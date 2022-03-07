@@ -1,0 +1,509 @@
+<template>
+    <Dialog :title="title" :height="600" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
+        <template v-slot:default>
+            <!-- 查看字段表 -->
+            <div class="see-field" v-loading="loading">
+                <div class="margin-div">
+                    <p class="book-title">1、选择文书模版：</p>
+                    <el-input clearable placeholder="输入关键字进行过滤" v-model="filterText">
+                    </el-input>
+                    <el-scrollbar style="height:250px;" v-if="title =='批量生成多人多案文书'">
+                        <el-tree :data="dataTwo" class="border-style" :props="defaultProps" node-key="id"
+                            :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
+                            @node-click="handleNodeClick" default-expand-all />
+                    </el-scrollbar>
+                    <el-scrollbar style="height:250px;" v-else>
+                        <el-tree :data="data" class="border-style" :props="defaultProps" node-key="id"
+                            :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
+                            @node-click="handleNodeClick" default-expand-all />
+                    </el-scrollbar>
+                </div>
+                <div class="margin-div">
+                    <p class="book-title">2、电子签章设置：</p>
+                    <p>系统将根据下面的顺序按顺序打印</p>
+                    <ul class="drag-box" ref="parentNode">
+                        <p v-if="chooseData.length == 0" style="line-height: 50px; text-align: center">
+                            暂无数据
+                        </p>
+                        <draggable v-model="chooseData" v-else>
+                            <transition-group>
+                                <li v-for="(item, index) in chooseData" :key="item.id" class="item">
+                                    <p>{{ item.name }}</p>
+                                    <div>
+                                        <el-switch v-model="item.switch" active-color="#13ce66" inactive-color="#ff4949"
+                                            style="margin-right: 20px"></el-switch>
+                                        <i class="el-icon-delete" @click="deleteData(index)"></i>
+                                    </div>
+                                </li>
+                            </transition-group>
+                        </draggable>
+                    </ul>
+                </div>
+                <div class="margin-div">
+                    <p class="book-title">3、申请日期：</p>
+                    <el-date-picker v-model="applyDate" type="date" placeholder="选择日期" format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd">
+                    </el-date-picker>
+                </div>
+                <div class="margin-div" v-if="title =='批量生成多人多案文书'">
+                    <p class="book-title">4、每份文书的合并案件数量：</p>
+                    <el-input v-model="caseNumOnePaper" style="width:220px" placeholder="请输入数量,不超过100个"></el-input>
+                </div>
+                <div class="margin-div" v-else>
+                    <p class="book-title">4、是否显示页码：</p>
+                    <el-switch v-model="isShow" active-color="#13ce66" inactive-color="#ff4949" :active-value="1"
+                        :inactive-value="0">
+                    </el-switch>
+                </div>
+                <div class="margin-div">
+                    <p class="book-title">5、导出文档格式：</p>
+                    <el-radio-group v-model="suffix">
+                        <el-radio :label="1">.docx</el-radio>
+                        <el-radio :label="2">.pdf</el-radio>
+                        <el-radio :label="3">.xlsx</el-radio>
+                    </el-radio-group>
+                </div>
+                <div class="margin-div" v-if="title =='批量生成多人多案文书'">
+                    <p class="book-title">6、自定义案件顺序：</p>
+                    <div class="demo">
+                    <el-table :data="selection" border row-key="id" align="left">
+                        <el-table-column ref="tableColumn" v-for="(item, index) in col"
+                            :key="`col_${index}`"
+                            :prop="dropCol[index].prop"
+                            :label="item.label"> 
+                        </el-table-column>
+                    </el-table>                        
+                    </div>
+
+                </div>
+            </div>
+        </template>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">关闭</el-button>
+            <el-button type="primary" @click="submit">确 定</el-button>
+        </div>
+    </Dialog>
+</template>
+
+<script>
+    import Dialog from "@/components/Dialog/index";
+    import axios from "axios";
+    import {
+        getToken
+    } from "@/utils/auth";
+    import templateApi from "@/api/case/document/templateIndex";
+    import draggable from 'vuedraggable'
+    import Sortable from 'sortablejs'
+    const mimeMap = {
+        xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        zip: "application/zip",
+    };
+    export default {
+        name: "mediationBook",
+        components: {
+            Dialog,
+            draggable
+        },
+        props: {
+            // 传参控制弹窗显示隐藏
+            show: {
+                type: Boolean,
+                default: false,
+            },
+            title: {
+                type: String,
+                default: "",
+            },
+            id: {
+                type: String,
+                default: "",
+            },
+            requestApi: {
+                type: String,
+                default: "",
+            },
+            params: {
+                type: String,
+                default: "",
+            },
+            selection: {
+                type: Array,
+                default: [],
+            },
+        },
+        watch: {
+            filterText(val) {
+                this.$refs.tree.filter(val);
+            },
+            selection(val){
+                this.ids = val.map((item) => item.id);
+            }
+        },
+        data() {
+            return {
+                defaultProps: {
+                    children: "children",
+                    label: "name",
+                },
+                col: [
+                    {
+                    label: '姓名',
+                    prop: 'respondentName'
+                    },
+                    {
+                    label: '订单号',
+                    prop: 'id'
+                    },
+                    {
+                    label: '合同号',
+                    prop: 'orderNo'
+                    }
+                ],
+                dropCol: [
+                    {
+                    label: '姓名',
+                    prop: 'respondentName'
+                    },
+                    {
+                    label: '订单号',
+                    prop: 'id'
+                    },
+                    {
+                    label: '合同号',
+                    prop: 'orderNo'
+                    }
+                ],
+                filterText: "",
+                caseList: [],
+                data: [{
+                        name: "多元调解模版",
+                        children: [],
+                    },
+                    {
+                        name: "诉讼模版",
+                        children: [],
+                    },
+                ],
+                dataTwo: [{
+                    name: "多人多案文书模版",
+                    children: [],
+                }, ],
+                chooseData: [],
+                selectionData: [],
+                draging: null, //被拖拽的对象
+                target: null, //目标对象
+                applyDate: "",
+                isShow: 0,
+                suffix: 1,
+                ids:[],
+                caseNumOnePaper: "",
+                templateIdArr: [],
+                loading: false,
+                needSignTemplate: [],
+                drawBodyWrapper:'',
+            };
+        },
+        computed: {
+            dialogVisible: {
+                get() {
+                    return this.show;
+                },
+                set(val) {
+                    this.$emit("update:show", val);
+                },
+            },
+        },
+        created() {},
+        mounted() {
+            //为了防止火狐浏览器拖拽的时候以新标签打开，此代码真实有效
+            document.body.ondrop = function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            };
+        },
+        methods: {
+            openDialog() {
+                this.loading = false;
+                this.data[0].children = [];
+                this.dataTwo[0].children = [];
+                this.data[1].children = [];
+                this.chooseData = [];
+                this.needSignTemplate = [];
+                this.caseNumOnePaper = "";
+                this.templateIdArr = [];
+                this.applyDate = "";
+                this.isShow = 0;
+                this.suffix = 1;
+                this.filterText = "";
+                this.getList();
+                this.$nextTick(()=>{
+                    const drawBodyWrapper = document.querySelector('.el-dialog__body tbody')
+                    this.drawBodyWrapper = drawBodyWrapper;
+                    this.rowDrop()
+                })
+            },
+            //行拖拽
+            rowDrop() {
+                const tbody = this.drawBodyWrapper
+                const _this = this
+                Sortable.create(tbody, {
+                    onEnd({ newIndex, oldIndex }) {
+                    const currRow = _this.selection.splice(oldIndex, 1)[0]
+                    _this.selection.splice(newIndex, 0, currRow)
+                    }
+                })
+            },
+            // 提交上传文件
+            submit() {
+                this.templateIdArr = this.chooseData.map((item) => item.id);
+                this.needSignTemplate = this.chooseData.map((item) => item.switch ? item.switch : false);
+                let param = {};
+                //单个生成调解文书
+                if (this.id) {
+                    param = {
+                        templateIdArr: this.templateIdArr.join(","),
+                        needSignTemplate: this.needSignTemplate.join(","),
+                        id: this.id,
+                        applyDate: this.applyDate,
+                        isShow: this.isShow,
+                        suffix: this.suffix == 1 ?
+                            ".docx" : this.suffix == 2 ?
+                            ".pdf" : ".xlsx",
+                    };
+                //批量
+                } else {
+                    if (this.title == '批量生成多人多案文书') {
+                        param.ids = this.ids.join(",");
+                        if (this.caseNumOnePaper && (/^100$|^([1-4]\d)$|^\d?$/.test(this.caseNumOnePaper))) {} else {
+                            this.msgError('请填写正确的合并数量')
+                            return
+                        }
+                        if (this.templateIdArr.length <= 0) {
+                            this.msgError("请选择模版");
+                            return;
+                        }
+                    } else {
+                        //批量生成调解文书
+                        param.ids = this.params;
+                        if (this.templateIdArr.length <= 0) {
+                            this.msgError("请选择模版");
+                            return;
+                        }
+                    }
+                    param.caseNumOnePaper = this.caseNumOnePaper;
+                    param.templateIdArr = this.templateIdArr.join(",");
+                    param.needSignTemplate = this.needSignTemplate.join(","),
+                    param.applyDate = this.applyDate;
+                    param.isShow = this.isShow;
+                    param.suffix =
+                        this.suffix == 1 ?
+                        ".docx" :
+                        this.suffix == 2 ?
+                        ".pdf" :
+                        ".xlsx";
+                }
+                this.loading = true;
+                const baseUrl = process.env.VUE_APP_BASE_API;
+                var url = baseUrl + this.requestApi;
+                axios({
+                    method: "post",
+                    url: url,
+                    responseType: "blob",
+                    params: param,
+                    headers: {
+                        Authorization: "Bearer " + getToken()
+                    },
+                }).then((res) => {
+                    let data = res.data
+                    let _self = this
+                    let fileReader = new FileReader();
+                    fileReader.onload = function () {
+                        try {
+                            let jsonData = JSON.parse(this.result); // 说明是普通对象数据，后台转换失败
+                            _self.$message({
+                                message: jsonData.msg,
+                                type: "error",
+                            }); // 弹出的提示信息
+                            _self.loading = false;
+                        } catch (err) { // 解析成对象失败，说明是正常的文件流
+                            _self.resolveBlob(res, mimeMap.zip);
+                            _self.needSignTemplate = [];
+                            _self.dialogVisible = false;
+                            _self.loading = false;
+                            _self.$emit('refresh')
+                        }
+                    };
+                    fileReader.readAsText(data) // 注意别落掉此代码，可以将 Blob 或者 File 对象转根据特殊的编码格式转化为内容(字符串形式)
+                }).catch((error) => {
+                    this.needSignTemplate = [];
+                    this.loading = false;
+                });
+            },
+            resolveBlob(res, mimeType) {
+                const aLink = document.createElement("a");
+                var blob = new Blob([res.data], {
+                    type: mimeType
+                });
+                // //从response的headers中获取filename, 后端response.setHeader("Content-disposition", "attachment; filename=xxxx.docx") 设置的文件名;
+                var patt = new RegExp("filename=([^;]+\\.[^\\.;]+);*");
+                var contentDisposition = decodeURI(res.headers["content-disposition"]);
+                var result = patt.exec(contentDisposition);
+                var fileName = result[1];
+                fileName = fileName.replace(/\"/g, "");
+                aLink.href = URL.createObjectURL(blob);
+                aLink.setAttribute("download", fileName); // 设置下载文件名称
+                document.body.appendChild(aLink);
+                aLink.click();
+                document.body.appendChild(aLink);
+                this.dialogVisible = false;
+                this.loading = false;
+                this.$emit('refresh')
+            },
+            filterNode(value, data) {
+                if (!value) return true;
+                return data.name.indexOf(value) !== -1;
+            },
+            //多元调解模版 0
+            //诉讼模版    1
+            //律师函模版  2
+            //债转模版   3
+            //多人多案模版  4
+            getList() {
+                let param = {
+                    name: "",
+                    templateType: "",
+                    status: "",
+                };
+                templateApi.templateList(param).then((response) => {
+                    //console.log(response)
+                    this.caseList = response.data || [];
+                    this.caseList.forEach((item) => {
+                        if (
+                            item.formatType == 0 &&
+                            item.templateType == 0 &&
+                            item.status == 1
+                        ) {
+                            this.data[0].children.push(item);
+                        }
+                        if (
+                            item.formatType == 0 &&
+                            item.templateType == 1 &&
+                            item.status == 1
+                        ) {
+                            this.data[1].children.push(item);
+                        }
+                        if (
+                            item.formatType == 0 &&
+                            item.templateType == 4 &&
+                            item.status == 1
+                        ) {
+                            this.dataTwo[0].children.push(item);
+                        }
+                        // if(item.formatType == 0&&item.templateType==2&&item.status==1){
+                        //     this.data[2].children.push(item)
+                        // }
+                        // if(item.formatType == 0&&item.templateType==3&&item.status==1){
+                        //     this.data[3].children.push(item)
+                        // }
+                    });
+                });
+            },
+            handleNodeClick(data) {
+                //console.log(data)
+                if (!data.id) {
+                    this.$refs.tree.setCurrentKey(null);
+                } else {
+                    this.chooseData.push(data);
+                    this.chooseData = Array.from(new Set(this.chooseData));
+                }
+            },
+            deleteData(index) {
+                this.chooseData.splice(index, 1);
+            },
+        },
+    };
+
+</script>
+
+<style scoped lang="scss">
+    .el-dialog__body {
+        height: 20px;
+    }
+
+</style>
+<style lang="scss">
+    .li-item {
+        padding: 10px 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        border-top: 2px solid #f8f8f9;
+        align-items: center;
+
+        &:first-child {
+            border: none;
+        }
+    }
+
+    .margin-div {
+        margin-bottom: 20px;
+    }
+
+    .book-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #409eff;
+    }
+
+    .drag-box {
+        border: 1px solid #e6ebf5;
+        margin: 10px 0;
+        padding: 10px;
+        min-height: 50px;
+
+        li {
+            list-style: none;
+            height: 30px;
+            border-bottom: 1px solid #f3eeee;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li:last-of-type {
+            border-bottom: none;
+        }
+    }
+
+    .border-style {
+        border: 1px solid #e6ebf5;
+        padding: 10px;
+        min-height: 250px;
+        border-top: none;
+        border-radius: 4px;
+
+        .el-tree-node.is-current>.el-tree-node__content {
+            color: #409eff;
+            background-color: transparent;
+            border-radius: 4px;
+        }
+
+        .el-tree-node>.el-tree-node__content:hover {
+            background-color: transparent;
+        }
+
+        .el-tree-node.is-current>.el-tree-node__content:after {
+            content: "\e6da";
+            font-family: element-icons !important;
+            padding-left: 10px;
+            font-weight: bolder;
+        }
+
+        .el-tree-node>.el-tree-node__children {
+            overflow: unset;
+        }
+    }
+
+</style>
