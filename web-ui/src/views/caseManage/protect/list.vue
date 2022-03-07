@@ -166,7 +166,8 @@
                     principal: "",
                     caseStatus: "",
                     status: "",
-                    isAsc: ''
+                    orderByColumn: "",
+                    isAsc: "",
                 },
                 statusOptions: [], //案件状态
                 protects: [], //案件类型

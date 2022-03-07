@@ -211,6 +211,7 @@
                     letterRepairStatus: '',
                     caseStatus: '',
                     postUserId: '',
+                    orderByColumn: "",
                     isAsc: "",
                 },
                 statusOptions: [],

@@ -155,6 +155,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        orderByColumn: "",
+        isAsc: "",
       },
       searchParams:{},
       selection: [],

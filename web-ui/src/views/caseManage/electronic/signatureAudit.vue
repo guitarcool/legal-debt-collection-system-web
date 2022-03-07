@@ -137,6 +137,8 @@
                     auditSignStatus: "",
                     signStatus: "",
                     caseStatus: "",
+                    orderByColumn: "",
+                    isAsc: "",
                 },
                 statusOptions: [], //案件状态
                 auditOptions: [], //文书审核状态

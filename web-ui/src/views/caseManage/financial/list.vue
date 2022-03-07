@@ -248,6 +248,7 @@
                     remittanceTime: '',
                     caseType: '',
                     reviewStatus: '',
+                    orderByColumn: "",
                     isAsc: "",
                 },
                 statusOptions: [], //案件状态
