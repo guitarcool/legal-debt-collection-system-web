@@ -891,6 +891,7 @@
         initObj
     } from "@/utils/common";
     import exportDialog from "./exportDialog";
+    import merge from 'webpack-merge';
     export default {
         name: "info",
         components: {
@@ -1931,6 +1932,10 @@
                     return
                 }
                 this.id = this.idList[idx];
+                //新增或修改单个参数
+                this.$router.replace({
+                    query: merge(this.$route.query,{afterId: this.id})
+                })
             },
         },
     };
