@@ -101,7 +101,7 @@
                         v-hasPermi="['evidence:package:mail']">生成通知短信
                     </el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(1)" @clearTick="clearSelection">
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
 
@@ -194,16 +194,16 @@
             <pagination v-show="total>0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <message @refresh="getList(1)" :params="messageData.params" :title="messageData.title"
+        <message @refresh="clearSelection" :params="messageData.params" :title="messageData.title"
             :show.sync="messageData.dialogVisible" :type="messageData.type" :requestApi="messageData.requestApi">
         </message>
-        <batchExportDialog @refresh="getList(1)" :title="batchexportDialogData.title"
+        <batchExportDialog @refresh="clearSelection" :title="batchexportDialogData.title"
             :show.sync="batchexportDialogData.dialogVisible" :red="batchexportDialogData.red"
             :params="batchexportDialogData.params"></batchExportDialog>
-        <editEvidence @refresh="getList(1)" :id="editData.id" :title="editData.title"
+        <editEvidence @refresh="clearSelection" :id="editData.id" :title="editData.title"
             :show.sync="editData.dialogVisible">
         </editEvidence>
-        <newEvidenceImport @refresh="getList(1)" :id="evidenceData.id" :title="evidenceData.title"
+        <newEvidenceImport @refresh="clearSelection" :id="evidenceData.id" :title="evidenceData.title"
             :show.sync="evidenceData.dialogVisible">
         </newEvidenceImport>
 
@@ -310,7 +310,7 @@
             //案件id
             this.pid = this.$route.query.pid
             this.queryParams.pid = this.$route.query.pid
-            // this.getList();
+            this.getList(1);
         },
         // 是否显示过滤栏， 扣除页数，每页显示数，总数量参数，3个内的搜索参数，直接显示一行，不显示过滤
         computed: {
@@ -329,8 +329,6 @@
                     this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     evidenceApi.infoList(this.searchParams).then((response) => {
                         this.clearSelection();
-                        this.ids = [];
-                        this.selection = [];
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
@@ -386,18 +384,20 @@
                     return evidenceApi.exportInfo(queryParams);
                 }).then(response => {
                     this.download(response.msg);
-                    this.getList(1);
+                    this.clearSelection();
                 }).catch(function () {});
             },
             handleDownZip() {
                 let id = this.ids.join(',')
                 //console.log(id)
                 downLoadZip("/evidence/package/download?ids=" + id, '证据包');
-                this.getList(1);
+                this.clearSelection();
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
-                    this.$refs.multiTable.clearSelection() //清除选中的数据
+                    this.$refs.multiTable.clearSelection(); //清除选中的数据
+                    this.ids = [];
+                    this.selection = [];
                 }
             },
             handleMessage(type) {
@@ -422,7 +422,7 @@
                         return evidenceApi.delData(userIds);
                     })
                     .then(() => {
-                        this.getList(1);
+                        this.clearSelection();
                         this.msgSuccess("删除成功");
                     })
                     .catch(function () {});

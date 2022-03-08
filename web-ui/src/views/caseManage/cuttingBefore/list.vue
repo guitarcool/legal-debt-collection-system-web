@@ -232,7 +232,7 @@
                         批量导出网调记录
                     </el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(1)" @clearTick="clearSelection">
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
 
@@ -345,12 +345,12 @@
         </recordDialog>
         <exportDialog :requestApi="exportDialogData.requestApi" :title="exportDialogData.title"
             :show.sync="exportDialogData.dialogVisible" :id="exportDialogData.id"
-            :contractNo="exportDialogData.contractNo" @refresh="getList(1)"></exportDialog>
-        <batchExportDialog @refresh="getList(1)" :requestApi="batchData.requestApi" :title="batchData.title"
+            :contractNo="exportDialogData.contractNo" @refresh="clearSelection"></exportDialog>
+        <batchExportDialog @refresh="clearSelection" :requestApi="batchData.requestApi" :title="batchData.title"
             :show.sync="batchData.dialogVisible" :params="batchData.params"></batchExportDialog>
-        <testCall @refresh="getList(1)" :title="callData.title" :show.sync="callData.dialogVisible" :ids="callData.ids">
+        <testCall @refresh="clearSelection" :title="callData.title" :show.sync="callData.dialogVisible" :ids="callData.ids">
         </testCall>
-        <batchExport @refresh="getList(1)" :title="batchexportData.title" :show.sync="batchexportData.dialogVisible"
+        <batchExport @refresh="clearSelection" :title="batchexportData.title" :show.sync="batchexportData.dialogVisible"
             :red="batchexportData.red" :params="batchexportData.params"></batchExport>
     </div>
 </template>
@@ -586,8 +586,6 @@
                     cuttingBeforeApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
-                        this.ids = [];
-                        this.selection = [];
                         this.otherParam = response.otherParam;
                         this.caseList = response.rows;
                         response.rows.forEach(element => {
@@ -629,7 +627,9 @@
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
-                    this.$refs.multiTable.clearSelection() //清除选中的数据
+                    this.$refs.multiTable.clearSelection(); //清除选中的数据
+                    this.ids = [];
+                    this.selection = [];
                 }
             },
             // 多选框选中数据
@@ -756,7 +756,7 @@
                             cuttingBeforeApi.applyCaseEdit(param).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess(res.msg);
-                                    that.getList(1);
+                                    that.clearSelection();
                                 }else if (res.code === 500) {
                                     that.msgError(res.msg);
                                 }
@@ -809,7 +809,7 @@
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
                                     this.dialogVisible = false;
-                                    this.getList(1);
+                                    this.clearSelection();
                                     this.download(res.msg);
                                 }
                             })
@@ -826,7 +826,7 @@
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
                                     this.dialogVisible = false;
-                                    this.getList(1);
+                                    this.clearSelection();
                                     this.download(res.msg);
                                 }
                             })
@@ -855,7 +855,7 @@
                         cuttingBeforeApi.caseProperty(ids).then((res) => {
                             if (res.code === 200) {
                                 that.msgSuccess("操作成功");
-                                that.getList(1);
+                                that.clearSelection();
                             }
                         });
                     })
@@ -875,44 +875,44 @@
                 });
             },
             btnAmount1() {
-                this.queryParams.orderByColumn = "subjectAmount asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "subjectAmount asc";
+                this.getList(2);
             },
             btnAmount2() {
-                this.queryParams.orderByColumn = "subjectAmount desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "subjectAmount desc";
+                this.getList(2);
             },
             btnPaidAmount1() {
-                this.queryParams.orderByColumn = "paidAmount asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "paidAmount asc";
+                this.getList(2);
             },
             btnPaidAmount2() {
-                this.queryParams.orderByColumn = "paidAmount desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "paidAmount desc";
+                this.getList(2);
             },
             btnRepayDate1() {
-                this.queryParams.orderByColumn = "promiseRepayDate asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "promiseRepayDate asc";
+                this.getList(2);
             },
             btnRepayDate2() {
-                this.queryParams.orderByColumn = "promiseRepayDate desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "promiseRepayDate desc";
+                this.getList(2);
             },
             btnDisTime1() {
-                this.queryParams.orderByColumn = "distributionTime asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "distributionTime asc";
+                this.getList(2);
             },
             btnDisTime2() {
-                this.queryParams.orderByColumn = "distributionTime desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "distributionTime desc";
+                this.getList(2);
             },
             btnOverdueDay1() {
-                this.queryParams.orderByColumn = "overdueDay asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "overdueDay asc";
+                this.getList(2);
             },
             btnOverdueDay2() {
-                this.queryParams.orderByColumn = "overdueDay desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "overdueDay desc";
+                this.getList(2);
             },
             resetAll() {
                 this.chooseDaterange = [];

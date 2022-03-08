@@ -232,7 +232,7 @@
                         导出网调记录
                     </el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(1)" @clearTick="clearSelection">
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
             <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys"
@@ -354,14 +354,14 @@
                 <el-button type="primary" @click="phoneNumberFormSubmit">确 定</el-button>
             </span>
         </el-dialog>
-        <divisionDialog @refresh="getList(1)" :title="divisionData.title" :show.sync="divisionData.dialogVisible"
+        <divisionDialog @refresh="clearSelection" :title="divisionData.title" :show.sync="divisionData.dialogVisible"
             :id="divisionData.id" :principal="divisionData.principal" :orgNo="divisionData.orgNo"
             :caseStatus="divisionData.caseStatus"></divisionDialog>
-        <supervisorDialog @refresh="getList(1)" :title="supervisorData.title" :ids="supervisorData.ids"
+        <supervisorDialog @refresh="clearSelection" :title="supervisorData.title" :ids="supervisorData.ids"
             :show.sync="supervisorData.dialogVisible"></supervisorDialog>
         <recordDialog :title="recordData.title" :show.sync="recordData.dialogVisible" :id="recordData.id">
         </recordDialog>
-        <exportDialog @refresh="getList(1)" :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
+        <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
             :requestApi="exportData.requestApi"></exportDialog>
         <el-dialog :title="form.title" :visible.sync="exportDialogVisible" width="50%" :before-close="handleClose">
             <el-form style="margin: 0 auto;" ref="form" :model="form" :rules="exportRules" label-width="100px">
@@ -625,8 +625,6 @@
                     divisionApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
-                        this.ids = [];
-                        this.selection = [];
                         this.otherParam = response.otherParam;
                         this.caseList = response.rows;
                         this.total = response.total;
@@ -660,7 +658,9 @@
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
-                    this.$refs.multiTable.clearSelection() //清除选中的数据
+                    this.$refs.multiTable.clearSelection(); //清除选中的数据
+                    this.ids = [];
+                    this.selection = [];
                 }
             },
             /** 导出按钮操作 */
@@ -686,7 +686,7 @@
                         divisionApi.suspendCase(this.ids).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
-                                    that.getList(1);
+                                    that.clearSelection();
                                 }
                             });
                     })
@@ -710,7 +710,7 @@
                         divisionApi.recoverCase(this.ids).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
-                                    that.getList(1);
+                                    that.clearSelection();
                                 }
                             });
                     })
@@ -729,7 +729,7 @@
                         divisionApi.withdrawalCase(this.ids).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
-                                    that.getList(1);
+                                    that.clearSelection();
                                 }
                             });
                     })
@@ -739,25 +739,25 @@
             },
             //导出调解记录
             batchExportMediationRecord(){
-            // if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
-            //   this.msgError("所选数据存在已结案的数据，不能批量筛选号码");
-            //   return;
-            // }  
-            this.form.title = '导出调解记录';
-            this.form.exportRange = [];
-            this.form.isDesensitization = 1;
-            this.exportDialogVisible = true;
+                // if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
+                //   this.msgError("所选数据存在已结案的数据，不能批量筛选号码");
+                //   return;
+                // }  
+                this.form.title = '导出调解记录';
+                this.form.exportRange = [];
+                this.form.isDesensitization = 1;
+                this.exportDialogVisible = true;
             },
             //导出网调记录
             batchExportAdjestMent(){
-            // if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
-            //   this.msgError("所选数据存在已结案的数据，不能批量筛选号码");
-            //   return;
-            // }  
-            this.form.title = '导出网调记录';
-            this.form.exportRange = [];
-            this.form.isDesensitization = 1;
-            this.exportDialogVisible = true;
+                // if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
+                //   this.msgError("所选数据存在已结案的数据，不能批量筛选号码");
+                //   return;
+                // }  
+                this.form.title = '导出网调记录';
+                this.form.exportRange = [];
+                this.form.isDesensitization = 1;
+                this.exportDialogVisible = true;
             },
             phoneSubmit(title) {
                 if(title == '导出调解记录'){
@@ -773,7 +773,7 @@
                                     this.msgSuccess("操作成功");
                                     this.exportDialogVisible = false;
                                     this.download(res.msg);
-                                    this.getList(1);
+                                    this.clearSelection();
                                 }
                             })
                         }
@@ -790,7 +790,7 @@
                                     this.msgSuccess("操作成功");
                                     this.exportDialogVisible = false;
                                     this.download(res.msg);
-                                    this.getList(1);
+                                    this.clearSelection();
                                 }
                             })
                         }
@@ -936,7 +936,7 @@
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
                                     this.numberDialogVisible = false;
-                                    this.getList(1);
+                                    this.clearSelection();
                                 }else if(res.code === 500){
                                     this.msgError(res.msg);
                                 }
@@ -945,60 +945,60 @@
                 });
             },
             btnRemainDays1() {
-                this.queryParams.orderByColumn = "remainDays asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "remainDays asc";
+                this.getList(2);
             },
             btnRemainDays2() {
-                this.queryParams.orderByColumn = "remainDays desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "remainDays desc";
+                this.getList(2);
             },
             btnAmount1() {
-                this.queryParams.orderByColumn = "caseAmount asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "caseAmount asc";
+                this.getList(2);
             },
             btnAmount2() {
-                this.queryParams.orderByColumn = "caseAmount desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "caseAmount desc";
+                this.getList(2);
             },
             btnPaidAmount1() {
-                this.queryParams.orderByColumn = "paidAmount asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "paidAmount asc";
+                this.getList(2);
             },
             btnPaidAmount2() {
-                this.queryParams.orderByColumn = "paidAmount desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "paidAmount desc";
+                this.getList(2);
             },
             btnRepayDate1() {
-                this.queryParams.orderByColumn = "promiseRepayDate asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "promiseRepayDate asc";
+                this.getList(2);
             },
             btnRepayDate2() {
-                this.queryParams.orderByColumn = "promiseRepayDate desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "promiseRepayDate desc";
+                this.getList(2);
             },
             btnOrderNo1() {
-                this.queryParams.orderByColumn = "orderNo asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "orderNo asc";
+                this.getList(2);
             },
             btnOrderNo2() {
-                this.queryParams.orderByColumn = "orderNo desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "orderNo desc";
+                this.getList(2);
             },
             btnTime1() {
-                this.queryParams.orderByColumn = "createTime asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "createTime asc";
+                this.getList(2);
             },
             btnTime2() {
-                this.queryParams.orderByColumn = "createTime desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "createTime desc";
+                this.getList(2);
             },
             btnDisTime1() {
-                this.queryParams.orderByColumn = "distributionTime asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "distributionTime asc";
+                this.getList(2);
             },
             btnDisTime2() {
-                this.queryParams.orderByColumn = "distributionTime desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "distributionTime desc";
+                this.getList(2);
             },
             renderAmount() {
               return (

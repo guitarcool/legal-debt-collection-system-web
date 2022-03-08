@@ -58,7 +58,7 @@
                         删除
                     </el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(1)" @clearTick="clearSelection">
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
 
@@ -115,7 +115,7 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <addTemplate @refresh="getList(1)" :title="addTemplateData.title" :show.sync="addTemplateData.dialogVisible"
+        <addTemplate @refresh="clearSelection" :title="addTemplateData.title" :show.sync="addTemplateData.dialogVisible"
             :id="addTemplateData.id"></addTemplate>
         <seeField :title="seeFieldData.title" :show.sync="seeFieldData.dialogVisible" :id="seeFieldData.id"></seeField>
         <combined :title="combinedData.title" :show.sync="combinedData.dialogVisible" :id="combinedData.id"></combined>
@@ -223,8 +223,6 @@
 		            this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     templateApi.list(this.searchParams).then((response) => {
                         this.clearSelection();
-                        this.ids = [];
-                        this.selection = [];
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
@@ -253,7 +251,7 @@
                         return templateApi.templatedelete(userIds);
                     })
                     .then(() => {
-                        this.getList(1);
+                        this.clearSelection();
                         this.msgSuccess("删除成功");
                     })
                     .catch(function () {});
@@ -299,7 +297,9 @@
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
-                    this.$refs.multiTable.clearSelection() //清除选中的数据
+                    this.$refs.multiTable.clearSelection(); //清除选中的数据
+                    this.ids = [];
+                    this.selection = [];
                 }
             },
             handleAddTemplate() {
@@ -323,7 +323,7 @@
                     .then(() => {
                         templateApi.toggleStatus(id).then((res) => {
                             that.msgSuccess("操作成功");
-                            that.getList(1);
+                            that.clearSelection();
                         });
                     })
                     .catch(() => {});

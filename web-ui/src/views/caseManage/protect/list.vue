@@ -65,7 +65,7 @@
 
         <div class="box-contnet-wrap">
             <el-row :gutter="10" class="mb8">
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(1)" @clearTick="clearSelection">
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
             <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys"
@@ -120,7 +120,7 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <applyAudit @refresh="getList(1)" :title="applyData.title" :show.sync="applyData.dialogVisible"
+        <applyAudit @refresh="clearSelection" :title="applyData.title" :show.sync="applyData.dialogVisible"
             :id="applyData.id" :cid="applyData.cid" :item="applyData.item"></applyAudit>
     </div>
 </template>
@@ -227,8 +227,6 @@
                     divisionApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
-                        this.ids = [];
-                        this.selection = [];
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
@@ -250,7 +248,9 @@
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
-                    this.$refs.multiTable.clearSelection() //清除选中的数据
+                    this.$refs.multiTable.clearSelection(); //清除选中的数据
+                    this.ids = [];
+                    this.selection = [];
                 }
             },
             // 多选框选中数据
@@ -303,36 +303,36 @@
                 });
             },
             btnDisTime1() {
-                this.queryParams.orderByColumn = "distributionTime asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "distributionTime asc";
+                this.getList(2);
             },
             btnDisTime2() {
-                this.queryParams.orderByColumn = "distributionTime desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "distributionTime desc";
+                this.getList(2);
             },
             btnAmount1() {
-                this.queryParams.orderByColumn = "subjectAmount asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "subjectAmount asc";
+                this.getList(2);
             },
             btnAmount2() {
-                this.queryParams.orderByColumn = "subjectAmount desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "subjectAmount desc";
+                this.getList(2);
             },
             btnRepayDate1() {
-                this.queryParams.orderByColumn = "createTime asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "createTime asc";
+                this.getList(2);
             },
             btnRepayDate2() {
-                this.queryParams.orderByColumn = "createTime desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "createTime desc";
+                this.getList(2);
             },
             btnRepayDate3() {
-                this.queryParams.orderByColumn = "frozenStartTime asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "frozenStartTime asc";
+                this.getList(2);
             },
             btnRepayDate4() {
-                this.queryParams.orderByColumn = "frozenStartTime desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "frozenStartTime desc";
+                this.getList(2);
             },
             renderAmount() {
             return ( 
@@ -386,7 +386,7 @@
                         divisionApi.property(param).then((res) => {
                             if (res.code === 200) {
                                 that.msgSuccess("操作成功");
-                                that.getList(1);
+                                that.clearSelection();
                             }
                         });
                     })

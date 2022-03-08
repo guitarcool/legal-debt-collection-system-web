@@ -86,7 +86,7 @@
                     <el-button type="danger" size="mini" :disabled="multiple" v-hasPermi="['report:screenrecord:export']" @click="handleExport">导出
                     </el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(1)" @clearTick="clearSelection"></right-toolbar>
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection"></right-toolbar>
             </el-row>
 
             <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
@@ -128,7 +128,7 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <exportDialog @refresh="getList(1)"  :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
+        <exportDialog @refresh="clearSelection"  :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
             :requestApi="exportData.requestApi"></exportDialog>
     </div>
 </template>
@@ -225,8 +225,6 @@
 		            this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     operationApi.screenRecordlist(this.searchParams).then((response) => {
                         this.clearSelection();
-                        this.ids = [];
-                        this.selection = [];
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
@@ -267,7 +265,9 @@
             },
             clearSelection(){
                 if(this.caseList.length>0){
-                    this.$refs.multiTable.clearSelection() //清除选中的数据
+                    this.$refs.multiTable.clearSelection(); //清除选中的数据
+                    this.ids = [];
+                    this.selection = [];
                 }
             },
             /** 导出按钮操作 */

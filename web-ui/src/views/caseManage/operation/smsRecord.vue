@@ -114,7 +114,7 @@
                 <el-col :span="1.5">
                     <el-button type="success" size="mini" :disabled="multiple" @click="handleMessage">重新发送短信</el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(1)" @clearTick="clearSelection"></right-toolbar>
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection"></right-toolbar>
             </el-row>
 
             <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
@@ -176,9 +176,9 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <exportDialog @refresh="getList(1)"  :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
+        <exportDialog @refresh="clearSelection"  :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
             :requestApi="exportData.requestApi"></exportDialog>
-        <batchExport  @refresh="getList(1)" :title="batchexportData.title" :show.sync="batchexportData.dialogVisible" :params="batchexportData.params"></batchExport>
+        <batchExport  @refresh="clearSelection" :title="batchexportData.title" :show.sync="batchexportData.dialogVisible" :params="batchexportData.params"></batchExport>
     </div>
 </template>
 
@@ -287,8 +287,6 @@
 		            this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     operationApi.shortMsgRecordlist(this.searchParams).then((response) => {
                         this.clearSelection();
-                        this.selection = [];
-                        this.ids = [];
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
@@ -327,7 +325,9 @@
             },
             clearSelection(){
                 if(this.caseList.length>0){
-                    this.$refs.multiTable.clearSelection() //清除选中的数据
+                    this.$refs.multiTable.clearSelection(); //清除选中的数据
+                    this.selection = [];
+                    this.ids = [];
                 }
             },
             /** 导出按钮操作 */

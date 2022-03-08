@@ -54,7 +54,7 @@
                         @click="handleExport" v-hasPermi="['evidence:package:export']">导出
                     </el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(1)" @clearTick="clearSelection"></right-toolbar>
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection"></right-toolbar>
             </el-row>
 
             <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
@@ -118,9 +118,9 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <evidenceImport @refresh="getList(1)" :title="evidenceData.title" :show.sync="evidenceData.dialogVisible">
+        <evidenceImport @refresh="clearSelection" :title="evidenceData.title" :show.sync="evidenceData.dialogVisible">
         </evidenceImport>
-        <exportDialog @refresh="getList(1)" :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
+        <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
             :requestApi="exportData.requestApi"></exportDialog>
     </div>
 </template>
@@ -212,7 +212,6 @@ export default {
             evidenceApi.list(this.searchParams).then((response) => {
                 this.queryParams.orderByColumn = "";
                 this.clearSelection();
-                this.ids = [];
                 this.caseList = response.rows;
                 this.total = response.total;
                 this.loading = false;
@@ -229,7 +228,9 @@ export default {
     },
     clearSelection(){
         if(this.caseList.length>0){
-            this.$refs.multiTable.clearSelection() //清除选中的数据
+            this.$refs.multiTable.clearSelection(); //清除选中的数据
+            this.ids = [];
+            this.selection = [];
         }
     },
     /** 导出按钮操作 */
@@ -279,7 +280,7 @@ export default {
           evidenceApi.move(item.id).then((res) => {
             if (res.code === 200) {
               that.msgSuccess("操作成功");
-              that.getList(1);
+              that.clearSelection();
             }
           });
         })
@@ -288,12 +289,12 @@ export default {
         });
     },
     btnTime1() {
-      this.queryParams.orderByColumn = "createTime asc";
-      this.getList(1);
+      this.searchParams.orderByColumn = "createTime asc";
+      this.getList(2);
     },
     btnTime2() {
-      this.queryParams.orderByColumn = "createTime desc";
-      this.getList(1);
+      this.searchParams.orderByColumn = "createTime desc";
+      this.getList(2);
     },
   },
 };

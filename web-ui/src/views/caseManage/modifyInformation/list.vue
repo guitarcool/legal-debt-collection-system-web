@@ -103,7 +103,7 @@
                         批量导入信修结果
                     </el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(1)" @clearTick="clearSelection">
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
 
@@ -154,11 +154,11 @@
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
 
-        <importDialog @refresh="getList(1)" :title="addData.title" :show.sync="addData.dialogVisible" :id="addData.id">
+        <importDialog @refresh="clearSelection" :title="addData.title" :show.sync="addData.dialogVisible" :id="addData.id">
         </importDialog>
-        <applyAudit @refresh="getList(1)" :title="applyData.title"
+        <applyAudit @refresh="clearSelection" :title="applyData.title"
             :show.sync="applyData.dialogVisible" :id="applyData.id"></applyAudit>
-        <exportDialog @refresh="getList(1)" :title="exportData.title" :show.sync="exportData.dialogVisible"
+        <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
             :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
     </div>
 </template>
@@ -292,8 +292,6 @@
                     modifyApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
-                        this.ids = [];
-                        this.selection = [];
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
@@ -322,7 +320,9 @@
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
-                    this.$refs.multiTable.clearSelection() //清除选中的数据
+                    this.$refs.multiTable.clearSelection(); //清除选中的数据
+                    this.ids = [];
+                    this.selection = [];
                 }
             },
             /** 导出按钮操作 */
@@ -376,12 +376,12 @@
                 );
             },
             btnDisTime1() {
-                this.queryParams.orderByColumn = "distributionTime asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "distributionTime asc";
+                this.getList(2);
             },
             btnDisTime2() {
-                this.queryParams.orderByColumn = "distributionTime desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "distributionTime desc";
+                this.getList(2);
             },
             renderDisTime() {
                 return (

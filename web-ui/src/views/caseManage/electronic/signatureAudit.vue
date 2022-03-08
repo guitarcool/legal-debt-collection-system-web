@@ -57,7 +57,7 @@
                     <el-button type="primary" size="mini" @click="editApply" :disabled="multiple"
                         icon="el-icon-download">签章批量审核</el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(1)" @clearTick="clearSelection">
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
             <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys"
@@ -93,7 +93,7 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <applyAudit @refresh="getList(1)" :type="applyData.type" :title="applyData.title"
+        <applyAudit @refresh="clearSelection" :type="applyData.type" :title="applyData.title"
             :show.sync="applyData.dialogVisible" :id="applyData.id" :ids="applyData.ids"></applyAudit>
     </div>
 </template>
@@ -194,8 +194,6 @@
                     electronicApi.applyList(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
-                        this.ids = [];
-                        this.selection = [];
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
@@ -261,7 +259,9 @@
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
-                    this.$refs.multiTable.clearSelection() //清除选中的数据
+                    this.$refs.multiTable.clearSelection(); //清除选中的数据
+                    this.ids = [];
+                    this.selection = [];
                 }
             },
             //案件详情
@@ -307,20 +307,20 @@
                 }
             },
             btnRepayDate1() {
-                this.queryParams.orderByColumn = "submitTime asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "submitTime asc";
+                this.getList(2);
             },
             btnRepayDate2() {
-                this.queryParams.orderByColumn = "submitTime desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "submitTime desc";
+                this.getList(2);
             },
             btnRepayDate3() {
-                this.queryParams.orderByColumn = "signTime asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "signTime asc";
+                this.getList(2);
             },
             btnRepayDate4() {
-                this.queryParams.orderByColumn = "signTime desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "signTime desc";
+                this.getList(2);
             },
             renderRepayDate() {
               return ( < div style="display: flex;align-items: center;">

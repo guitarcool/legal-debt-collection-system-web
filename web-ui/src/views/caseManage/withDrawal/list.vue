@@ -72,7 +72,7 @@
                         批量导出网调记录
                     </el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(1)" @clearTick="clearSelection">
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
 
@@ -130,7 +130,7 @@
                 <el-button type="primary" @click="phoneSubmit(form.title)">确 定</el-button>
             </span>
         </el-dialog>
-        <exportDialog @refresh="getList(1)" :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
+        <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
             :requestApi="exportData.requestApi"></exportDialog>
     </div>
 </template>
@@ -245,8 +245,6 @@
 		            this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     withDrawalApi.list(this.searchParams).then((response) => {
                         this.clearSelection();
-                        this.ids = [];
-                        this.selection = [];
                         this.otherParam = response.otherParam;
                         this.caseList = response.rows;
                         this.total = response.total;
@@ -265,7 +263,9 @@
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
-                    this.$refs.multiTable.clearSelection() //清除选中的数据
+                    this.$refs.multiTable.clearSelection(); //清除选中的数据
+                    this.ids = [];
+                    this.selection = [];
                 }
             },
             //导出调解记录
@@ -326,7 +326,7 @@
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
                                     this.dialogVisible = false;
-                                    this.getList(1);
+                                    this.clearSelection();
                                     this.download(res.msg);
                                 }
                             })
@@ -343,7 +343,7 @@
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
                                     this.dialogVisible = false;
-                                    this.getList(1);
+                                    this.clearSelection();
                                     this.download(res.msg);
                                 }
                             })

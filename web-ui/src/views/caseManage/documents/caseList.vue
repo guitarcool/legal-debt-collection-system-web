@@ -77,7 +77,7 @@
                         :disabled="multiple" v-hasPermi="['case:clerical:instrumentBatch']">批量生成多人多案文书
                     </el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(1)" @clearTick="clearSelection">
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
 
@@ -126,12 +126,12 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <mediationBook @refresh="getList(1)" :params="mediationBookData.params" :selection="mediationBookData.selection"
+        <mediationBook @refresh="clearSelection" :params="mediationBookData.params" :selection="mediationBookData.selection"
             :title="mediationBookData.title" :show.sync="mediationBookData.dialogVisible" :id="mediationBookData.id"
             :requestApi="mediationBookData.requestApi"></mediationBook>
-        <message @refresh="getList(1)" :params="messageData.params" :title="messageData.title"
+        <message @refresh="clearSelection" :params="messageData.params" :title="messageData.title"
             :show.sync="messageData.dialogVisible" :requestApi="messageData.requestApi" :id="messageData.id"></message>
-        <batchExportDialog @refresh="getList(1)" :title="batchexportDialogData.title"
+        <batchExportDialog @refresh="clearSelection" :title="batchexportDialogData.title"
             :show.sync="batchexportDialogData.dialogVisible" :red="batchexportDialogData.red"
             :params="batchexportDialogData.params"></batchExportDialog>
         <!--<divisionDialog @refresh="getList" :title="divisionData.title" :show.sync="divisionData.dialogVisible" :id="divisionData.id" :principal="divisionData.principal" :orgNo="divisionData.orgNo"></divisionDialog>-->
@@ -260,8 +260,6 @@
                     templateApi.caseList(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
-                        this.ids = [];
-                        this.selection = [];
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
@@ -275,14 +273,6 @@
                         this.loading = false;
                     });
                 }
-            },
-            btnDisTime1() {
-                this.queryParams.orderByColumn = "distributionTime asc";
-                this.getList(1);
-            },
-            btnDisTime2() {
-                this.queryParams.orderByColumn = "distributionTime desc";
-                this.getList(1);
             },
             //委案状态
             getEntrustType(row, column) {
@@ -359,19 +349,27 @@
                 this.messageData.id = "";
             },
             btnAction() {
-                if (this.queryParams.orderByColumn == "contractAmount asc") {
-                    this.queryParams.orderByColumn = "contractAmount desc";
-                    this.getList(1);
+                if (this.searchParams.orderByColumn == "contractAmount asc") {
+                    this.searchParams.orderByColumn = "contractAmount desc";
+                    this.getList(2);
                     return;
                 }
                 if (
-                    this.queryParams.orderByColumn == "contractAmount desc" ||
-                    this.queryParams.orderByColumn == ""
+                    this.searchParams.orderByColumn == "contractAmount desc" ||
+                    this.searchParams.orderByColumn == ""
                 ) {
-                    this.queryParams.orderByColumn = "contractAmount asc";
-                    this.getList(1);
+                    this.searchParams.orderByColumn = "contractAmount asc";
+                    this.getList(2);
                     return;
                 }
+            },
+            btnDisTime1() {
+                this.searchParams.orderByColumn = "distributionTime asc";
+                this.getList(2);
+            },
+            btnDisTime2() {
+                this.searchParams.orderByColumn = "distributionTime desc";
+                this.getList(2);
             },
             renderHeader(h) {
               return (
@@ -396,7 +394,9 @@
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
-                    this.$refs.multiTable.clearSelection() //清除选中的数据
+                    this.$refs.multiTable.clearSelection(); //清除选中的数据
+                    this.ids = [];
+                    this.selection = [];
                 }
             },
             //获取调解员
@@ -409,9 +409,7 @@
                     // }
                 });
             },
-            resetAll() {
-                this.queryParams.orderByColumn = "contractAmount asc";
-            },
+            resetAll() {},
         },
     };
 

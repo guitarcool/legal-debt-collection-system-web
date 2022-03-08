@@ -102,7 +102,7 @@
                         批量导入还款信息
                     </el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(1)" @clearTick="clearSelection">
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
 
@@ -184,13 +184,13 @@
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
 
-        <importDialog @refresh="getList(1)" :title="addData.title" :show.sync="addData.dialogVisible" :id="addData.id">
+        <importDialog @refresh="clearSelection" :title="addData.title" :show.sync="addData.dialogVisible" :id="addData.id">
         </importDialog>
         <erweima :title="erweimaData.title" :url="erweimaData.url" :show.sync="erweimaData.dialogVisible">
         </erweima>
-        <applyAudit @refresh="getList(1)" :title="applyData.title" :show.sync="applyData.dialogVisible" :id="applyData.id"
+        <applyAudit @refresh="clearSelection" :title="applyData.title" :show.sync="applyData.dialogVisible" :id="applyData.id"
             :item="applyData.item"></applyAudit>
-        <exportDialog  @refresh="getList(1)" :title="exportData.title" :show.sync="exportData.dialogVisible"
+        <exportDialog  @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
             :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
     </div>
 </template>
@@ -340,8 +340,6 @@
                     financeApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
-                        this.ids = [];
-                        this.selection = [];
                         this.otherParam = response.otherParam || {};
                         this.caseList = response.rows;
                         this.total = response.total;
@@ -372,7 +370,9 @@
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
-                    this.$refs.multiTable.clearSelection() //清除选中的数据
+                    this.$refs.multiTable.clearSelection(); //清除选中的数据
+                    this.ids = [];
+                    this.selection = [];
                 }
             },
             /** 导出按钮操作 */
@@ -414,44 +414,44 @@
                 return this.selectDictLabel(this.entrustType, row.entrustStatus);
             },
             btnDisTime1() {
-                this.queryParams.orderByColumn = "distributionTime asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "distributionTime asc";
+                this.getList(2);
             },
             btnDisTime2() {
-                this.queryParams.orderByColumn = "distributionTime desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "distributionTime desc";
+                this.getList(2);
             },
             btnsubjectAmount1() {
-                this.queryParams.orderByColumn = "subjectAmount asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "subjectAmount asc";
+                this.getList(2);
             },
             btnsubjectAmount2() {
-                this.queryParams.orderByColumn = "subjectAmount desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "subjectAmount desc";
+                this.getList(2);
             },
             btnPaidAmount1() {
-                this.queryParams.orderByColumn = "paidAmount asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "paidAmount asc";
+                this.getList(2);
             },
             btnPaidAmount2() {
-                this.queryParams.orderByColumn = "paidAmount desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "paidAmount desc";
+                this.getList(2);
             },
             btnremainingBalance1() {
-                this.queryParams.orderByColumn = "remainingBalance asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "remainingBalance asc";
+                this.getList(2);
             },
             btnremainingBalance2() {
-                this.queryParams.orderByColumn = "remainingBalance desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "remainingBalance desc";
+                this.getList(2);
             },
             btnremittanceTime1() {
-                this.queryParams.orderByColumn = "remittanceTime asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "remittanceTime asc";
+                this.getList(2);
             },
             btnremittanceTime2() {
-                this.queryParams.orderByColumn = "remittanceTime desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "remittanceTime desc";
+                this.getList(2);
             },
             renderDisTime() {
                 return (

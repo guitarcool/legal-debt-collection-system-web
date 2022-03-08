@@ -54,7 +54,7 @@
                     <el-button type="success" size="mini" :disabled="multiple" @click="handleMessage">批量文书短信发送
                     </el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(1)" @clearTick="clearSelection">
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
             <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys"
@@ -91,7 +91,7 @@
 
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
-            <batchDialog @refresh="getList(1)" :title="batchDialogData.title" :show.sync="batchDialogData.dialogVisible"
+            <batchDialog @refresh="clearSelection" :title="batchDialogData.title" :show.sync="batchDialogData.dialogVisible"
                 :red="batchDialogData.red" :params="batchDialogData.params"></batchDialog>
         </div>
     </div>
@@ -183,7 +183,6 @@
                     templateApi.recordList(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
-                        this.ids = [];
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
@@ -211,7 +210,9 @@
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
-                    this.$refs.multiTable.clearSelection() //清除选中的数据
+                    this.$refs.multiTable.clearSelection(); //清除选中的数据
+                    this.ids = [];
+                    this.selection = [];
                 }
             },
             /** 搜索按钮操作 */
@@ -237,12 +238,12 @@
                     item.fileUrl;
             },
             btnRepayDate1() {
-                this.queryParams.orderByColumn = "createTime asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "createTime asc";
+                this.getList(2);
             },
             btnRepayDate2() {
-                this.queryParams.orderByColumn = "createTime desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "createTime desc";
+                this.getList(2);
             },
             //打开发送短信的弹窗
             handleMessage() {

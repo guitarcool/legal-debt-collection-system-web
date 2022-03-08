@@ -94,7 +94,7 @@
                     <el-button type="warning" icon="el-icon-download" size="mini" @click="handleExport"
                         :disabled="multiple" v-hasPermi="['case:caseinfo:export']">导出</el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(1)" @clearTick="clearSelection"></right-toolbar>
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection"></right-toolbar>
             </el-row>
 
             <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys"
@@ -140,9 +140,9 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <importDialog @refresh="getList(1)" :title="addData.title" :show.sync="addData.dialogVisible" :id="addData.id">
+        <importDialog @refresh="clearSelection" :title="addData.title" :show.sync="addData.dialogVisible" :id="addData.id">
         </importDialog>
-        <exportDialog  :title="exportData.title" @refresh="getList(1)" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
+        <exportDialog  :title="exportData.title" @refresh="clearSelection" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
             :requestApi="exportData.requestApi"></exportDialog>
     </div>
 </template>
@@ -274,7 +274,6 @@
                     importApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
-                        this.ids = [];
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
@@ -291,7 +290,8 @@
             },
             clearSelection(){
                 if(this.caseList.length>0){
-                    this.$refs.multiTable.clearSelection() //清除选中的数据
+                    this.$refs.multiTable.clearSelection(); //清除选中的数据
+                    this.ids = [];
                 }
             },
             /** 搜索按钮操作 */
@@ -326,44 +326,44 @@
                 });
             },
             btnAction1() {
-                this.queryParams.orderByColumn = "contractAmount asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "contractAmount asc";
+                this.getList(2);
             },
             btnAction2() {
-                this.queryParams.orderByColumn = "contractAmount desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "contractAmount desc";
+                this.getList(2);
             },
             btnTime1() {
-                this.queryParams.orderByColumn = "createTime asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "createTime asc";
+                this.getList(2);
             },
             btnTime2() {
-                this.queryParams.orderByColumn = "createTime desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "createTime desc";
+                this.getList(2);
             },
             btnMoney1() {
-                this.queryParams.orderByColumn = "remainingBalance asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "remainingBalance asc";
+                this.getList(2);
             },
             btnMoney2() {
-                this.queryParams.orderByColumn = "remainingBalance desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "remainingBalance desc";
+                this.getList(2);
             },
             btnTerm1() {
-                this.queryParams.orderByColumn = "overdueTerm asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "overdueTerm asc";
+                this.getList(2);
             },
             btnTerm2() {
-                this.queryParams.orderByColumn = "overdueTerm desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "overdueTerm desc";
+                this.getList(2);
             },
             btnDisTime1() {
-                this.queryParams.orderByColumn = "distributionTime asc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "distributionTime asc";
+                this.getList(2);
             },
             btnDisTime2() {
-                this.queryParams.orderByColumn = "distributionTime desc";
-                this.getList(1);
+                this.searchParams.orderByColumn = "distributionTime desc";
+                this.getList(2);
             },
             renderHeader(h) {
               return (
