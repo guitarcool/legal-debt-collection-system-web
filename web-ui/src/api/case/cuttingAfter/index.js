@@ -220,7 +220,22 @@ const cuttingAfterApi = {
             method: 'get',
             params: query
         })
-    },             
+    },   
+    //裁后案件编辑获取详情
+    getCaseEditData(caseId) {
+        return request({
+            url: '/case/postAdjudged/getCaseEditData?caseId='+caseId,
+            method: 'get'
+        })
+    },  
+    // 裁后案件编辑发送
+    updateCaseEditData(data) {
+        return request({
+        url: '/case/postAdjudged/updateCaseEditData',
+        method: 'post',
+        data: data
+        })
+    },         
 }
 
 // 下载用户导入模版

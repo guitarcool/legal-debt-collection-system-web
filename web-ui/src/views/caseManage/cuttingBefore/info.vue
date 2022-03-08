@@ -8,6 +8,7 @@
                     <span>【案件状态：{{statusFormat(firstInfo.caseStatus)}}】</span>
                 </div>
                 <div>
+                    <el-button circle size="mini" icon="el-icon-edit" v-hasPermi="['case:pretrial:getCaseEditData']" @click="editInformation"></el-button>
                     <el-button v-if="firstInfo.isDesensitization" :disabled="isDisable" circle size="mini"
                         icon="el-icon-view" style="margin-right:10px" @click="viewData"></el-button>
                     <el-button size="mini" type="primary" @click="nextCase(1)">上一案</el-button>
@@ -24,7 +25,7 @@
                         </el-dropdown-menu>
                     </el-dropdown>
                     <el-dropdown slot="append" v-if="firstInfo.caseStatus != 13">
-                        <el-button type="primary" size="mini" >
+                        <el-button type="primary" size="mini">
                             还款登记<i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
@@ -90,8 +91,12 @@
                 </div>
                 <div class="small-three">
                     <p class="small-unit-header">最近一次短信送达状态：</p>
-                    <P v-if="firstInfo.providerType == 1">{{shisuyunStatusFormat(firstInfo.deliverStatus) !=""?shisuyunStatusFormat(firstInfo.deliverStatus):firstInfo.deliverStatus}}</P>
-                    <p v-if="firstInfo.providerType == 2">{{wodongStatusFormat(firstInfo.deliverStatus) !=""?wodongStatusFormat(firstInfo.deliverStatus):firstInfo.deliverStatus}}</p>
+                    <P v-if="firstInfo.providerType == 1">
+                        {{shisuyunStatusFormat(firstInfo.deliverStatus) !=""?shisuyunStatusFormat(firstInfo.deliverStatus):firstInfo.deliverStatus}}
+                    </P>
+                    <p v-if="firstInfo.providerType == 2">
+                        {{wodongStatusFormat(firstInfo.deliverStatus) !=""?wodongStatusFormat(firstInfo.deliverStatus):firstInfo.deliverStatus}}
+                    </p>
                 </div>
             </div>
         </div>
@@ -756,8 +761,10 @@
                             </el-table-column>
                             <el-table-column label="送达状态" width="120" prop="deliverStatus">
                                 <template slot-scope="scope" v-if="scope.row.deliverStatus != null">
-                                    <span v-if="scope.row.providerType == 1">{{shisuyunStatusFormat(scope.row.deliverStatus) !=""?shisuyunStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
-                                    <span v-if="scope.row.providerType == 2">{{wodongStatusFormat(scope.row.deliverStatus) !=""?wodongStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
+                                    <span
+                                        v-if="scope.row.providerType == 1">{{shisuyunStatusFormat(scope.row.deliverStatus) !=""?shisuyunStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
+                                    <span
+                                        v-if="scope.row.providerType == 2">{{wodongStatusFormat(scope.row.deliverStatus) !=""?wodongStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="deliverTime" label="送达时间" :show-overflow-tooltip="true" width="210">
@@ -861,6 +868,9 @@
         </reimbursement>
         <erweima :title="erweimaData.title" :url="erweimaData.url" :show.sync="erweimaData.dialogVisible">
         </erweima>
+        <editInformation :title="information.title" :id="id" @refresh="getAdjudgedInfo"
+            :type="information.type" :show.sync="information.dialogVisible">
+        </editInformation>
     </div>
 </template>
 
@@ -868,6 +878,7 @@
     import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
     import recordList from "../components/recordList";
     import normalDialog from "../components/normalDialog"; //通用弹窗
+    import editInformation from "../components/editInformation"; //修改信息弹窗
     import componentsArray from "@/utils/componentsArray"; //按钮组件数组，后台直接调用
     import pendingFilling from "../components/pendingFiling"; //待执行立案
     import hasRuled from "../components/hasRuled"; //已判决
@@ -898,8 +909,8 @@
             reimbursement,
             erweima,
             statusAlteration,
-            exportsms
-
+            exportsms,
+            editInformation
         },
         data() {
             return {
@@ -1004,6 +1015,12 @@
                     id: "",
                     statusId: 0,
                 },
+                information: {
+                    dialogVisible: false,
+                    title: "",
+                    id: "",
+                    type:""
+                },
                 phoneData: {
                     dialogVisible: false,
                     title: "",
@@ -1095,7 +1112,7 @@
                 shisuyunStatus: [],
                 contactResultOptions: [],
                 contactStatusOptions: [],
-                protects:[],
+                protects: [],
                 token: null,
                 isDisable: false,
                 idList: [],
@@ -1111,7 +1128,7 @@
             });
             //案件联系状态
             this.getDicts("contactStatus").then((response) => {
-            this.contactStatusOptions = response.data;
+                this.contactStatusOptions = response.data;
             });
             //车房类型
             this.getDicts("yes_no").then((response) => {
@@ -1246,11 +1263,11 @@
                             this.componentsMap.set(item.eName, item);
                         }
                     });
-                    if(type == 2){
+                    if (type == 2) {
                         this.getCaseBaseInfo('subject');
                         this.getCaseBaseInfo('repayAccount');
                         this.getMediationObject();
-                        this.getCaseRecordInfo('medRecord');                        
+                        this.getCaseRecordInfo('medRecord');
                     }
                 });
             },
@@ -1808,7 +1825,7 @@
                 if (this.firstInfo.entrustStatus == 2) {
                     this.msgError("案件委案状态为【暂停】,无法进行该操作！");
                     return;
-                } 
+                }
                 var that = this;
                 this.$confirm(`是否要拨打电话?`, "提示", {
                         confirmButtonText: "确定",
@@ -1865,11 +1882,11 @@
                             ids: that.id,
                         };
                         cuttingBeforeApi.applyCaseEdit(param).then((res) => {
-                                if (res.code === 200) {
-                                    that.msgSuccess(res.msg);
-                                }else if (res.code === 500) {
-                                    that.msgError(res.msg);
-                                }
+                            if (res.code === 200) {
+                                that.msgSuccess(res.msg);
+                            } else if (res.code === 500) {
+                                that.msgError(res.msg);
+                            }
                         });
                     })
                     .catch(() => {
@@ -1882,6 +1899,13 @@
                     process.env.VUE_APP_BASE_API +
                     "/common/download/resource?resource=" +
                     item.annexAddress;
+            },
+            editInformation() {
+                this.information.title = '裁后详情案件信息编辑';
+                this.information.type = 'before';
+                this.information.requestApi = "/case/adjudged/mediationFailed";
+                // 控制弹窗组件显示
+                this.information.dialogVisible = true;
             },
             //查看二维码
             seeErweima(item) {
@@ -1945,7 +1969,7 @@
 
 <style scoped lang="scss">
     .case-info {
-         margin: 10px 15px;
+        margin: 10px 15px;
     }
 
     .two-distribution {
@@ -1973,9 +1997,11 @@
             white-space: pre-wrap;
         }
     }
-    .el-tabs__header{
-        margin:0
+
+    .el-tabs__header {
+        margin: 0
     }
+
     .distinguish-style {
         color: rgb(24, 144, 255);
         text-decoration: underline;

@@ -8,7 +8,7 @@
                     <span>【案件状态：{{statusFormat(firstInfo.caseStatus)}}】</span>
                 </div>
                 <div>
-                    <el-button circle size="mini" icon="el-icon-edit" @click="editInformation"></el-button>
+                    <el-button circle size="mini" icon="el-icon-edit" v-hasPermi="['case:postAdjudged:getCaseEditData']" @click="editInformation"></el-button>
                     <el-button v-if="firstInfo.isDesensitization" :disabled="isDisable" circle size="mini"
                         icon="el-icon-view" @click="viewData"></el-button>
                     <el-button size="mini" type="primary" @click="nextCase(1)">上一案</el-button>
@@ -866,7 +866,7 @@
         <erweima :title="erweimaData.title" :url="erweimaData.url" :show.sync="erweimaData.dialogVisible">
         </erweima>
         <editInformation :title="information.title" :id="id" @refresh="getAdjudgedInfo"
-            :requestApi="information.requestApi" :show.sync="information.dialogVisible">
+            :type="information.type" :show.sync="information.dialogVisible">
         </editInformation>
     </div>
 </template>
@@ -958,7 +958,7 @@
                 information: {
                     dialogVisible: false,
                     title: "",
-                    requestApi: "",
+                    type: "",
                     id: "",
                 },
                 exportDialogData: {
@@ -1447,6 +1447,7 @@
             },
             editInformation(){
                 this.information.title = '裁后详情案件信息编辑';
+                this.information.type = 'after';
                 this.information.requestApi = "/case/adjudged/mediationFailed";
                 // 控制弹窗组件显示
                 this.information.dialogVisible = true;

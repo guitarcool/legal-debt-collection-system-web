@@ -185,6 +185,21 @@ const cuttingBeforeApi = {
             method: 'get',
             params: query
         })
+    }, 
+    //裁前案件编辑获取详情
+    getCaseEditData(caseId) {
+        return request({
+            url: '/case/pretrial/getCaseEditData?caseId='+caseId,
+            method: 'get'
+        })
+    },  
+    // 裁前案件编辑发送
+    updateCaseEditData(data) {
+        return request({
+        url: '/case/pretrial/updateCaseEditData',
+        method: 'post',
+        data: data
+        })
     },        
 }
 
