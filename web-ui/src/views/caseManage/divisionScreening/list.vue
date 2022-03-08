@@ -432,7 +432,7 @@
                     id: "",
                     batchNo: "",
                     pageNum: 1,
-                    pageSize: 10,
+                    pageSize: 50,
                     mediator: "",
                     respondentName: "",
                     respondentPhone: "",

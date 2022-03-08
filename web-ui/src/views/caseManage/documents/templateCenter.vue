@@ -162,7 +162,7 @@
                 queryParams: {
                     name: "",
                     pageNum: 1,
-                    pageSize: 10,
+                    pageSize: 50,
                     templateType: "",
                     status: "",
                     formatType: "",

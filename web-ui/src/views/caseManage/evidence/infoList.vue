@@ -251,7 +251,7 @@
                 searchParams: {},
                 queryParams: {
                     pageNum: 1,
-                    pageSize: 10,
+                    pageSize: 50,
                 },
                 selection: [],
                 typeOptions: [{

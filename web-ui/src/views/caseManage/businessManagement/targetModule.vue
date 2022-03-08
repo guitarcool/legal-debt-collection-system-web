@@ -131,7 +131,7 @@
                 showSearch: true,
                 queryParams: {
                     pageNum: 1,
-                    pageSize: 10,
+                    pageSize: 50,
                 },
                 activeName: 'first',
                 infoName: 'first',
