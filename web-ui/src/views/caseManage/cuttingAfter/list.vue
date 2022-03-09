@@ -80,8 +80,8 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item v-if="queryParams.screenType" label="号码筛选结果：">
-                    <el-select clearable v-if="queryParams.screenType == 1" size="small" v-model="queryParams.screenResult"
-                        placeholder="请选择">
+                    <el-select clearable v-if="queryParams.screenType == 1" size="small"
+                        v-model="queryParams.screenResult" placeholder="请选择">
                         <el-option v-for="item in networkSortresult" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
@@ -107,8 +107,8 @@
                 </el-form-item>
                 <el-form-item label="短信发送渠道：">
                     <el-select size="small" clearable v-model="queryParams.providerType" placeholder="请选择">
-                        <el-option v-for="item in shortmsgProviderType" :key="item.dictValue"
-                            :label="item.dictLabel" :value="item.dictValue">
+                        <el-option v-for="item in shortmsgProviderType" :key="item.dictValue" :label="item.dictLabel"
+                            :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -126,7 +126,8 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="账龄（M）：">
-                        <el-input clearable size="small" style="width:100px" v-model="queryParams.overdueStartAge" />~<el-input clearable size="small" style="width:100px" v-model="queryParams.overdueEndAge" />
+                    <el-input clearable size="small" style="width:100px" v-model="queryParams.overdueStartAge" />~
+                    <el-input clearable size="small" style="width:100px" v-model="queryParams.overdueEndAge" />
                 </el-form-item>
                 <el-form-item label="联系状态：">
                     <el-select size="small" clearable v-model="queryParams.contactStatus" placeholder="请选择">
@@ -239,33 +240,40 @@
                 </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys"
-                @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
+                :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
                 <el-table-column label="手机号" width="120" prop="respondentPhone" fixed="left" />
-                <el-table-column label="姓名" width="100" prop="respondentName" :show-overflow-tooltip="true" fixed="left" />
-                <el-table-column label="最近一次调解标签" width="150" :formatter="getContactResultOptions" prop="mediationLabel"></el-table-column>
+                <el-table-column label="姓名" width="100" prop="respondentName" :show-overflow-tooltip="true"
+                    fixed="left" />
+                <el-table-column label="最近一次调解标签" width="150" :formatter="getContactResultOptions"
+                    prop="mediationLabel"></el-table-column>
                 <el-table-column label="最近一次调解时间" width="160" prop="mediateTime"></el-table-column>
                 <el-table-column label="最近一次短信送达状态" width="160" prop="deliverStatus">
                     <template slot-scope="scope" v-if="scope.row.deliverStatus != null">
-                        <span v-if="scope.row.providerType == 1">{{shisuyunStatusFormat(scope.row.deliverStatus) !=""?shisuyunStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
-                        <span v-if="scope.row.providerType == 2">{{wodongStatusFormat(scope.row.deliverStatus) !=""?wodongStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
+                        <span
+                            v-if="scope.row.providerType == 1">{{shisuyunStatusFormat(scope.row.deliverStatus) !=""?shisuyunStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
+                        <span
+                            v-if="scope.row.providerType == 2">{{wodongStatusFormat(scope.row.deliverStatus) !=""?wodongStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="账龄"  prop="overdueAge" />
-                <el-table-column label="标的金额" width="150" prop="subjectAmount" :render-header="renderAmount" />
-                <el-table-column label="已还金额" width="150" prop="paidAmount" :render-header="renderPaidAmount" />
+                <el-table-column label="账龄" prop="overdueAge" />
+                <el-table-column label="标的金额" width="150" prop="subjectAmount" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" />
+                <el-table-column label="已还金额" width="150" prop="paidAmount" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="剩余待还总额" width="200" prop="remainingBalance" />
                 <el-table-column label="还款状态" :formatter="getRepayStatus" prop="repayStatus">
                 </el-table-column>
                 <el-table-column label="合同号" width="150" prop="orderNo" :show-overflow-tooltip="true" />
-                <el-table-column label="逾期天数" width="150" :render-header="renderOverdueDay" prop="overdueDay" />
+                <el-table-column label="逾期天数" width="150" sortable="custom" :sort-orders="['descending', 'ascending']"
+                    prop="overdueDay" />
                 <el-table-column label="逾期年利率" prop="overYearRate" width="100" />
                 <el-table-column label="联系状态" :formatter="getContactStatusOptions" prop="contactStatus">
                 </el-table-column>
-                <el-table-column label="案件分配时间" prop="distributionTime" width="120"
-                    :render-header="renderDisTime">
+                <el-table-column label="案件分配时间" prop="distributionTime" width="120" sortable="custom"
+                    :sort-orders="['descending', 'ascending']">
                     <template slot-scope="scope" v-if="scope.row.distributionTime">
                         <span>{{
                             parseTime(scope.row.distributionTime, "{y}-{m}-{d}")
@@ -287,7 +295,8 @@
                 <el-table-column label="案件状态" width="150" :show-overflow-tooltip="true" :formatter="statusFormat"
                     prop="caseStatus">
                 </el-table-column>
-                <el-table-column label="承诺还款日" width="150" prop="promiseRepayDate" :render-header="renderRepayDate">
+                <el-table-column label="承诺还款日" width="150" prop="promiseRepayDate" sortable="custom"
+                    :sort-orders="['descending', 'ascending']">
                     <template slot-scope="scope">
                         <span>{{
                             parseTime(scope.row.promiseRepayDate, "{y}-{m}-{d}")
@@ -339,7 +348,8 @@
         </recordDialog>
         <importDialog @refresh="clearSelection" :title="addData.title" :headline="addData.headline"
             :show.sync="addData.dialogVisible" :id="addData.id"></importDialog>
-        <testCall  @refresh="clearSelection" :title="callData.title" :show.sync="callData.dialogVisible" :ids="callData.ids">
+        <testCall @refresh="clearSelection" :title="callData.title" :show.sync="callData.dialogVisible"
+            :ids="callData.ids">
         </testCall>
         <batchExportDialog @refresh="clearSelection" :title="batchexportDialogData.title"
             :show.sync="batchexportDialogData.dialogVisible" :red="batchexportDialogData.red"
@@ -380,9 +390,9 @@
                 total: 0,
                 // 角色表格数据
                 caseList: [],
-                idList:[],//id集合
+                idList: [], //id集合
                 // 查询参数
-                searchParams:[],
+                searchParams: [],
                 queryParams: {
                     id: "",
                     batchNo: "",
@@ -393,11 +403,11 @@
                     promiseRepayDate: "",
                     respondentName: "",
                     respondentPhone: "",
-                    replyContent:"",
+                    replyContent: "",
                     respondentIdNo: "",
                     orderNo: "",
                     screenType: "",
-                    screenStatus:"",
+                    screenStatus: "",
                     screenResult: "",
                     productName: "",
                     medLabel: "",
@@ -405,7 +415,7 @@
                     medFail: "",
                     caseStatus: "",
                     preStatus: "",
-                    entrustStatus:"1",
+                    entrustStatus: "1",
                     orderByColumn: "",
                     isAsc: "",
                 },
@@ -453,8 +463,8 @@
                 realtimeSortresult: [],
                 screenType: [],
                 adjustType: [],
-                screen_status:[],
-                entrustType:[],
+                screen_status: [],
+                entrustType: [],
                 rules: {
                     exportRange: [{
                         required: true,
@@ -477,8 +487,8 @@
                 },
                 wodongStatus: [],
                 shisuyunStatus: [],
-                contactStatusOptions:[],
-                shortmsgProviderType: []
+                contactStatusOptions: [],
+                shortmsgProviderType: [],
             };
         },
         created() {
@@ -565,8 +575,8 @@
                 this.idList = [];
                 this.loading = true;
                 //查询
-                if(type == 1){
-		            this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
+                if (type == 1) {
+                    this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     cuttingAfterApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
@@ -580,7 +590,7 @@
                     });
                 }
                 //切换页
-                else if(type == 2){
+                else if (type == 2) {
                     cuttingAfterApi.list(this.searchParams).then((response) => {
                         this.otherParam = response.otherParam;
                         this.caseList = response.rows;
@@ -591,6 +601,12 @@
                         this.loading = false;
                     });
                 }
+            },
+            /** 排序触发事件 */
+            handleSortChange(column, prop, order) {
+                this.searchParams.orderByColumn = column.prop;
+                this.searchParams.isAsc = column.order;
+                this.getList(2);
             },
             /** 批量统一弹窗 */
             handleAdd(val) {
@@ -763,7 +779,7 @@
                     name: "cutAfterInfo",
                     query: {
                         afterId: item.id,
-                        afterList:this.idList
+                        afterList: this.idList
                     }
                 });
             },
@@ -785,7 +801,7 @@
             },
             //信修状态
             getLetterRepairStatus(row, column) {
-                return this.selectDictLabel(this.letterRepairStatusOptions,row.letterRepairStatus);
+                return this.selectDictLabel(this.letterRepairStatusOptions, row.letterRepairStatus);
             },
             //财保状态
             getProtects(row, column) {
@@ -845,7 +861,7 @@
                                 if (res.code === 200) {
                                     that.msgSuccess(res.msg);
                                     that.clearSelection();
-                                }else if (res.code === 500) {
+                                } else if (res.code === 500) {
                                     that.msgError(res.msg);
                                 }
                             });
@@ -904,46 +920,6 @@
                     // }
                 });
             },
-            btnAmount1() {
-                this.searchParams.orderByColumn = "subjectAmount asc";
-                this.getList(2);
-            },
-            btnAmount2() {
-                this.searchParams.orderByColumn = "subjectAmount desc";
-                this.getList(2);
-            },
-            btnPaidAmount1() {
-                this.searchParams.orderByColumn = "paidAmount asc";
-                this.getList(2);
-            },
-            btnPaidAmount2() {
-                this.searchParams.orderByColumn = "paidAmount desc";
-                this.getList(2);
-            },
-            btnRepayDate1() {
-                this.searchParams.orderByColumn = "promiseRepayDate asc";
-                this.getList(2);
-            },
-            btnRepayDate2() {
-                this.searchParams.orderByColumn = "promiseRepayDate desc";
-                this.getList(2);
-            },
-            btnDisTime1() {
-                this.searchParams.orderByColumn = "distributionTime asc";
-                this.getList(2);
-            },
-            btnDisTime2() {
-                this.searchParams.orderByColumn = "distributionTime desc";
-                this.getList(2);
-            },
-            btnOverdueDay1() {
-                this.searchParams.orderByColumn = "overdueDay asc";
-                this.getList(2);
-            },
-            btnOverdueDay2() {
-                this.searchParams.orderByColumn = "overdueDay desc";
-                this.getList(2);
-            },
             resetAll() {
                 this.chooseDaterange = [];
                 this.chooseDaterange1 = [];
@@ -990,61 +966,6 @@
                 this.batchexportDialogData.red = false;
                 this.batchexportDialogData.params = this.ids.join(",");
             },
-            renderOverdueDay(){
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 逾期天数 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnOverdueDay1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnOverdueDay2}></i>
-                  </span>
-                </div>
-              );
-            },  
-            renderAmount() {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 标的金额 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnAmount1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnAmount2}></i>
-                  </span>
-                </div>
-              );
-            },
-            renderPaidAmount() {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 已还金额 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnPaidAmount1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnPaidAmount2}></i>
-                  </span>
-                </div>
-              );
-            },
-            renderRepayDate() {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 承诺还款日 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnRepayDate1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnRepayDate2}></i>
-                  </span>
-                </div>
-              );
-            },
-            renderDisTime() {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 案件分配时间 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnDisTime1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnDisTime2}></i>
-                  </span>
-                </div>
-              );
-            }, 
         },
     };
 

@@ -89,8 +89,8 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item v-if="queryParams.screenType" label="号码筛选结果：">
-                    <el-select clearable v-if="queryParams.screenType == 1" size="small" v-model="queryParams.screenResult"
-                        placeholder="请选择">
+                    <el-select clearable v-if="queryParams.screenType == 1" size="small"
+                        v-model="queryParams.screenResult" placeholder="请选择">
                         <el-option v-for="item in networkSortresult" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
@@ -116,8 +116,8 @@
                 </el-form-item>
                 <el-form-item label="短信发送渠道：">
                     <el-select clearable size="small" v-model="queryParams.providerType" placeholder="请选择">
-                        <el-option v-for="item in shortmsgProviderType" :key="item.dictValue"
-                            :label="item.dictLabel" :value="item.dictValue">
+                        <el-option v-for="item in shortmsgProviderType" :key="item.dictValue" :label="item.dictLabel"
+                            :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -197,17 +197,17 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="primary" icon="el-icon-video-pause" size="mini" :disabled="multiple"
-                         @click="suspendCase" v-hasPermi="['case:assignment:suspendCase']">暂停案件
+                        @click="suspendCase" v-hasPermi="['case:assignment:suspendCase']">暂停案件
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="primary" icon="el-icon-video-play" size="mini" :disabled="multiple"
-                         @click="recoveryCase" v-hasPermi="['case:assignment:recoverCase']">恢复案件
+                        @click="recoveryCase" v-hasPermi="['case:assignment:recoverCase']">恢复案件
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="primary" icon="el-icon-s-fold" size="mini" :disabled="multiple"
-                         @click="retreat" v-hasPermi="['case:assignment:withdrawalCase']">退案
+                    <el-button type="primary" icon="el-icon-s-fold" size="mini" :disabled="multiple" @click="retreat"
+                        v-hasPermi="['case:assignment:withdrawalCase']">退案
                     </el-button>
                 </el-col>
             </el-row>
@@ -222,25 +222,25 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" icon="el-icon-download" size="mini" :disabled="multiple"
-                         @click="batchExportMediationRecord">
+                        @click="batchExportMediationRecord">
                         导出调解记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" icon="el-icon-download" size="mini" :disabled="multiple"
-                         @click="batchExportAdjestMent">
+                        @click="batchExportAdjestMent">
                         导出网调记录
                     </el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
-            <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys"
-                @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
+                :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
-                <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="120"
-                    :render-header="renderDisTime">
+                <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="120" sortable="custom"
+                    :sort-orders="['descending', 'ascending']">
                     <template slot-scope="scope" v-if="scope.row.distributionTime">
                         <span>{{
               parseTime(scope.row.distributionTime, "{y}-{m}-{d}")
@@ -252,14 +252,17 @@
                 <el-table-column label="案件状态" :formatter="statusFormat" prop="caseStatus" width="120">
                 </el-table-column>
                 <el-table-column label="订单号" prop="id" :show-overflow-tooltip="true" width="170" />
-                <el-table-column label="合同号" prop="orderNo" :show-overflow-tooltip="true" width="120"
-                    :render-header="renderOrderNo" />
+                <el-table-column label="合同号" prop="orderNo" :show-overflow-tooltip="true" width="120" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="手机号" prop="respondentPhone" width="120" />
-                <el-table-column label="逾期总额" prop="caseAmount" :render-header="renderAmount" width="120" />
-                <el-table-column label="已还金额" prop="paidAmount" width="120" :render-header="renderPaidAmount" />
+                <el-table-column label="逾期总额" prop="caseAmount" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" width="120" />
+                <el-table-column label="已还金额" prop="paidAmount" width="120" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="逾期天数" prop="overdueDay" width="120" />
                 <el-table-column label="逾期年利率" prop="overYearRate" width="100" />
-                <el-table-column label="承诺还款日" prop="promiseRepayDate" width="160" :render-header="renderRepayDate">
+                <el-table-column label="承诺还款日" prop="promiseRepayDate" width="160" sortable="custom"
+                    :sort-orders="['descending', 'ascending']">
                     <template slot-scope="scope">
                         <span>{{
               parseTime(scope.row.promiseRepayDate, "{y}-{m}-{d}")
@@ -267,14 +270,16 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="借款平台名称" prop="platform" width="160" :show-overflow-tooltip="true" />
-                <el-table-column label="发布时间" prop="createTime" width="160" :render-header="renderTime">
+                <el-table-column label="发布时间" prop="createTime" width="160" sortable="custom"
+                    :sort-orders="['descending', 'ascending']">
                     <template slot-scope="scope" v-if="scope.row.createTime">
                         <span>{{ parseTime(scope.row.createTime) }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="还款状态" :formatter="getRepayStatus" prop="repayStatus" width="100">
                 </el-table-column>
-                <el-table-column label="分配天数" :render-header="renderRemainDays" prop="remainDays" width="100">
+                <el-table-column label="分配天数" sortable="custom" :sort-orders="['descending', 'ascending']"
+                    prop="remainDays" width="100">
                 </el-table-column>
                 <el-table-column label="调解员" prop="principalName" width="140" />
                 <el-table-column label="监督员" prop="supervisors" width="140" />
@@ -300,8 +305,10 @@
                 </el-table-column>
                 <el-table-column label="最近一次短信发送状态" width="160" prop="deliverStatus">
                     <template slot-scope="scope" v-if="scope.row.deliverStatus != null">
-                        <span v-if="scope.row.providerType == 1">{{shisuyunStatusFormat(scope.row.deliverStatus) !=""?shisuyunStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
-                        <span v-if="scope.row.providerType == 2">{{wodongStatusFormat(scope.row.deliverStatus) !=""?wodongStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
+                        <span
+                            v-if="scope.row.providerType == 1">{{shisuyunStatusFormat(scope.row.deliverStatus) !=""?shisuyunStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
+                        <span
+                            v-if="scope.row.providerType == 2">{{wodongStatusFormat(scope.row.deliverStatus) !=""?wodongStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="委案状态" :formatter="getEntrustType" prop="entrustStatus">
@@ -361,27 +368,27 @@
             :show.sync="supervisorData.dialogVisible"></supervisorDialog>
         <recordDialog :title="recordData.title" :show.sync="recordData.dialogVisible" :id="recordData.id">
         </recordDialog>
-        <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
-            :requestApi="exportData.requestApi"></exportDialog>
+        <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
+            :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
         <el-dialog :title="form.title" :visible.sync="exportDialogVisible" width="50%" :before-close="handleClose">
             <el-form style="margin: 0 auto;" ref="form" :model="form" :rules="exportRules" label-width="100px">
                 <el-form-item v-if="form.title=='导出调解记录'" label="导出范围：" prop="exportRange">
-                <el-checkbox-group v-model="form.exportRange">
-                    <el-checkbox :label="1">最近一次调解记录</el-checkbox>
-                    <el-checkbox :label="2">全部调解记录</el-checkbox>
-                </el-checkbox-group>
+                    <el-checkbox-group v-model="form.exportRange">
+                        <el-checkbox :label="1">最近一次调解记录</el-checkbox>
+                        <el-checkbox :label="2">全部调解记录</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item v-if="form.title=='导出网调记录'" label="导出范围：" prop="exportRange">
-                <el-checkbox-group v-model="form.exportRange">
-                    <el-checkbox :label="1">最近一次网调记录</el-checkbox>
-                    <el-checkbox :label="2">全部网调记录</el-checkbox>
-                </el-checkbox-group>
+                    <el-checkbox-group v-model="form.exportRange">
+                        <el-checkbox :label="1">最近一次网调记录</el-checkbox>
+                        <el-checkbox :label="2">全部网调记录</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item v-if="form.title=='导出调解记录'" label="是否脱敏：" prop="isDesensitization">
-                <el-radio-group v-model="form.isDesensitization">
-                    <el-radio :label="1">是</el-radio>
-                    <el-radio :label="0">否</el-radio>
-                </el-radio-group>
+                    <el-radio-group v-model="form.isDesensitization">
+                        <el-radio :label="1">是</el-radio>
+                        <el-radio :label="0">否</el-radio>
+                    </el-radio-group>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -427,7 +434,7 @@
                 // 角色表格数据
                 caseList: [],
                 // 查询参数
-                searchParams:{},
+                searchParams: {},
                 queryParams: {
                     id: "",
                     batchNo: "",
@@ -436,7 +443,7 @@
                     mediator: "",
                     respondentName: "",
                     respondentPhone: "",
-                    replyContent:"",
+                    replyContent: "",
                     respondentIdNo: "",
                     orderNo: "",
                     caseStatus: "",
@@ -444,13 +451,13 @@
                     screenType: "",
                     screenResult: "",
                     contactStatus: "",
-                    screenStatus:"",
+                    screenStatus: "",
                     platform: "",
                     disBeginTime: "",
                     disEndTime: "",
                     repayBeginTime: "",
                     repayEndTime: "",
-                    entrustStatus:"1",
+                    entrustStatus: "1",
                     orderByColumn: "",
                     isAsc: "",
                 },
@@ -493,7 +500,7 @@
                     jump: [],
                     radioStatus: "",
                 },
-                numberDialogVisible:false,
+                numberDialogVisible: false,
                 dialogVisible: false,
                 selection: [],
                 chooseDaterange: [],
@@ -502,11 +509,11 @@
                 networkSortresult: [],
                 realtimeSortresult: [],
                 screenType: [],
-                screen_status:[],
+                screen_status: [],
                 userList: [],
                 deptList: [],
                 adjustType: [],
-                entrustType:[],
+                entrustType: [],
                 otherParam: {},
                 exportData: {
                     title: "",
@@ -514,25 +521,29 @@
                     ids: "",
                     requestApi: "",
                 },
-                form:{
+                form: {
                     exportRange: [],
                     isDesensitization: '1',
                 },
                 exportRules: {
-                    exportRange:[
-                        { required: true, message: '请选择导出范围', trigger: 'change' }
-                    ],
-                    isDesensitization:[
-                        { required: true, message: '请选择是否脱敏', trigger: 'change' }
-                    ]
-                },   
-                exportDialogVisible:false,
+                    exportRange: [{
+                        required: true,
+                        message: '请选择导出范围',
+                        trigger: 'change'
+                    }],
+                    isDesensitization: [{
+                        required: true,
+                        message: '请选择是否脱敏',
+                        trigger: 'change'
+                    }]
+                },
+                exportDialogVisible: false,
                 getRowKeys(row) {
                     return row.id;
                 },
                 wodongStatus: [],
                 shisuyunStatus: [],
-                shortmsgProviderType:[]
+                shortmsgProviderType: []
             };
         },
         created() {
@@ -620,8 +631,8 @@
             getList(type) {
                 this.loading = true;
                 //查询
-                if(type == 1){
-		            this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
+                if (type == 1) {
+                    this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     divisionApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
@@ -632,7 +643,7 @@
                     });
                 }
                 //切换页
-                else if(type == 2){
+                else if (type == 2) {
                     divisionApi.list(this.searchParams).then((response) => {
                         this.otherParam = response.otherParam;
                         this.caseList = response.rows;
@@ -640,6 +651,12 @@
                         this.loading = false;
                     });
                 }
+            },
+            /** 排序触发事件 */
+            handleSortChange(column, prop, order) {
+                this.searchParams.orderByColumn = column.prop;
+                this.searchParams.isAsc = column.order;
+                this.getList(2);
             },
             jumpChange(value) {
                 this.numberForm.jump = value;
@@ -675,7 +692,7 @@
                 if (this.selection.filter((item) => item.entrustStatus == 2).length > 0) {
                     this.msgError("所选案件存在暂停状态的案件，不能批量暂停");
                     return;
-                } 
+                }
                 var that = this;
                 this.$confirm("注：案件状态变更为：暂停，暂停期间可从案件中心更新案件信息，分配/监督机构及其用户可对案件信息进行查看，其余业务操作暂停，直至案件恢复。是否确认暂停？", "暂停案件", {
                         confirmButtonText: "确定",
@@ -684,11 +701,11 @@
                     })
                     .then(() => {
                         divisionApi.suspendCase(this.ids).then((res) => {
-                                if (res.code === 200) {
-                                    that.msgSuccess("操作成功");
-                                    that.clearSelection();
-                                }
-                            });
+                            if (res.code === 200) {
+                                that.msgSuccess("操作成功");
+                                that.clearSelection();
+                            }
+                        });
                     })
                     .catch(() => {
                         that.msgError("已取消操作");
@@ -699,7 +716,7 @@
                 if (this.selection.filter((item) => item.entrustStatus == 1).length > 0) {
                     this.msgError("所选案件存在进行中状态的案件，不能批量恢复案件");
                     return;
-                } 
+                }
                 var that = this;
                 this.$confirm("注：恢复案件后案件状态变更恢复回暂停前状态，可对案件进行正常业务操作。是否确认恢复？", "恢复案件", {
                         confirmButtonText: "确定",
@@ -708,11 +725,11 @@
                     })
                     .then(() => {
                         divisionApi.recoverCase(this.ids).then((res) => {
-                                if (res.code === 200) {
-                                    that.msgSuccess("操作成功");
-                                    that.clearSelection();
-                                }
-                            });
+                            if (res.code === 200) {
+                                that.msgSuccess("操作成功");
+                                that.clearSelection();
+                            }
+                        });
                     })
                     .catch(() => {
                         that.msgError("已取消操作");
@@ -727,18 +744,18 @@
                     })
                     .then(() => {
                         divisionApi.withdrawalCase(this.ids).then((res) => {
-                                if (res.code === 200) {
-                                    that.msgSuccess("操作成功");
-                                    that.clearSelection();
-                                }
-                            });
+                            if (res.code === 200) {
+                                that.msgSuccess("操作成功");
+                                that.clearSelection();
+                            }
+                        });
                     })
                     .catch(() => {
                         that.msgError("已取消操作");
                     });
             },
             //导出调解记录
-            batchExportMediationRecord(){
+            batchExportMediationRecord() {
                 // if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
                 //   this.msgError("所选数据存在已结案的数据，不能批量筛选号码");
                 //   return;
@@ -749,7 +766,7 @@
                 this.exportDialogVisible = true;
             },
             //导出网调记录
-            batchExportAdjestMent(){
+            batchExportAdjestMent() {
                 // if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
                 //   this.msgError("所选数据存在已结案的数据，不能批量筛选号码");
                 //   return;
@@ -760,14 +777,14 @@
                 this.exportDialogVisible = true;
             },
             phoneSubmit(title) {
-                if(title == '导出调解记录'){
+                if (title == '导出调解记录') {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
-                        let queryParams ={
-                            caseIds: this.ids.join(","),
-                            exportRange: this.form.exportRange.toString(),
-                            isDesensitization: this.form.isDesensitization,
-                        };
+                            let queryParams = {
+                                caseIds: this.ids.join(","),
+                                exportRange: this.form.exportRange.toString(),
+                                isDesensitization: this.form.isDesensitization,
+                            };
                             cuttingAfterApi.postAdjudgedBatchExport(queryParams).then(res => {
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
@@ -778,13 +795,13 @@
                             })
                         }
                     });
-                }else if(title == '导出网调记录'){
+                } else if (title == '导出网调记录') {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
-                        let queryParams ={
-                            caseIds: this.ids.join(","),
-                            exportRange: this.form.exportRange.toString(),
-                        };
+                            let queryParams = {
+                                caseIds: this.ids.join(","),
+                                exportRange: this.form.exportRange.toString(),
+                            };
                             cuttingAfterApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
@@ -931,151 +948,19 @@
             phoneNumberFormSubmit() {
                 this.$refs["numberForm"].validate((valid) => {
                     if (valid) {
-                        divisionApi.screening(this.ids, this.numberForm.jump, this.numberForm.status, this.numberForm.radioStatus)
+                        divisionApi.screening(this.ids, this.numberForm.jump, this.numberForm.status, this
+                                .numberForm.radioStatus)
                             .then(res => {
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
                                     this.numberDialogVisible = false;
                                     this.clearSelection();
-                                }else if(res.code === 500){
+                                } else if (res.code === 500) {
                                     this.msgError(res.msg);
                                 }
                             })
                     }
                 });
-            },
-            btnRemainDays1() {
-                this.searchParams.orderByColumn = "remainDays asc";
-                this.getList(2);
-            },
-            btnRemainDays2() {
-                this.searchParams.orderByColumn = "remainDays desc";
-                this.getList(2);
-            },
-            btnAmount1() {
-                this.searchParams.orderByColumn = "caseAmount asc";
-                this.getList(2);
-            },
-            btnAmount2() {
-                this.searchParams.orderByColumn = "caseAmount desc";
-                this.getList(2);
-            },
-            btnPaidAmount1() {
-                this.searchParams.orderByColumn = "paidAmount asc";
-                this.getList(2);
-            },
-            btnPaidAmount2() {
-                this.searchParams.orderByColumn = "paidAmount desc";
-                this.getList(2);
-            },
-            btnRepayDate1() {
-                this.searchParams.orderByColumn = "promiseRepayDate asc";
-                this.getList(2);
-            },
-            btnRepayDate2() {
-                this.searchParams.orderByColumn = "promiseRepayDate desc";
-                this.getList(2);
-            },
-            btnOrderNo1() {
-                this.searchParams.orderByColumn = "orderNo asc";
-                this.getList(2);
-            },
-            btnOrderNo2() {
-                this.searchParams.orderByColumn = "orderNo desc";
-                this.getList(2);
-            },
-            btnTime1() {
-                this.searchParams.orderByColumn = "createTime asc";
-                this.getList(2);
-            },
-            btnTime2() {
-                this.searchParams.orderByColumn = "createTime desc";
-                this.getList(2);
-            },
-            btnDisTime1() {
-                this.searchParams.orderByColumn = "distributionTime asc";
-                this.getList(2);
-            },
-            btnDisTime2() {
-                this.searchParams.orderByColumn = "distributionTime desc";
-                this.getList(2);
-            },
-            renderAmount() {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 逾期总额 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnAmount1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnAmount2}></i>
-                  </span>
-                </div>
-              );
-            },
-            renderPaidAmount() {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 已还金额 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnPaidAmount1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnPaidAmount2}></i>
-                  </span>
-                </div>
-              );
-            },
-            renderRepayDate() {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 承诺还款日 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnRepayDate1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnRepayDate2}></i>
-                  </span>
-                </div>
-              );
-            },
-            renderOrderNo() {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 合同号 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnOrderNo1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnOrderNo2}></i>
-                  </span>
-                </div>
-              );
-            },
-            renderTime(h) {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 发布时间 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnTime1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnTime2}></i>
-                  </span>
-                </div>
-              );
-            },
-            renderRemainDays(h) {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 分配天数 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnRemainDays1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnRemainDays2}></i>
-                  </span>
-                </div>
-              );
-            },    
-            renderDisTime() {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 案件分配时间 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnDisTime1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnDisTime2}></i>
-                  </span>
-                </div>
-              );
             },
         },
     };

@@ -68,12 +68,12 @@
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
-            <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys"
-                @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
+                :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
-                <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="120"
-                    :render-header="renderDisTime">
+                <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="120" sortable="custom"
+                    :sort-orders="['descending', 'ascending']">
                     <template slot-scope="scope" v-if="scope.row.distributionTime">
                         <span>{{
               parseTime(scope.row.distributionTime, "{y}-{m}-{d}")
@@ -90,15 +90,18 @@
                 <el-table-column label="身份证号" width="180" prop="respondentIdNo" />
                 <el-table-column label="手机号" width="120" prop="respondentPhone" />
                 <el-table-column label="户籍地址" width="150" prop="respondentAddress" />
-                <el-table-column label="标的金额" width="120" prop="subjectAmount" :render-header="renderAmount" />
+                <el-table-column label="标的金额" width="120" prop="subjectAmount" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="逾期年利率" prop="overYearRate" width="100" />
                 <el-table-column label="放款日期" width="120" prop="loanDate" />
                 <el-table-column label="合同地址" width="200" :show-overflow-tooltip="true" prop="respondentAliveAddress" />
                 <el-table-column label="调解员" width="80" prop="principalName" />
                 <el-table-column label="案件状态" width="120" :formatter="caseStatusFormat" prop="caseStatus" />
-                <el-table-column label="财保申请时间" width="180" prop="createTime" :render-header="renderRepayDate" />
+                <el-table-column label="财保申请时间" width="180" prop="createTime" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="财保案号" width="100" prop="propertyProNo" />
-                <el-table-column label="财保冻结时间" width="150" prop="frozenStartTime" :render-header="renderRepayDate2" />
+                <el-table-column label="财保冻结时间" width="150" prop="frozenStartTime" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="首次冻结金额" width="120" prop="frozenAmount" />
                 <!-- <template slot-scope="scope">
                         <span>{{ parseTime(scope.row.remittanceTime,'{y}-{m}-{d}') }}</span>
@@ -241,6 +244,12 @@
                     });
                 }
             },
+            /** 排序触发事件 */
+            handleSortChange(column, prop, order) {
+                this.searchParams.orderByColumn = column.prop;
+                this.searchParams.isAsc = column.order;
+                this.getList(2);
+            },
             /** 搜索按钮操作 */
             handleQuery() {
                 this.queryParams.pageNum = 1;
@@ -301,75 +310,6 @@
                 divisionApi.userList().then((response) => {
                     this.userList = response.data.userList || [];
                 });
-            },
-            btnDisTime1() {
-                this.searchParams.orderByColumn = "distributionTime asc";
-                this.getList(2);
-            },
-            btnDisTime2() {
-                this.searchParams.orderByColumn = "distributionTime desc";
-                this.getList(2);
-            },
-            btnAmount1() {
-                this.searchParams.orderByColumn = "subjectAmount asc";
-                this.getList(2);
-            },
-            btnAmount2() {
-                this.searchParams.orderByColumn = "subjectAmount desc";
-                this.getList(2);
-            },
-            btnRepayDate1() {
-                this.searchParams.orderByColumn = "createTime asc";
-                this.getList(2);
-            },
-            btnRepayDate2() {
-                this.searchParams.orderByColumn = "createTime desc";
-                this.getList(2);
-            },
-            btnRepayDate3() {
-                this.searchParams.orderByColumn = "frozenStartTime asc";
-                this.getList(2);
-            },
-            btnRepayDate4() {
-                this.searchParams.orderByColumn = "frozenStartTime desc";
-                this.getList(2);
-            },
-            renderAmount() {
-            return ( 
-              < div style="display: flex;align-items: center;">
-              < span> 标的金额 </span> < span class="sorting">
-                  < i class="el-icon-caret-top" onClick={ this.btnAmount1 }>
-                    </i> < i class="el-icon-caret-bottom" onClick={ this.btnAmount2 }>
-                      </i> </ span>
-                        </div> 
-              ); 
-            },
-          renderRepayDate() {
-          return ( 
-            < div style="display: flex;align-items: center;">
-            < span> 申请时间 </span> < span class="sorting">
-                < i class="el-icon-caret-top" onClick={ this.btnRepayDate1 }>
-                  </i> < i class="el-icon-caret-bottom" onClick={ this.btnRepayDate2 }>
-                    </i> </ span>
-                      </div> ); },
-            renderRepayDate2() {
-              return ( 
-                < div style="display: flex;align-items: center;">
-                < span> 财保冻结开始时间 </span> < span class="sorting">
-                    < i class="el-icon-caret-top" onClick={ this.btnRepayDate3 }>
-                      </i> < i class="el-icon-caret-bottom" onClick={ this.btnRepayDate4 }>
-                        </i> </ span>
-                          </div> 
-                ); 
-            },
-            renderDisTime() {
-            return ( <div style="display: flex;align-items: center;">
-              <span> 案件分配时间 </span>
-              <span class="sorting">
-                <i class="el-icon-caret-top" onClick={ this.btnDisTime1 }></i>
-                < i class="el-icon-caret-bottom" onClick={ this.btnDisTime2 }></i>
-                </ span>
-            </div> );
             },
             //申请冻结结束
             handleAppleEdit(val) {

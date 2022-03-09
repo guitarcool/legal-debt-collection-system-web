@@ -60,8 +60,8 @@
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
-            <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys"
-                @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
+                :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchno" width="200" :show-overflow-tooltip="true" fixed="left" />
                 <el-table-column label="姓名" prop="name" width="150" :show-overflow-tooltip="true" fixed="left" />
@@ -71,8 +71,10 @@
                 <el-table-column label="签章内容" prop="signContent" width="100" />
                 <el-table-column label="案件状态" width="120" :formatter="caseStatusFormat" prop="caseStatus" />
                 <el-table-column label="提交人" prop="submitterName" />
-                <el-table-column label="审核提交时间" width="120" prop="submitTime" :render-header="renderRepayDate" />
-                <el-table-column label="签章时间" width="120" prop="signTime" :render-header="renderRepayDate2" />
+                <el-table-column label="审核提交时间" width="120" prop="submitTime" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" />
+                <el-table-column label="签章时间" width="120" prop="signTime" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="签章状态" width="120" :formatter="signOptionsFormat" prop="signStatus" />
                 <el-table-column label="审核人" width="120" prop="reviewerName" />
                 <el-table-column label="签章文书审核状态" width="130" :formatter="auditOptionsFormat" prop="auditSignStatus" />
@@ -127,7 +129,7 @@
                 statusOptions: [],
                 caseList: [],
                 // 查询参数
-                searchParams:{},
+                searchParams: {},
                 queryParams: {
                     reviewerName: "",
                     batchno: "",
@@ -143,7 +145,7 @@
                 statusOptions: [], //案件状态
                 auditOptions: [], //文书审核状态
                 signOptions: [], //签章状态
-                entrustType:[],
+                entrustType: [],
                 applyData: {
                     title: "",
                     dialogVisible: false,
@@ -189,8 +191,8 @@
             getList(type) {
                 this.loading = true;
                 //查询
-                if(type == 1){
-		            this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
+                if (type == 1) {
+                    this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     electronicApi.applyList(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
@@ -200,13 +202,19 @@
                     });
                 }
                 //切换页
-                else if(type == 2){
+                else if (type == 2) {
                     electronicApi.applyList(this.searchParams).then((response) => {
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
                     });
                 }
+            },
+            /** 排序触发事件 */
+            handleSortChange(column, prop, order) {
+                this.searchParams.orderByColumn = column.prop;
+                this.searchParams.isAsc = column.order;
+                this.getList(2);
             },
             /** 搜索按钮操作 */
             handleQuery() {
@@ -305,38 +313,6 @@
                     this.queryParams.beginTime = value[0];
                     this.queryParams.endTime = value[1];
                 }
-            },
-            btnRepayDate1() {
-                this.searchParams.orderByColumn = "submitTime asc";
-                this.getList(2);
-            },
-            btnRepayDate2() {
-                this.searchParams.orderByColumn = "submitTime desc";
-                this.getList(2);
-            },
-            btnRepayDate3() {
-                this.searchParams.orderByColumn = "signTime asc";
-                this.getList(2);
-            },
-            btnRepayDate4() {
-                this.searchParams.orderByColumn = "signTime desc";
-                this.getList(2);
-            },
-            renderRepayDate() {
-              return ( < div style="display: flex;align-items: center;">
-                < span> 审核提交时间 </span> < span class="sorting">
-                    < i class="el-icon-caret-top" onClick={ this.btnRepayDate1 }>
-                      </i> < i class="el-icon-caret-bottom" onClick={ this.btnRepayDate2 }>
-                        </i> </ span>
-                          </div> ); 
-            },
-            renderRepayDate2() {
-              return ( < div style="display: flex;align-items: center;">
-                < span> 签章时间 </span> < span class="sorting">
-                    < i class="el-icon-caret-top" onClick={ this.btnRepayDate3 }>
-                      </i> < i class="el-icon-caret-bottom" onClick={ this.btnRepayDate4 }>
-                        </i> </ span>
-                          </div> ); 
             },
         },
     };

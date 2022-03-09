@@ -51,8 +51,8 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item v-if="queryParams.screenType" label="号码筛选结果：">
-                    <el-select clearable v-if="queryParams.screenType == 1" size="small" v-model="queryParams.screenResult"
-                        placeholder="请选择">
+                    <el-select clearable v-if="queryParams.screenType == 1" size="small"
+                        v-model="queryParams.screenResult" placeholder="请选择">
                         <el-option v-for="item in networkSortresult" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
@@ -107,13 +107,13 @@
                 </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys"
-                @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
+                :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <!--:selectable="checkSelectable"-->
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
-                <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="120"
-                    :render-header="renderDisTime">
+                <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="120" sortable="custom"
+                    :sort-orders="['descending', 'ascending']">
                     <template slot-scope="scope" v-if="scope.row.distributionTime">
                         <span>{{
                     parseTime(scope.row.distributionTime, "{y}-{m}-{d}")
@@ -154,10 +154,11 @@
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
 
-        <importDialog @refresh="clearSelection" :title="addData.title" :show.sync="addData.dialogVisible" :id="addData.id">
+        <importDialog @refresh="clearSelection" :title="addData.title" :show.sync="addData.dialogVisible"
+            :id="addData.id">
         </importDialog>
-        <applyAudit @refresh="clearSelection" :title="applyData.title"
-            :show.sync="applyData.dialogVisible" :id="applyData.id"></applyAudit>
+        <applyAudit @refresh="clearSelection" :title="applyData.title" :show.sync="applyData.dialogVisible"
+            :id="applyData.id"></applyAudit>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
             :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
     </div>
@@ -196,7 +197,7 @@
                 // 角色表格数据
                 caseList: [],
                 // 查询参数
-                searchParams:{},
+                searchParams: {},
                 queryParams: {
                     id: '',
                     batchNo: '',
@@ -287,8 +288,8 @@
             getList(type) {
                 this.loading = true;
                 //查询
-                if(type == 1){
-		            this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
+                if (type == 1) {
+                    this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     modifyApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
@@ -298,13 +299,19 @@
                     });
                 }
                 //切换页
-                else if(type == 2){
+                else if (type == 2) {
                     modifyApi.list(this.searchParams).then((response) => {
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
                     });
                 }
+            },
+            /** 排序触发事件 */
+            handleSortChange(column, prop, order) {
+                this.searchParams.orderByColumn = column.prop;
+                this.searchParams.isAsc = column.order;
+                this.getList(2);
             },
             /** 搜索按钮操作 */
             handleQuery() {
@@ -373,25 +380,6 @@
                         //     delete this.userList[i].deptId
                         // }
                     }
-                );
-            },
-            btnDisTime1() {
-                this.searchParams.orderByColumn = "distributionTime asc";
-                this.getList(2);
-            },
-            btnDisTime2() {
-                this.searchParams.orderByColumn = "distributionTime desc";
-                this.getList(2);
-            },
-            renderDisTime() {
-                return (
-                    <div style="display: flex;align-items: center;">
-                    <span> 案件分配时间 </span>
-                    <span class="sorting">
-                        <i class="el-icon-caret-top" onClick={this.btnDisTime1}></i>
-                        <i class="el-icon-caret-bottom" onClick={this.btnDisTime2}></i>
-                    </span>
-                    </div>
                 );
             },
         }

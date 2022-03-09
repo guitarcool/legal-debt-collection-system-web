@@ -67,8 +67,8 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item v-if="queryParams.screenType" label="号码筛选结果：">
-                    <el-select clearable v-if="queryParams.screenType == 1" size="small" v-model="queryParams.screenResult"
-                        placeholder="请选择">
+                    <el-select clearable v-if="queryParams.screenType == 1" size="small"
+                        v-model="queryParams.screenResult" placeholder="请选择">
                         <el-option v-for="item in networkSortresult" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
@@ -94,15 +94,16 @@
                     <el-button type="warning" icon="el-icon-download" size="mini" @click="handleExport"
                         :disabled="multiple" v-hasPermi="['case:caseinfo:export']">导出</el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection"></right-toolbar>
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
+                </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys"
-                @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
+                :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
-                <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="120"
-                    :render-header="renderDisTime">
+                <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="130" sortable="custom"
+                    :sort-orders="['descending', 'ascending']">
                     <template slot-scope="scope" v-if="scope.row.distributionTime">
                         <span>{{
               parseTime(scope.row.distributionTime, "{y}-{m}-{d}")
@@ -112,17 +113,20 @@
                 <el-table-column label="姓名" prop="respondentName" :show-overflow-tooltip="true" fixed="left" />
                 <el-table-column label="订单号" prop="id" width="200" :show-overflow-tooltip="true" />
                 <el-table-column label="内部订单号" prop="loanId" width="110" :show-overflow-tooltip="true" />
-                <el-table-column label="案件导入时间" :render-header="renderTime" prop="createTime"
-                    :show-overflow-tooltip="true" width="130">
+                <el-table-column label="案件导入时间" sortable="custom" :sort-orders="['descending', 'ascending']"
+                    prop="createTime" :show-overflow-tooltip="true" width="130">
                     <template slot-scope="scope">
                         <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d}") }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="合同编号" prop="orderNo" width="130" :show-overflow-tooltip="true" />
                 <el-table-column label="手机号" prop="respondentPhone" width="120" />
-                <el-table-column label="合同金额" prop="contractAmount" :render-header="renderHeader" width="120" />
-                <el-table-column label="尚欠期数" prop="overdueTerm" :render-header="renderTerm" width="120" />
-                <el-table-column label="尚欠本金" prop="remainingBalance" width="120" :render-header="renderMoney" />
+                <el-table-column label="合同金额" prop="contractAmount" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" width="120" />
+                <el-table-column label="尚欠期数" prop="overdueTerm" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" width="120" />
+                <el-table-column label="尚欠本金" prop="remainingBalance" width="120" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="逾期年利率" prop="overYearRate" width="100" />
                 <el-table-column label="资产受让方" prop="assetAssignee" :show-overflow-tooltip="true" width="200" />
                 <el-table-column label="资产最终受让方" prop="assetLastAssignee" :show-overflow-tooltip="true" width="200" />
@@ -140,10 +144,11 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <importDialog @refresh="clearSelection" :title="addData.title" :show.sync="addData.dialogVisible" :id="addData.id">
+        <importDialog @refresh="clearSelection" :title="addData.title" :show.sync="addData.dialogVisible"
+            :id="addData.id">
         </importDialog>
-        <exportDialog  :title="exportData.title" @refresh="clearSelection" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
-            :requestApi="exportData.requestApi"></exportDialog>
+        <exportDialog :title="exportData.title" @refresh="clearSelection" :show.sync="exportData.dialogVisible"
+            :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
     </div>
 </template>
 
@@ -193,7 +198,7 @@
                     orderByColumn: "",
                     isAsc: "",
                 },
-                searchParams:{},
+                searchParams: {},
                 // 表单校验
                 rules: {
                     roleName: [{
@@ -269,8 +274,8 @@
             getList(type) {
                 this.loading = true;
                 //查询
-                if(type == 1){
-		            this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
+                if (type == 1) {
+                    this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     importApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
@@ -280,7 +285,7 @@
                     });
                 }
                 //切换页
-                else if(type == 2){
+                else if (type == 2) {
                     importApi.list(this.searchParams).then((response) => {
                         this.caseList = response.rows;
                         this.total = response.total;
@@ -288,8 +293,14 @@
                     });
                 }
             },
-            clearSelection(){
-                if(this.caseList.length>0){
+            /** 排序触发事件 */
+            handleSortChange(column, prop, order) {
+                this.searchParams.orderByColumn = column.prop;
+                this.searchParams.isAsc = column.order;
+                this.getList(2);
+            },
+            clearSelection() {
+                if (this.caseList.length > 0) {
                     this.$refs.multiTable.clearSelection(); //清除选中的数据
                     this.ids = [];
                 }
@@ -324,101 +335,6 @@
                         listid: item.id
                     }
                 });
-            },
-            btnAction1() {
-                this.searchParams.orderByColumn = "contractAmount asc";
-                this.getList(2);
-            },
-            btnAction2() {
-                this.searchParams.orderByColumn = "contractAmount desc";
-                this.getList(2);
-            },
-            btnTime1() {
-                this.searchParams.orderByColumn = "createTime asc";
-                this.getList(2);
-            },
-            btnTime2() {
-                this.searchParams.orderByColumn = "createTime desc";
-                this.getList(2);
-            },
-            btnMoney1() {
-                this.searchParams.orderByColumn = "remainingBalance asc";
-                this.getList(2);
-            },
-            btnMoney2() {
-                this.searchParams.orderByColumn = "remainingBalance desc";
-                this.getList(2);
-            },
-            btnTerm1() {
-                this.searchParams.orderByColumn = "overdueTerm asc";
-                this.getList(2);
-            },
-            btnTerm2() {
-                this.searchParams.orderByColumn = "overdueTerm desc";
-                this.getList(2);
-            },
-            btnDisTime1() {
-                this.searchParams.orderByColumn = "distributionTime asc";
-                this.getList(2);
-            },
-            btnDisTime2() {
-                this.searchParams.orderByColumn = "distributionTime desc";
-                this.getList(2);
-            },
-            renderHeader(h) {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 合同金额 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnAction1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnAction2}></i>
-                  </span>
-                </div>
-              );
-            },
-            renderTime(h) {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 案件导入时间 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnTime1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnTime2}></i>
-                  </span>
-                </div>
-              );
-            },
-            renderMoney(h) {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 尚欠本金 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnMoney1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnMoney2}></i>
-                  </span>
-                </div>
-              );
-            },
-            renderDisTime() {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 案件分配时间 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnDisTime1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnDisTime2}></i>
-                  </span>
-                </div>
-              );
-            },  
-            renderTerm(h) {
-              return (
-                <div style="display: flex;align-items: center;">
-                  <span> 尚欠期数 </span>
-                  <span class="sorting">
-                    <i class="el-icon-caret-top" onClick={this.btnTerm1}></i>
-                    <i class="el-icon-caret-bottom" onClick={this.btnTerm2}></i>
-                  </span>
-                </div>
-              );
             },
             resetAll() {
                 this.chooseDaterange = [];

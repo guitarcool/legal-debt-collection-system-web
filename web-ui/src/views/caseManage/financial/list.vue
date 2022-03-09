@@ -106,13 +106,13 @@
                 </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys"
-                @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
+                :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="还款ID" prop="id" width="60" :show-overflow-tooltip="true" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
-                <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="120"
-                    :render-header="renderDisTime">
+                <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="120" sortable="custom"
+                    :sort-orders="['descending', 'ascending']">
                     <template slot-scope="scope" v-if="scope.row.distributionTime">
                         <span>{{
                     parseTime(scope.row.distributionTime, "{y}-{m}-{d}")
@@ -131,9 +131,11 @@
                     prop="caseType">
                 </el-table-column>
                 <el-table-column label="账龄" prop="overdueAge" />
-                <el-table-column label="标的金额" width="150" :render-header="rendersubjectAmount" prop="subjectAmount" />
-                <el-table-column label="已还金额" width="150" :render-header="renderpaidAmount" prop="paidAmount" />
-                <el-table-column label="剩余待还总额" width="150" :render-header="renderremainingBalance"
+                <el-table-column label="标的金额" width="150" sortable="custom" :sort-orders="['descending', 'ascending']"
+                    prop="subjectAmount" />
+                <el-table-column label="已还金额" width="150" sortable="custom" :sort-orders="['descending', 'ascending']"
+                    prop="paidAmount" />
+                <el-table-column label="剩余待还总额" width="150" sortable="custom" :sort-orders="['descending', 'ascending']"
                     prop="remainingBalance" />
                 <el-table-column label="还款类型" width="150" prop="type">
                     <template slot-scope="scope">
@@ -155,7 +157,8 @@
                     prop="payChannal">
                 </el-table-column>
                 <el-table-column label="逾期年利率" prop="overYearRate" width="100" />
-                <el-table-column label="汇款时间" width="150" :render-header="renderremittanceTime" prop="remittanceTime">
+                <el-table-column label="汇款时间" width="150" sortable="custom" :sort-orders="['descending', 'ascending']"
+                    prop="remittanceTime">
                     <template slot-scope="scope">
                         <span>{{ parseTime(scope.row.remittanceTime,'{y}-{m}-{d}') }}</span>
                     </template>
@@ -184,13 +187,14 @@
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
 
-        <importDialog @refresh="clearSelection" :title="addData.title" :show.sync="addData.dialogVisible" :id="addData.id">
+        <importDialog @refresh="clearSelection" :title="addData.title" :show.sync="addData.dialogVisible"
+            :id="addData.id">
         </importDialog>
         <erweima :title="erweimaData.title" :url="erweimaData.url" :show.sync="erweimaData.dialogVisible">
         </erweima>
-        <applyAudit @refresh="clearSelection" :title="applyData.title" :show.sync="applyData.dialogVisible" :id="applyData.id"
-            :item="applyData.item"></applyAudit>
-        <exportDialog  @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
+        <applyAudit @refresh="clearSelection" :title="applyData.title" :show.sync="applyData.dialogVisible"
+            :id="applyData.id" :item="applyData.item"></applyAudit>
+        <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
             :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
     </div>
 </template>
@@ -231,7 +235,7 @@
                 // 角色表格数据
                 caseList: [],
                 // 查询参数
-                searchParams:{},
+                searchParams: {},
                 queryParams: {
                     caseId: '',
                     id: '',
@@ -335,8 +339,8 @@
             getList(type) {
                 this.loading = true;
                 //查询
-                if(type == 1){
-		            this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
+                if (type == 1) {
+                    this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     financeApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
@@ -347,7 +351,7 @@
                     });
                 }
                 //切换页
-                else if(type == 2){
+                else if (type == 2) {
                     financeApi.list(this.searchParams).then((response) => {
                         this.otherParam = response.otherParam || {};
                         this.caseList = response.rows;
@@ -355,6 +359,12 @@
                         this.loading = false;
                     });
                 }
+            },
+            /** 排序触发事件 */
+            handleSortChange(column, prop, order) {
+                this.searchParams.orderByColumn = column.prop;
+                this.searchParams.isAsc = column.order;
+                this.getList(2);
             },
             /** 搜索按钮操作 */
             handleQuery() {
@@ -412,101 +422,6 @@
             //委案状态
             getEntrustType(row, column) {
                 return this.selectDictLabel(this.entrustType, row.entrustStatus);
-            },
-            btnDisTime1() {
-                this.searchParams.orderByColumn = "distributionTime asc";
-                this.getList(2);
-            },
-            btnDisTime2() {
-                this.searchParams.orderByColumn = "distributionTime desc";
-                this.getList(2);
-            },
-            btnsubjectAmount1() {
-                this.searchParams.orderByColumn = "subjectAmount asc";
-                this.getList(2);
-            },
-            btnsubjectAmount2() {
-                this.searchParams.orderByColumn = "subjectAmount desc";
-                this.getList(2);
-            },
-            btnPaidAmount1() {
-                this.searchParams.orderByColumn = "paidAmount asc";
-                this.getList(2);
-            },
-            btnPaidAmount2() {
-                this.searchParams.orderByColumn = "paidAmount desc";
-                this.getList(2);
-            },
-            btnremainingBalance1() {
-                this.searchParams.orderByColumn = "remainingBalance asc";
-                this.getList(2);
-            },
-            btnremainingBalance2() {
-                this.searchParams.orderByColumn = "remainingBalance desc";
-                this.getList(2);
-            },
-            btnremittanceTime1() {
-                this.searchParams.orderByColumn = "remittanceTime asc";
-                this.getList(2);
-            },
-            btnremittanceTime2() {
-                this.searchParams.orderByColumn = "remittanceTime desc";
-                this.getList(2);
-            },
-            renderDisTime() {
-                return (
-                    <div style="display: flex;align-items: center;">
-                    <span> 案件分配时间 </span>
-                    <span class="sorting">
-                        <i class="el-icon-caret-top" onClick={this.btnDisTime1}></i>
-                        <i class="el-icon-caret-bottom" onClick={this.btnDisTime2}></i>
-                    </span>
-                    </div>
-                );
-            },
-            rendersubjectAmount() {
-                return (
-                    <div style="display: flex;align-items: center;">
-                    <span> 标的金额 </span>
-                    <span class="sorting">
-                        <i class="el-icon-caret-top" onClick={this.btnsubjectAmount1}></i>
-                        <i class="el-icon-caret-bottom" onClick={this.btnsubjectAmount2}></i>
-                    </span>
-                    </div>
-                );
-            },
-            renderpaidAmount() {
-                return (
-                    <div style="display: flex;align-items: center;">
-                    <span> 已还金额 </span>
-                    <span class="sorting">
-                        <i class="el-icon-caret-top" onClick={this.btnPaidAmount1}></i>
-                        <i class="el-icon-caret-bottom" onClick={this.btnPaidAmount2}></i>
-                    </span>
-                    </div>
-                );
-            },
-            renderremainingBalance() {
-                return (
-                    <div style="display: flex;align-items: center;">
-                    <span> 剩余待还总额 </span>
-                    <span class="sorting">
-                        <i class="el-icon-caret-top" onClick={this.btnremainingBalance1}></i>
-                        <i class="el-icon-caret-bottom" onClick={this.btnremainingBalance2}></i>
-                    </span>
-                    </div>
-                );
-            },
-            renderremittanceTime() {
-                return (
-                    <div style="display: flex;align-items: center;">
-                    <span> 汇款时间 </span>
-                    <span class="sorting">
-                        <i class="el-icon-caret-top" onClick={this.btnremittanceTime1}></i>
-                        <i class="el-icon-caret-bottom" onClick={this.btnremittanceTime2}></i>
-                    </span>
-                    </div>
-                );
             },
             //申请案件信修
             apply(item) {
