@@ -269,7 +269,7 @@
                 <el-table-column label="逾期年利率" prop="overYearRate" width="100" />
                 <el-table-column label="联系状态" :formatter="getContactStatusOptions" prop="contactStatus">
                 </el-table-column>
-                <el-table-column label="案件分配时间" prop="distributionTime" width="120" sortable="custom"
+                <el-table-column label="案件分配时间" prop="distributionTime" width="130" sortable="custom"
                     :sort-orders="['descending', 'ascending']">
                     <template slot-scope="scope" v-if="scope.row.distributionTime">
                         <span>{{
