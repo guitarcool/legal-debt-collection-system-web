@@ -320,11 +320,11 @@
           name: '',
           version: '',
           manager: '',
+          deptId: null,
           templateType: '',
           formatType: '',
           signatureId: '',
           isPublic: 1,
-          deptId: undefined,
           status: 1,
           content: '',
           file: ''
@@ -519,10 +519,10 @@
           formatType: '',
           signatureId: '',
           isPublic: 1,
-          deptId: null,
           status: 1,
           content: '',
           file: null,
+          deptId: null,
           list: [],
           managerId: null,
         }
@@ -624,7 +624,7 @@
         formData.append("formatType", this.form.formatType);
         formData.append("signatureId", this.form.signatureId);
         formData.append("isPublic", this.form.isPublic);
-        formData.append("deptId", this.form.deptId);
+        formData.append("deptId", this.form.deptId?this.form.deptId:null);
         formData.append("status", this.form.status);
         formData.append("content", this.form.content);
         //formData.append("list", this.draggableList);
@@ -819,7 +819,7 @@
       },
       changeUser(value) {
         this.managerId = null;
-        this.form.deptId = undefined;
+        this.form.deptId = null;
         this.deptOptions = undefined;
         temCenterApi.findByUsername(value).then(response => {
           //整合部门数据和用户数据成一棵树
