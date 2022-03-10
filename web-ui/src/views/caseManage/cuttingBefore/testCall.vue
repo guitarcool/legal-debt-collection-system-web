@@ -36,7 +36,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="呼出号码：" prop="caller">
-                    <el-select size="small" v-model="form.caller" placeholder="请选择">
+                    <el-select size="small" filterable v-model="form.caller" placeholder="请选择">
                         <el-option v-for="item in callphone" :key="item.id" :label="item.full_number"
                             :value="item.full_number">
                         </el-option>

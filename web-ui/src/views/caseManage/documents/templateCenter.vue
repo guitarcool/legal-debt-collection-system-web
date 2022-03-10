@@ -7,7 +7,7 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="格式类型：">
-                    <el-select clearable v-model="queryParams.formatType" placeholder="请选择">
+                    <el-select clearable filterable v-model="queryParams.formatType" placeholder="请选择">
                         <el-option v-for="item in formatTypes" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>

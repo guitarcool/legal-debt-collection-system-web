@@ -12,14 +12,14 @@
                         @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="调解员：">
-                    <el-select clearable size="small" v-model="queryParams.principal" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.principal" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="监督员：">
-                    <el-select clearable size="small" v-model="queryParams.supervisors" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.supervisors" placeholder="请选择">
                         <el-option v-for="item in deptList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -75,34 +75,34 @@
                         size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="号码筛选状态：">
-                    <el-select clearable size="small" v-model="queryParams.screenStatus" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.screenStatus" placeholder="请选择">
                         <el-option v-for="item in screen_status" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="号码筛选类型：">
-                    <el-select clearable size="small" v-model="queryParams.screenType" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.screenType" placeholder="请选择">
                         <el-option v-for="item in screenType" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item v-if="queryParams.screenType" label="号码筛选结果：">
-                    <el-select clearable v-if="queryParams.screenType == 1" size="small"
+                    <el-select clearable filterable v-if="queryParams.screenType == 1" size="small"
                         v-model="queryParams.screenResult" placeholder="请选择">
                         <el-option v-for="item in networkSortresult" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
-                    <el-select clearable v-else size="small" v-model="queryParams.screenResult" placeholder="请选择">
+                    <el-select clearable filterable v-else size="small" v-model="queryParams.screenResult" placeholder="请选择">
                         <el-option v-for="item in realtimeSortresult" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="网调标签：">
-                    <el-select clearable size="small" v-model="queryParams.networkAdjustLabel" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.networkAdjustLabel" placeholder="请选择">
                         <el-option v-for="item in adjustType" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
@@ -115,21 +115,21 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="短信发送渠道：">
-                    <el-select clearable size="small" v-model="queryParams.providerType" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.providerType" placeholder="请选择">
                         <el-option v-for="item in shortmsgProviderType" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="短信送达状态：" v-if="queryParams.providerType">
-                    <el-select clearable size="small" v-model="queryParams.lastDeliverStatus" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.lastDeliverStatus" placeholder="请选择">
                         <el-option label="已送达" value="0"></el-option>
                         <el-option label="接收中" value="1"></el-option>
                         <el-option label="其他" value="2"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="客户回复内容：">
-                    <el-select clearable size="small" v-model="queryParams.replyContent" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.replyContent" placeholder="请选择">
                         <el-option label="无" value="0"></el-option>
                         <el-option label="有" value="1"></el-option>
                     </el-select>

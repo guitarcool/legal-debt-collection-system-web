@@ -4,14 +4,14 @@
             @resetAll="resetAll">
             <template #default>
                 <el-form-item label="统计部门：">
-                    <el-select size="small" v-model="queryParams.teamId" placeholder="请选择" @change="queryUserDepts">
+                    <el-select size="small" filterable v-model="queryParams.teamId" placeholder="请选择" @change="queryUserDepts">
                         <el-option v-for="item in userDepts" :key="item.deptId" :label="item.deptName"
                             :value="item.deptId">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="统计用户：">
-                    <el-select :disabled="disabled" multiple size="small" @change="handleMediation" v-model="mediation"
+                    <el-select :disabled="disabled" filterable multiple size="small" @change="handleMediation" v-model="mediation"
                         placeholder="请选择">
                         <el-option v-for="item in listByDept" :key="item.userId" :label="item.userName"
                             :value="item.userId">

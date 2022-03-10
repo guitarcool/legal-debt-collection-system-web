@@ -20,7 +20,7 @@
                     <!--@keyup.enter.native="handleQuery"-->
                     <!--/>-->
 
-                    <el-select clearable size="small" v-model="queryParams.postUserId" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.postUserId" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -44,20 +44,20 @@
                         size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="号码筛选类型：">
-                    <el-select clearable size="small" v-model="queryParams.screenType" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.screenType" placeholder="请选择">
                         <el-option v-for="item in screenType" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item v-if="queryParams.screenType" label="号码筛选结果：">
-                    <el-select clearable v-if="queryParams.screenType == 1" size="small"
+                    <el-select clearable filterable v-if="queryParams.screenType == 1" size="small"
                         v-model="queryParams.screenResult" placeholder="请选择">
                         <el-option v-for="item in networkSortresult" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
-                    <el-select clearable v-else size="small" v-model="queryParams.screenResult" placeholder="请选择">
+                    <el-select clearable filterable v-else size="small" v-model="queryParams.screenResult" placeholder="请选择">
                         <el-option v-for="item in realtimeSortresult" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>

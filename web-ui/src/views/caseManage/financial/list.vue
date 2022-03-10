@@ -12,7 +12,7 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="还款提交人：">
-                    <el-select clearable size="small" v-model="queryParams.createId" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.createId" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>

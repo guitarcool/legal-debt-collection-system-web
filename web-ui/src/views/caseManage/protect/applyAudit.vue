@@ -98,7 +98,7 @@
           </el-select> -->
         </el-form-item>
         <el-form-item label="房屋情况：" v-if="project_operate == 1">
-          <el-select v-model="formhouse" placeholder="请选择">
+          <el-select v-model="formhouse" filterable placeholder="请选择">
             <el-option
               v-for="item in house"
               :key="item.dictValue"

@@ -18,27 +18,27 @@
             <el-form-item label="管理员：">
               <!--<el-input v-model="form.manager" placeholder="请输入管理员"></el-input>-->
               <!--<el-cascader v-model="userIds" @change="changeUser" :options="deptOptions" :props="defaultProps" :show-all-levels="false"></el-cascader>-->
-              <el-select v-model="form.manager" @change="changeUser" placeholder="请选择">
+              <el-select v-model="form.manager" filterable @change="changeUser" placeholder="请选择">
                 <el-option v-for="item in userList" :key="item.userId" :label="item.nickName" :value="item.userId">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="模版类别：" prop="templateType">
-              <el-select @change="templateTypesChange" v-model="form.templateType" placeholder="请选择">
+              <el-select @change="templateTypesChange" filterable v-model="form.templateType" placeholder="请选择">
                 <el-option v-for="item in templateTypes" :key="item.dictValue" :label="item.dictLabel"
                   :value="item.dictValue">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item v-if="form.templateType&&form.templateType != 4" label="格式类型：" prop="formatType">
-              <el-select @change="handleChange" v-model="form.formatType" placeholder="请选择">
+              <el-select @change="handleChange" filterable v-model="form.formatType" placeholder="请选择">
                 <el-option v-for="item in formatTypes" :key="item.dictValue" :label="item.dictLabel"
                   :value="item.dictValue">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item v-else-if="form.templateType" label="格式类型：" prop="formatType">
-              <el-select @change="handleChange" v-model="form.formatType" placeholder="请选择">
+              <el-select @change="handleChange" filterable v-model="form.formatType" placeholder="请选择">
                   <el-option label="调解文书" value="0" ></el-option>
               </el-select>
             </el-form-item>
@@ -197,7 +197,7 @@
               <div v-if="draggableList.length==0" style="line-height: 50px;text-align: center">暂无数据</div>
               <draggable v-model="draggableList" v-else>
                 <transition-group>
-                  <li v-for="(item,index) in draggableList" :key="index" class="item"
+                  <li v-for="(item,index) in draggableList" :key="item.id" class="item"
                     style="height:auto;display:flex;flex-direction: column;">
                     <div style="width:100%;display:flex;align-items: center;margin-top:10px;">
                       <p style="width:50%">{{item.label}}</p>
@@ -210,14 +210,14 @@
                     </div>
                       <el-form class="model_form" ref="isSignform" :model="isSignform">
                         <el-form-item style="width:30%" label="有无签章:">
-                          <el-select v-model="item.isSign" @change="isSignchange(item)" placeholder="请选择">
+                          <el-select clearable v-model="item.isSign" filterable @change="isSignchange(item)" placeholder="请选择">
                             <el-option v-for="item in isSignOptions" :key="item.dictValue" :label="item.dictLabel"
                               :value="item.dictValue">
                             </el-option>
                           </el-select>
                         </el-form-item>
                         <el-form-item style="width:30%" label="签章名称:" prop="signName" v-if="item.isSign!=0">
-                          <el-select v-model="item.signName" placeholder="请选择">
+                          <el-select clearable v-model="item.signName" filterable placeholder="请选择">
                             <el-option v-for="item in signNameOptions" :key="item.dictValue" :label="item.dictLabel"
                               :value="item.dictValue">
                             </el-option>
@@ -227,7 +227,7 @@
                     <el-form class="model_form" ref="isSignform" :model="isSignform">
                       <el-form-item style="width:30%" label="签章设定:" prop="signSetUp"
                         v-if="item.isSign!=0&&item.type==1">
-                        <el-select v-model="item.signSetUp" placeholder="请选择">
+                        <el-select clearable v-model="item.signSetUp" filterable placeholder="请选择">
                           <el-option v-for="item in signSetUpOptions" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                           </el-option>
@@ -236,7 +236,7 @@
                       <!-- 如果是证据包 -->
                       <el-form-item style="width:30%" label="签章设定:" prop="signSetUp"
                         v-if="item.isSign!=0&&item.type==2">
-                        <el-select v-model="item.signSetUp" placeholder="请选择">
+                        <el-select  clearable v-model="item.signSetUp" filterable placeholder="请选择">
                           <el-option v-for="item in options5" :key="item.value" :label="item.label"
                             :value="item.value">
                           </el-option>
@@ -244,7 +244,7 @@
                       </el-form-item>
                       <el-form-item style="width:30%" label="指定位置:" prop="pagePlace"
                         v-if="item.isSign!=0&&item.signSetUp==2">
-                        <el-select clearable  v-model="item.pagePlace" placeholder="请选择">
+                        <el-select clearable filterable  v-model="item.pagePlace" placeholder="请选择">
                           <el-option v-for="item in pagePlaceOptions" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                           </el-option>

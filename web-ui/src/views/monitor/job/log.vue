@@ -13,7 +13,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="执行状态" prop="status">
-                <el-select v-model="queryParams.status" placeholder="请选择执行状态" clearable size="small"
+                <el-select v-model="queryParams.status" filterable placeholder="请选择执行状态" clearable size="small"
                     style="width: 240px">
                     <el-option v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictLabel"
                         :value="dict.dictValue" />

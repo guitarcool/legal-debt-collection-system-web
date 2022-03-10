@@ -25,7 +25,7 @@
                                 style="width: 240px" @keyup.enter.native="handleQuery" />
                         </el-form-item>
                         <el-form-item label="状态" prop="status">
-                            <el-select v-model="queryParams.status" placeholder="用户状态" clearable size="small"
+                            <el-select v-model="queryParams.status" filterable placeholder="用户状态" clearable size="small"
                                 style="width: 240px">
                                 <el-option v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictLabel"
                                     :value="dict.dictValue" />
@@ -146,7 +146,7 @@
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="用户性别">
-                            <el-select v-model="form.sex" placeholder="请选择">
+                            <el-select v-model="form.sex" filterable placeholder="请选择">
                                 <el-option v-for="dict in sexOptions" :key="dict.dictValue" :label="dict.dictLabel"
                                     :value="dict.dictValue"></el-option>
                             </el-select>
@@ -164,15 +164,15 @@
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="岗位">
-                            <el-select v-model="form.postIds" multiple placeholder="请选择">
+                            <el-select v-model="form.postIds" filterable multiple placeholder="请选择">
                                 <el-option v-for="item in postOptions" :key="item.postId" :label="item.postName"
                                     :value="item.postId" :disabled="item.status == 1"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="角色">
-                            <el-select v-model="form.roleIds" multiple placeholder="请选择">
+                        <el-form-item label="角色"> 
+                            <el-select v-model="form.roleIds" filterable multiple placeholder="请选择">
                                 <el-option v-for="item in roleOptions" :key="item.roleId" :label="item.roleName"
                                     :value="item.roleId" :disabled="item.status == 1"></el-option>
                             </el-select>
@@ -180,7 +180,7 @@
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="度言账户">
-                            <el-select style="width:250px" v-model="form.accountId" clearable placeholder="请选择">
+                            <el-select style="width:250px" filterable v-model="form.accountId" clearable placeholder="请选择">
                                 <el-option v-for="item in acountList" :key="item" :label="item" :value="item"
                                     :disabled="item.status == 1"></el-option>
                             </el-select>

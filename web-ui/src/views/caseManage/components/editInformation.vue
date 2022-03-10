@@ -18,7 +18,7 @@
                     <el-input clearable v-model="form.purpose"></el-input>
                 </el-form-item>
                 <el-form-item label="性别：" prop="respondentSex">
-                    <el-select clearable style="width: 100%" v-model="form.respondentSex" placeholder="请选择">
+                    <el-select clearable filterable style="width: 100%" v-model="form.respondentSex" placeholder="请选择">
                         <el-option v-for="item in respondentSexOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
@@ -52,7 +52,7 @@
                     <el-input clearable v-model="form.respondentOccupation"></el-input>
                 </el-form-item>
                 <el-form-item label="婚姻状况：" prop="maritalStatus">
-                    <el-select clearable style="width: 100%" v-model="form.maritalStatus" placeholder="请选择">
+                    <el-select clearable filterable style="width: 100%" v-model="form.maritalStatus" placeholder="请选择">
                         <el-option v-for="item in maritalStatusOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>

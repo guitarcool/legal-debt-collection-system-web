@@ -12,7 +12,7 @@
                         @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="操作员：">
-                    <el-select clearable size="small" v-model="queryParams.operatorId" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.operatorId" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -23,7 +23,7 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="调解员：">
-                    <el-select clearable size="small" v-model="queryParams.mediatorId" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.mediatorId" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -46,20 +46,20 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="呼出类型：">
-                    <el-select clearable size="small" v-model="queryParams.type" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.type" placeholder="请选择">
                         <el-option label="呼入" value="INBOUND"></el-option>
                         <el-option label="呼出" value="OUTBOUND"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="坐席是否有敏感词结果：">
-                    <el-select clearable size="small" v-model="queryParams.isSeatWord" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.isSeatWord" placeholder="请选择">
                         <el-option label="全部" value=""></el-option>
                         <el-option label="是" value="1"></el-option>
                         <el-option label="否" value="0"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="客户是否有敏感词结果：">
-                    <el-select clearable size="small" v-model="queryParams.isClientWord" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.isClientWord" placeholder="请选择">
                         <el-option label="全部" value=""></el-option>
                         <el-option label="是" value="1"></el-option>
                         <el-option label="否" value="0"></el-option>

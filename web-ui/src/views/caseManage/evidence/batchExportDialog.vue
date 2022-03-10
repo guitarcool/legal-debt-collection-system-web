@@ -90,7 +90,7 @@
                         </div>
                         <div class="margin-div">
                             <p class="book-title">5、发送时间：</p>
-                            <el-select v-model="setvalue" placeholder="请选择">
+                            <el-select v-model="setvalue" filterable placeholder="请选择">
                                 <el-option v-for="item in options" :key="item.value" :label="item.label"
                                     :value="item.value">
                                 </el-option>
@@ -102,7 +102,7 @@
                         </div>
                         <div class="margin-div">
                             <p class="book-title">6、发送渠道：</p>
-                            <el-select v-model="providerType" placeholder="请选择">
+                            <el-select v-model="providerType" filterable placeholder="请选择">
                                 <el-option v-for="item in shortmsgProviderType" :key="item.dictValue"
                                     :label="item.dictLabel" :value="item.dictValue">
                                 </el-option>

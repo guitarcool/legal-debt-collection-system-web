@@ -3,7 +3,7 @@
         <template v-slot:default>
             <el-form ref="form" :model="form" :rules="rules" label-width="160px">
                 <el-form-item label="请选择绑定公众号：" prop="wechatId">
-                    <el-select style="width: 100%" v-model="form.wechatId" placeholder="请选择">
+                    <el-select style="width: 100%" filterable v-model="form.wechatId" placeholder="请选择">
                         <el-option v-for="item in options" :key="item.id" :label="item.accountName" :value="item.id">
                         </el-option>
                     </el-select>

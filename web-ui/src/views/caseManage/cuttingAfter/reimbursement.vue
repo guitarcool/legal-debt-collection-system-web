@@ -11,7 +11,7 @@
                 <!-- 有账户 -->
                 <div v-if="account">
                     <el-form-item label="收款账户：" prop="accountNoShou">
-                        <el-select v-model="form.accountNoShou" placeholder="请选择" style="width: 210px"
+                        <el-select v-model="form.accountNoShou" filterable placeholder="请选择" style="width: 210px"
                             @change="selectaccountNoShou">
                             <el-option v-for="item in repayList" :key="item.accountNumber" :label="item.accountNumber"
                                 :value="item.accountNumber">
@@ -44,14 +44,14 @@
                     <el-input v-model="form.amount"></el-input>
                 </el-form-item>
                 <el-form-item label="汇款类型：" prop="repayType">
-                    <el-select v-model="form.repayType" placeholder="请选择">
+                    <el-select v-model="form.repayType" filterable placeholder="请选择">
                         <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="回款渠道：" prop="payChannal">
-                    <el-select v-model="payChannal" placeholder="请选择" @change="selectpayChannal">
+                    <el-select v-model="payChannal" placeholder="请选择" filterable @change="selectpayChannal">
                         <el-option v-for="item in payChannalOptions" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>

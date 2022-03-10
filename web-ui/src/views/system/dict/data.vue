@@ -2,7 +2,7 @@
     <div class="app-container">
         <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
             <el-form-item label="字典名称" prop="dictType">
-                <el-select v-model="queryParams.dictType" size="small">
+                <el-select v-model="queryParams.dictType" filterable size="small">
                     <el-option v-for="item in typeOptions" :key="item.dictId" :label="item.dictName"
                         :value="item.dictType" />
                 </el-select>
@@ -12,7 +12,7 @@
                     @keyup.enter.native="handleQuery" />
             </el-form-item>
             <el-form-item label="状态" prop="status">
-                <el-select v-model="queryParams.status" placeholder="数据状态" clearable size="small">
+                <el-select v-model="queryParams.status" filterable placeholder="数据状态" clearable size="small">
                     <el-option v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictLabel"
                         :value="dict.dictValue" />
                 </el-select>

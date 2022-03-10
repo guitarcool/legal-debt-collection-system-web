@@ -12,7 +12,7 @@
                     <el-input disabled style="width: 200px" v-model="form.amount" placeholder="请输入汇款金额"></el-input>
                 </el-form-item>
                 <el-form-item label="收款类型：">
-                    <el-select disabled v-model="form.repayType" placeholder="请选择">
+                    <el-select disabled v-model="form.repayType" filterable placeholder="请选择">
                         <el-option
                                 v-for="item in remittanceTypes"
                                 :key="item.dictValue"

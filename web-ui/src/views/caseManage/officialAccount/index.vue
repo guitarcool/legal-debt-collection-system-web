@@ -18,14 +18,14 @@
                         style="width: 200px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="身份证匹配案件：">
-                    <el-select style="width: 150px" clearable size="small" v-model="queryParams.idCardHit"
+                    <el-select style="width: 150px" filterable clearable size="small" v-model="queryParams.idCardHit"
                         placeholder="请选择">
                         <el-option v-for="item in hitList" :key="item.id" :label="item.label" :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="手机号匹配案件：">
-                    <el-select style="width: 150px" clearable size="small" v-model="queryParams.phoneHit"
+                    <el-select style="width: 150px" filterable clearable size="small" v-model="queryParams.phoneHit"
                         placeholder="请选择">
                         <el-option v-for="item in hitList" :key="item.id" :label="item.label" :value="item.id">
                         </el-option>

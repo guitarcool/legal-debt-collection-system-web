@@ -62,7 +62,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item v-if="activeData.justify!==undefined&&activeData.type==='flex'" label="水平排列">
-            <el-select v-model="activeData.justify" placeholder="请选择水平排列" :style="{width: '100%'}">
+            <el-select v-model="activeData.justify" filterable placeholder="请选择水平排列" :style="{width: '100%'}">
               <el-option
                 v-for="(item, index) in justifyOptions"
                 :key="index"
@@ -224,7 +224,7 @@
           </el-form-item>
           <el-form-item v-if="activeData.fileSize !== undefined" label="文件大小">
             <el-input v-model.number="activeData.fileSize" placeholder="请输入文件大小">
-              <el-select slot="append" v-model="activeData.sizeUnit" :style="{ width: '66px' }">
+              <el-select slot="append" filterable v-model="activeData.sizeUnit" :style="{ width: '66px' }">
                 <el-option label="KB" value="KB" />
                 <el-option label="MB" value="MB" />
                 <el-option label="GB" value="GB" />

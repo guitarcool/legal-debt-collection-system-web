@@ -10,7 +10,7 @@
                     @keyup.enter.native="handleQuery" />
             </el-form-item>
             <el-form-item label="类型" prop="noticeType">
-                <el-select v-model="queryParams.noticeType" placeholder="公告类型" clearable size="small">
+                <el-select v-model="queryParams.noticeType" filterable placeholder="公告类型" clearable size="small">
                     <el-option v-for="dict in typeOptions" :key="dict.dictValue" :label="dict.dictLabel"
                         :value="dict.dictValue" />
                 </el-select>
@@ -75,7 +75,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="公告类型" prop="noticeType">
-                            <el-select v-model="form.noticeType" placeholder="请选择">
+                            <el-select v-model="form.noticeType" filterable placeholder="请选择">
                                 <el-option v-for="dict in typeOptions" :key="dict.dictValue" :label="dict.dictLabel"
                                     :value="dict.dictValue"></el-option>
                             </el-select>

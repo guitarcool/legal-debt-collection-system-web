@@ -6,7 +6,7 @@
                     <el-input v-model="form.relatedContact"></el-input>
                 </el-form-item>
                 <el-form-item label="关系：" prop="relatedRelation">
-                    <el-select style="width: 100%" @change="handleChange" v-model="form.relatedRelation" placeholder="请选择">
+                    <el-select filterable style="width: 100%" @change="handleChange" v-model="form.relatedRelation" placeholder="请选择">
                         <el-option
                                 v-for="item in options"
                                 :key="item.value"

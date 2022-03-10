@@ -53,14 +53,14 @@
               <p style="width:20%">{{item.label}}</p>
               <el-form style="width:60%;display:flex;" ref="isSignform" :model="isSignform" label-width="90px">
                 <el-form-item style="margin-bottom:0;" label="">
-                  <el-select v-model="item.isSign" @change="isSignchange(item)" placeholder="请选择">
+                  <el-select v-model="item.isSign" filterable @change="isSignchange(item)" placeholder="请选择">
                     <el-option v-for="item in isSignOptions" :key="item.dictValue" :label="item.dictLabel"
                       :value="item.dictValue">
                     </el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item style="margin-bottom:0;" label="签章名称:" prop="signName" v-if="item.isSign!=0">
-                  <el-select v-model="item.signName" placeholder="请选择">
+                  <el-select v-model="item.signName" filterable placeholder="请选择">
                     <el-option v-for="item in signNameOptions" :key="item.dictValue" :label="item.dictLabel"
                       :value="item.dictValue">
                     </el-option>
@@ -76,7 +76,7 @@
             </div>
             <el-form class="model_form" ref="isSignform" :model="isSignform">
               <el-form-item style="width:30%" label="签章设定:" prop="signSetUp" v-if="item.isSign!=0&&item.type!=2">
-                <el-select @change="signSetUpchange(item)" v-model="item.signSetUp" placeholder="请选择">
+                <el-select @change="signSetUpchange(item)" filterable v-model="item.signSetUp" placeholder="请选择">
                   <el-option v-for="item in signSetUpOptions" :key="item.dictValue" :label="item.dictLabel"
                     :value="item.dictValue">
                   </el-option>
@@ -84,14 +84,14 @@
               </el-form-item>
               <!-- 如果是证据包 -->
               <el-form-item style="width:30%" label="签章设定:" prop="signSetUp" v-if="item.isSign!=0&&item.type==2">
-                <el-select v-model="item.signSetUp" placeholder="请选择">
+                <el-select v-model="item.signSetUp" filterable placeholder="请选择">
                   <el-option size="mini" v-for="item in options5" :key="item.value" :label="item.label"
                     :value="item.value">
                   </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item style="width:30%" label="指定位置" prop="pagePlace" v-if="item.isSign!=0&&item.signSetUp==2">
-                <el-select v-model="item.pagePlace" placeholder="请选择">
+                <el-select v-model="item.pagePlace" filterable placeholder="请选择">
                   <el-option v-for="item in pagePlaceOptions" :key="item.dictValue" :label="item.dictLabel"
                     :value="item.dictValue">
                   </el-option>

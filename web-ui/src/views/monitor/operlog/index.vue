@@ -6,20 +6,20 @@
                     @keyup.enter.native="handleQuery" />
             </el-form-item>
             <el-form-item label="操作人员" prop="operName">
-                <el-select size="small" multiple v-model="operName" placeholder="请选择">
+                <el-select size="small" multiple filterable v-model="operName" placeholder="请选择">
                     <el-option v-for="item in userList" :key="item.userId" :label="item.userName" :value="item.userId">
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="类型" prop="businessType">
-                <el-select v-model="queryParams.businessType" placeholder="操作类型" clearable size="small"
+                <el-select v-model="queryParams.businessType" filterable placeholder="操作类型" clearable size="small"
                     style="width: 240px">
                     <el-option v-for="dict in typeOptions" :key="dict.dictValue" :label="dict.dictLabel"
                         :value="dict.dictValue" />
                 </el-select>
             </el-form-item>
             <el-form-item label="状态" prop="status">
-                <el-select v-model="queryParams.status" placeholder="操作状态" clearable size="small" style="width: 240px">
+                <el-select v-model="queryParams.status" filterable placeholder="操作状态" clearable size="small" style="width: 240px">
                     <el-option v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictLabel"
                         :value="dict.dictValue" />
                 </el-select>

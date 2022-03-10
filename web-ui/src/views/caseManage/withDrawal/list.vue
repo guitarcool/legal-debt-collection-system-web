@@ -16,7 +16,7 @@
                         size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="调解员：">
-                    <el-select clearable  multiple size="small" @change="handleMediation" v-model="mediation" placeholder="请选择">
+                    <el-select clearable filterable  multiple size="small" @change="handleMediation" v-model="mediation" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -32,7 +32,7 @@
                 </el-form-item>
                 <el-form-item label="还款状态：">
                     <!--paymentStatus-->
-                    <el-select clearable size="small" v-model="queryParams.repayStatus" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.repayStatus" placeholder="请选择">
                         <el-option v-for="item in repayStatus" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>

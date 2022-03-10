@@ -12,49 +12,49 @@
                         @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="身份证正面：" prop="haveOcrPhoto">
-                    <el-select clearable size="small" v-model="queryParams.haveOcrPhoto" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.haveOcrPhoto" placeholder="请选择">
                         <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="授权协议：" prop="haveAuthProtocol">
-                    <el-select clearable size="small" v-model="queryParams.haveAuthProtocol" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.haveAuthProtocol" placeholder="请选择">
                         <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="放款凭证：" prop="haveLoanCertificate">
-                    <el-select clearable size="small" v-model="queryParams.haveLoanCertificate" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.haveLoanCertificate" placeholder="请选择">
                         <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="注册协议：" prop="haveRegistProtocol">
-                    <el-select clearable size="small" v-model="queryParams.haveRegistProtocol" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.haveRegistProtocol" placeholder="请选择">
                         <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="融担协议：" prop="haveFinanceContract">
-                    <el-select clearable size="small" v-model="queryParams.haveFinanceContract" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.haveFinanceContract" placeholder="请选择">
                         <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="还款详情：" prop="haveRepayDetails">
-                    <el-select clearable size="small" v-model="queryParams.haveRepayDetails" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.haveRepayDetails" placeholder="请选择">
                         <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="还款记录：" prop="haveRepayRecord">
-                    <el-select clearable size="small" v-model="queryParams.haveRepayRecord" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.haveRepayRecord" placeholder="请选择">
                         <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>

@@ -10,7 +10,7 @@
                     size="small" @keyup.enter.native="handleQuery" />
             </el-form-item>
             <el-form-item label="状态" prop="status">
-                <el-select v-model="queryParams.status" placeholder="登录状态" clearable size="small" style="width: 240px">
+                <el-select v-model="queryParams.status" filterable placeholder="登录状态" clearable size="small" style="width: 240px">
                     <el-option v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictLabel"
                         :value="dict.dictValue" />
                 </el-select>

@@ -12,7 +12,7 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="操作员：">
-                    <el-select clearable size="small" v-model="queryParams.operatorId" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.operatorId" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -23,7 +23,7 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="调解员：">
-                    <el-select clearable size="small" v-model="queryParams.mediatorId" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.mediatorId" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -46,13 +46,13 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="呼出类型：">
-                    <el-select clearable size="small" v-model="queryParams.type" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.type" placeholder="请选择">
                         <el-option label="呼入" value="INBOUND"></el-option>
                         <el-option label="呼出" value="OUTBOUND"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="呼叫结果：">
-                    <el-select clearable size="small" v-model="queryParams.outcome" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.outcome" placeholder="请选择">
                         <el-option label="成功" value="SUCCESS"></el-option>
                         <el-option label="失败" value="FAIL"></el-option>
                     </el-select>

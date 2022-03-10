@@ -20,7 +20,7 @@
                     <!--style="width: 240px"-->
                     <!--@keyup.enter.native="handleQuery"-->
                     <!--/>-->
-                    <el-select clearable size="small" v-model="queryParams.principal" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.principal" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>

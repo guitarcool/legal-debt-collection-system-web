@@ -3,7 +3,7 @@
         <template v-slot:default>
             <el-form ref="form" :model="form" :rules="rules" label-width="150px">
                 <el-form-item label="统计团队：" prop="teamId">
-                    <el-select :disabled="teamIdDisabled" size="small" v-model="form.teamId" placeholder="请选择" @change="queryUserDepts">
+                    <el-select :disabled="teamIdDisabled" filterable size="small" v-model="form.teamId" placeholder="请选择" @change="queryUserDepts">
                         <el-option v-for="item in userDepts" :key="item.deptId" :label="item.deptName"
                             :value="item.deptId">
                         </el-option>
@@ -25,7 +25,7 @@
                     style="margin:0 auto;width: 85%;margin-bottom: 20px;margin-top: 20px">
                     <el-table-column prop="batchNo" label="产品批次号">
                         <template slot-scope="scope">
-                            <el-select size="small" v-model="scope.row.batchNo" placeholder="请选择">
+                            <el-select size="small" filterable v-model="scope.row.batchNo" placeholder="请选择">
                                 <el-option v-for="item in batchNoList" :key="item" :label="item" :value="item">
                                 </el-option>
                             </el-select>

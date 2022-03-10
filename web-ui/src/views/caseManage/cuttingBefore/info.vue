@@ -520,7 +520,7 @@
                     <el-form style="margin-top: 20px" :model="ruleForm" :rules="rules" ref="ruleForm"
                         label-width="100px" class="demo-ruleForm">
                         <el-form-item label="联络人" prop="related">
-                            <el-select v-model="ruleForm.related" clearable placeholder="请选择">
+                            <el-select v-model="ruleForm.related" filterable clearable placeholder="请选择">
                                 <el-option v-for="item in medNameOption" :key="item.sourceRowId"
                                     :label="`${item.relation} ${item.name} ${item.phone}`"
                                     :value="`${item.relation},${item.name},${item.validPhone},${item.sourceRowId},${item.sourceType}`">
@@ -581,7 +581,7 @@
                     <el-form ref="adjustmentForm" style="margin-top: 20px" :model="adjustmentForm"
                         :rules="adjustmentRules" label-width="120px">
                         <el-form-item label="网调对象" prop="related">
-                            <el-select v-model="adjustmentForm.related" clearable placeholder="请选择">
+                            <el-select v-model="adjustmentForm.related" filterable clearable placeholder="请选择">
                                 <el-option v-for="item in medNameOption" :key="item.sourceRowId"
                                     :label="`${item.name}-${item.relation}`" :value="`${item.name},${item.relation}`">
                                 </el-option>

@@ -6,13 +6,13 @@
                     @keyup.enter.native="handleQuery" />
             </el-form-item>
             <el-form-item label="任务组名" prop="jobGroup">
-                <el-select v-model="queryParams.jobGroup" placeholder="请选择任务组名" clearable size="small">
+                <el-select v-model="queryParams.jobGroup" filterable placeholder="请选择任务组名" clearable size="small">
                     <el-option v-for="dict in jobGroupOptions" :key="dict.dictValue" :label="dict.dictLabel"
                         :value="dict.dictValue" />
                 </el-select>
             </el-form-item>
             <el-form-item label="任务状态" prop="status">
-                <el-select v-model="queryParams.status" placeholder="请选择任务状态" clearable size="small">
+                <el-select v-model="queryParams.status" filterable placeholder="请选择任务状态" clearable size="small">
                     <el-option v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictLabel"
                         :value="dict.dictValue" />
                 </el-select>
@@ -86,7 +86,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="任务分组" prop="jobGroup">
-                            <el-select v-model="form.jobGroup" placeholder="请选择">
+                            <el-select v-model="form.jobGroup" filterable placeholder="请选择">
                                 <el-option v-for="dict in jobGroupOptions" :key="dict.dictValue" :label="dict.dictLabel"
                                     :value="dict.dictValue"></el-option>
                             </el-select>

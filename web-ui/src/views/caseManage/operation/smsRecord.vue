@@ -12,7 +12,7 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="操作员：">
-                    <el-select clearable size="small" v-model="queryParams.createBy" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.createBy" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -23,7 +23,7 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="调解员：">
-                    <el-select clearable size="small" v-model="queryParams.mediationtor" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.mediationtor" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -42,7 +42,7 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="发送状态：">
-                    <el-select clearable size="small" v-model="queryParams.status" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.status" placeholder="请选择">
                         <el-option label="全部" value=""></el-option>
                         <el-option label="发送成功" value="0"></el-option>
                         <el-option label="发送未成功" value="1"></el-option>
@@ -61,20 +61,20 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="客户回复内容：">
-                    <el-select clearable size="small" v-model="queryParams.replyContent" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.replyContent" placeholder="请选择">
                         <el-option label="有" value="1"></el-option>
                         <el-option label="否" value="0"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="短信发送渠道：">
-                    <el-select clearable size="small" v-model="queryParams.providerType" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.providerType" placeholder="请选择">
                         <el-option v-for="item in shortmsgProviderType" :key="item.dictValue"
                             :label="item.dictLabel" :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="短信类型：">
-                    <el-select clearable size="small" v-model="queryParams.type" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.type" placeholder="请选择">
                         <el-option label="全部" value=""></el-option>
                         <el-option label="一般短信" value="1"></el-option>
                         <el-option label="文书短信" value="2"></el-option>
@@ -85,7 +85,7 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="短信送达状态：">
-                    <el-select clearable size="small" v-model="queryParams.deliverStatus" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.deliverStatus" placeholder="请选择">
                         <el-option label="已送达" value="0"></el-option>
                         <el-option label="接收中" value="1"></el-option>
                         <el-option label="其他" value="2"></el-option>

@@ -26,7 +26,7 @@
           />
           <el-table-column label="Java类型" min-width="11%">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.javaType">
+              <el-select v-model="scope.row.javaType" filterable>
                 <el-option label="Long" value="Long" />
                 <el-option label="String" value="String" />
                 <el-option label="Integer" value="Integer" />
@@ -64,7 +64,7 @@
           </el-table-column>
           <el-table-column label="查询方式" min-width="10%">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.queryType">
+              <el-select v-model="scope.row.queryType" filterable>
                 <el-option label="=" value="EQ" />
                 <el-option label="!=" value="NE" />
                 <el-option label=">" value="GT" />
@@ -83,7 +83,7 @@
           </el-table-column>
           <el-table-column label="显示类型" min-width="12%">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.htmlType">
+              <el-select v-model="scope.row.htmlType" filterable>
                 <el-option label="文本框" value="input" />
                 <el-option label="文本域" value="textarea" />
                 <el-option label="下拉框" value="select" />

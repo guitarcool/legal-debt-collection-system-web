@@ -10,7 +10,7 @@
                     style="width: 240px" @keyup.enter.native="handleQuery" />
             </el-form-item>
             <el-form-item label="状态" prop="status">
-                <el-select v-model="queryParams.status" placeholder="角色状态" clearable size="small" style="width: 240px">
+                <el-select v-model="queryParams.status" filterable placeholder="角色状态" clearable size="small" style="width: 240px">
                     <el-option v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictLabel"
                         :value="dict.dictValue" />
                 </el-select>
@@ -128,7 +128,7 @@
                     <el-input v-model="form.roleKey" :disabled="true" />
                 </el-form-item>
                 <el-form-item label="权限范围">
-                    <el-select v-model="form.dataScope" @change="dataScopeSelectChange">
+                    <el-select v-model="form.dataScope" filterable @change="dataScopeSelectChange">
                         <el-option v-for="item in dataScopeOptions" :key="item.value" :label="item.label"
                             :value="item.value"></el-option>
                     </el-select>

@@ -75,14 +75,14 @@
           <p class="box-title">电子签章审核</p>
           <el-form ref="form" :rules="rules" :model="form" label-width="100px">
             <el-form-item label="审核类型：" prop="checkType">
-              <el-select style="width:300px" v-model="form.checkType" placeholder="请选择审核类型">
+              <el-select style="width:300px" filterable v-model="form.checkType" placeholder="请选择审核类型">
                 <el-option v-for="item in checkTypeData" :key="item.dictValue" :label="item.dictLabel"
                   :value="item.dictValue">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="审核人员：" v-if="form.checkType == 1" prop="checkMan">
-              <el-select style="width:300px" v-model="form.checkMan" multiple placeholder="请选择审核人员">
+              <el-select style="width:300px" filterable v-model="form.checkMan" multiple placeholder="请选择审核人员">
                 <el-option v-for="item in userList" :key="item.userId" :label="item.userName" :value="item.userId">
                 </el-option>
               </el-select>

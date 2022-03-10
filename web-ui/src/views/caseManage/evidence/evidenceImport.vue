@@ -8,14 +8,14 @@
                     </el-form-item>
                     <el-form-item label="案件发布公司：" prop="publishCompany">
                         <!--<el-input v-model="form.publishCompany"></el-input>-->
-                        <el-select v-model="form.publishCompany" clearable placeholder="请选择">
+                        <el-select v-model="form.publishCompany" filterable clearable placeholder="请选择">
                             <el-option v-for="item in companies" :key="item.dictValue" :label="item.dictLabel"
                                 :value="item.dictLabel">
                             </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="案件类型：" prop="caseType">
-                        <el-select v-model="form.caseType" placeholder="请选择">
+                        <el-select v-model="form.caseType" filterable placeholder="请选择">
                             <el-option v-for="item in typeOptions" :key="item.dictValue" :label="item.dictLabel"
                                 :value="item.dictValue">
                             </el-option>
