@@ -215,6 +215,9 @@
         },
         created() {},
         mounted() {
+            if(this.chooseData.length>0){
+                this.rowDrop();
+            }
             //为了防止火狐浏览器拖拽的时候以新标签打开，此代码真实有效
             document.body.ondrop = function (event) {
                 event.preventDefault();
@@ -236,14 +239,15 @@
                 this.suffix = 1;
                 this.filterText = "";
                 this.getList();
-                this.$nextTick(()=>{
-                    const drawBodyWrapper = document.querySelector('.el-dialog__body tbody')
-                    this.drawBodyWrapper = drawBodyWrapper;
-                    this.rowDrop()
-                })
+                // this.$nextTick(()=>{
+                //     const drawBodyWrapper = document.querySelector('.el-dialog__body tbody')
+                //     this.drawBodyWrapper = drawBodyWrapper;
+                //     this.rowDrop()
+                // })
             },
             //行拖拽
             rowDrop() {
+                this.drawBodyWrapper = document.querySelector('.el-dialog__body tbody');
                 const tbody = this.drawBodyWrapper
                 const _this = this
                 Sortable.create(tbody, {
