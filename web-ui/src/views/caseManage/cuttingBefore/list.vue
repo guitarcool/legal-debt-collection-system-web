@@ -155,7 +155,6 @@
                 <el-form-item label="案件状态：" class="custom-radio">
                     <el-radio-group v-model="queryParams.caseStatus" @change="changeStatus">
                         <el-radio label="">全部</el-radio>
-                        <el-radio :label="0">待分配</el-radio>
                         <el-radio :label="1">电话调解中</el-radio>
                         <el-radio :label="2">电话调解成功</el-radio>
                         <el-radio :label="3">电话调解失败</el-radio>
@@ -253,6 +252,8 @@
                             v-if="scope.row.providerType == 1">{{shisuyunStatusFormat(scope.row.deliverStatus) !=""?shisuyunStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
                         <span
                             v-if="scope.row.providerType == 2">{{wodongStatusFormat(scope.row.deliverStatus) !=""?wodongStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
+                        <span
+                            v-if="scope.row.providerType == 3">{{xuanwuStatusFormat(scope.row.deliverStatus) !=""?xuanwuStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>                  
                     </template>
                 </el-table-column>
                 <el-table-column label="账龄" prop="overdueAge" />
@@ -502,6 +503,7 @@
                 },
                 wodongStatus: [],
                 shisuyunStatus: [],
+                xuanwuStatus: [],
                 contactStatusOptions: [],
                 shortmsgProviderType: [],
                 screen_status: []
@@ -564,6 +566,10 @@
             //时速云标签
             this.getDicts("shisuyun_deliver_status").then((response) => {
                 this.shisuyunStatus = response.data;
+            });
+            //玄武标签
+            this.getDicts("xuanwu_deliver_status").then((response) => {
+                this.xuanwuStatus = response.data;
             });
             //短信渠道类型
             this.getDicts("shortmsg_provider_type").then((response) => {
@@ -742,6 +748,10 @@
             //时速云标签
             shisuyunStatusFormat(deliverStatus) {
                 return this.selectDictLabel(this.shisuyunStatus, deliverStatus);
+            },
+            //玄武标签
+            xuanwuStatusFormat(deliverStatus) {
+                return this.selectDictLabel(this.xuanwuStatus, deliverStatus);
             },
             //申请案件信修
             handleAppleEdit() {

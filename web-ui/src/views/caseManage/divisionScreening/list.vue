@@ -312,6 +312,8 @@
                             v-if="scope.row.providerType == 1">{{shisuyunStatusFormat(scope.row.deliverStatus) !=""?shisuyunStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
                         <span
                             v-if="scope.row.providerType == 2">{{wodongStatusFormat(scope.row.deliverStatus) !=""?wodongStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
+                        <span
+                            v-if="scope.row.providerType == 3">{{xuanwuStatusFormat(scope.row.deliverStatus) !=""?xuanwuStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>                   
                     </template>
                 </el-table-column>
                 <el-table-column label="委案状态" :formatter="getEntrustType" prop="entrustStatus">
@@ -555,6 +557,7 @@
                 },
                 wodongStatus: [],
                 shisuyunStatus: [],
+                xuanwuStatus: [],
                 shortmsgProviderType: []
             };
         },
@@ -610,6 +613,10 @@
             //时速云标签
             this.getDicts("shisuyun_deliver_status").then((response) => {
                 this.shisuyunStatus = response.data;
+            });
+            //玄武标签
+            this.getDicts("xuanwu_deliver_status").then((response) => {
+                this.xuanwuStatus = response.data;
             });
             //短信渠道类型
             this.getDicts("shortmsg_provider_type").then((response) => {
@@ -910,6 +917,10 @@
             //时速云标签
             shisuyunStatusFormat(deliverStatus) {
                 return this.selectDictLabel(this.shisuyunStatus, deliverStatus);
+            },
+            //玄武标签
+            xuanwuStatusFormat(deliverStatus) {
+                return this.selectDictLabel(this.xuanwuStatus, deliverStatus);
             },
             //网调标签
             getAdjustType(row, column) {

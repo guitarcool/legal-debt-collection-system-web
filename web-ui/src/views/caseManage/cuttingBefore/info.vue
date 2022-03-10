@@ -97,6 +97,9 @@
                     <p v-if="firstInfo.providerType == 2">
                         {{wodongStatusFormat(firstInfo.deliverStatus) !=""?wodongStatusFormat(firstInfo.deliverStatus):firstInfo.deliverStatus}}
                     </p>
+                    <p v-if="firstInfo.providerType == 3">
+                        {{xuanwuStatusFormat(firstInfo.deliverStatus) !=""?xuanwuStatusFormat(firstInfo.deliverStatus):firstInfo.deliverStatus}}
+                    </p>
                 </div>
             </div>
         </div>
@@ -765,6 +768,8 @@
                                         v-if="scope.row.providerType == 1">{{shisuyunStatusFormat(scope.row.deliverStatus) !=""?shisuyunStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
                                     <span
                                         v-if="scope.row.providerType == 2">{{wodongStatusFormat(scope.row.deliverStatus) !=""?wodongStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
+                                    <span
+                                        v-if="scope.row.providerType == 3">{{xuanwuStatusFormat(scope.row.deliverStatus) !=""?xuanwuStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>                          
                                 </template>
                             </el-table-column>
                             <el-table-column prop="deliverTime" label="送达时间" :show-overflow-tooltip="true" width="210">
@@ -1111,6 +1116,7 @@
                 adjustType: [],
                 wodongStatus: [],
                 shisuyunStatus: [],
+                xuanwuStatus: [],
                 contactResultOptions: [],
                 contactStatusOptions: [],
                 protects: [],
@@ -1182,6 +1188,10 @@
             //时速云标签
             this.getDicts("shisuyun_deliver_status").then((response) => {
                 this.shisuyunStatus = response.data;
+            });
+            //玄武标签
+            this.getDicts("xuanwu_deliver_status").then((response) => {
+                this.xuanwuStatus = response.data;
             });
             //财保状态
             this.getDicts("wealth_protect").then((response) => {
@@ -1648,6 +1658,10 @@
             //时速云标签
             shisuyunStatusFormat(deliverStatus) {
                 return this.selectDictLabel(this.shisuyunStatus, deliverStatus);
+            },
+            //玄武标签
+            xuanwuStatusFormat(deliverStatus) {
+                return this.selectDictLabel(this.xuanwuStatus, deliverStatus);
             },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
