@@ -63,7 +63,7 @@
                         <el-radio :label="3">.xlsx</el-radio>
                     </el-radio-group>
                 </div>
-                <div class="margin-div" v-if="title =='批量生成多人多案文书'">
+                <div class="margin-div" v-show="title =='批量生成多人多案文书'">
                     <p class="book-title">6、自定义案件顺序：</p>
                     <div class="demo">
                     <el-table :data="selection" border row-key="id" align="left">
@@ -215,9 +215,6 @@
         },
         created() {},
         mounted() {
-            if(this.chooseData.length>0){
-                this.rowDrop();
-            }
             //为了防止火狐浏览器拖拽的时候以新标签打开，此代码真实有效
             document.body.ondrop = function (event) {
                 event.preventDefault();
@@ -239,15 +236,14 @@
                 this.suffix = 1;
                 this.filterText = "";
                 this.getList();
-                // this.$nextTick(()=>{
-                //     const drawBodyWrapper = document.querySelector('.el-dialog__body tbody')
-                //     this.drawBodyWrapper = drawBodyWrapper;
-                //     this.rowDrop()
-                // })
+                this.$nextTick(()=>{
+                    const drawBodyWrapper = document.querySelector('.el-dialog__body tbody')
+                    this.drawBodyWrapper = drawBodyWrapper;
+                    this.rowDrop()
+                })
             },
             //行拖拽
             rowDrop() {
-                this.drawBodyWrapper = document.querySelector('.el-dialog__body tbody');
                 const tbody = this.drawBodyWrapper
                 const _this = this
                 Sortable.create(tbody, {
