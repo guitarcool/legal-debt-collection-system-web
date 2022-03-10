@@ -109,6 +109,22 @@ const divisionApi = {
 
         })
     },
+    //公众号列表查询
+    wechatList(data){
+        return request({
+            url: '/admin/wechat/list',
+            method: 'post',
+            data:data
+        })
+    },
+    //公众号绑定
+    bindWechat(data){
+        return request({
+            url: '/admin/wechat/case/bind',
+            method: 'post',
+            data:data
+        })
+    },
 }
 
 // 下载用户导入模版

@@ -1,0 +1,116 @@
+<template>
+    <Dialog :title="title" :height="350" :show.sync="dialogVisible" width="40%" @openDialog="openDialog">
+        <template v-slot:default>
+            <el-form ref="form" :model="form" :rules="rules" label-width="160px">
+                <el-form-item label="请选择绑定公众号：" prop="wechatId">
+                    <el-select style="width: 100%" v-model="form.wechatId" placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.id" :label="item.accountName" :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+        </template>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="submit" v-hasPermi="['wechat:case:bind']">确 定</el-button>
+        </div>
+    </Dialog>
+</template>
+
+<script>
+    import Dialog from '@/components/Dialog/index';
+    import divisionApi from "@/api/case/division/index";
+    import {
+        initObj
+    } from '@/utils/common'
+    export default {
+        //已强制执行
+        name: "bindingCase",
+        components: {
+            Dialog
+        },
+        data() {
+            return {
+                form: {
+                    wechatId: '',
+                    caseIds: ''
+                },
+                rules: {
+                    wechatId: [{
+                        required: true,
+                        message: '请选择绑定公众号',
+                        trigger: 'change'
+                    }],
+                },
+                options: []
+            }
+        },
+        props: {
+            // 传参控制弹窗显示隐藏
+            show: {
+                type: Boolean,
+                default: false
+            },
+            title: {
+                type: String,
+                default: ''
+            },
+            ids: {
+                type: Array,
+                default: []
+            },
+        },
+        computed: {
+            dialogVisible: {
+                get() {
+                    return this.show
+                },
+                set(val) {
+                    this.$emit('update:show', val)
+                }
+            }
+        },
+        methods: {
+            //重置表单清除验证
+            resetAddForm() {
+                try {
+                    this.$refs['form'].resetFields()
+                } catch (e) {
+
+                }
+            },
+            getList() {
+                divisionApi.wechatList().then((response) => {
+                    this.options = response.data || [];
+                });
+            },
+            openDialog() {
+                initObj(this.form);
+                this.resetAddForm();
+                this.form.caseIds = this.ids;
+                this.getList();
+            },
+            submit() {
+                this.$refs["form"].validate((valid) => {
+                    if (valid) {
+                        divisionApi.bindWechat(this.form).then(res => {
+                            if (res.code === 200) {
+                                this.msgSuccess("绑定成功");
+                                this.dialogVisible = false;
+                                this.$emit('refresh');
+                            }
+                        })
+                    }
+                });
+            },
+        }
+    }
+
+</script>
+
+<style scoped>
+    .el-dialog__body {
+        height: 20px;
+    }
+
+</style>

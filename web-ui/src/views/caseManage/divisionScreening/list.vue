@@ -185,6 +185,9 @@
                         v-hasPermi="['case:assignment:supervisorAssignment']" @click="handleSupervisor">监督员分发
                     </el-button>
                 </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-s-promotion" size="mini" :disabled="multiple" @click="handleBinding"  v-hasPermi="['wechat:info:list']">公众号绑定</el-button>
+                </el-col>
             </el-row>
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
@@ -368,6 +371,8 @@
             :show.sync="supervisorData.dialogVisible"></supervisorDialog>
         <recordDialog :title="recordData.title" :show.sync="recordData.dialogVisible" :id="recordData.id">
         </recordDialog>
+        <bindingCase @refresh="clearSelection" :title="bindingData.title" :show.sync="bindingData.dialogVisible" :ids="bindingData.ids">
+        </bindingCase>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
             :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
         <el-dialog :title="form.title" :visible.sync="exportDialogVisible" width="50%" :before-close="handleClose">
@@ -406,6 +411,7 @@
     import cuttingAfterApi from "@/api/case/cuttingAfter/index";
     import supervisorDialog from "./supervisorDialog";
     import recordDialog from "./recordDialog";
+    import bindingCase from "./bindingCase";
     import exportDialog from "../components/exportDialog";
 
     export default {
@@ -415,7 +421,8 @@
             divisionDialog,
             supervisorDialog,
             recordDialog,
-            exportDialog
+            exportDialog,
+            bindingCase
         },
         data() {
             return {
@@ -484,6 +491,11 @@
                     orgNo: "",
                     principal: "",
                     caseStatus: "",
+                },
+                bindingData:{
+                    title: "",
+                    dialogVisible: false,
+                    ids: []
                 },
                 supervisorData: {
                     title: "",
@@ -849,6 +861,11 @@
                 this.supervisorData.ids = this.ids.join(",");
                 this.supervisorData.title = "监督员分发";
                 this.supervisorData.dialogVisible = true;
+            },
+            handleBinding() {
+                this.bindingData.ids = this.ids;
+                this.bindingData.title = "公众号绑定";
+                this.bindingData.dialogVisible = true;
             },
             handleClose(done) {
                 this.$confirm('确认关闭？')
