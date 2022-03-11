@@ -77,16 +77,12 @@ import {
     MessageBox,
     Message,
     Notification,
-    Scrollbar,
-    Descriptions,
-    DescriptionsItem
+    Scrollbar
 } from 'element-ui';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 const msgbox = MessageBox;
 const { alert, confirm, prompt } = msgbox;
-Vue.component(CollapseTransition.name, CollapseTransition);
-Vue.use(Descriptions);
-Vue.use(DescriptionsItem);
+Vue.component(CollapseTransition.name, CollapseTransition)
 Vue.use(Scrollbar);
 Vue.use(Pagination);
 Vue.use(Dialog);
