@@ -5,18 +5,10 @@ if (process.env.NODE_ENV === "production") {    // todo  if判断是否打包,�
 module.exports = {
   presets: [
     // https://github.com/vuejs/vue-cli/tree/master/packages/@vue/babel-preset-app
-    '@vue/cli-plugin-babel/preset',
-    ["@babel/preset-env", { modules: false }]
+    '@vue/cli-plugin-babel/preset'
   ],
   'plugins': [
-    ...prodPlugins,
-    [
-      'component',
-      {
-        libraryName: 'element-ui',
-        styleLibraryName: 'theme-chalk'
-      }
-    ]
+    ...prodPlugins
   ],  
   'env': {
     'development': {
