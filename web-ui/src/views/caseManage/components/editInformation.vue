@@ -3,16 +3,26 @@
         <template v-slot:default>
             <el-form style="width:80%;margin:0 auto;text-align:left;" ref="form" :model="form" label-width="120px">
                 <el-form-item label="首次还款日期：" prop="firstRepayDate">
-                    <el-input clearable v-model="form.firstRepayDate"></el-input>
+                    <el-date-picker
+                        clearable
+                        v-model="form.firstRepayDate"
+                        type="date"
+                        placeholder="选择日期">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="末次还款日期：" prop="lastRepayDate">
+                    <el-date-picker
+                        clearable
+                        v-model="form.lastRepayDate"
+                        type="date"
+                        placeholder="选择日期">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item label="起始已还本金：" prop="repaidCapital">
                     <el-input clearable v-model="form.repaidCapital"></el-input>
                 </el-form-item>
                 <el-form-item label="已还期数：" prop="repaidTerms">
                     <el-input clearable v-model="form.repaidTerms"></el-input>
-                </el-form-item>
-                <el-form-item label="末次还款日期：" prop="lastRepayDate">
-                    <el-input clearable v-model="form.lastRepayDate"></el-input>
                 </el-form-item>
                 <el-form-item label="借款用途：" prop="purpose">
                     <el-input clearable v-model="form.purpose"></el-input>
