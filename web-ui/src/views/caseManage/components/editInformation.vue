@@ -7,6 +7,7 @@
                         clearable
                         v-model="form.firstRepayDate"
                         type="date"
+                        value-format="yyyy-MM-dd"
                         placeholder="选择日期">
                     </el-date-picker>
                 </el-form-item>
@@ -15,6 +16,7 @@
                         clearable
                         v-model="form.lastRepayDate"
                         type="date"
+                        value-format="yyyy-MM-dd"
                         placeholder="选择日期">
                     </el-date-picker>
                 </el-form-item>
