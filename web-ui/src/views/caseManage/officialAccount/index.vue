@@ -48,18 +48,18 @@
                 <el-table-column label="登陆身份证" prop="idCard" :show-overflow-tooltip="true" />
                 <el-table-column label="登陆手机号" prop="phone" :show-overflow-tooltip="true" />
                 <el-table-column label="身份证匹配案件" prop="idCardHit" :show-overflow-tooltip="true">
-                    <template slot-scope="scope" v-if="scope.row.idCardHit">
-                        <span>{{scope.row.idCardHit == 1?'不匹配':(scope.row.idCardHit == 0?'匹配':'')}}</span>
+                    <template slot-scope="scope">
+                        <span>{{scope.row.idCardHit == 1?'不匹配':'匹配'}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="手机号匹配案件" prop="phoneHit" :show-overflow-tooltip="true">
-                    <template slot-scope="scope" v-if="scope.row.phoneHit">
-                        <span>{{scope.row.phoneHit == 1?'不匹配':(scope.row.phoneHit == 0?'匹配':'')}}</span>
+                    <template slot-scope="scope">
+                        <span>{{scope.row.phoneHit == 1?'不匹配':'匹配'}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="公众号匹配案件" prop="gzhHit" :show-overflow-tooltip="true">
-                    <template slot-scope="scope" v-if="scope.row.gzhHit">
-                        <span>{{scope.row.gzhHit == 1?'不匹配':(scope.row.gzhHit == 0?'匹配':'')}}</span>
+                    <template slot-scope="scope">
+                        <span>{{scope.row.gzhHit == 1?'不匹配':'匹配'}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="查询时间" prop="createTime" :show-overflow-tooltip="true" />
