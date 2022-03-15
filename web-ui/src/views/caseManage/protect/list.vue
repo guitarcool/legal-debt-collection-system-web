@@ -227,7 +227,7 @@
                 //查询
                 if (type == 1) {
                     this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
-                    divisionApi.list(this.searchParams).then((response) => {
+                    divisionApi.propertylist(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
                         this.caseList = response.rows;
@@ -237,7 +237,7 @@
                 }
                 //切换页
                 else if (type == 2) {
-                    divisionApi.list(this.searchParams).then((response) => {
+                    divisionApi.propertylist(this.searchParams).then((response) => {
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
