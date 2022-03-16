@@ -62,7 +62,8 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="信修状态：">
-                    <el-select clearable filterable size="small" v-model="queryParams.letterRepairStatus" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.letterRepairStatus"
+                        placeholder="请选择">
                         <el-option v-for="item in letterRepairStatusOptions" :key="item.dictValue"
                             :label="item.dictLabel" :value="item.dictValue">
                         </el-option>
@@ -93,14 +94,16 @@
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
-                    <el-select clearable filterable v-else size="small" v-model="queryParams.screenResult" placeholder="请选择">
+                    <el-select clearable filterable v-else size="small" v-model="queryParams.screenResult"
+                        placeholder="请选择">
                         <el-option v-for="item in realtimeSortresult" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="网调标签：">
-                    <el-select clearable filterable size="small" v-model="queryParams.networkAdjustLabel" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.networkAdjustLabel"
+                        placeholder="请选择">
                         <el-option v-for="item in adjustType" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
@@ -120,7 +123,8 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="短信送达状态：" v-if="queryParams.providerType">
-                    <el-select clearable filterable size="small" v-model="queryParams.lastDeliverStatus" placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.lastDeliverStatus"
+                        placeholder="请选择">
                         <el-option label="已送达" value="0"></el-option>
                         <el-option label="接收中" value="1"></el-option>
                         <el-option label="其他" value="2"></el-option>
@@ -140,6 +144,12 @@
                     <el-select clearable filterable size="small" v-model="queryParams.contactStatus" placeholder="请选择">
                         <el-option v-for="item in contactStatusOptions" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="公众号名称：">
+                    <el-select clearable filterable size="small" v-model="queryParams.bindWechatId" placeholder="请选择">
+                        <el-option v-for="item in wechatList" :key="item.id" :label="item.accountName" :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -253,7 +263,7 @@
                         <span
                             v-if="scope.row.providerType == 2">{{wodongStatusFormat(scope.row.deliverStatus) !=""?wodongStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
                         <span
-                            v-if="scope.row.providerType == 3">{{xuanwuStatusFormat(scope.row.deliverStatus) !=""?xuanwuStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>                  
+                            v-if="scope.row.providerType == 3">{{xuanwuStatusFormat(scope.row.deliverStatus) !=""?xuanwuStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="账龄" prop="overdueAge" />
@@ -301,6 +311,7 @@
                         }}</span>
                     </template>
                 </el-table-column>
+                <el-table-column label="公众号名称" prop="bindWechat" width="160" :show-overflow-tooltip="true" />
                 <el-table-column label="操作" width="300" fixed="right" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" type="warning" @click="handleRecord(scope.row)"
@@ -506,12 +517,14 @@
                 xuanwuStatus: [],
                 contactStatusOptions: [],
                 shortmsgProviderType: [],
-                screen_status: []
+                screen_status: [],
+                wechatList: []
             };
         },
         created() {
             this.getList(1);
             this.getUsers();
+            this.getwechatList();
             //财保申请类型
             this.getDicts("wealth_protect").then((response) => {
                 this.protects = response.data;
@@ -592,6 +605,11 @@
             },
         },
         methods: {
+            getwechatList() {
+                divisionApi.wechatList().then((response) => {
+                    this.wechatList = response.data || [];
+                });
+            },
             /** 查询角色列表 */
             getList(type) {
                 this.idList = [];

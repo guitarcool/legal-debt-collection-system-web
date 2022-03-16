@@ -134,6 +134,16 @@
                         <el-option label="有" value="1"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="公众号名称：">
+                    <el-select clearable filterable size="small" v-model="queryParams.bindWechatId" placeholder="请选择">
+                        <el-option v-for="item in wechatList" :key="item.id" :label="item.accountName"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="公众号名称：">
+                    <el-input v-model="queryParams.platform" placeholder="请输入绑定的公众号名称" clearable size="small" @keyup.enter.native="handleQuery" />
+                </el-form-item>
             </template>
             <template #filter>
                 <el-form-item label="案件状态：" class="custom-radio">
@@ -318,6 +328,7 @@
                 </el-table-column>
                 <el-table-column label="委案状态" :formatter="getEntrustType" prop="entrustStatus">
                 </el-table-column>
+                <el-table-column label="公众号名称" prop="bindWechat" width="160" :show-overflow-tooltip="true" />
                 <el-table-column label="操作" width="240" fixed="right" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" type="warning" @click="handleRecord(scope.row)"
@@ -558,7 +569,8 @@
                 wodongStatus: [],
                 shisuyunStatus: [],
                 xuanwuStatus: [],
-                shortmsgProviderType: []
+                shortmsgProviderType: [],
+                wechatList:[]
             };
         },
         created() {
@@ -624,6 +636,7 @@
             });
             this.getList(1);
             this.getUsers();
+            this.getwechatList();
             this.getDeptList();
         },
         // 是否显示过滤栏， 扣除页数，每页显示数，总数量参数，3个内的搜索参数，直接显示一行，不显示过滤
@@ -644,6 +657,11 @@
             getDeptList() {
                 divisionApi.supervisorList().then(response => {
                     this.deptList = response.data.userList || []
+                });
+            },
+            getwechatList() {
+                divisionApi.wechatList().then((response) => {
+                    this.wechatList = response.data || [];
                 });
             },
             /** 查询角色列表 */
