@@ -161,28 +161,28 @@
           })
 
           DYSDK.callBridge((data) => {
-              // console.log(data, '预测计划')
-              // if (data.bridgeType == 'start') {
-              // let result = data.userTag.split("+");
-              // let id = result[0];
-              // let name = result[1];
-              // console.log(result, id, name)
-              // if (name == 'cUtBeforeInfo') {
-              //   this.$router.push({
-              //     path: 'cutBeforeInfo',
-              //     query: {
-              //       id: id
-              //     }
-              //   })
-              // } else if (name == 'cUtAfterInfo') {
-              //   this.$router.push({
-              //     path: 'cutAfterInfo',
-              //     query: {
-              //       id: id
-              //     }
-              //   })
-              // }
-            // }
+              if (data.bridgeType == 'start') {
+              let result = data.userTag.split("+");
+              let id = result[0];
+              let name = result[1];
+              if (name == 'cUtBeforeInfo') {
+                let BeforerouteUrl = this.$router.resolve({
+                  path: "cutBeforeInfo",
+                  query: {
+                    id: id
+                  }
+                });
+                window.open(BeforerouteUrl.href, '_blank');
+              } else if (name == 'cUtAfterInfo') {
+                let AfterrouteUrl = this.$router.resolve({
+                  path: "cutAfterInfo",
+                  query: {
+                    id: id
+                  }
+                });
+                window.open(AfterrouteUrl.href, '_blank');
+              }
+            }
           })
 
           DYSDK.getPhonelines((data) => {
