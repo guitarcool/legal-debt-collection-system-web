@@ -72,7 +72,6 @@
                         <el-checkbox :label="3">空号</el-checkbox>
                         <el-checkbox :label="4">短时间（24h）关机</el-checkbox>
                         <el-checkbox :label="7">长时间（大于24h）关机</el-checkbox>
-                        <el-checkbox :label="0">关机</el-checkbox>
                         <el-checkbox :label="5">欠费停机且无短信能力</el-checkbox>
                         <el-checkbox :label="6">欠费但能接受短信</el-checkbox>
                         <el-checkbox :label="8">关机-疑似呼转</el-checkbox>
@@ -211,7 +210,7 @@
                     is_start_now: false,
                     filterMedLabel: [6, 0, 8, 3, 12, 14, 13],
                     filterNetworkStatus: [2, 4003],
-                    filterRealtimeStatus: [3, 7, 0, 5, 6, 8, 9, 10, -3],
+                    filterRealtimeStatus: [3, 7, 5, 6, 8, 9, 10, -3],
                     callObject: 0,
                 }
                 this.caseId = this.id;
