@@ -161,28 +161,32 @@
           })
 
           DYSDK.callBridge((data) => {
-              if (data.bridgeType == 'start') {
-              let result = data.userTag.split("+");
-              let id = result[0];
-              let name = result[1];
-              if (name == 'cUtBeforeInfo') {
-                let BeforerouteUrl = this.$router.resolve({
-                  path: "cutBeforeInfo",
-                  query: {
-                    beforeId: id
-                  }
-                });
-                window.open(BeforerouteUrl.href, '_blank');
-              } else if (name == 'cUtAfterInfo') {
-                let AfterrouteUrl = this.$router.resolve({
-                  path: "cutAfterInfo",
-                  query: {
-                    afterId: id
-                  }
-                });
-                window.open(AfterrouteUrl.href, '_blank');
-              }
-            }
+            //   console.log(data);
+            //   if (data.bridgeType == 'start') {
+            //   let result = data.userTag.split("+");
+            //   console.log(result);
+            //   let id = result[0];
+            //   let name = result[1];
+            //   console.log(id,name);
+            //   if (name == 'cUtBeforeInfo') {
+            //     let BeforerouteUrl = this.$router.resolve({
+            //       path: "cutBeforeInfo",
+            //       query: {
+            //         beforeId: id
+            //       }
+            //     });
+
+            //     window.open(BeforerouteUrl.href, '_blank');
+            //   } else if (name == 'cUtAfterInfo') {
+            //     let AfterrouteUrl = this.$router.resolve({
+            //       path: "cutAfterInfo",
+            //       query: {
+            //         afterId: id
+            //       }
+            //     });
+            //     window.open(AfterrouteUrl.href, '_blank');
+            //   }
+            // }
           })
 
           DYSDK.getPhonelines((data) => {
