@@ -141,9 +141,6 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="公众号名称：">
-                    <el-input v-model="queryParams.platform" placeholder="请输入绑定的公众号名称" clearable size="small" @keyup.enter.native="handleQuery" />
-                </el-form-item>
             </template>
             <template #filter>
                 <el-form-item label="案件状态：" class="custom-radio">
