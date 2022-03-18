@@ -169,7 +169,7 @@
                 let BeforerouteUrl = this.$router.resolve({
                   path: "cutBeforeInfo",
                   query: {
-                    id: id
+                    beforeId: id
                   }
                 });
                 window.open(BeforerouteUrl.href, '_blank');
@@ -177,7 +177,7 @@
                 let AfterrouteUrl = this.$router.resolve({
                   path: "cutAfterInfo",
                   query: {
-                    id: id
+                    afterId: id
                   }
                 });
                 window.open(AfterrouteUrl.href, '_blank');
