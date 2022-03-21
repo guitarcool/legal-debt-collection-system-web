@@ -193,7 +193,7 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-s-promotion" size="mini" :disabled="multiple" @click="handleBinding"  v-hasPermi="['wechat:info:list']">公众号绑定</el-button>
+                    <el-button type="success" icon="el-icon-s-promotion" size="mini" :disabled="multiple" @click="handleBinding"  v-hasPermi="['wechat:case:bind']">公众号绑定</el-button>
                 </el-col>
             </el-row>
             <el-row :gutter="10" class="mb8">
