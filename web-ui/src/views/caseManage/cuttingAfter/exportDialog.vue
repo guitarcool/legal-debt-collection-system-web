@@ -26,7 +26,7 @@
                     <div v-show="active ==2">
                         <div class="margin-div">
                             <p class="book-title">3、发送内容：</p>
-                            <el-input type="textarea" :rows="4" placeholder="短信内容" v-model="textarea">
+                            <el-input type="textarea" disabled :rows="4" placeholder="短信内容" v-model="textarea">
                             </el-input>
                         </div>
                         <div class="margin-div">

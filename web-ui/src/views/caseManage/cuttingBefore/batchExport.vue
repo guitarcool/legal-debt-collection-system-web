@@ -80,11 +80,11 @@
                                 <span>点击下载：</span>
                                 <el-link type="info" style="font-size: 16px; margin: 10px 0; color: #1890ff"
                                     @click="importTemplate"><i class="el-icon-download"></i>批量生成短信内容</el-link>
-                                <el-upload class="upload-demo" :limit="1" action="string" :http-request="handleUplod"
+                                <!-- <el-upload class="upload-demo" :limit="1" action="string" :http-request="handleUplod"
                                     :disabled="isUploading" :on-change="fileOnChange" :on-remove="removeFile">
                                     <el-button size="mini" type="primary">上传短信内容<i
                                             class="el-icon-upload el-icon--right"></i></el-button>
-                                </el-upload>
+                                </el-upload> -->
                             </div>
                         </div>
                         <div class="margin-div">
