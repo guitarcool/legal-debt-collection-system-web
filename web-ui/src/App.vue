@@ -26,6 +26,7 @@
 
 <script>
     import indexApi from "@/api/index";
+    import merge from 'webpack-merge';
     export default {
         name: 'App',
         data() {
