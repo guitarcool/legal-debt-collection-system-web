@@ -696,6 +696,8 @@
                                     <span>{{scope.row.type=='INBOUND'?'呼入':'呼出'}}</span>
                                 </template>
                             </el-table-column>
+                            <el-table-column prop="type" label="呼出子类型" :show-overflow-tooltip="true" width="100">
+                            </el-table-column>
                             <el-table-column prop="ringTime" label="响铃时长" :show-overflow-tooltip="true" width="80">
                                 <template slot-scope="scope" v-if="scope.row.ringTime != null">
                                     <span>{{scope.row.ringTime}}秒</span>
