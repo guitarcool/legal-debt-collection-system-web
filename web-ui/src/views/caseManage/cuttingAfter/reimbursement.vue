@@ -51,7 +51,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="回款渠道：" prop="payChannal">
-                    <el-select v-model="payChannal" placeholder="请选择" filterable @change="selectpayChannal">
+                    <el-select v-model="form.payChannal" placeholder="请选择" filterable>
                         <el-option v-for="item in payChannalOptions" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
@@ -201,7 +201,6 @@
                     },
                 ],
                 payChannalOptions: [],
-                payChannal: "1",
                 accountNoShouOptions: [],
                 fileList: [],
             };
@@ -258,15 +257,15 @@
                 initObj(this.form);
                 this.resetAddForm();
                 this.form.id = this.id;
+                this.form.payChannal = '1';
                 this.removeFile();
                 this.fileList = [];
-                if (this.repayList.length>0&&this.repayList[0].accountNumber) {
+                if (this.repayList.length > 0 && this.repayList[0].accountNumber) {
                     this.account = true;
                     this.selectaccountNoShou(this.repayList[0].accountNumber);
                 } else {
                     this.account = false;
                 }
-                this.selectpayChannal(1);
             },
             //重置表单清除验证
             resetAddForm() {
@@ -278,9 +277,9 @@
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
                         if (this.files == null) {
-                        this.msgError("请上传汇款凭证");
-                        return;
-                        }  
+                            this.msgError("请上传汇款凭证");
+                            return;
+                        }
                         let formData = new FormData();
                         formData.append("caseId", this.id);
                         formData.append("file", this.files);
@@ -347,9 +346,6 @@
                         this.form.accountName = element.accountName;
                     }
                 });
-            },
-            selectpayChannal(val) {
-                this.form.payChannal = val;
             },
         },
     };

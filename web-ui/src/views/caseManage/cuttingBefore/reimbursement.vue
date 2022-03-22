@@ -51,7 +51,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="回款渠道：" prop="payChannal">
-                    <el-select v-model="payChannal" filterable placeholder="请选择" @change="selectpayChannal">
+                    <el-select v-model="form.payChannal" filterable placeholder="请选择">
                         <el-option v-for="item in payChannalOptions" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
@@ -194,7 +194,6 @@
                 ],
                 fileList: [],
                 payChannalOptions: [],
-                payChannal: "1",
                 accountNoShouOptions: [{
                         label: "130997110000080479",
                         value: "130997110000080479",
@@ -258,6 +257,7 @@
                 initObj(this.form);
                 this.resetAddForm();
                 this.form.id = this.id;
+                this.form.payChannal = '1';
                 this.removeFile();
                 this.fileList = [];
                 if (this.repayList.length>0&&this.repayList[0].accountNumber) {
@@ -266,7 +266,6 @@
                 } else {
                     this.account = false;
                 }
-                this.selectpayChannal(1);
             },
             //重置表单清除验证
             resetAddForm() {
@@ -346,9 +345,6 @@
                         this.form.accountName = element.accountName;
                     }
                 });
-            },
-            selectpayChannal(val) {
-                this.form.payChannal = val;
             },
         },
     };
