@@ -11,8 +11,8 @@
                     <el-button circle size="mini" icon="el-icon-edit" v-hasPermi="['case:postAdjudged:getCaseEditData']" @click="editInformation"></el-button>
                     <el-button v-if="firstInfo.isDesensitization" :disabled="isDisable" circle size="mini"
                         icon="el-icon-view" @click="viewData"></el-button>
-                    <el-button size="mini" type="primary" @click="nextCase(1)">上一案</el-button>
-                    <el-button size="mini" style="margin-right:10px" type="primary" @click="nextCase(2)">下一案</el-button>
+                    <el-button size="mini" type="primary" v-if="buttonChange" @click="nextCase(1)">上一案</el-button>
+                    <el-button size="mini" style="margin-right:10px" type="primary" v-if="buttonChange"  @click="nextCase(2)">下一案</el-button>
                     <el-dropdown style="margin-right:10px" v-if="firstInfo.caseStatus != 13" @command="changeButton">
                         <el-button type="primary" size="mini">
                             变更案件状态<i class="el-icon-arrow-down el-icon--right"></i>
@@ -1119,12 +1119,20 @@
                 token: null,
                 isDisable: false,
                 idList: [],
+                buttonChange: false
             };
         },
         created() {
             //案件id
             this.id = this.$route.query.afterId;
-            this.idList = this.$route.query.afterList;
+            if(this.$route.query.afterList&&this.$route.query.afterList.length>0){
+                this.idList = this.$route.query.afterList;
+                this.buttonChange = true;
+            }else{
+                this.idList = [];
+                this.buttonChange = false;
+            }
+
             //案件联系状态
             this.getDicts("contactStatus").then((response) => {
                 this.contactStatusOptions = response.data;
@@ -1208,8 +1216,13 @@
             //监控路由参数，实现自己跳自己刷新数据
             $route() {
                 this.id = this.$route.query.afterId;
-                this.idList = this.$route.query.afterList;
-
+                if(this.$route.query.afterList&&this.$route.query.afterList.length>0){
+                    this.idList = this.$route.query.afterList;
+                    this.buttonChange = true;
+                }else{
+                    this.idList = [];
+                    this.buttonChange = false;
+                }
             },
             id() {
                 if (!this.id) {
@@ -1266,7 +1279,7 @@
                     this.firstInfo = response.data;
                     this.componentsName = [];
                     componentsArray.componentsName.forEach((item) => {
-                        if (item.showFlag.indexOf(this.firstInfo.caseStatus) != -1) {
+                        if (item.showFlag.includes(this.firstInfo.caseStatus)) {
                             this.componentsName.push(item);
                             this.componentsMap.set(item.eName, item);
                         }

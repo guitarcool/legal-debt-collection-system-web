@@ -11,8 +11,8 @@
                     <el-button circle size="mini" icon="el-icon-edit" v-hasPermi="['case:pretrial:getCaseEditData']" @click="editInformation"></el-button>
                     <el-button v-if="firstInfo.isDesensitization" :disabled="isDisable" circle size="mini"
                         icon="el-icon-view" style="margin-right:10px" @click="viewData"></el-button>
-                    <el-button size="mini" type="primary" @click="nextCase(1)">上一案</el-button>
-                    <el-button size="mini" style="margin-right:10px" type="primary" @click="nextCase(2)">下一案</el-button>
+                    <el-button size="mini" type="primary" v-if="buttonChange" @click="nextCase(1)">上一案</el-button>
+                    <el-button size="mini" style="margin-right:10px" type="primary" v-if="buttonChange" @click="nextCase(2)">下一案</el-button>
                     <el-dropdown style="margin-right:10px" v-if="firstInfo.caseStatus != 13" @command="changeButton">
                         <el-button type="primary" size="mini">
                             变更案件状态<i class="el-icon-arrow-down el-icon--right"></i>
@@ -660,8 +660,8 @@
                             <el-table-column label="汇款时间" width="150" prop="remittanceTime">
                                 <template slot-scope="scope">
                                     <span>{{
-              parseTime(scope.row.remittanceTime, "{y}-{m}-{d}")
-            }}</span>
+                                        parseTime(scope.row.remittanceTime, "{y}-{m}-{d}")
+                                    }}</span>
                                 </template>
                             </el-table-column>
                             <el-table-column label="还款状态" width="150" :show-overflow-tooltip="true"
@@ -1123,12 +1123,19 @@
                 token: null,
                 isDisable: false,
                 idList: [],
+                buttonChange: false,
             };
         },
         created() {
             //案件id
             this.id = this.$route.query.beforeId;
-            this.idList = this.$route.query.beforeList;
+            if(this.$route.query.beforeList&&this.$route.query.beforeList.length>0){
+                this.idList = this.$route.query.beforeList;
+                this.buttonChange = true;
+            }else{
+                this.idList = [];
+                this.buttonChange = false;
+            }
             //联系标签
             this.getDicts("contact_status").then((response) => {
                 this.contactResultOptions = response.data;
@@ -1212,7 +1219,13 @@
             //监控路由参数，实现自己跳自己刷新数据
             $route() {
                 this.id = this.$route.query.beforeId;
-                this.idList = this.$route.query.beforeList;
+                if(this.$route.query.beforeList&&this.$route.query.beforeList.length>0){
+                    this.idList = this.$route.query.beforeList;
+                    this.buttonChange = true;
+                }else{
+                    this.idList = [];
+                    this.buttonChange = false;
+                }
             },
             id() {
                 if (!this.id) {
@@ -1269,7 +1282,7 @@
                     this.firstInfo = response.data;
                     this.componentsName = [];
                     componentsArray.componentsName.forEach((item) => {
-                        if (item.showFlag.indexOf(this.firstInfo.caseStatus) != -1) {
+                        if (item.showFlag.includes(this.firstInfo.caseStatus)) {
                             this.componentsName.push(item);
                             this.componentsMap.set(item.eName, item);
                         }
@@ -1466,6 +1479,30 @@
                 this.pendingFilling.confirmTip = item.cName;
                 // 控制弹窗组件显示
                 this.pendingFilling.dialogVisible = true;
+            },
+            telephoneMediation(item) {
+                var that = this;
+                this.$confirm(`是否切换案件状态为${item.cName}?`, "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        type: "warning",
+                    })
+                    .then(() => {
+                        let param = {
+                            caseId:that.id
+                        };
+                        cuttingBeforeApi
+                            .common(`/case/pretrial/mediationSuccess`, param)
+                            .then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess("操作成功");
+                                    that.getAdjudgedInfo();
+                                }
+                            });
+                    })
+                    .catch(() => {
+                        that.msgError("已取消操作");
+                    });
             },
             //已判决-待执行立案不需要弹窗
             pendingFilingSecond(item) {

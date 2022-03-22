@@ -2,28 +2,43 @@
 const componentsName = [
     {
         //上个状态
-        showFlag: '1,2',
+        showFlag: ['1','3'],
+        cName:'电话调解成功',
+        eName:'phone_success',
+        route:'',
+        methods:'telephoneMediation'
+    },
+    {
+        //上个状态
+        showFlag: ['1','2'],
         cName:'电话调解失败',
         eName:'phone_failure',
         route:'',
         methods:'fail'
     },
     {
-        showFlag:'4',
+        showFlag:['4'],
         cName:'多元调解失败',
         eName:'more_failure',
         route:'',
         methods:'fail'
     },
     {
-        showFlag:'2',
+        showFlag:['4'],
+        cName:'多元调解成功',
+        eName:'multiple_success',
+        route:'',
+        methods:'multipleSuccess'
+    },
+    {
+        showFlag:['2'],
         cName:'多元调解中',
         eName:'more_failureing',
         route:'',
         methods:'handleFailureing'
     },
     {
-        showFlag:'6,3,0',
+        showFlag:['6','3','0'],
         cName:'待立案',
         eName:'on_record',
         route:'',
@@ -31,7 +46,7 @@ const componentsName = [
     },
     //多元调解成功-待执行立案需要弹窗
     {
-        showFlag:'5',
+        showFlag:['5'],
         cName:'待执行立案',
         eName:'pending_filing',
         route:'',
@@ -39,49 +54,42 @@ const componentsName = [
     },
     //已判决-待执行立案不需要弹窗
     {
-        showFlag:'9',
+        showFlag:['9'],
         cName:'待执行立案',
         eName:'pending_filing_two',
         route:'',
         methods:'pendingFilingSecond'
     },
     {
-        showFlag:'8',
+        showFlag:['8'],
         cName:'已判决',
         eName:'has_ruled',
         route:'',
         methods:'hasRule'
     },
     {
-        showFlag:'4',
-        cName:'多元调解成功',
-        eName:'multiple_success',
-        route:'',
-        methods:'multipleSuccess'
-    },
-    {
-        showFlag:'10',
+        showFlag:['10'],
         cName:'已执行立案',
         eName:'executed_filing',
         route:'',
         methods:'executedFilling'
     },
     {
-        showFlag:'11',
+        showFlag:['11'],
         cName:'已强制执行',
         eName:'enforced',
         route:'',
         methods:'handleEnforced'
     },
     {
-        showFlag:'7',
+        showFlag:['7'],
         cName:'已立案',
         eName:'put_on_record',
         route:'',
         methods:'handlePutOnRecord'
     },
     {
-        showFlag:'12',
+        showFlag:['1','2','3','4','5','6','7','8','9','10','11',,'12'],
         cName:'强制结案',
         eName:'mandatory_put_on_record',
         route:'',
