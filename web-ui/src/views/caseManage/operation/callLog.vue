@@ -51,6 +51,13 @@
                         <el-option label="呼出" value="OUTBOUND"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="呼出子类型：">
+                    <el-select clearable size="small" filterable v-model="queryParams.subType" placeholder="请选择">
+                        <el-option label="坐席呼叫" value="OUTBOUND"></el-option>
+                        <el-option label="坐席接听" value="INBOUND"></el-option>
+                        <el-option label="预测式计划" value="FCFS"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="呼叫结果：">
                     <el-select clearable size="small" filterable v-model="queryParams.outcome" placeholder="请选择">
                         <el-option label="成功" value="SUCCESS"></el-option>
@@ -111,7 +118,10 @@
                         <span>{{scope.row.type=='INBOUND'?'呼入':'呼出'}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="type" label="呼出子类型" :show-overflow-tooltip="true" width="100">
+                <el-table-column prop="subType" label="呼出子类型" :show-overflow-tooltip="true" width="100">
+                    <template slot-scope="scope" v-if="scope.row.subType != null">
+                        <span>{{scope.row.subType=='OUTBOUND'?'坐席呼叫':(scope.row.subType=='INBOUND'?'坐席接听':scope.row.subType=='FCFS'?'预测式计划':'')}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="响铃时长" width="80" prop="ringTime">
                     <template slot-scope="scope" v-if="scope.row.ringTime != null">

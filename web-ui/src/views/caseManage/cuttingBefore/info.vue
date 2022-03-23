@@ -699,7 +699,10 @@
                                     <span>{{scope.row.type=='INBOUND'?'呼入':'呼出'}}</span>
                                 </template>
                             </el-table-column>
-                            <el-table-column prop="type" label="呼出子类型" :show-overflow-tooltip="true" width="100">
+                            <el-table-column prop="subType" label="呼出子类型" :show-overflow-tooltip="true" width="100">
+                                <template slot-scope="scope" v-if="scope.row.subType != null">
+                                    <span>{{scope.row.subType=='OUTBOUND'?'坐席呼叫':(scope.row.subType=='INBOUND'?'坐席接听':scope.row.subType=='FCFS'?'预测式计划':'')}}</span>
+                                </template>
                             </el-table-column>
                             <el-table-column prop="ringTime" label="响铃时长" :show-overflow-tooltip="true" width="80">
                                 <template slot-scope="scope" v-if="scope.row.ringTime != null">
