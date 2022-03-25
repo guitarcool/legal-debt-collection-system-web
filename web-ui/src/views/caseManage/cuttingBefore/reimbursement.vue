@@ -44,9 +44,9 @@
                     <el-input v-model="form.amount"></el-input>
                 </el-form-item>
                 <el-form-item label="汇款类型：" prop="repayType">
-                    <el-select v-model="form.repayType" filterable placeholder="请选择">
-                        <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
-                            :value="item.value">
+                    <el-select v-model="form.repayType" placeholder="请选择" filterable>
+                        <el-option v-for="item in remittanceTypes" :key="item.dictValue" :label="item.dictLabel"
+                            :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -175,23 +175,7 @@
                         trigger: "change"
                     }, ],
                 },
-                typeOptions: [{
-                        label: "支付宝账户",
-                        value: "0",
-                    },
-                    {
-                        label: "银联账户",
-                        value: "1",
-                    },
-                    {
-                        label: "微信账户",
-                        value: "2",
-                    },
-                    {
-                        label: "二维码",
-                        value: "3",
-                    },
-                ],
+                remittanceTypes: [],
                 fileList: [],
                 payChannalOptions: [],
                 accountNoShouOptions: [{
@@ -250,6 +234,10 @@
             //回款状态
             this.getDicts("payChannal_options").then((response) => {
                 this.payChannalOptions = response.data;
+            });
+            //汇款类型
+            this.getDicts("remittance_status").then((response) => {
+                this.remittanceTypes = response.data;
             });
         },
         methods: {
