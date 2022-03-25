@@ -14,7 +14,7 @@ export function initObj (obj) {
             obj[index]=0
             break;
           case (index == 'pageSize'):
-            obj[index]=10
+            obj[index]=50
             break;
           case (index == 'total'):
             obj[index]=0

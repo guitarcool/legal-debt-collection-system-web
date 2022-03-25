@@ -140,7 +140,6 @@
                     officialApi.wechatList(this.searchParams).then((response) => {
                         this.caseList = response.rows;
                         if (!this.isDesensitization) {
-                            console.log(1);
                             this.caseList.forEach(element => {
                                 element.idCard = element.idCard.replace( /^(.{4})(?:\d+)(.{4})$/, "$1 **** **** $2");
                                 element.phone = element.phone.replace(/(\d{3})\d*(\d{4})/,"$1****$2");
@@ -154,6 +153,12 @@
                 else if (type == 2) {
                     officialApi.wechatList(this.searchParams).then((response) => {
                         this.caseList = response.rows;
+                        if (!this.isDesensitization) {
+                            this.caseList.forEach(element => {
+                                element.idCard = element.idCard.replace( /^(.{4})(?:\d+)(.{4})$/, "$1 **** **** $2");
+                                element.phone = element.phone.replace(/(\d{3})\d*(\d{4})/,"$1****$2");
+                            });
+                        }
                         this.total = response.total;
                         this.loading = false;
                     });
@@ -182,7 +187,7 @@
                 this.isDisable = true;
                 this.isDesensitization = !this.isDesensitization;
                 if (!this.isDesensitization) {
-                    this.getList(1);
+                    this.getList(2);
                     this.$notify({
                         title: '成功',
                         message: '数据脱敏成功',
@@ -190,7 +195,7 @@
                     });
                     this.title = '去除数据脱敏';
                 } else if (this.isDesensitization) {
-                    this.getList(1);
+                    this.getList(2);
                     this.$notify({
                         title: '成功',
                         message: '数据去除脱敏成功',
