@@ -196,15 +196,15 @@
         </div>
         <div class="box-contnet-wrap" style="margin-top:0">
             <el-row :gutter="10" class="mb8">
-                <el-col :span="1.5">
-                    <!-- <el-button
+                <!-- <el-col :span="1.5">
+                     <el-button
             type="success"
             size="mini"
             @click="batchMessage"
             :disabled="multiple"
             >批量生成律师函短信
-          </el-button> -->
-                </el-col>
+          </el-button> 
+                </el-col>-->
                 <el-col :span="1.5">
                     <el-button type="danger" size="mini" @click="batchLawyer" :disabled="multiple">批量生成律师函
                     </el-button>
@@ -232,15 +232,27 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="primary" size="mini" :disabled="multiple"
-                        v-hasPermi="['case:pretrial:batchExportMediationRecord']" @click="batchExportMediationRecord">
+                        v-hasPermi="['case:pretrial:batchExportMediationRecord']"
+                        @click="batchExportMediationRecord('批量导出调解记录')">
                         批量导出调解记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" size="mini" :disabled="multiple"
-                        v-hasPermi="['case:pretrial:batchExportNetworkAdjustRecord']" @click="batchExportAdjestMent">
+                        v-hasPermi="['case:pretrial:batchExportNetworkAdjustRecord']"
+                        @click="batchExportMediationRecord('批量导出网调记录')">
                         批量导出网调记录
                     </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-hasPermi="['case:pretrial:batchMediationFailed']"
+                        v-if="queryParams.caseStatus == 1 || queryParams.caseStatus == 2" type="success" size="mini"
+                        @click="batchExportMediationRecord('批量转电话调解失败')" :disabled="multiple">批量转电话调解失败
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatus == 3 || queryParams.caseStatus == 6" type="success"
+                        size="mini" @click="handleOnRecord" :disabled="multiple">批量转待立案</el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
@@ -335,32 +347,6 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <el-dialog :title="form.title" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
-            <el-form style="margin: 0 auto;" ref="form" :model="form" :rules="rules" label-width="100px">
-                <el-form-item v-if="form.title=='导出调解记录'" label="导出范围：" prop="exportRange">
-                    <el-checkbox-group v-model="form.exportRange">
-                        <el-checkbox :label="1">最近一次调解记录</el-checkbox>
-                        <el-checkbox :label="2">全部调解记录</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item v-if="form.title=='导出网调记录'" label="导出范围：" prop="exportRange">
-                    <el-checkbox-group v-model="form.exportRange">
-                        <el-checkbox :label="1">最近一次网调记录</el-checkbox>
-                        <el-checkbox :label="2">全部网调记录</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item v-if="form.title=='导出调解记录'" label="是否脱敏：" prop="isDesensitization">
-                    <el-radio-group v-model="form.isDesensitization">
-                        <el-radio :label="1">是</el-radio>
-                        <el-radio :label="0">否</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="phoneSubmit(form.title)">确 定</el-button>
-            </span>
-        </el-dialog>
         <!--<divisionDialog @refresh="getList" :title="divisionData.title" :show.sync="divisionData.dialogVisible" :id="divisionData.id"></divisionDialog>-->
         <recordDialog :title="recordData.title" :show.sync="recordData.dialogVisible" :id="recordData.id">
         </recordDialog>
@@ -374,6 +360,8 @@
         </testCall>
         <batchExport @refresh="clearSelection" :title="batchexportData.title" :show.sync="batchexportData.dialogVisible"
             :red="batchexportData.red" :params="batchexportData.params"></batchExport>
+        <publicBatchDialog @refresh="clearSelection" :title="publicBatchData.title"
+            :show.sync="publicBatchData.dialogVisible" :params="publicBatchData.params"></publicBatchDialog>
     </div>
 </template>
 
@@ -384,6 +372,7 @@
     // import divisionDialog from './divisionDialog'
     import recordDialog from "./recordDialog";
     import batchExportDialog from "./batchExportDialog";
+    import publicBatchDialog from "./publicBatchDialog";
     import divisionApi from "@/api/case/division/index";
     import testCall from "./testCall";
     import batchExport from "./batchExport";
@@ -397,7 +386,8 @@
             exportDialog,
             batchExportDialog,
             testCall,
-            batchExport
+            batchExport,
+            publicBatchDialog
         },
         data() {
             return {
@@ -457,6 +447,11 @@
                     dialogVisible: false,
                     id: "",
                 },
+                publicBatchData: {
+                    title: "",
+                    dialogVisible: false,
+                    params: "",
+                },
                 contactResultOptions: [],
                 letterRepairStatusOptions: [],
                 checkFailure: false,
@@ -491,22 +486,6 @@
                     dialogVisible: false,
                     red: "",
                     params: "",
-                },
-                rules: {
-                    exportRange: [{
-                        required: true,
-                        message: '请选择导出范围',
-                        trigger: 'change'
-                    }],
-                    isDesensitization: [{
-                        required: true,
-                        message: '请选择是否脱敏',
-                        trigger: 'change'
-                    }]
-                },
-                form: {
-                    exportRange: [],
-                    isDesensitization: '1',
                 },
                 dialogVisible: false,
                 getRowKeys(row) {
@@ -811,73 +790,36 @@
                         });
                 }
             },
-            //导出调解记录
-            batchExportMediationRecord() {
-                // if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
-                //   this.msgError("所选数据存在已结案的数据，不能批量筛选号码");
-                //   return;
-                // }  
-                this.form.title = '导出调解记录';
-                this.form.exportRange = [];
-                this.form.isDesensitization = 1;
-                this.dialogVisible = true;
-            },
-            //导出网调记录
-            batchExportAdjestMent() {
-                // if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
-                //   this.msgError("所选数据存在已结案的数据，不能批量筛选号码");
-                //   return;
-                // }  
-                this.form.title = '导出网调记录';
-                this.form.exportRange = [];
-                this.form.isDesensitization = 1;
-                this.dialogVisible = true;
-            },
-            handleClose(done) {
-                this.$confirm('确认关闭？')
-                    .then(_ => {
-                        done();
+            //批量待立案
+            handleOnRecord() {
+                var that = this;
+                this.$confirm(`是否切换案件状态为待立案?`, "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        type: "warning",
                     })
-                    .catch(_ => {});
+                    .then(() => {
+                        let data = {
+                          caseId: that.ids.join(",")
+                        }
+                        cuttingBeforeApi.batchPending(data).then((res) => {
+                            if (res.code === 200) {
+                                that.msgSuccess(res.msg);
+                                that.clearSelection();
+                            } else if (res.code === 500) {
+                                that.msgError(res.msg);
+                            }
+                        });
+                    })
+                    .catch(() => {
+                        that.msgError("已取消操作");
+                    });
             },
-            phoneSubmit(title) {
-                if (title == '导出调解记录') {
-                    this.$refs["form"].validate((valid) => {
-                        if (valid) {
-                            let queryParams = {
-                                caseIds: this.ids.join(","),
-                                exportRange: this.form.exportRange.toString(),
-                                isDesensitization: this.form.isDesensitization,
-                            };
-                            cuttingBeforeApi.batchExportMediationRecord(queryParams).then(res => {
-                                if (res.code === 200) {
-                                    this.msgSuccess("操作成功");
-                                    this.dialogVisible = false;
-                                    this.clearSelection();
-                                    this.download(res.msg);
-                                }
-                            })
-                        }
-                    });
-                } else if (title == '导出网调记录') {
-                    this.$refs["form"].validate((valid) => {
-                        if (valid) {
-                            let queryParams = {
-                                caseIds: this.ids.join(","),
-                                exportRange: this.form.exportRange.toString(),
-                            };
-                            cuttingBeforeApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
-                                if (res.code === 200) {
-                                    this.msgSuccess("操作成功");
-                                    this.dialogVisible = false;
-                                    this.clearSelection();
-                                    this.download(res.msg);
-                                }
-                            })
-                        }
-                    });
-                }
-
+            //导出调解记录,网调记录,电调记录。
+            batchExportMediationRecord(title) {
+                this.publicBatchData.title = title;
+                this.publicBatchData.params = this.ids.join(",");
+                this.publicBatchData.dialogVisible = true;
             },
             //申请财保
             handleprojectEdit() {

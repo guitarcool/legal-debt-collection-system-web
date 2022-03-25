@@ -186,6 +186,22 @@ const cuttingBeforeApi = {
             params: query
         })
     }, 
+    //裁前批量电调失败
+    batchMediationFailed(data){
+        return request({
+            url: '/case/pretrial/batchMediationFailed',
+            method: 'post',
+            data: data
+        })
+    }, 
+    //裁前批量待立案
+    batchPending(data){
+        return request({
+            url: '/case/pretrial/batchPending',
+            method: 'post',
+            data: data
+        })
+    }, 
     //裁前案件编辑获取详情
     getCaseEditData(caseId) {
         return request({
