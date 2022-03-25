@@ -650,7 +650,7 @@
                             <el-table-column prop="accountNo" label="汇款账号" width="200">
                             </el-table-column>
                             <el-table-column prop="amount" label="汇款金额"> </el-table-column>
-                            <el-table-column label="收款类型" :show-overflow-tooltip="true" :formatter="repayTypeFormat"
+                            <el-table-column label="汇款类型" :show-overflow-tooltip="true" :formatter="repayTypeFormat"
                                 prop="repayType">
                             </el-table-column>
                             <el-table-column prop="accountNoShou" label="收款账户" width="200"></el-table-column>
