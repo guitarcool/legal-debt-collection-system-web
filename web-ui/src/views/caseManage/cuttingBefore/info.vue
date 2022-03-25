@@ -807,8 +807,6 @@
                             </el-table-column>
                             <el-table-column prop="content" label="记录内容" :show-overflow-tooltip="true" width="320">
                             </el-table-column>
-                            <el-table-column prop="createName" label="调解员" :show-overflow-tooltip="true" width="150">
-                            </el-table-column>
                             <el-table-column prop="annexName" label="附件" :show-overflow-tooltip="true" width="200">
                                 <template slot-scope="scope">
                                     <span class="distinguish-style"
