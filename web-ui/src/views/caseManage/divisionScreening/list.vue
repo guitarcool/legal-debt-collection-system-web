@@ -259,14 +259,13 @@
                 </el-table-column>
                 <el-table-column label="姓名" prop="respondentName" :show-overflow-tooltip="true" fixed="left"
                     width="80" />
+                <el-table-column label="标的金额" prop="subjectAmount" width="110" :show-overflow-tooltip="true" />
                 <el-table-column label="案件状态" :formatter="statusFormat" prop="caseStatus" width="120">
                 </el-table-column>
                 <el-table-column label="订单号" prop="id" :show-overflow-tooltip="true" width="170" />
                 <el-table-column label="合同号" prop="orderNo" :show-overflow-tooltip="true" width="120" sortable="custom"
                     :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="手机号" prop="respondentPhone" width="120" />
-                <el-table-column label="逾期总额" prop="caseAmount" sortable="custom"
-                    :sort-orders="['descending', 'ascending']" width="120" />
                 <el-table-column label="已还金额" prop="paidAmount" width="120" sortable="custom"
                     :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="逾期天数" prop="overdueDay" width="120" />

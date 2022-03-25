@@ -111,6 +111,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="姓名" prop="respondentName" :show-overflow-tooltip="true" fixed="left" />
+                <el-table-column label="标的金额" prop="subjectAmount" width="110" :show-overflow-tooltip="true" />
                 <el-table-column label="订单号" prop="id" width="200" :show-overflow-tooltip="true" />
                 <el-table-column label="内部订单号" prop="loanId" width="110" :show-overflow-tooltip="true" />
                 <el-table-column label="案件导入时间" sortable="custom" :sort-orders="['descending', 'ascending']"

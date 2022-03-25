@@ -88,7 +88,7 @@
                 <el-table-column label="逾期天数" width="150" prop="overdueDay" />
                 <el-table-column label="账龄" width="150" prop="overdueAge" />
                 <el-table-column label="借款本金" width="150" prop="capital" />
-                <el-table-column label="逾期总额" width="150" prop="caseAmount" />
+                <el-table-column label="标的金额" width="150" prop="subjectAmount" />
                 <el-table-column label="已还金额" width="150" prop="repaidAmount" />
                 <el-table-column label="剩余待还总额" width="150" prop="remainingBalance" />
                 <el-table-column label="还款状态" width="150" :formatter="getRepayStatus" prop="repayStatus">

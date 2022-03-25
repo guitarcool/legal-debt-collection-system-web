@@ -58,6 +58,10 @@
                     <p class="small-unit-conent">{{ firstInfo.overdueAge }}</p>
                 </div>
                 <div class="small-three">
+                    <p class="small-unit-header">逾期总额：</p>
+                    <p class="small-unit-conent">{{ firstInfo.caseAmount }}</p>
+                </div>
+                <div class="small-three">
                     <p class="small-unit-header">标的金额：</p>
                     <p class="small-unit-conent">{{ firstInfo.subjectAmount }}</p>
                 </div>

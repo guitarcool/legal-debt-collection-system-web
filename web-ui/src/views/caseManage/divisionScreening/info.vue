@@ -118,6 +118,10 @@
                     <p class="small-unit-conent">{{info.subjectInfo.capital}}</p>
                 </div>
                 <div class="small-unit">
+                    <p class="small-unit-header">逾期总额：</p>
+                    <p class="small-unit-conent">{{info.subjectInfo.caseAmount}}</p>
+                </div>
+                <div class="small-unit">
                     <p class="small-unit-header">标的金额：</p>
                     <p class="small-unit-conent">{{info.subjectInfo.subjectAmount}}</p>
                 </div>

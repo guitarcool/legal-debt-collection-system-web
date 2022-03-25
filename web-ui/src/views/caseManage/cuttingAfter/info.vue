@@ -154,6 +154,10 @@
                             <p class="small-unit-conent">{{ subjectInfo.terms }}</p>
                         </div>
                         <div class="small-three">
+                            <p class="small-unit-header">逾期总额：</p>
+                            <p class="small-unit-conent">{{ subjectInfo.caseAmount }}</p>
+                        </div>
+                        <div class="small-three">
                             <p class="small-unit-header">标的金额：</p>
                             <p class="small-unit-conent">{{ subjectInfo.subjectAmount }}</p>
                         </div>
