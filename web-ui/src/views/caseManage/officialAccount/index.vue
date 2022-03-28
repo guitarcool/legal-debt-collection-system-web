@@ -38,12 +38,13 @@
         <div class="box-contnet-wrap" style="margin-top:0">
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
-                    <p>注：仅且仅当登陆身份证在系统中含有进行中/暂停的案件且案件已绑定匹配的公众号时，方可登陆成功</p>
+                    <el-button type="success" :disabled="isDisable" icon="el-icon-share" size="mini" v-hasPermi="['wechat:list:replace']"
+                        @click="handleDivision">{{title}}
+                    </el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
-                </right-toolbar>
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection" ></right-toolbar>
             </el-row>
-
+            <p style="padding-bottom:10px;">注：仅且仅当登陆身份证在系统中含有进行中/暂停的案件且案件已绑定匹配的公众号时，方可登陆成功</p>
             <el-table v-loading="loading" border :data="caseList" ref="multiTable">
                 <el-table-column label="登陆身份证" prop="idCard" :show-overflow-tooltip="true" />
                 <el-table-column label="登陆手机号" prop="phone" :show-overflow-tooltip="true" />
@@ -112,7 +113,10 @@
                         id: 1,
                         label: '不匹配'
                     }
-                ]
+                ],
+                isDesensitization: false,
+                isDisable: false,
+                title:'去除数据脱敏'
             }
         },
         created() {
@@ -135,6 +139,12 @@
                     this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     officialApi.wechatList(this.searchParams).then((response) => {
                         this.caseList = response.rows;
+                        if (!this.isDesensitization) {
+                            this.caseList.forEach(element => {
+                                element.idCard = element.idCard.replace( /^(.{4})(?:\d+)(.{4})$/, "$1 **** **** $2");
+                                element.phone = element.phone.replace(/(\d{3})\d*(\d{4})/,"$1****$2");
+                            });
+                        }
                         this.total = response.total;
                         this.loading = false;
                     });
@@ -143,6 +153,12 @@
                 else if (type == 2) {
                     officialApi.wechatList(this.searchParams).then((response) => {
                         this.caseList = response.rows;
+                        if (!this.isDesensitization) {
+                            this.caseList.forEach(element => {
+                                element.idCard = element.idCard.replace( /^(.{4})(?:\d+)(.{4})$/, "$1 **** **** $2");
+                                element.phone = element.phone.replace(/(\d{3})\d*(\d{4})/,"$1****$2");
+                            });
+                        }
                         this.total = response.total;
                         this.loading = false;
                     });
@@ -166,6 +182,30 @@
                     this.queryParams.beginTime = value[0]
                     this.queryParams.endTime = value[1]
                 }
+            },
+            handleDivision(){
+                this.isDisable = true;
+                this.isDesensitization = !this.isDesensitization;
+                if (!this.isDesensitization) {
+                    this.getList(2);
+                    this.$notify({
+                        title: '成功',
+                        message: '数据脱敏成功',
+                        type: 'success'
+                    });
+                    this.title = '去除数据脱敏';
+                } else if (this.isDesensitization) {
+                    this.getList(2);
+                    this.$notify({
+                        title: '成功',
+                        message: '数据去除脱敏成功',
+                        type: 'warning'
+                    });
+                    this.title = '数据脱敏';
+                }
+                setTimeout(() => {
+                    this.isDisable = false
+                }, 3000)
             },
         }
     };
