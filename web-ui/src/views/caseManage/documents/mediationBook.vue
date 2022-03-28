@@ -274,7 +274,7 @@
                 } else {
                     if (this.title == '批量生成多人多案文书') {
                         param.ids = this.ids.join(",");
-                        if (this.caseNumOnePaper && (/^100$|^([1-4]\d)$|^\d?$/.test(this.caseNumOnePaper))) {} else {
+                        if (this.caseNumOnePaper > 100){
                             this.msgError('请填写正确的合并数量')
                             return
                         }
