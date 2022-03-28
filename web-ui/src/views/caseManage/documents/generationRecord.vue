@@ -54,6 +54,10 @@
                     <el-button type="success" size="mini" :disabled="multiple" @click="handleMessage">批量文书短信发送
                     </el-button>
                 </el-col>
+                <el-col :span="1.5">
+                    <el-button type="danger" size="mini" :disabled="multiple" v-hasPermi="['template:clerical:batchDownloadClerical']" @click="handleOnRecord">批量文书下载
+                    </el-button>
+                </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
@@ -63,6 +67,7 @@
                 <el-table-column label="合同号" prop="orderNo" :show-overflow-tooltip="true" fixed="left" width="150" />
                 <el-table-column label="订单号" prop="caseId" :show-overflow-tooltip="true" fixed="left" width="150" />
                 <el-table-column label="模版名称" prop="name" :show-overflow-tooltip="true" fixed="left" width="150" />
+                <el-table-column label="文书id" prop="id" :show-overflow-tooltip="true" width="150" />
                 <el-table-column label="被申请人姓名" prop="respondentName" :show-overflow-tooltip="true" width="120" />
                 <el-table-column label="手机号" :show-overflow-tooltip="true" prop="respondentPhone" width="150" />
                 <el-table-column label="身份证号" :show-overflow-tooltip="true" prop="respondentIdNo" width="200" />
@@ -244,6 +249,30 @@
                     process.env.VUE_APP_BASE_API +
                     "/common/download/resource?resource=" +
                     item.fileUrl;
+            },
+            //批量文书下载
+            handleOnRecord() {
+                var that = this;
+                this.$confirm(`是否批量文书下载?`, "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        type: "warning",
+                    })
+                    .then(() => {
+                        let data = {
+                          clericalIds: that.ids.join(",")
+                        }
+                        templateApi.batchDownloadClerical(data).then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess("操作成功");
+                                    that.clearSelection();
+                                    that.download(res.msg);
+                                }
+                        });
+                    })
+                    .catch(() => {
+                        that.msgError("已取消操作");
+                    });
             },
             //打开发送短信的弹窗
             handleMessage() {

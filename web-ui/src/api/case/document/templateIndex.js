@@ -182,6 +182,14 @@ const templateApi = {
         method: 'get'
         })
     },
+    //批量下载文书
+    batchDownloadClerical(data) {
+        return request({
+            url: '/template/clerical/batchDownloadClerical',
+            method: 'post',
+            data: data
+        })
+    },
 }
 
 // 下载用户导入模版
