@@ -251,7 +251,7 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatus == 3 || queryParams.caseStatus == 6" type="success"
+                    <el-button v-hasPermi="['case:pretrial:batchPending']" v-if="queryParams.caseStatus == 3 || queryParams.caseStatus == 6" type="success"
                         size="mini" @click="handleOnRecord" :disabled="multiple">批量转待立案</el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
