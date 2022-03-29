@@ -10,6 +10,14 @@ const cuttingAfterApi = {
             params: query
         })
     },
+    //history列表
+    historical(query) {
+        return request({
+            url: '/case/historical/list',
+            method: 'get',
+            params: query
+        })
+    },
     //裁后案件概述详情第一部分
     postAdjudgedInfo(id) {
         return request({
