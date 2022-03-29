@@ -198,7 +198,7 @@
                     requestApi: "",
                 },
                 getRowKeys(row) {
-                    return row.id;
+                    return row.callRecordId;
                 },
             };
         },
