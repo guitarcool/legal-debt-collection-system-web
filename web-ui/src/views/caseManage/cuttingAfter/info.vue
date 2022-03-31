@@ -173,18 +173,19 @@
                             <p class="small-unit-header">收款银行：</p>
                             <p class="small-unit-conent">{{ subjectInfo.dueBank }}</p>
                         </div>
-                        <div class="small-three" style="margin-bottom:20px">
+                        <div class="small-three">
                             <p class="small-unit-header">借款用途：</p>
                             <p class="small-unit-conent">{{ subjectInfo.purpose }}</p>
                         </div>
-                        <div class="small-three" style="margin-bottom:20px">
+                        <div class="small-three">
                             <p class="small-unit-header">贷款利息（年化利率）：</p>
                             <p class="small-unit-conent">{{ subjectInfo.interest }}</p>
                         </div>
-                        <div class="small-three" style="margin-bottom:20px">
+                        <div class="small-three">
                             <p class="small-unit-header">逾期年利率：</p>
                             <p class="small-unit-conent">{{ subjectInfo.overYearRate }}</p>
                         </div>
+                        <div style="margin-top:20px;width:100%;"></div>
                         <div class="small-three">
                             <p class="small-unit-header">首次还款日期：</p>
                             <p class="small-unit-conent">
@@ -236,6 +237,7 @@
                             <p class="small-unit-header"></p>
                             <p class="small-unit-conent"></p>
                         </div>
+                        <div style="margin-top:20px;width:100%;"></div>
                         <div class="small-three">
                             <p class="small-unit-header">剩余待还总额：</p>
                             <p class="small-unit-conent">{{ subjectInfo.remainingBalance }}</p>
