@@ -259,7 +259,7 @@
                 </div>
                 <div class="small-unit">
                     <p class="small-unit-header">标的金额：</p>
-                    <p class="small-unit-conent">{{info.overdueInfo.subjectAmount}}</p>
+                    <p class="small-unit-conent">{{info.subjectAmount}}</p>
                 </div>
                 <div class="small-unit">
                     <p class="small-unit-header">逾期本金：</p>
