@@ -115,8 +115,8 @@
                 <el-table-column label="呼叫时间" width="160" prop="callTime" />
                 <el-table-column label="联系人姓名" width="150" prop="calleeName" />
                 <el-table-column label="关系" width="100" prop="relation" />
-                <el-table-column label="主叫号码" width="150" prop="caller" />
-                <el-table-column label="被叫号码" prop="callee" width="100" />
+                <el-table-column label="主叫号码" width="120" prop="caller" />
+                <el-table-column label="被叫号码" prop="callee" width="120" />
                 <el-table-column label="呼出类型" width="120" prop="type" >
                     <template slot-scope="scope" v-if="scope.row.type != null">
                         <span>{{scope.row.type=='INBOUND'?'呼入':'呼出'}}</span>
@@ -141,7 +141,7 @@
                 <el-table-column label="客户敏感词" width="200" prop="clientWord" />
                 <el-table-column label="操作员" width="100" prop="createName" />
                 <el-table-column label="调解员" width="100" prop="mediatorName" />
-                <el-table-column label="催收机构" width="100" prop="mediatorDeptName" />
+                <el-table-column label="催收机构" width="150" prop="mediatorDeptName" />
                 <el-table-column label="产品名称" width="100" prop="platform" />
                 <el-table-column label="案件状态" width="150" :show-overflow-tooltip="true" :formatter="statusFormat"
                     prop="caseStatus" />
@@ -215,7 +215,7 @@
                     requestApi: "",
                 },
                 getRowKeys(row) {
-                    return row.id;
+                    return row.callRecordId;
                 },
             };
         },
