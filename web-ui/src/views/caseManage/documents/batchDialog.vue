@@ -359,6 +359,7 @@
                         let formData = new FormData();
                         formData.append("content", '');
                         formData.append("ids", this.params);
+                        formData.append("templateId", this.templateId);
                         formData.append("phoneStatus", this.phoneStatus);
                         formData.append("filterDeliverStatus", this.filterDeliverStatus);
                         formData.append("filterRealtimeStatus", this.filterRealtimeStatus);
@@ -400,6 +401,7 @@
                             content: this.textarea,
                             applyTime: this.applyTime,
                             ids: this.params,
+                            templateId: this.templateId,
                             phoneStatus: this.phoneStatus,
                             filterDeliverStatus: this.filterDeliverStatus,
                             filterRealtimeStatus: this.filterRealtimeStatus,
