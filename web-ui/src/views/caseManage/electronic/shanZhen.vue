@@ -82,7 +82,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="审核人员：" v-if="form.checkType == 1" prop="checkMan">
-              <el-select style="width:300px" filterable v-model="form.checkMan" multiple placeholder="请选择审核人员">
+              <el-select style="width:300px" filterable v-model="form.checkMan" collapse-tags multiple placeholder="请选择审核人员">
                 <el-option v-for="item in userList" :key="item.userId" :label="item.userName" :value="item.userId">
                 </el-option>
               </el-select>

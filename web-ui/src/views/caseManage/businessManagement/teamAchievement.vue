@@ -11,7 +11,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="统计用户：">
-                    <el-select :disabled="disabled" filterable multiple size="small" @change="handleMediation" v-model="mediation"
+                    <el-select :disabled="disabled" filterable multiple collapse-tags size="small" @change="handleMediation" v-model="mediation"
                         placeholder="请选择">
                         <el-option v-for="item in listByDept" :key="item.userId" :label="item.userName"
                             :value="item.userId">

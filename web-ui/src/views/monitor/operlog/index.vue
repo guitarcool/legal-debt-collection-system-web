@@ -6,7 +6,7 @@
                     @keyup.enter.native="handleQuery" />
             </el-form-item>
             <el-form-item label="操作人员" prop="operName">
-                <el-select size="small" multiple filterable v-model="operName" placeholder="请选择">
+                <el-select size="small" collapse-tags multiple filterable v-model="operName" placeholder="请选择">
                     <el-option v-for="item in userList" :key="item.userId" :label="item.userName" :value="item.userId">
                     </el-option>
                 </el-select>
