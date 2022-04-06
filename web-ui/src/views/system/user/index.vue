@@ -522,7 +522,7 @@
                     this.roleOptions = response.roles;
                     this.form.postIds = response.postIds;
                     this.form.roleIds = response.roleIds;
-                    this.form.accountId = response.accountId;
+                    // this.form.accountId = response.accountId;
                     this.open = true;
                     this.title = "修改用户";
                     this.form.password = "";
