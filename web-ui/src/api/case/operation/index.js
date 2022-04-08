@@ -2,11 +2,11 @@ import request from '@/utils/request'
 
 const operationApi = {
     //获取通话记录报表列表
-    callRecordlist(query) {
+    callRecordlist(data) {
         return request({
             url: '/report/callRecord/list',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     },   
     //通话记录列表导出 
@@ -26,11 +26,11 @@ const operationApi = {
         })
     },   
     //获取质检记录报表列表
-    callQualitylist(query) {
+    callQualitylist(data) {
         return request({
             url: '/report/callQuality/list',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     }, 
     //质检记录列表导出 
@@ -42,11 +42,11 @@ const operationApi = {
         })
     },  
     //获取号码筛选报表列表
-    screenRecordlist(query) {
+    screenRecordlist(data) {
         return request({
             url: '/report/screenRecord/list',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     },
     //号码筛选列表导出 
@@ -74,11 +74,11 @@ const operationApi = {
         })
     }, 
     //获取短信列表
-    shortMsgRecordlist(query) {
+    shortMsgRecordlist(data) {
         return request({
             url: '/report/shortMsgRecord/list',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     },
     //短信导出 

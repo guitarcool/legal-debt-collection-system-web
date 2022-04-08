@@ -23,7 +23,7 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="调解员：">
-                    <el-select clearable size="small" filterable v-model="queryParams.mediatorId" placeholder="请选择">
+                    <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.mediatorIds" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>

@@ -71,11 +71,11 @@ const templateApi = {
         })
     },
     //案例列表
-    caseList(query) {
+    caseList(data) {
         return request({
             url: '/case/caseInfo/clericalList',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     },
     common(url, data) {

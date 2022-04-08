@@ -11,11 +11,11 @@ const cuttingAfterApi = {
         })
     },
     //history列表
-    historical(query) {
+    historical(data) {
         return request({
             url: '/case/historical/list',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     },
     //裁后案件概述详情第一部分

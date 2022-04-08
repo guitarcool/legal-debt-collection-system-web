@@ -9,11 +9,11 @@ const divisionApi = {
             data
         })
     },
-    propertylist(query) {
+    propertylist(data) {
         return request({
             url: '/case/property/list',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     },
     export(query) {

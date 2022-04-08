@@ -12,7 +12,7 @@
                         @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="调解员：">
-                    <el-select clearable filterable size="small" v-model="queryParams.principal" placeholder="请选择">
+                    <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.principals" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
