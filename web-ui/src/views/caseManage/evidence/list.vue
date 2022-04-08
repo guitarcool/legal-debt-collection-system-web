@@ -16,8 +16,8 @@
                         style="width: 200px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="姓名：" prop="respondentName">
-                    <el-input v-model="queryParams.respondentName" placeholder="请输入姓名，多个姓名用英文逗号连接" clearable
-                        type="textarea" size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
+                    <el-input clearable v-model="queryParams.respondentName" placeholder="请输入姓名" size="small"
+                        style="width: 200px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="合同号：">
                     <el-input clearable v-model="queryParams.orderNo" placeholder="请输入合同号，多个合同号用英文逗号连接" type="textarea"
