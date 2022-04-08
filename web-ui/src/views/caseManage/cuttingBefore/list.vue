@@ -148,7 +148,6 @@
                         <div style="padding: 10px 0;font-weight:700">高级查询:</div>
                         <el-form-item label="案件状态：" class="custom-radio">
                             <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
-                                <el-checkbox label="">全部</el-checkbox>
                                 <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
                                     :key="item.dictValue">
                                     {{ item.dictLabel }}</el-checkbox>
@@ -409,7 +408,7 @@
                     letterRepairStatus: "",
                     contactStatus: "",
                     repayStatus: "",
-                    caseStatuss: [''],
+                    caseStatuss:[],
                     orderByColumn: "",
                     isAsc: "",
                 },
@@ -978,7 +977,6 @@
                 this.chooseDaterange = [];
                 this.chooseDaterange1 = [];
                 this.chooseDaterange2 = [];
-                this.queryParams.caseStatuss = [''];
             },
             handleChange(value) {
                 //console.log(value)
