@@ -27,15 +27,15 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="姓名：">
-                    <el-input clearable v-model="queryParams.respondentName" placeholder="请输入姓名" size="small"
-                        style="width: 240px" @keyup.enter.native="handleQuery" />
+                    <el-input v-model="queryParams.respondentName" placeholder="请输入姓名，多个姓名用英文逗号连接" clearable
+                        type="textarea" size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="手机号：">
                     <el-input clearable v-model="queryParams.respondentPhone" placeholder="请输入手机号" size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="身份证号：">
-                    <el-input clearable v-model="queryParams.respondentIdNo" placeholder="请输入身份证号" size="small"
+                    <el-input v-model="queryParams.respondentIdNo" placeholder="请输入手机号" clearable size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="合同号：">

@@ -95,14 +95,6 @@
                             <el-input v-model="queryParams.id" placeholder="请输入订单号" clearable size="small"
                                 style="width: 240px" @keyup.enter.native="handleQuery" />
                         </el-form-item>
-                        <el-form-item label="监督员：">
-                            <el-select clearable multiple collapse-tags filterable size="small"
-                                v-model="queryParams.supervisorss" placeholder="请选择">
-                                <el-option v-for="item in deptList" :key="item.userId" :label="item.userName"
-                                    :value="item.userId">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
                         <el-form-item label="分发时间：">
                             <el-date-picker v-model="chooseDaterange" type="daterange" size="small" range-separator="至"
                                 start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd"
@@ -186,7 +178,7 @@
                 </transition>
             </template>
             <template #buttonArea>
-                <el-button size="mini" icon="el-icon-zoom-in" type="success" @click="implicitQuery">高级查询</el-button>
+                <el-button size="mini" icon="el-icon-zoom-in" type="success" @click="implicitQuery" style="margin-left:16px">高级查询</el-button>
             </template>
         </search-bar>
         <div class="queryDiv">
@@ -454,7 +446,6 @@
                 },
                 userList: [],
                 idList: [],
-                deptList: [],
                 chooseDaterange: [],
                 networkSortresult: [],
                 realtimeSortresult: [],
@@ -625,7 +616,6 @@
             this.getUsers();
             this.getwechatList();
             this.getCascaderData();
-            this.getDeptList();
             //财保申请类型
             this.getDicts("wealth_protect").then((response) => {
                 this.protects = response.data;
@@ -709,12 +699,6 @@
             getwechatList() {
                 divisionApi.wechatList().then((response) => {
                     this.wechatList = response.data || [];
-                });
-            },
-            /** 获取监督员列表 */
-            getDeptList() {
-                divisionApi.supervisorList().then(response => {
-                    this.deptList = response.data.userList || [];
                 });
             },
             /** 查询角色列表 */
