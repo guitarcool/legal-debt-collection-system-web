@@ -23,8 +23,8 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="姓名：">
-                    <el-input v-model="queryParams.name" placeholder="请输入姓名" clearable size="small"
-                        style="width: 240px" @keyup.enter.native="handleQuery" />
+                    <el-input v-model="queryParams.name" placeholder="请输入姓名，多个姓名用英文逗号连接" clearable
+                    type="textarea" size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="模版名称：">
                     <el-input v-model="queryParams.templateName" placeholder="请输入模版名称" clearable size="small"

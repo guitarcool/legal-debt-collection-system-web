@@ -8,8 +8,8 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="姓名：">
-                    <el-input v-model="queryParams.name" placeholder="请输入姓名" clearable size="small" style="width: 240px"
-                        @keyup.enter.native="handleQuery" />
+                    <el-input v-model="queryParams.name" placeholder="请输入姓名，多个姓名用英文逗号连接" clearable
+                    type="textarea" size="small" style="width: 240px"  @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="身份证正面：" prop="haveOcrPhoto">
                     <el-select clearable size="small" filterable v-model="queryParams.haveOcrPhoto" placeholder="请选择">
