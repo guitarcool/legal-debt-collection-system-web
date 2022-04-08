@@ -2,11 +2,11 @@ import request from '@/utils/request'
 import { praseStrEmpty } from "@/utils/ruoyi";
 
 const divisionApi = {
-    list(query) {
+    list(data) {
         return request({
             url: '/case/assignment/list',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     },
     propertylist(query) {
@@ -123,6 +123,14 @@ const divisionApi = {
             url: '/admin/wechat/case/bind',
             method: 'post',
             data:data
+        })
+    },
+    //级联选择接口
+    getCascaderData(query) {
+        return request({
+            url: '/case/cascader/getCascaderData',
+            method: 'get',
+            params: query
         })
     },
 }

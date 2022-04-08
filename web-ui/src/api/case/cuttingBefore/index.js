@@ -3,11 +3,11 @@ import { praseStrEmpty } from "@/utils/ruoyi";
 
 const cuttingBeforeApi = {
     //列表
-    list(query) {
+    list(data) {
         return request({
             url: '/case/pretrial/list',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     },
     //案件概述详情第一部分

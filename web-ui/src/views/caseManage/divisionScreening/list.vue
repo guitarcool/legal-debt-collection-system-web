@@ -7,72 +7,25 @@
                     <el-input v-model="queryParams.batchNo" placeholder="请输入案件批次号" clearable size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
-                <el-form-item label="订单号：">
-                    <el-input v-model="queryParams.id" placeholder="请输入订单号" clearable size="small" style="width: 240px"
-                        @keyup.enter.native="handleQuery" />
-                </el-form-item>
                 <el-form-item label="调解员：">
-                    <el-select clearable filterable size="small" v-model="queryParams.principal" placeholder="请选择">
+                    <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.principals"
+                        placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="监督员：">
-                    <el-select clearable filterable size="small" v-model="queryParams.supervisors" placeholder="请选择">
-                        <el-option v-for="item in deptList" :key="item.userId" :label="item.userName"
-                            :value="item.userId">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="借款平台名称：">
-                    <el-input v-model="queryParams.platform" placeholder="请输入借款平台名称" clearable size="small"
-                        style="width: 240px" @keyup.enter.native="handleQuery" />
-                </el-form-item>
-                <el-form-item label="分发时间：">
-                    <!--<el-date-picker-->
-                    <!--v-model="queryParams.distributionTime"-->
-                    <!--type="date"-->
-                    <!--placeholder="选择日期"-->
-                    <!--format="yyyy-MM-dd"-->
-                    <!--value-format="yyyy-MM-dd">-->
-                    <!--</el-date-picker>-->
-
-                    <el-date-picker v-model="chooseDaterange" type="daterange" size="small" range-separator="至"
-                        start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" @change="handleChange"
-                        value-format="yyyy-MM-dd">
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item label="承诺还款日：">
-                    <!--<el-date-picker-->
-                    <!--v-model="queryParams.promiseRepayDate"-->
-                    <!--type="date"-->
-                    <!--placeholder="选择日期"-->
-                    <!--format="yyyy-MM-dd"-->
-                    <!--value-format="yyyy-MM-dd">-->
-                    <!--</el-date-picker>-->
-
-                    <el-date-picker v-model="chooseDaterange1" type="daterange" size="small" range-separator="至"
-                        start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" @change="handleChange1"
-                        value-format="yyyy-MM-dd">
-                    </el-date-picker>
-                </el-form-item>
-
                 <el-form-item label="姓名：">
-                    <el-input v-model="queryParams.respondentName" placeholder="请输入姓名" clearable size="small"
-                        style="width: 240px" @keyup.enter.native="handleQuery" />
+                    <el-input v-model="queryParams.respondentName" placeholder="请输入姓名，多个姓名用英文逗号连接" clearable
+                        type="textarea" size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="手机号：">
                     <el-input v-model="queryParams.respondentPhone" placeholder="请输入手机号" clearable size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
-                <el-form-item label="身份证号：">
-                    <el-input v-model="queryParams.respondentIdNo" placeholder="请输入身份证号" clearable size="small"
-                        style="width: 240px" @keyup.enter.native="handleQuery" />
-                </el-form-item>
-                <el-form-item label="合同号：">
-                    <el-input v-model="queryParams.orderNo" placeholder="请输入合同号，多个合同号用英文逗号连接" clearable type="textarea"
-                        size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
+                <el-form-item label="账龄（M）：">
+                    <el-input clearable size="small" style="width:100px" v-model="queryParams.overdueStartAge" />~
+                    <el-input clearable size="small" style="width:100px" v-model="queryParams.overdueEndAge" />
                 </el-form-item>
                 <el-form-item label="号码筛选状态：">
                     <el-select clearable filterable size="small" v-model="queryParams.screenStatus" placeholder="请选择">
@@ -81,32 +34,10 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="号码筛选类型：">
-                    <el-select clearable filterable size="small" v-model="queryParams.screenType" placeholder="请选择">
-                        <el-option v-for="item in screenType" :key="item.dictValue" :label="item.dictLabel"
-                            :value="item.dictValue">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item v-if="queryParams.screenType" label="号码筛选结果：">
-                    <el-select clearable filterable v-if="queryParams.screenType == 1" size="small"
-                        v-model="queryParams.screenResult" placeholder="请选择">
-                        <el-option v-for="item in networkSortresult" :key="item.dictValue" :label="item.dictLabel"
-                            :value="item.dictValue">
-                        </el-option>
-                    </el-select>
-                    <el-select clearable filterable v-else size="small" v-model="queryParams.screenResult" placeholder="请选择">
-                        <el-option v-for="item in realtimeSortresult" :key="item.dictValue" :label="item.dictLabel"
-                            :value="item.dictValue">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="网调标签：">
-                    <el-select clearable filterable size="small" v-model="queryParams.networkAdjustLabel" placeholder="请选择">
-                        <el-option v-for="item in adjustType" :key="item.dictValue" :label="item.dictLabel"
-                            :value="item.dictValue">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="号码筛选结果：">
+                    <el-cascader collapse-tags :props="props" clearable filterable size="small"
+                        v-model="queryParams.screenResults" :options="screenResultOptions" placeholder="请选择">
+                    </el-cascader>
                 </el-form-item>
                 <el-form-item label="最近一次调解时间：">
                     <el-date-picker v-model="chooseDaterange2" type="daterange" size="small" range-separator="至"
@@ -114,19 +45,42 @@
                         value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="短信发送渠道：">
-                    <el-select clearable filterable size="small" v-model="queryParams.providerType" placeholder="请选择">
-                        <el-option v-for="item in shortmsgProviderType" :key="item.dictValue" :label="item.dictLabel"
+                <el-form-item label="无调解天数：">
+                    <el-cascader clearable filterable size="small" v-model="queryParams.noMedDay"
+                        :options="noMedDayOptions" placeholder="请选择">
+                    </el-cascader>
+                </el-form-item>
+                <el-form-item label="无通话记录天数：">
+                    <el-cascader clearable filterable size="small" v-model="queryParams.noCallDay"
+                        :options="noCallDayOptions" placeholder="请选择">
+                    </el-cascader>
+                </el-form-item>
+                <el-form-item label="联系结果：">
+                    <el-select size="small" multiple collapse-tags filterable clearable
+                        v-model="queryParams.medLabelArr" placeholder="请选择">
+                        <el-option v-for="item in contactResultOptions" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="短信送达状态：" v-if="queryParams.providerType">
-                    <el-select clearable filterable size="small" v-model="queryParams.lastDeliverStatus" placeholder="请选择">
-                        <el-option label="已送达" value="0"></el-option>
-                        <el-option label="接收中" value="1"></el-option>
-                        <el-option label="其他" value="2"></el-option>
+                <el-form-item label="承诺还款日：">
+                    <el-date-picker v-model="chooseDaterange1" type="daterange" size="small" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" @change="handleChange1"
+                        value-format="yyyy-MM-dd">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="网调标签：">
+                    <el-select clearable filterable size="small" v-model="queryParams.networkAdjustLabel"
+                        placeholder="请选择">
+                        <el-option v-for="item in adjustType" :key="item.dictValue" :label="item.dictLabel"
+                            :value="item.dictValue">
+                        </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="短信送达结果：">
+                    <el-cascader collapse-tags :props="props" clearable filterable size="small"
+                        v-model="queryParams.deliverResult" :options="shortmsgOptions" placeholder="请选择">
+                    </el-cascader>
                 </el-form-item>
                 <el-form-item label="客户回复内容：">
                     <el-select clearable filterable size="small" v-model="queryParams.replyContent" placeholder="请选择">
@@ -134,29 +88,55 @@
                         <el-option label="有" value="1"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="公众号名称：">
-                    <el-select clearable filterable size="small" v-model="queryParams.bindWechatId" placeholder="请选择">
-                        <el-option v-for="item in wechatList" :key="item.id" :label="item.accountName"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+                <transition name="fade">
+                    <div v-show="isShow" transiton="fade">
+                        <div style="padding: 10px 0;font-weight:700">高级查询:</div>
+                        <el-form-item label="订单号：">
+                            <el-input v-model="queryParams.id" placeholder="请输入订单号" clearable size="small"
+                                style="width: 240px" @keyup.enter.native="handleQuery" />
+                        </el-form-item>
+                        <el-form-item label="监督员：">
+                            <el-select clearable multiple collapse-tags filterable size="small"
+                                v-model="queryParams.supervisorss" placeholder="请选择">
+                                <el-option v-for="item in deptList" :key="item.userId" :label="item.userName"
+                                    :value="item.userId">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="分发时间：">
+                            <el-date-picker v-model="chooseDaterange" type="daterange" size="small" range-separator="至"
+                                start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd"
+                                @change="handleChange" value-format="yyyy-MM-dd">
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item label="借款平台名称：">
+                            <el-input v-model="queryParams.platform" placeholder="请输入借款平台名称" clearable size="small"
+                                style="width: 240px" @keyup.enter.native="handleQuery" />
+                        </el-form-item>
+                        <el-form-item label="身份证号：">
+                            <el-input v-model="queryParams.respondentIdNo" placeholder="请输入身份证号，多个身份证号用英文逗号连接" clearable
+                                type="textarea" size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
+                        </el-form-item>
+                        <el-form-item label="合同号：">
+                            <el-input v-model="queryParams.orderNo" placeholder="请输入合同号，多个合同号用英文逗号连接" clearable
+                                type="textarea" size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
+                        </el-form-item>
+                        <el-form-item label="公众号名称：">
+                            <el-select clearable filterable size="small" v-model="queryParams.bindWechatId"
+                                placeholder="请选择">
+                                <el-option v-for="item in wechatList" :key="item.id" :label="item.accountName"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="备注：">
+                            <el-input v-model="queryParams.remark" placeholder="请输入备注查询内容" clearable size="small"
+                                style="width: 240px" @keyup.enter.native="handleQuery" />
+                        </el-form-item>
+                    </div>
+                </transition>
             </template>
             <template #filter>
-                <el-form-item label="案件状态：" class="custom-radio">
-                    <el-radio-group v-model="queryParams.caseStatus" @change="changeStatus">
-                        <el-radio label="">全部</el-radio>
-                        <el-radio v-for="item in statusOptions" :label="item.dictValue" :key="item.dictValue">
-                            {{ item.dictLabel }}</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item label="信修状态：" class="custom-radio">
-                    <el-radio-group v-model="queryParams.letterRepairStatus" @change="changeStatus">
-                        <el-radio label="">全部</el-radio>
-                        <el-radio v-for="item in letterRepairStatusOptions" :label="item.dictValue"
-                            :key="item.dictValue">{{ item.dictLabel }}</el-radio>
-                    </el-radio-group>
-                </el-form-item>
                 <el-form-item label="联系状态：" class="custom-radio">
                     <el-radio-group v-model="queryParams.contactStatus" @change="changeStatus">
                         <el-radio label="">全部</el-radio>
@@ -164,14 +144,50 @@
                             {{ item.dictLabel }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="委案状态：" class="custom-radio">
-                    <el-radio-group v-model="queryParams.entrustStatus" @change="changeStatus">
-                        <el-radio v-for="item in entrustType" :label="item.dictValue" :key="item.dictValue">
-                            {{ item.dictLabel }}</el-radio>
+                <el-form-item label="还款状态：" class="custom-radio">
+                    <el-radio-group v-model="queryParams.repayStatus" @change="changeStatus">
+                        <el-radio label="">全部</el-radio>
+                        <el-radio v-for="item in repayStatus" :key="item.dictValue" :label="item.dictValue">
+                            {{item.dictLabel}}</el-radio>
                     </el-radio-group>
                 </el-form-item>
+                <transition name="fade">
+                    <div v-show="isShow" transiton="fade">
+                        <div style="padding: 10px 0;font-weight:700">高级查询:</div>
+                        <el-form-item label="案件状态：" class="custom-radio">
+                            <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
+                                <el-checkbox label="">全部</el-checkbox>
+                                <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
+                                    :key="item.dictValue">
+                                    {{ item.dictLabel }}</el-checkbox>
+                            </el-checkbox-group>
+                        </el-form-item>
+                        <el-form-item label="财保状态：" class="custom-radio">
+                            <el-radio-group v-model="queryParams.preStatus" @change="changeStatus">
+                                <el-radio label="">全部</el-radio>
+                                <el-radio v-for="item in protects" :key="item.dictValue" :label="item.dictValue">
+                                    {{ item.dictLabel }}</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                        <el-form-item label="委案状态：" class="custom-radio">
+                            <el-radio-group v-model="queryParams.entrustStatus" @change="changeStatus">
+                                <el-radio v-for="item in entrustType" :label="item.dictValue" :key="item.dictValue">
+                                    {{ item.dictLabel }}</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                        <el-form-item label="信修状态：" class="custom-radio">
+                            <el-radio-group v-model="queryParams.letterRepairStatus" @change="changeStatus">
+                                <el-radio label="">全部</el-radio>
+                                <el-radio v-for="item in letterRepairStatusOptions" :label="item.dictValue"
+                                    :key="item.dictValue">{{ item.dictLabel }}</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </div>
+                </transition>
             </template>
-            <template #buttonArea> </template>
+            <template #buttonArea>
+                <el-button size="mini" icon="el-icon-zoom-in" type="success" @click="implicitQuery">高级查询</el-button>
+            </template>
         </search-bar>
         <div v-if="otherParam" class="queryDiv">
             查询结果统计：<span>列表案件量：{{otherParam.caseTotalCount}}件；</span><span>列表标的金额：{{otherParam.subjectTotalAmount}}元；</span><span>列表剩余待还总额：{{otherParam.totalRemainingBalance}}元；</span>
@@ -193,7 +209,8 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-s-promotion" size="mini" :disabled="multiple" @click="handleBinding"  v-hasPermi="['wechat:case:bind']">公众号绑定</el-button>
+                    <el-button type="success" icon="el-icon-s-promotion" size="mini" :disabled="multiple"
+                        @click="handleBinding" v-hasPermi="['wechat:case:bind']">公众号绑定</el-button>
                 </el-col>
             </el-row>
             <el-row :gutter="10" class="mb8">
@@ -245,8 +262,8 @@
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
-            <el-table v-loading="loading" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
-                :row-key="getRowKeys" @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange"
+                ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
                 <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="130" sortable="custom"
@@ -292,7 +309,7 @@
                 </el-table-column>
                 <el-table-column label="调解员" prop="principalName" width="140" />
                 <el-table-column label="监督员" prop="supervisors" width="140" />
-                <el-table-column label="催收机构" prop="deptName" width="100">
+                <el-table-column label="催收机构" prop="deptName" width="120">
                     <template slot-scope="scope" v-if="scope.row.deptName">
                         <span>{{ scope.row.deptName }}</span>
                     </template>
@@ -312,6 +329,8 @@
                 </el-table-column>
                 <el-table-column label="最近一次调解时间" width="160" prop="mediateTime">
                 </el-table-column>
+                <el-table-column label="前通话记录" width="160" prop="lastCallTime" sortable="custom"
+                    :sort-orders="['descending', 'ascending']"></el-table-column>
                 <el-table-column label="最近一次短信发送状态" width="160" prop="deliverStatus">
                     <template slot-scope="scope" v-if="scope.row.deliverStatus != null">
                         <span
@@ -319,7 +338,7 @@
                         <span
                             v-if="scope.row.providerType == 2">{{wodongStatusFormat(scope.row.deliverStatus) !=""?wodongStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
                         <span
-                            v-if="scope.row.providerType == 3">{{xuanwuStatusFormat(scope.row.deliverStatus) !=""?xuanwuStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>                   
+                            v-if="scope.row.providerType == 3">{{xuanwuStatusFormat(scope.row.deliverStatus) !=""?xuanwuStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="委案状态" :formatter="getEntrustType" prop="entrustStatus">
@@ -380,7 +399,8 @@
             :show.sync="supervisorData.dialogVisible"></supervisorDialog>
         <recordDialog :title="recordData.title" :show.sync="recordData.dialogVisible" :id="recordData.id">
         </recordDialog>
-        <bindingCase @refresh="clearSelection" :title="bindingData.title" :show.sync="bindingData.dialogVisible" :ids="bindingData.ids">
+        <bindingCase @refresh="clearSelection" :title="bindingData.title" :show.sync="bindingData.dialogVisible"
+            :ids="bindingData.ids">
         </bindingCase>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
             :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
@@ -449,31 +469,18 @@
                 total: 0,
                 // 角色表格数据
                 caseList: [],
+                isShow: false,
                 // 查询参数
                 searchParams: {},
                 queryParams: {
-                    id: "",
-                    batchNo: "",
                     pageNum: 1,
                     pageSize: 50,
-                    mediator: "",
-                    respondentName: "",
-                    respondentPhone: "",
-                    replyContent: "",
-                    respondentIdNo: "",
-                    orderNo: "",
-                    caseStatus: "",
-                    letterRepairStatus: "",
-                    screenType: "",
-                    screenResult: "",
-                    contactStatus: "",
-                    screenStatus: "",
-                    platform: "",
-                    disBeginTime: "",
-                    disEndTime: "",
-                    repayBeginTime: "",
-                    repayEndTime: "",
                     entrustStatus: "1",
+                    preStatus: "",
+                    letterRepairStatus: "",
+                    contactStatus: "",
+                    repayStatus: "",
+                    caseStatuss: [''],
                     orderByColumn: "",
                     isAsc: "",
                 },
@@ -489,6 +496,130 @@
                         trigger: 'change'
                     }]
                 },
+                noMedDayOptions: [{
+                        value: '0',
+                        label: '无调解记录'
+                    },
+                    {
+                        value: '1',
+                        label: '大于',
+                        children: [{
+                                value: '7',
+                                label: '7天',
+                            },
+                            {
+                                value: '14',
+                                label: '14天',
+                            },
+                            {
+                                value: '21',
+                                label: '21天',
+                            },
+                            {
+                                value: '28',
+                                label: '28天',
+                            },
+                            {
+                                value: '35',
+                                label: '35天',
+                            },
+                            {
+                                value: '42',
+                                label: '42天',
+                            },
+                            {
+                                value: '49',
+                                label: '49天',
+                            },
+                            {
+                                value: '56',
+                                label: '56天',
+                            },
+                            {
+                                value: '63',
+                                label: '63天',
+                            },
+                            {
+                                value: '70',
+                                label: '70天',
+                            },
+                            {
+                                value: '77',
+                                label: '77天',
+                            },
+                            {
+                                value: '84',
+                                label: '84天',
+                            },
+                            {
+                                value: '91',
+                                label: '91天',
+                            },
+                        ]
+                    },
+                ],
+                noCallDayOptions: [{
+                        value: '0',
+                        label: '无通话记录'
+                    },
+                    {
+                        value: '1',
+                        label: '大于',
+                        children: [{
+                                value: '7',
+                                label: '7天',
+                            },
+                            {
+                                value: '14',
+                                label: '14天',
+                            },
+                            {
+                                value: '21',
+                                label: '21天',
+                            },
+                            {
+                                value: '28',
+                                label: '28天',
+                            },
+                            {
+                                value: '35',
+                                label: '35天',
+                            },
+                            {
+                                value: '42',
+                                label: '42天',
+                            },
+                            {
+                                value: '49',
+                                label: '49天',
+                            },
+                            {
+                                value: '56',
+                                label: '56天',
+                            },
+                            {
+                                value: '63',
+                                label: '63天',
+                            },
+                            {
+                                value: '70',
+                                label: '70天',
+                            },
+                            {
+                                value: '77',
+                                label: '77天',
+                            },
+                            {
+                                value: '84',
+                                label: '84天',
+                            },
+                            {
+                                value: '91',
+                                label: '91天',
+                            },
+                        ]
+                    },
+                ],
                 statusOptions: [],
                 contactStatusOptions: [],
                 letterRepairStatusOptions: [],
@@ -501,7 +632,7 @@
                     principal: "",
                     caseStatus: "",
                 },
-                bindingData:{
+                bindingData: {
                     title: "",
                     dialogVisible: false,
                     ids: []
@@ -566,7 +697,14 @@
                 shisuyunStatus: [],
                 xuanwuStatus: [],
                 shortmsgProviderType: [],
-                wechatList:[]
+                contactResultOptions: [],
+                wechatList: [],
+                screenResultOptions: [],
+                shortmsgOptions: [],
+                protects: [],
+                props: {
+                    multiple: true
+                },
             };
         },
         created() {
@@ -590,6 +728,10 @@
             this.getDicts("letter_repair_status").then((response) => {
                 this.letterRepairStatusOptions = response.data;
             });
+            //号码筛选类型
+            this.getDicts("screen_Type").then((response) => {
+                this.screenType = response.data;
+            });
             //在网状态号码筛选结果
             this.getDicts("network_screen_result").then((response) => {
                 this.networkSortresult = response.data;
@@ -597,10 +739,6 @@
             //实时在网号码筛选结果
             this.getDicts("realtime_screen_result").then((response) => {
                 this.realtimeSortresult = response.data;
-            });
-            //号码筛选类型
-            this.getDicts("screen_Type").then((response) => {
-                this.screenType = response.data;
             });
             //号码筛选状态类型
             this.getDicts("screen_status").then((response) => {
@@ -630,10 +768,15 @@
             this.getDicts("shortmsg_provider_type").then((response) => {
                 this.shortmsgProviderType = response.data;
             });
+            //财保申请类型
+            this.getDicts("wealth_protect").then((response) => {
+                this.protects = response.data;
+            });
             this.getList(1);
             this.getUsers();
             this.getwechatList();
             this.getDeptList();
+            this.getCascaderData();
         },
         // 是否显示过滤栏， 扣除页数，每页显示数，总数量参数，3个内的搜索参数，直接显示一行，不显示过滤
         computed: {
@@ -648,11 +791,27 @@
                 this.chooseDaterange = [];
                 this.chooseDaterange1 = [];
                 this.chooseDaterange2 = [];
+                this.queryParams.caseStatuss = [''];
             },
             /** 获取监督员列表 */
             getDeptList() {
                 divisionApi.supervisorList().then(response => {
-                    this.deptList = response.data.userList || []
+                    this.deptList = response.data.userList || [];
+                });
+            },
+            /** 获取级联选择器 */
+            getCascaderData() {
+                let params1 = {
+                    type: 'screen'
+                };
+                let params2 = {
+                    type: 'shortmsg'
+                };
+                divisionApi.getCascaderData(params1).then(response => {
+                    this.screenResultOptions = response.data || [];
+                });
+                divisionApi.getCascaderData(params2).then(response => {
+                    this.shortmsgOptions = response.data || [];
                 });
             },
             getwechatList() {
@@ -673,6 +832,10 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
+                    }).catch(() => {
+                        this.loading = false;
+                        this.caseList = [];
+                        this.total = 0;
                     });
                 }
                 //切换页
@@ -682,6 +845,10 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
+                    }).catch(() => {
+                        this.loading = false;
+                        this.caseList = [];
+                        this.total = 0;
                     });
                 }
             },
@@ -981,10 +1148,6 @@
             getUsers() {
                 divisionApi.userList().then((response) => {
                     this.userList = response.data.userList || [];
-                    // for (var i = 0; i < this.userList.length; i++) {
-                    //     this.userList[i].parentId = this.userList[i].deptId
-                    //     delete this.userList[i].deptId
-                    // }
                 });
             },
             phoneNumberFormSubmit() {
@@ -1003,6 +1166,10 @@
                             })
                     }
                 });
+            },
+            //高级查询
+            implicitQuery() {
+                this.isShow = !this.isShow
             },
         },
     };
@@ -1039,6 +1206,16 @@
 
     .queryDivTwo {
         height: 20px;
+    }
+
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: opacity .5s
+    }
+
+    .fade-enter,
+    .fade-leave-active {
+        transition: opacity .5s
     }
 
 </style>

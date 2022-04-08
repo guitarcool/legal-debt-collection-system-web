@@ -3,11 +3,11 @@ import { praseStrEmpty } from "@/utils/ruoyi";
 
 const cuttingAfterApi = {
     //列表
-    list(query) {
+    list(data) {
         return request({
             url: '/case/postAdjudged/list',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     },
     //history列表
