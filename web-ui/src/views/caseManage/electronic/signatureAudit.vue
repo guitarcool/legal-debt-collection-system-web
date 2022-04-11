@@ -59,7 +59,7 @@
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
-            <el-table v-loading="loading" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
+            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
                 :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchno" width="200" :show-overflow-tooltip="true" fixed="left" />

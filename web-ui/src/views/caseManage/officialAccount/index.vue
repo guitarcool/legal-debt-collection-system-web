@@ -45,7 +45,7 @@
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection" ></right-toolbar>
             </el-row>
             <p style="padding-bottom:10px;">注：仅且仅当登陆身份证在系统中含有进行中/暂停的案件且案件已绑定匹配的公众号时，方可登陆成功</p>
-            <el-table v-loading="loading" border :data="caseList" ref="multiTable">
+            <el-table v-loading="loading" max-height="550" border :data="caseList" ref="multiTable">
                 <el-table-column label="登陆身份证" prop="idCard" :show-overflow-tooltip="true" />
                 <el-table-column label="登陆手机号" prop="phone" :show-overflow-tooltip="true" />
                 <el-table-column label="身份证匹配案件" prop="idCardHit" :show-overflow-tooltip="true">

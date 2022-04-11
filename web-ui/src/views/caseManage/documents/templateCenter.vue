@@ -62,7 +62,7 @@
                 </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys"
+            <el-table v-loading="loading" max-height="550" :data="caseList" ref="multiTable" :row-key="getRowKeys"
                 @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="模版号" prop="id" :show-overflow-tooltip="true" fixed="left" width="100" />
