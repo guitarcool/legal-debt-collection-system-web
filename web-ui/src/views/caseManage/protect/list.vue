@@ -36,10 +36,13 @@
                     <el-input v-model="queryParams.respondentIdNo" placeholder="请输入身份证号" clearable size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
-
                 <el-form-item label="财保案号：">
                     <el-input v-model="queryParams.propertyProNo" placeholder="请输入财保案号，多个财保案号用英文逗号连接" clearable
                         type="textarea" size="small" style="width: 200px" @keyup.enter.native="handleQuery" />
+                </el-form-item>
+                <el-form-item label="备注：">
+                    <el-input v-model="queryParams.remark" placeholder="请输入备注查询内容" clearable size="small"
+                        style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
             </template>
             <template #filter>

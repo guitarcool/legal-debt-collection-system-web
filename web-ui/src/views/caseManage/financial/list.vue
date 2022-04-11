@@ -58,6 +58,10 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="备注：">
+                    <el-input v-model="queryParams.remark" placeholder="请输入备注查询内容" clearable size="small"
+                        style="width: 240px" @keyup.enter.native="handleQuery" />
+                </el-form-item>
             </template>
             <template #filter>
                 <el-form-item label="案件状态：" class="custom-radio">
