@@ -44,12 +44,11 @@
             </template>
             <template #filter>
                 <el-form-item label="案件状态：" class="custom-radio">
-                    <el-radio-group v-model="queryParams.caseStatus" @change="changeStatus">
-                        <el-radio label="">全部</el-radio>
-                        <el-radio v-for="item in statusOptions" :label="item.dictValue" :key="item.dictValue">
-                            {{ item.dictLabel }}
-                        </el-radio>
-                    </el-radio-group>
+                    <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
+                        <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
+                            :key="item.dictValue">
+                            {{ item.dictLabel }}</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="财保状态：" class="custom-radio">
                     <el-radio-group v-model="queryParams.status" @change="changeStatus">
@@ -167,7 +166,7 @@
                     respondentIdNo: "",
                     propertyProNo: "",
                     principal: "",
-                    caseStatus: "",
+                    caseStatuss: [],
                     status: "",
                     orderByColumn: "",
                     isAsc: "",

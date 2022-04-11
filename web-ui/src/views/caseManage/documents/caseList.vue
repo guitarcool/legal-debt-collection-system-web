@@ -37,11 +37,11 @@
             </template>
             <template #filter>
                 <el-form-item label="案件状态：" class="custom-radio">
-                    <el-radio-group v-model="queryParams.caseStatus" @change="changeStatus">
-                        <el-radio label="">全部</el-radio>
-                        <el-radio v-for="item in statusOptions" :label="item.dictValue" :key="item.dictValue">
-                            {{ item.dictLabel }}</el-radio>
-                    </el-radio-group>
+                    <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
+                        <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
+                            :key="item.dictValue">
+                            {{ item.dictLabel }}</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
             </template>
             <template #buttonArea></template>
@@ -176,19 +176,12 @@
                     respondentPhone: "",
                     respondentIdNo: "",
                     orderNo: "",
-                    caseStatus: "",
+                    caseStatuss: [],
                     orderByColumn: "",
                     isAsc: "",
                 },
                 entrustType: [],
                 statusOptions: [],
-                // divisionData: {
-                //   title: "",
-                //   dialogVisible: false,
-                //   id: "",
-                //   orgNo: "",
-                //   principal: "",
-                // },
                 recordData: {
                     title: "",
                     dialogVisible: false,

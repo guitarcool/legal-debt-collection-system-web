@@ -9,11 +9,11 @@ const financeApi = {
             method: 'get'
         })
     },
-    list(query) {
+    list(data) {
         return request({
             url: '/case/financial/list',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     },
     exportRole(query) {

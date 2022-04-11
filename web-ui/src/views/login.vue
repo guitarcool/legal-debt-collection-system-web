@@ -141,7 +141,6 @@
                 });
               })
               .catch(() => {
-                console.log(111)
                 this.loading = false;
                 this.getCode();
               });

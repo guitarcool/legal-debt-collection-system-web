@@ -24,14 +24,13 @@
             </template>
             <template #filter>
                 <el-form-item label="案件状态：" class="custom-radio">
-                    <el-radio-group v-model="queryParams.caseStatus" @change="changeStatus">
-                        <el-radio label="">全部</el-radio>
-                        <el-radio v-for="item in statusOptions" :label="item.dictValue" :key="item.dictValue">
-                            {{ item.dictLabel }}
-                        </el-radio>
-                    </el-radio-group>
+                    <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
+                        <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
+                            :key="item.dictValue">
+                            {{ item.dictLabel }}</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="签章文书审核状态：" class="custom-radio">
+                <el-form-item label="审核状态：" class="custom-radio">
                     <el-radio-group v-model="queryParams.auditSignStatus" @change="changeStatus">
                         <el-radio label="">全部</el-radio>
                         <el-radio v-for="item in auditOptions" :label="item.dictValue" :key="item.dictValue">
@@ -126,7 +125,6 @@
                 // 总条数
                 total: 0,
                 // 角色表格数据
-                statusOptions: [],
                 caseList: [],
                 // 查询参数
                 searchParams: {},
@@ -138,7 +136,7 @@
                     name: "",
                     auditSignStatus: "",
                     signStatus: "",
-                    caseStatus: "",
+                    caseStatuss: [],
                     orderByColumn: "",
                     isAsc: "",
                 },

@@ -95,12 +95,12 @@
                         :disabled="multiple" v-hasPermi="['evidence:package:mail']">生成通知邮件
                     </el-button>
                 </el-col>
-                <el-col :span="1.5">
+                <!-- <el-col :span="1.5">
                     <el-button type="primary" icon="el-icon-download" size="mini"
                         @click="generateANotificationTextMessage" :disabled="multiple"
                         v-hasPermi="['evidence:package:mail']">生成通知短信
                     </el-button>
-                </el-col>
+                </el-col> -->
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>

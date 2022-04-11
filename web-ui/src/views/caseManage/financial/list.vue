@@ -19,13 +19,6 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="汇款时间：">
-                    <!--<el-date-picker-->
-                    <!--v-model="queryParams.remittanceTime"-->
-                    <!--type="date"-->
-                    <!--placeholder="选择日期"-->
-                    <!--format="yyyy-MM-dd"-->
-                    <!--value-format="yyyy-MM-dd">-->
-                    <!--</el-date-picker>-->
                     <el-date-picker size="small" v-model="chooseDaterange" type="daterange" range-separator="至"
                         start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" @change="handleChange"
                         value-format="yyyy-MM-dd">
@@ -52,8 +45,28 @@
                     <el-input size="small" clearable style="width:100px" v-model="queryParams.overdueStartAge" />~
                     <el-input size="small" clearable style="width:100px" v-model="queryParams.overdueEndAge" />
                 </el-form-item>
+                <el-form-item label="还款提交时间：">
+                    <el-date-picker v-model="chooseDaterange2" type="daterange" size="small" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" @change="handleChange2"
+                        value-format="yyyy-MM-dd">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="回款渠道：">
+                    <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.payChannals" placeholder="请选择">
+                        <el-option v-for="item in payChannalOptions" :key="item.dictValue" :label="item.dictLabel"
+                            :value="item.dictValue">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
             </template>
             <template #filter>
+                <el-form-item label="案件状态：" class="custom-radio">
+                    <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
+                        <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
+                            :key="item.dictValue">
+                            {{ item.dictLabel }}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
                 <el-form-item label="案件类型：" class="custom-radio">
                     <el-radio-group v-model="queryParams.caseType" @change="changeStatus">
                         <el-radio label="">全部</el-radio>
@@ -106,21 +119,15 @@
                 </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
+            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
                 :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="还款ID" prop="id" width="60" :show-overflow-tooltip="true" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
-                <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="130" sortable="custom"
-                    :sort-orders="['descending', 'ascending']">
-                    <template slot-scope="scope" v-if="scope.row.distributionTime">
-                        <span>{{
-                    parseTime(scope.row.distributionTime, "{y}-{m}-{d}")
-                    }}</span>
-                    </template>
-                </el-table-column>
+                <el-table-column label="还款提交时间" sortable="custom" :sort-orders="['descending', 'ascending']" prop="createTime" width="170" :show-overflow-tooltip="true" />
                 <el-table-column label="姓名" width="80" prop="respondentName" :show-overflow-tooltip="true"
                     fixed="left" />
+                <el-table-column label="身份证号" width="80" prop="respondentIdNo" :show-overflow-tooltip="true" />
                 <el-table-column label="案件状态" width="150" :show-overflow-tooltip="true" :formatter="statusFormat"
                     prop="caseStatus">
                 </el-table-column>
@@ -167,6 +174,14 @@
                 <el-table-column label="审核状态" :formatter="reviewStatusFormat" prop="reviewStatus"></el-table-column>
                 <el-table-column label="提交人" prop="createName" />
                 <el-table-column label="审核人" prop="reviewName" />
+                <el-table-column label="案件分配时间" prop="distributionTime" width="130" sortable="custom"
+                    :sort-orders="['descending', 'ascending']">
+                    <template slot-scope="scope" v-if="scope.row.distributionTime">
+                        <span>{{
+                    parseTime(scope.row.distributionTime, "{y}-{m}-{d}")
+                    }}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column label="委案状态" :formatter="getEntrustType" prop="entrustStatus">
                 </el-table-column>
                 <el-table-column label="操作" width="250" fixed="right" align="center">
@@ -251,6 +266,7 @@
                     postUserId: '',
                     remittanceTime: '',
                     caseType: '',
+                    caseStatuss: [],
                     reviewStatus: '',
                     orderByColumn: "",
                     isAsc: "",
@@ -292,6 +308,7 @@
                 getRowKeys(row) {
                     return row.id;
                 },
+                chooseDaterange2: [],
             }
         },
         created() {
@@ -348,6 +365,10 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
+                    }).catch(() => {
+                        this.loading = false;
+                        this.caseList = [];
+                        this.total = 0;
                     });
                 }
                 //切换页
@@ -357,6 +378,10 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
+                    }).catch(() => {
+                        this.loading = false;
+                        this.caseList = [];
+                        this.total = 0;
                     });
                 }
             },
@@ -460,7 +485,9 @@
                 this.erweimaData.dialogVisible = true
             },
             resetAll() {
-                this.chooseDaterange = []
+                this.chooseDaterange = [];
+                this.chooseDaterange2 = [];
+
             },
             handleChange(value) {
                 //console.log(value)
@@ -487,7 +514,17 @@
                 //     //console.log(res)
                 //     this.userList = res.data || []
                 // })
-            }
+            },
+            handleChange2(value) {
+                //console.log(value)
+                if (value == null) {
+                    this.queryParams.repaySubmitBeginTime = "";
+                    this.queryParams.repaySubmitEndTime = "";
+                } else {
+                    this.queryParams.repaySubmitBeginTime = value[0];
+                    this.queryParams.repaySubmitEndTime = value[1];
+                }
+            },
         }
     };
 
