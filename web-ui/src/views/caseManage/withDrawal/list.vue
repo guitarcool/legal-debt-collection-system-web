@@ -76,7 +76,7 @@
                 </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" border :data="caseList" ref="multiTable" :row-key="getRowKeys"
+            <el-table v-loading="loading" max-height="550" border :data="caseList" ref="multiTable" :row-key="getRowKeys"
                 @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
@@ -84,7 +84,7 @@
                 <el-table-column label="订单号" prop="caseId" width="170" :show-overflow-tooltip="true" />
                 <el-table-column label="催收机构" width="150" prop="deptName" :show-overflow-tooltip="true"/>
                 <el-table-column label="调解员" width="150" prop="mediationName" />
-                <el-table-column label="借款平台名称" width="150" prop="platform" />
+                <el-table-column label="借款平台名称" width="180" prop="platform" :show-overflow-tooltip="true"/>
                 <el-table-column label="逾期天数" width="150" prop="overdueDay" />
                 <el-table-column label="账龄" width="150" prop="overdueAge" />
                 <el-table-column label="借款本金" width="150" prop="capital" />

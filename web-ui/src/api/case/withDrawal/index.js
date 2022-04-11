@@ -3,11 +3,11 @@ import { praseStrEmpty } from "@/utils/ruoyi";
 
 const withDrawalApi = {
     //列表
-    list(data) {
+    list(query) {
         return request({
             url: '/case/withdrawal/list',
-            method: 'post',
-            data
+            method: 'get',
+            params: query
         })
     },
     //调解记录优化
