@@ -155,9 +155,15 @@
                         <div style="padding: 10px 0;font-weight:700">高级查询:</div>
                         <el-form-item label="案件状态：" class="custom-radio">
                             <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
-                                <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
+                                <!-- <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
                                     :key="item.dictValue">
-                                    {{ item.dictLabel }}</el-checkbox>
+                                    {{ item.dictLabel }}</el-checkbox> -->
+                                <el-checkbox :label="7">待立案</el-checkbox>
+                                <el-checkbox :label="8">已立案</el-checkbox>
+                                <el-checkbox :label="9">已判决</el-checkbox>
+                                <el-checkbox :label="10">待执行立案</el-checkbox>
+                                <el-checkbox :label="11">已执行立案</el-checkbox>
+                                <el-checkbox :label="12">已强制执行</el-checkbox>
                             </el-checkbox-group>
                         </el-form-item>
                         <el-form-item label="财保状态：" class="custom-radio">
