@@ -41,25 +41,17 @@
                     <el-input v-model="queryParams.phone" placeholder="请输入手机号" clearable size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
-                <el-form-item label="号码筛选类型：">
-                    <el-select clearable size="small" filterable v-model="queryParams.screenType" placeholder="请选择">
-                        <el-option v-for="item in screenType" :key="item.dictValue" :label="item.dictLabel"
+                <el-form-item label="号码筛选状态：">
+                    <el-select clearable filterable size="small" v-model="queryParams.screenStatus" placeholder="请选择">
+                        <el-option v-for="item in screen_status" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="queryParams.screenType" label="号码筛选结果：">
-                    <el-select clearable filterable v-if="queryParams.screenType == 1" size="small" v-model="queryParams.screenResult"
-                        placeholder="请选择">
-                        <el-option v-for="item in networkSortresult" :key="item.dictValue" :label="item.dictLabel"
-                            :value="item.dictValue">
-                        </el-option>
-                    </el-select>
-                    <el-select clearable filterable v-else size="small" v-model="queryParams.screenResult" placeholder="请选择">
-                        <el-option v-for="item in realtimeSortresult" :key="item.dictValue" :label="item.dictLabel"
-                            :value="item.dictValue">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="号码筛选结果：">
+                    <el-cascader collapse-tags :props="props" clearable filterable size="small"
+                        v-model="queryParams.screenResults" :options="screenResultOptions" placeholder="请选择">
+                    </el-cascader>
                 </el-form-item>
                 <el-form-item label="筛选时间：">
                     <el-date-picker v-model="chooseDaterange" type="daterange" size="small" range-separator="至"
@@ -89,7 +81,7 @@
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection"></right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" max-height="550" :data="caseList" ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="号码筛选类型" width="200" prop="screenType">
                     <template slot-scope="scope">
@@ -108,7 +100,7 @@
                     <span v-else>{{ realtimeSortresultFormat(scope.row.screenResult) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作员" width="100" prop="createBy" />
+                <el-table-column label="操作员" width="120" prop="createBy" />
                 <el-table-column label="调解员" width="100" prop="mediationtor" />
                 <el-table-column label="催收机构" width="120" prop="deptname" />
                 <el-table-column label="产品名称" width="150" :show-overflow-tooltip="true" prop="platform" />
@@ -136,6 +128,7 @@
 <script>
     import operationApi from "@/api/case/operation/index";
     import SearchBar from "@/components/SearchBar/index";
+    import divisionApi from "@/api/case/division/index";
     import exportDialog from "../components/exportDialog";
 
     export default {
@@ -179,6 +172,11 @@
                     ids: "",
                     requestApi: "",
                 },
+                screenResultOptions:[],
+                screen_status:[],
+                props: {
+                        multiple: true
+                    },
                 getRowKeys(row) {
                     return row.screenId;
                 },
@@ -187,6 +185,7 @@
         created() {
             this.getList(1);
             this.getUsers();
+            this.getCascaderData();
             //案件状态
             this.getDicts("case_status").then((response) => {
                 this.statusOptions = response.data;
@@ -202,6 +201,10 @@
             //号码筛选类型
             this.getDicts("screen_Type").then((response) => {
                 this.screenType = response.data;
+            });
+            //号码筛选状态类型
+            this.getDicts("screen_status").then((response) => {
+                this.screen_status = response.data;
             });
             //委案状态
             this.getDicts("entrust_status").then((response) => {
@@ -228,6 +231,10 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
+                    }).catch(() => {
+                        this.loading = false;
+                        this.caseList = [];
+                        this.total = 0;
                     });
                 }
                 //切换页
@@ -236,8 +243,21 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
+                    }).catch(() => {
+                        this.loading = false;
+                        this.caseList = [];
+                        this.total = 0;
                     });
                 }
+            },
+            /** 获取级联选择器 */
+            getCascaderData() {
+                let params1 = {
+                    type: 'screen'
+                };
+                divisionApi.getCascaderData(params1).then(response => {
+                    this.screenResultOptions = response.data || [];
+                });
             },
             //号码筛选类型
             screenTypeFormat(screenType) {

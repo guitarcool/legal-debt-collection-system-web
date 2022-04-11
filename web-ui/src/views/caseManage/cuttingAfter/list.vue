@@ -661,14 +661,6 @@
             this.getDicts("contactStatus").then((response) => {
                 this.contactStatusOptions = response.data;
             });
-            //在网状态号码筛选结果
-            this.getDicts("network_screen_result").then((response) => {
-                this.networkSortresult = response.data;
-            });
-            //实时在网号码筛选结果
-            this.getDicts("realtime_screen_result").then((response) => {
-                this.realtimeSortresult = response.data;
-            });
             //号码筛选类型
             this.getDicts("screen_Type").then((response) => {
                 this.screenType = response.data;

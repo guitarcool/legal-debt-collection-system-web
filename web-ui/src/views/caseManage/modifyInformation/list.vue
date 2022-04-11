@@ -43,25 +43,17 @@
                     <el-input v-model="queryParams.orderNo" placeholder="请输入合同号，多个合同号用英文逗号连接" clearable type="textarea"
                         size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
-                <el-form-item label="号码筛选类型：">
-                    <el-select clearable size="small" filterable v-model="queryParams.screenType" placeholder="请选择">
-                        <el-option v-for="item in screenType" :key="item.dictValue" :label="item.dictLabel"
+                <el-form-item label="号码筛选状态：">
+                    <el-select clearable filterable size="small" v-model="queryParams.screenStatus" placeholder="请选择">
+                        <el-option v-for="item in screen_status" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="queryParams.screenType" label="号码筛选结果：">
-                    <el-select clearable filterable v-if="queryParams.screenType == 1" size="small"
-                        v-model="queryParams.screenResult" placeholder="请选择">
-                        <el-option v-for="item in networkSortresult" :key="item.dictValue" :label="item.dictLabel"
-                            :value="item.dictValue">
-                        </el-option>
-                    </el-select>
-                    <el-select clearable filterable v-else size="small" v-model="queryParams.screenResult" placeholder="请选择">
-                        <el-option v-for="item in realtimeSortresult" :key="item.dictValue" :label="item.dictLabel"
-                            :value="item.dictValue">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="号码筛选结果：">
+                    <el-cascader collapse-tags :props="props" clearable filterable size="small"
+                        v-model="queryParams.screenResults" :options="screenResultOptions" placeholder="请选择">
+                    </el-cascader>
                 </el-form-item>
             </template>
             <template #filter>
@@ -107,7 +99,7 @@
                 </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
+            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
                 :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <!--:selectable="checkSelectable"-->
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
@@ -199,27 +191,13 @@
                 // 查询参数
                 searchParams: {},
                 queryParams: {
-                    id: '',
-                    batchNo: '',
                     pageNum: 1,
                     pageSize: 50,
-                    respondentName: '',
-                    respondentPhone: '',
-                    respondentIdNo: '',
-                    orderNo: '',
-                    screenType: "",
-                    screenResult: "",
-                    letterRepairStatus: '',
-                    caseStatus: '',
-                    postUserId: '',
                     orderByColumn: "",
                     isAsc: "",
                 },
                 statusOptions: [],
                 contactStatusOptions: [],
-                networkSortresult: [],
-                realtimeSortresult: [],
-                screenType: [],
                 letterRepairStatusOptions: [],
                 addData: {
                     title: '',
@@ -239,6 +217,11 @@
                     ids: "",
                     requestApi: "",
                 },
+                screenResultOptions:[],
+                screen_status:[],
+               props: {
+                    multiple: true
+                },
                 getRowKeys(row) {
                     return row.id;
                 },
@@ -253,17 +236,9 @@
             this.getDicts("letter_repair_status").then((response) => {
                 this.letterRepairStatusOptions = response.data;
             });
-            //在网状态号码筛选结果
-            this.getDicts("network_screen_result").then((response) => {
-                this.networkSortresult = response.data;
-            });
-            //实时在网号码筛选结果
-            this.getDicts("realtime_screen_result").then((response) => {
-                this.realtimeSortresult = response.data;
-            });
-            //号码筛选类型
-            this.getDicts("screen_Type").then((response) => {
-                this.screenType = response.data;
+            //号码筛选状态类型
+            this.getDicts("screen_status").then((response) => {
+                this.screen_status = response.data;
             });
             //案件联系状态
             this.getDicts("contactStatus").then((response) => {
@@ -271,6 +246,8 @@
             });
             this.getList(1);
             this.getUsers();
+            this.getCascaderData();
+
         },
         // 是否显示过滤栏， 扣除页数，每页显示数，总数量参数，3个内的搜索参数，直接显示一行，不显示过滤
         computed: {
@@ -296,6 +273,10 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
+                    }).catch(() => {
+                        this.loading = false;
+                        this.caseList = [];
+                        this.total = 0;
                     });
                 }
                 //切换页
@@ -304,8 +285,21 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
+                    }).catch(() => {
+                        this.loading = false;
+                        this.caseList = [];
+                        this.total = 0;
                     });
                 }
+            },
+            /** 获取级联选择器 */
+            getCascaderData() {
+                let params1 = {
+                    type: 'screen'
+                };
+                divisionApi.getCascaderData(params1).then(response => {
+                    this.screenResultOptions = response.data || [];
+                });
             },
             /** 排序触发事件 */
             handleSortChange(column, prop, order) {

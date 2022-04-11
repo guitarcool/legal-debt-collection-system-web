@@ -16,11 +16,11 @@ const importApi = {
             method: 'get'
         })
     },   
-    list(query) {
+    list(data) {
         return request({
             url: '/case/caseInfo/list',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     },
     exportRole(query) {

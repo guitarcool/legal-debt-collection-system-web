@@ -9,11 +9,11 @@ const modifyApi = {
             method: 'get'
         })
     },
-    list(query) {
+    list(data) {
         return request({
             url: '/case/letter/list',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     },
     exportRole(query) {
