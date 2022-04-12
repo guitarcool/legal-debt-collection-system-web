@@ -54,11 +54,16 @@
                         @click="handleExport" v-hasPermi="['evidence:package:export']">导出
                     </el-button>
                 </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-download" size="mini"
+                        @click="handleExportAll" v-hasPermi="['evidence:package:exportAll']">全选导出
+                    </el-button>
+                </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
+            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
                 :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="分案名" prop="divisionName" :show-overflow-tooltip="true" fixed="left"
@@ -241,6 +246,12 @@
                 this.exportData.title = "案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.requestApi = "/evidence/package/export";
+            },
+            /** 全选案件导出按钮操作 */
+            handleExportAll(){
+                this.exportData.title = "全选案件导出";
+                this.exportData.dialogVisible = true;
+                this.exportData.requestApi = "/evidence/package/exportAll";
             },
             /** 搜索按钮操作 */
             handleQuery() {

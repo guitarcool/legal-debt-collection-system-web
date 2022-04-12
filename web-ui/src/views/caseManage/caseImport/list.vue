@@ -82,6 +82,10 @@
                     <el-button type="warning" icon="el-icon-download" size="mini" @click="handleExport"
                         :disabled="multiple" v-hasPermi="['case:caseinfo:export']">导出</el-button>
                 </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-download" size="mini" @click="handleExportAll"
+                        v-hasPermi="['case:caseinfo:exportAll']">全选导出</el-button>
+                </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
@@ -321,6 +325,12 @@
                 this.exportData.title = "案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.requestApi = "/case/caseInfo/export";
+            },
+            /** 全选案件导出按钮操作 */
+            handleExportAll(){
+                this.exportData.title = "全选案件导出";
+                this.exportData.dialogVisible = true;
+                this.exportData.requestApi = "/case/caseInfo/exportAll";
             },
             /** 案件导入 */
             handleAdd() {

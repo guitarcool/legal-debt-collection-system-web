@@ -86,13 +86,28 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="warning" icon="el-icon-download" size="mini" @click="handleDownZip"
-                        :disabled="multiple" v-hasPermi="['evidence:package:download']">下载证据包
+                    <el-button type="success" icon="el-icon-download" size="mini"
+                        @click="handleExportAll" v-hasPermi="['evidence:package:detailExportAll']">全选导出
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-download" size="mini" @click="handleMessage(1)"
+                    <el-button type="warning" icon="el-icon-download" size="mini" @click="handleDownZip"
+                        :disabled="multiple" v-hasPermi="['evidence:package:downloadAll']">下载证据包
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-download" size="mini" @click="handleDownZipAll"
+                        v-hasPermi="['evidence:package:download']">全选下载证据包
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="warning" icon="el-icon-download" size="mini" @click="handleMessage(1)"
                         :disabled="multiple" v-hasPermi="['evidence:package:mail']">生成通知邮件
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-download" size="mini" @click="handleMessageAll(1)"
+                        v-hasPermi="['evidence:package:mailAll']">全选生成通知邮件
                     </el-button>
                 </el-col>
                 <!-- <el-col :span="1.5">
@@ -105,7 +120,7 @@
                 </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" :data="caseList" ref="multiTable" :row-key="getRowKeys"
+            <el-table v-loading="loading" max-height="550" :data="caseList" ref="multiTable" :row-key="getRowKeys"
                 @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="订单号" prop="caseId" :show-overflow-tooltip="true" fixed="left" width="180" />
@@ -206,12 +221,14 @@
         <newEvidenceImport @refresh="clearSelection" :id="evidenceData.id" :title="evidenceData.title"
             :show.sync="evidenceData.dialogVisible">
         </newEvidenceImport>
-
+        <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
+            :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
     </div>
 </template>
 
 <script>
     import SearchBar from '@/components/SearchBar/index'
+    import exportDialog from "../components/exportDialog";
     import evidenceApi from "@/api/case/evidence/index";
     import {
         downLoadZip
@@ -228,7 +245,8 @@
             message,
             batchExportDialog,
             editEvidence,
-            newEvidenceImport
+            newEvidenceImport,
+            exportDialog
         },
         data() {
             return {
@@ -286,6 +304,12 @@
                     title: "",
                     dialogVisible: false,
                     id: null,
+                },
+                exportData: {
+                    title: "",
+                    dialogVisible: false,
+                    ids: "",
+                    requestApi: "",
                 },
                 getRowKeys(row) {
                     return row.id;
@@ -387,10 +411,20 @@
                     this.clearSelection();
                 }).catch(function () {});
             },
+            /** 全选案件导出按钮操作 */
+            handleExportAll(){
+                this.exportData.title = "全选案件导出";
+                this.exportData.dialogVisible = true;
+                this.exportData.requestApi = "/evidence/package/detail/exportAll";
+            },
             handleDownZip() {
                 let id = this.ids.join(',')
                 //console.log(id)
                 downLoadZip("/evidence/package/download?ids=" + id, '证据包');
+                this.clearSelection();
+            },
+            handleDownZipAll(){
+                downLoadZip("/evidence/package/downloadAll", '证据包');
                 this.clearSelection();
             },
             clearSelection() {
@@ -406,6 +440,13 @@
                 this.messageData.type = type;
                 this.messageData.requestApi = '/evidence/package/notice/mail'
                 this.messageData.params = this.caseIds.join(',')
+            },
+            //全选生成通知邮件
+            handleMessageAll(type){
+                this.messageData.title = type == 1 ? '全选生成通知邮件' : '生成通知短信'
+                this.messageData.dialogVisible = true;
+                this.messageData.type = type;
+                this.messageData.requestApi = '/evidence/package/notice/mailAll'
             },
             deleteData() {
                 const userIds = this.ids;

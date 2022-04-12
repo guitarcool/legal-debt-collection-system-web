@@ -32,7 +32,7 @@ export function resolveBlob(res, mimeType) {
   var contentDisposition = decodeURI(res.headers['content-disposition'])
   var result = patt.exec(contentDisposition)
   if (result == null) {
-    Message.error('选中的数据无可下载的内容!')
+    Message.error('下载失败!')
     return;
   }else{
     Message.success('下载成功!')

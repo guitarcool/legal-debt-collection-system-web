@@ -82,6 +82,7 @@ const templateApi = {
         return request({
             url: url,
             method: 'get',
+            timeout: 500000,
             params: data
         })
     },

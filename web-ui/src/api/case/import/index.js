@@ -35,6 +35,7 @@ const importApi = {
         return request({
             url: `${query.url}`,
             method: 'get',
+            timeout: 500000,
             params: query
         })
     },
