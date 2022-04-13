@@ -45,6 +45,13 @@ const cuttingBeforeApi = {
             method: 'post',
         })
     },
+    // 批量诉前财保
+    casePropertyAll(ids){
+        return request({
+            url: '/case/property/all'+ids,
+            method: 'post',
+        })
+    },
      //诉前财保
      property(data){
         return request({
@@ -116,6 +123,14 @@ const cuttingBeforeApi = {
             params:data
         })
     },
+    //申请案件信修
+    applyLetterRepairAll(data){
+        return request({
+            url: '/case/pretrial/applyLetterRepairAll',
+            method: 'post',
+            params:data
+        })
+    },
     //获取号码list
     getLineList(){
         return request({
@@ -161,7 +176,15 @@ const cuttingBeforeApi = {
         method: 'post',
         data: data
         })
-    },       
+    },    
+    // 发送短信集合
+    sendSmsCollectionAll(data) {
+        return request({
+        url: '/case/pretrial/batchSMS',
+        method: 'post',
+        data: data
+        })
+    },    
     //获取正确的短信内容
     turnContent(data) {
         return request({
@@ -178,10 +201,26 @@ const cuttingBeforeApi = {
             params: query
         })
     },
+    //裁前调解记录优化
+    batchExportMediationRecordAll(query){
+        return request({
+            url: '/case/pretrial/batchExportMediationRecordAll',
+            method: 'get',
+            params: query
+        })
+    },
     //裁前网调记录优化
     batchExportNetworkAdjustRecord(query){
         return request({
             url: '/case/pretrial/batchExportNetworkAdjustRecord',
+            method: 'get',
+            params: query
+        })
+    }, 
+    //裁前网调记录优化
+    batchExportNetworkAdjustRecordAll(query){
+        return request({
+            url: '/case/pretrial/batchExportNetworkAdjustRecordAll',
             method: 'get',
             params: query
         })
@@ -194,10 +233,26 @@ const cuttingBeforeApi = {
             data: data
         })
     }, 
+    //裁前批量电调失败
+    batchMediationFailedAll(data){
+        return request({
+            url: '/case/pretrial/batchMediationFailedAll',
+            method: 'post',
+            data: data
+        })
+    }, 
     //裁前批量待立案
     batchPending(data){
         return request({
             url: '/case/pretrial/batchPending',
+            method: 'post',
+            data: data
+        })
+    }, 
+    //裁前批量待立案
+    batchPendingAll(data){
+        return request({
+            url: '/case/pretrial/batchPendingAll',
             method: 'post',
             data: data
         })

@@ -177,7 +177,8 @@
                 </transition>
             </template>
             <template #buttonArea>
-                <el-button size="mini" icon="el-icon-zoom-in" type="success" @click="implicitQuery" style="margin-left:16px">高级查询</el-button>
+                <el-button size="mini" icon="el-icon-zoom-in" type="success" @click="implicitQuery"
+                    style="margin-left:16px">高级查询</el-button>
             </template>
         </search-bar>
         <div class="queryDiv">
@@ -185,64 +186,108 @@
         </div>
         <div class="box-contnet-wrap" style="margin-top:0">
             <el-row :gutter="10" class="mb8">
-                <!-- <el-col :span="1.5">
-                     <el-button
-            type="success"
-            size="mini"
-            @click="batchMessage"
-            :disabled="multiple"
-            >批量生成律师函短信
-          </el-button> 
-                </el-col>-->
+                <el-col :span="1.5">
+                    <div style="font-size:14px;height:28px;line-height:28px;">案件操作：</div>
+                </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" size="mini" @click="batchLawyer" :disabled="multiple">批量生成律师函
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="warning" size="mini" :disabled="multiple" @click="handleAppleEdit"
+                    <el-button type="success" size="mini" @click="batchLawyer"
+                        v-hasPermi="['case:pretrial:instrumentBatchAll']">全选批量生成律师函
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="warning" size="mini" :disabled="multiple" @click="handleAppleEdit(1)"
                         v-hasPermi="['case:pretrial:letterRepair']">批量申请案件信修
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
+                    <el-button type="success" size="mini" @click="handleAppleEdit(2)"
+                        v-hasPermi="[' case:pretrial:letterRepairAll']">全选批量申请案件信修
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
                     <el-button v-if="queryParams.preStatus == 0 || queryParams.preStatus == 4" type="primary"
-                        size="mini" :disabled="multiple" @click="handleprojectEdit"
+                        size="mini" :disabled="multiple" @click="handleprojectEdit(1)"
                         v-hasPermi="['case:pretrial:letterRepair']">批量诉前财保申请
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatus != 13&&token" type="danger" size="mini" :disabled="multiple"
-                        @click="handleAppleCall">批量预测式外呼
+                    <el-button v-if="queryParams.preStatus == 0 || queryParams.preStatus == 4" type="success"
+                        size="mini" @click="handleprojectEdit(2)" v-hasPermi="['caseinfo:property:addAll']">全选批量诉前财保申请
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatus != 13" type="success" size="mini" :disabled="multiple"
-                        v-hasPermi="['shortMsg:sends']" @click="handleMessage">批量短信发送
+                    <el-button v-hasPermi="['case:pretrial:batchPending']"
+                        v-if="queryParams.caseStatuss.indexOf('3')>-1 == true || queryParams.caseStatuss.indexOf('6')>-1 == true"
+                        type="danger" size="mini" @click="handleOnRecord(1)" :disabled="multiple">批量转待立案</el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-hasPermi="['case:pretrial:batchPendingAll']"
+                        v-if="queryParams.caseStatuss.indexOf('3')>-1 == true || queryParams.caseStatuss.indexOf('6')>-1 == true"
+                        type="success" size="mini" @click="handleOnRecord(2)">全选批量转待立案</el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false && token" type="danger"
+                        size="mini" :disabled="multiple" @click="handleAppleCall">批量预测式外呼
+                    </el-button>
+                </el-col>
+            </el-row>
+            <el-row :gutter="10" class="mb8">
+                <el-col :span="1.5">
+                    <div style="font-size:14px;height:28px;line-height:28px;">案件操作：</div>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="danger" size="mini"
+                        :disabled="multiple" v-hasPermi="['shortMsg:sends']" @click="handleMessage">批量短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="primary" size="mini" :disabled="multiple"
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="success" size="mini"
+                        v-hasPermi="['case:pretrial:shortMsg']" @click="handleMessage">全选批量短信发送
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="warning" size="mini" :disabled="multiple"
                         v-hasPermi="['case:pretrial:batchExportMediationRecord']"
                         @click="batchExportMediationRecord('批量导出调解记录')">
                         批量导出调解记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="danger" size="mini" :disabled="multiple"
+                    <el-button type="success" size="mini" v-hasPermi="['case:pretrial:batchExportMediationRecordAll']"
+                        @click="batchExportMediationRecord('全选批量导出调解记录')">
+                        全选批量导出调解记录
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="primary" size="mini" :disabled="multiple"
                         v-hasPermi="['case:pretrial:batchExportNetworkAdjustRecord']"
                         @click="batchExportMediationRecord('批量导出网调记录')">
                         批量导出网调记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-hasPermi="['case:pretrial:batchMediationFailed']"
-                        v-if="queryParams.caseStatus == 1 || queryParams.caseStatus == 2" type="success" size="mini"
-                        @click="batchExportMediationRecord('批量转电话调解失败')" :disabled="multiple">批量转电话调解失败
+                    <el-button type="success" size="mini"
+                        v-hasPermi="['case:pretrial:batchExportNetworkAdjustRecordAll']"
+                        @click="batchExportMediationRecord('全选批量导出网调记录')">
+                        全选批量导出网调记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-hasPermi="['case:pretrial:batchPending']"
-                        v-if="queryParams.caseStatus == 3 || queryParams.caseStatus == 6" type="success" size="mini"
-                        @click="handleOnRecord" :disabled="multiple">批量转待立案</el-button>
+                    <el-button v-hasPermi="['case:pretrial:batchMediationFailed']"
+                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('2')>-1 == true"
+                        type="primary" size="mini" @click="batchExportMediationRecord('批量转电话调解失败')"
+                        :disabled="multiple">批量转电话调解失败
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-hasPermi="['case:pretrial:batchMediationFailedAll']"
+                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('2')>-1 == true"
+                        type="success" size="mini" @click="batchExportMediationRecord('全选批量转电话调解失败')">全选批量转电话调解失败
+                    </el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
@@ -408,7 +453,7 @@
                     letterRepairStatus: "",
                     contactStatus: "",
                     repayStatus: "",
-                    caseStatuss:[],
+                    caseStatuss: [],
                     orderByColumn: "",
                     isAsc: "",
                 },
@@ -807,6 +852,12 @@
                 this.batchData.requestApi = "/case/pretrial/instrument/batch";
                 this.batchData.params = this.ids.join(",");
             },
+            //批量生成律师函
+            batchLawyer() {
+                this.batchData.title = "全选批量生成律师函";
+                this.batchData.dialogVisible = true;
+                this.batchData.requestApi = "/case/pretrial/instrument/batchAll";
+            },
             handleUpdate(item) {
                 this.$router.push({
                     name: "cutBeforeInfo",
@@ -869,7 +920,7 @@
                 return this.selectDictLabel(this.xuanwuStatus, deliverStatus);
             },
             //申请案件信修
-            handleAppleEdit() {
+            handleAppleEdit(type) {
                 let cannotChoose = [];
                 this.selection.forEach((item) => {
                     if (item.letterRepairStatus == 1 || item.letterRepairStatus == 2) {
@@ -891,17 +942,29 @@
                             type: "warning",
                         })
                         .then(() => {
-                            let param = {
-                                ids: that.ids.join(","),
-                            };
-                            cuttingBeforeApi.applyCaseEdit(param).then((res) => {
-                                if (res.code === 200) {
-                                    that.msgSuccess(res.msg);
-                                    that.clearSelection();
-                                } else if (res.code === 500) {
-                                    that.msgError(res.msg);
-                                }
-                            });
+                            if (type == 1) {
+                                let param = {
+                                    ids: that.ids.join(","),
+                                };
+                                cuttingBeforeApi.applyCaseEdit(param).then((res) => {
+                                    if (res.code === 200) {
+                                        that.msgSuccess(res.msg);
+                                        that.clearSelection();
+                                    } else if (res.code === 500) {
+                                        that.msgError(res.msg);
+                                    }
+                                });
+                            } else if (type == 2) {
+                                cuttingBeforeApi.applyLetterRepairAll().then((res) => {
+                                    if (res.code === 200) {
+                                        that.msgSuccess(res.msg);
+                                        that.clearSelection();
+                                    } else if (res.code === 500) {
+                                        that.msgError(res.msg);
+                                    }
+                                });
+                            }
+
                         })
                         .catch(() => {
                             that.msgError("已取消操作");
@@ -909,7 +972,7 @@
                 }
             },
             //批量待立案
-            handleOnRecord() {
+            handleOnRecord(type) {
                 var that = this;
                 this.$confirm(`是否切换案件状态为待立案?`, "提示", {
                         confirmButtonText: "确定",
@@ -917,17 +980,29 @@
                         type: "warning",
                     })
                     .then(() => {
-                        let data = {
-                            caseId: that.ids.join(",")
-                        }
-                        cuttingBeforeApi.batchPending(data).then((res) => {
-                            if (res.code === 200) {
-                                that.msgSuccess(res.msg);
-                                that.clearSelection();
-                            } else if (res.code === 500) {
-                                that.msgError(res.msg);
+                        if (type == 1) {
+                            let data = {
+                                caseId: that.ids.join(",")
                             }
-                        });
+                            cuttingBeforeApi.batchPending(data).then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess(res.msg);
+                                    that.clearSelection();
+                                } else if (res.code === 500) {
+                                    that.msgError(res.msg);
+                                }
+                            });
+                        } else {
+                            cuttingBeforeApi.batchPendingAll().then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess(res.msg);
+                                    that.clearSelection();
+                                } else if (res.code === 500) {
+                                    that.msgError(res.msg);
+                                }
+                            });
+                        }
+
                     })
                     .catch(() => {
                         that.msgError("已取消操作");
@@ -940,7 +1015,7 @@
                 this.publicBatchData.dialogVisible = true;
             },
             //申请财保
-            handleprojectEdit() {
+            handleprojectEdit(type) {
                 let cannotChoose = [];
                 this.selection.forEach((item) => {
 
@@ -956,12 +1031,21 @@
                     })
                     .then(() => {
                         let ids = that.ids.join(",");
-                        cuttingBeforeApi.caseProperty(ids).then((res) => {
-                            if (res.code === 200) {
-                                that.msgSuccess("操作成功");
-                                that.clearSelection();
-                            }
-                        });
+                        if (type == 1) {
+                            cuttingBeforeApi.casePropertyAll(ids).then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess("操作成功");
+                                    that.clearSelection();
+                                }
+                            });
+                        } else {
+                            cuttingBeforeApi.caseProperty(ids).then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess("操作成功");
+                                    that.clearSelection();
+                                }
+                            });
+                        }
                     })
                     .catch(() => {
                         that.msgError("已取消操作");
@@ -1018,6 +1102,12 @@
                 this.batchexportData.dialogVisible = true;
                 this.batchexportData.red = false;
                 this.batchexportData.params = this.ids.join(",");
+            },
+            //打开发送短信的弹窗
+            handleMessageAll() {
+                this.batchexportData.title = "全选批量短信发送";
+                this.batchexportData.dialogVisible = true;
+                this.batchexportData.red = false;
             },
             //高级查询
             implicitQuery() {

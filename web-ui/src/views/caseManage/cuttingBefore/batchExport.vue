@@ -185,7 +185,7 @@
                         label: '定时发送'
                     }
                 ],
-                upload_url: process.env.VUE_APP_BASE_API + "/shortMsg/batchSMSFile", //上传URL
+                upload_url: '',
                 files: null,
                 // 是否禁用上传
                 isUploading: false,
@@ -372,6 +372,11 @@
                             withCredentials: true
                         });
                         instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken()
+                        if(this.title == '全选批量短信发送'){
+                            this.upload_url = process.env.VUE_APP_BASE_API + "/shortMsg/pretrialCase/batchSMSFileAll"; //上传URL
+                        }else{
+                            this.upload_url = process.env.VUE_APP_BASE_API + "/shortMsg/batchSMSFile"; //上传URL
+                        }
                         var that = this
                         instance({
                             method: 'post',
@@ -409,21 +414,37 @@
                             phoneStatus: this.phoneStatus,
                             sendTime: this.signatureDate ? this.signatureDate : '',
                         }
-                        cuttingBeforeApi.sendSmsCollection(param).then((res) => {
-                                if (res.code == 500) {
+                        if(this.title == '全选批量短信发送'){
+                            cuttingBeforeApi.sendSmsCollectionAll(param).then((res) => {
+                                    if (res.code == 500) {
+                                        this.loading = false;
+                                        this.msgError(res.msg);
+                                    } else {
+                                        this.dialogVisible = false;
+                                        this.loading = false;
+                                        this.msgSuccess(res.msg);
+                                        this.$emit('clearSelection');
+                                        this.$emit('refresh');
+                                    }
+                                }).catch((error) => {
                                     this.loading = false;
-                                    this.msgError(res.msg);
-                                } else {
-                                    this.dialogVisible = false;
+                                });
+                        }else{
+                            cuttingBeforeApi.sendSmsCollection(param).then((res) => {
+                                    if (res.code == 500) {
+                                        this.loading = false;
+                                        this.msgError(res.msg);
+                                    } else {
+                                        this.dialogVisible = false;
+                                        this.loading = false;
+                                        this.msgSuccess(res.msg);
+                                        this.$emit('clearSelection');
+                                        this.$emit('refresh');
+                                    }
+                                }).catch((error) => {
                                     this.loading = false;
-                                    this.msgSuccess(res.msg);
-                                    this.$emit('clearSelection');
-                                    this.$emit('refresh');
-                                }
-                            })
-                            .catch((error) => {
-                                this.loading = false;
-                            });
+                                });
+                        }
                     }
                 }
             },
