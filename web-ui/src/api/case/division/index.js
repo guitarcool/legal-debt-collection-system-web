@@ -55,10 +55,26 @@ const divisionApi = {
             data:data
         })
     },
+    divisionAll(data){
+        return request({
+            url: '/case/assignment/assignmentCaseAll',
+            method: 'post',
+            timeout:500000,
+            data:data
+        })
+    },
     supervisorAssignment(data){
         return request({
             url: '/case/assignment/supervisorAssignment',
             method: 'post',
+            data:data
+        })
+    },
+    supervisorAssignmentAll(data){
+        return request({
+            url: '/case/assignment/supervisorAssignmentAll',
+            method: 'post',
+            timeout:500000,
             data:data
         })
     },
@@ -85,12 +101,28 @@ const divisionApi = {
 
         })
     },
+    //号码筛选
+    screeningAll(ids,jump,status,radioStatus){
+        return request({
+            url: `/case/assignment/screeningAll?ids=${ids}&jump=${jump}&status=${status}&type=${radioStatus}`,
+            method: 'post',
+            timeout:500000,
+        })
+    },
     //暂停
     suspendCase(ids){
         return request({
             url: `/case/assignment/suspendCase?ids=${ids}`,
             method: 'post',
 
+        })
+    },
+    //暂停
+    suspendCaseAll(){
+        return request({
+            url: '/case/assignment/suspendCaseAll',
+            method: 'get',
+            timeout:500000,
         })
     },
     //恢复
@@ -101,12 +133,27 @@ const divisionApi = {
 
         })
     },
+    //恢复
+    recoverCaseAll(){
+        return request({
+            url: '/case/assignment/recoverCaseAll',
+            method: 'get',
+            timeout:500000,
+        })
+    },
     //退案
     withdrawalCase(ids){
         return request({
             url: `/case/assignment/withdrawalCase?ids=${ids}`,
             method: 'post',
-
+        })
+    },
+    //退案
+    withdrawalCaseAll(){
+        return request({
+            url: '/case/assignment/withdrawalCaseAll',
+            method: 'get',
+            timeout:500000,
         })
     },
     //公众号列表查询
@@ -122,6 +169,15 @@ const divisionApi = {
         return request({
             url: '/admin/wechat/case/bind',
             method: 'post',
+            data:data
+        })
+    },
+    //公众号绑定
+    bindWechatAll(data){
+        return request({
+            url: '/admin/wechat/case/bindAll',
+            method: 'post',
+            timeout:500000,
             data:data
         })
     },

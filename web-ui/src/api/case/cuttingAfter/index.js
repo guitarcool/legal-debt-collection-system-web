@@ -221,6 +221,14 @@ const cuttingAfterApi = {
             params: query
         })
     },
+    //裁后调解记录优化
+    batchExportMediationRecordAll(query){
+        return request({
+            url: '/case/postAdjudged/batchExportMediationRecordAll',
+            method: 'get',
+            params: query
+        })
+    },
     //裁后网调记录记录优化
     batchExportNetworkAdjustRecord(query){
         return request({
@@ -229,6 +237,14 @@ const cuttingAfterApi = {
             params: query
         })
     },   
+    //裁后网调记录记录优化
+    batchExportNetworkAdjustRecordAll(query){
+        return request({
+            url: '/case/postAdjudged/batchExportNetworkAdjustRecordAll',
+            method: 'get',
+            params: query
+        })
+    },  
     //裁后案件编辑获取详情
     getCaseEditData(caseId) {
         return request({

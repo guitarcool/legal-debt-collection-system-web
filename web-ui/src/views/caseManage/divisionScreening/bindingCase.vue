@@ -12,7 +12,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="submit" v-hasPermi="['wechat:case:bind']">确 定</el-button>
+            <el-button type="primary" @click="submit" :loading="loading">{{loading?'绑定中':'确定'}}</el-button>
         </div>
     </Dialog>
 </template>
@@ -42,7 +42,8 @@
                         trigger: 'change'
                     }],
                 },
-                options: []
+                options: [],
+                loading: false
             }
         },
         props: {
@@ -93,13 +94,30 @@
             submit() {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
-                        divisionApi.bindWechat(this.form).then(res => {
-                            if (res.code === 200) {
-                                this.msgSuccess("绑定成功");
-                                this.dialogVisible = false;
-                                this.$emit('refresh');
-                            }
-                        })
+                        this.loading = true;
+                        if (this.title == '全选公众号绑定') {
+                            divisionApi.bindWechatAll(this.form).then(res => {
+                                if (res.code === 200) {
+                                    this.msgSuccess("绑定成功");
+                                    this.dialogVisible = false;
+                                    this.loading = false;
+                                    this.$emit('refresh');
+                                }
+                            }).catch(error => {
+                                this.loading = false;
+                            })
+                        } else {
+                            divisionApi.bindWechat(this.form).then(res => {
+                                if (res.code === 200) {
+                                    this.msgSuccess("绑定成功");
+                                    this.dialogVisible = false;
+                                    this.loading = false;
+                                    this.$emit('refresh');
+                                }
+                            }).catch(error => {
+                                this.loading = false;
+                            })
+                        }
                     }
                 });
             },

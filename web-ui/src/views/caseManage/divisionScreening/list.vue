@@ -199,18 +199,32 @@
                     <div style="font-size:14px;height:28px;line-height:28px;">分案操作：</div>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-share" size="mini" :disabled="multiple"
+                    <el-button type="warning" icon="el-icon-share" size="mini" :disabled="multiple"
                         @click="handleDivision" v-hasPermi="['case:assignment:assignment']">统一分发
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-s-unfold" size="mini" :disabled="multiple"
+                    <el-button type="success" icon="el-icon-share" size="mini" @click="handleDivisionAll"
+                        v-hasPermi="['case:assignment:assignmentAll']">全选统一分发
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="warning" icon="el-icon-s-unfold" size="mini" :disabled="multiple"
                         v-hasPermi="['case:assignment:supervisorAssignment']" @click="handleSupervisor">监督员分发
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-s-promotion" size="mini" :disabled="multiple"
+                    <el-button type="success" icon="el-icon-s-unfold" size="mini"
+                        v-hasPermi="['case:assignment:supervisorAssignmentAll']" @click="handleSupervisorAll">全选监督员分发
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="warning" icon="el-icon-s-promotion" size="mini" :disabled="multiple"
                         @click="handleBinding" v-hasPermi="['wechat:case:bind']">公众号绑定</el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-s-promotion" size="mini" @click="handleBindingAll"
+                        v-hasPermi="['wechat:case:bindAll']">全选公众号绑定</el-button>
                 </el-col>
             </el-row>
             <el-row :gutter="10" class="mb8">
@@ -223,18 +237,38 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-mobile" size="mini" @click="handleFilteringAll"
+                        v-hasPermi="['case:assignment:screeningAll']">全选号码筛选
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
                     <el-button type="primary" icon="el-icon-video-pause" size="mini" :disabled="multiple"
-                        @click="suspendCase" v-hasPermi="['case:assignment:suspendCase']">暂停案件
+                        @click="suspendCase(1)" v-hasPermi="['case:assignment:suspendCase']">暂停案件
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-video-pause" size="mini" @click="suspendCase(2)"
+                        v-hasPermi="['case:assignment:suspendCaseAll']">全选暂停案件
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="primary" icon="el-icon-video-play" size="mini" :disabled="multiple"
-                        @click="recoveryCase" v-hasPermi="['case:assignment:recoverCase']">恢复案件
+                        @click="recoveryCase(1)" v-hasPermi="['case:assignment:recoverCase']">恢复案件
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="primary" icon="el-icon-s-fold" size="mini" :disabled="multiple" @click="retreat"
+                    <el-button type="success" icon="el-icon-video-play" size="mini" @click="recoveryCase(2)"
+                        v-hasPermi="['case:assignment:recoverCaseAll']">全选恢复案件
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="primary" icon="el-icon-s-fold" size="mini" :disabled="multiple" @click="retreat(1)"
                         v-hasPermi="['case:assignment:withdrawalCase']">退案
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-s-fold" size="mini" @click="retreat(2)"
+                        v-hasPermi="['case:assignment:withdrawalCaseAll']">全选退案
                     </el-button>
                 </el-col>
             </el-row>
@@ -248,15 +282,32 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-download" size="mini" @click="handleExportAll"
+                        v-hasPermi="['case:assignment:exportAll']">全选导出
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
                     <el-button type="danger" icon="el-icon-download" size="mini" :disabled="multiple"
                         @click="batchExportMediationRecord">
                         导出调解记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-download" size="mini" @click="batchExportMediationRecordAll"
+                        v-hasPermi="['case:adjudged:batchExportMediationRecordAll']">
+                        全选导出调解记录
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
                     <el-button type="danger" icon="el-icon-download" size="mini" :disabled="multiple"
                         @click="batchExportAdjestMent">
                         导出网调记录
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-download" size="mini" @click="batchExportAdjestMentAll"
+                        v-hasPermi="[' case:adjudged:batchExportNetworkAdjustRecordAll']">
+                        全选导出网调记录
                     </el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
@@ -362,7 +413,8 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <el-dialog title="号码筛选" :visible.sync="numberDialogVisible" width="50%" :before-close="handleClose">
+        <el-dialog :title="numberForm.title" :visible.sync="numberDialogVisible" width="50%"
+            :before-close="handleClose">
             <el-form style="margin: 0 auto;" ref="numberForm" :model="numberForm" :rules="rules" label-width="100px">
                 <el-form-item label="筛选服务：" prop="radioStatus">
                     <el-radio-group v-model="numberForm.radioStatus">
@@ -389,7 +441,9 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="numberDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="phoneNumberFormSubmit">确 定</el-button>
+                <el-button type="primary" @click="phoneNumberFormSubmit" :loading="numberFormLoading">
+                    {{numberFormLoading?'筛选中':'确定'}}</el-button>
+
             </span>
         </el-dialog>
         <divisionDialog @refresh="clearSelection" :title="divisionData.title" :show.sync="divisionData.dialogVisible"
@@ -406,19 +460,20 @@
             :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
         <el-dialog :title="form.title" :visible.sync="exportDialogVisible" width="50%" :before-close="handleClose">
             <el-form style="margin: 0 auto;" ref="form" :model="form" :rules="exportRules" label-width="100px">
-                <el-form-item v-if="form.title=='导出调解记录'" label="导出范围：" prop="exportRange">
+                <el-form-item v-if="form.title=='导出调解记录'||form.title=='全选导出调解记录'" label="导出范围：" prop="exportRange">
                     <el-checkbox-group v-model="form.exportRange">
                         <el-checkbox :label="1">最近一次调解记录</el-checkbox>
                         <el-checkbox :label="2">全部调解记录</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item v-if="form.title=='导出网调记录'" label="导出范围：" prop="exportRange">
+                <el-form-item v-if="form.title=='导出网调记录'||form.title=='全选导出网调记录'" label="导出范围：" prop="exportRange">
                     <el-checkbox-group v-model="form.exportRange">
                         <el-checkbox :label="1">最近一次网调记录</el-checkbox>
                         <el-checkbox :label="2">全部网调记录</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item v-if="form.title=='导出调解记录'" label="是否脱敏：" prop="isDesensitization">
+                <el-form-item v-if="form.title=='导出调解记录'||form.title=='全选导出调解记录'" label="是否脱敏："
+                    prop="isDesensitization">
                     <el-radio-group v-model="form.isDesensitization">
                         <el-radio :label="1">是</el-radio>
                         <el-radio :label="0">否</el-radio>
@@ -427,7 +482,8 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="exportDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="phoneSubmit(form.title)">确 定</el-button>
+                <el-button type="primary" @click="phoneSubmit(form.title)" :loading="formLoading">
+                    {{formLoading?'导出中':'确定'}}</el-button>
             </span>
         </el-dialog>
     </div>
@@ -457,6 +513,8 @@
             return {
                 // 遮罩层
                 loading: false,
+                formLoading: false,
+                numberFormLoading: false,
                 // 选中数组
                 ids: [],
                 // 非单个禁用
@@ -480,7 +538,7 @@
                     letterRepairStatus: "",
                     contactStatus: "",
                     repayStatus: "",
-                    caseStatuss:[],
+                    caseStatuss: [],
                     orderByColumn: "",
                     isAsc: "",
                 },
@@ -648,6 +706,7 @@
                     id: "",
                 },
                 numberForm: {
+                    title: "",
                     status: "",
                     jump: [],
                     radioStatus: "",
@@ -886,8 +945,14 @@
                 this.exportData.dialogVisible = true;
                 this.exportData.requestApi = "/case/assignment/export";
             },
+            /** 导出按钮操作 */
+            handleExportAll() {
+                this.exportData.title = "全选导出";
+                this.exportData.dialogVisible = true;
+                this.exportData.requestApi = "/case/assignment/exportAll";
+            },
             //暂停
-            suspendCase() {
+            suspendCase(type) {
                 if (this.selection.filter((item) => item.entrustStatus == 2).length > 0) {
                     this.msgError("所选案件存在暂停状态的案件，不能批量暂停");
                     return;
@@ -899,19 +964,28 @@
                         type: "warning",
                     })
                     .then(() => {
-                        divisionApi.suspendCase(this.ids).then((res) => {
-                            if (res.code === 200) {
-                                that.msgSuccess("操作成功");
-                                that.clearSelection();
-                            }
-                        });
+                        if (type == 1) {
+                            divisionApi.suspendCase(this.ids).then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess("操作成功");
+                                    that.clearSelection();
+                                }
+                            })
+                        } else if (type == 2) {
+                            divisionApi.suspendCaseAll().then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess("操作成功");
+                                    that.clearSelection();
+                                }
+                            })
+                        }
                     })
                     .catch(() => {
                         that.msgError("已取消操作");
                     });
             },
             //恢复案件
-            recoveryCase() {
+            recoveryCase(type) {
                 if (this.selection.filter((item) => item.entrustStatus == 1).length > 0) {
                     this.msgError("所选案件存在进行中状态的案件，不能批量恢复案件");
                     return;
@@ -923,18 +997,27 @@
                         type: "warning",
                     })
                     .then(() => {
-                        divisionApi.recoverCase(this.ids).then((res) => {
-                            if (res.code === 200) {
-                                that.msgSuccess("操作成功");
-                                that.clearSelection();
-                            }
-                        });
+                        if (type == 1) {
+                            divisionApi.recoverCase(this.ids).then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess("操作成功");
+                                    that.clearSelection();
+                                }
+                            });
+                        } else if (type == 2) {
+                            divisionApi.recoverCaseAll().then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess("操作成功");
+                                    that.clearSelection();
+                                }
+                            });
+                        }
                     })
                     .catch(() => {
                         that.msgError("已取消操作");
                     });
             },
-            retreat() {
+            retreat(type) {
                 var that = this;
                 this.$confirm("注：案件状态变更为：已退案，退案后案件不再更新，撤回分配/监督机构及其用户对案件的操作权限，仅保留操作记录及业务统计数据。是否确认退案？", "退案", {
                         confirmButtonText: "确定",
@@ -942,12 +1025,21 @@
                         type: "warning",
                     })
                     .then(() => {
-                        divisionApi.withdrawalCase(this.ids).then((res) => {
-                            if (res.code === 200) {
-                                that.msgSuccess("操作成功");
-                                that.clearSelection();
-                            }
-                        });
+                        if (type == 1) {
+                            divisionApi.withdrawalCase(this.ids).then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess("操作成功");
+                                    that.clearSelection();
+                                }
+                            });
+                        } else if (type == 2) {
+                            divisionApi.withdrawalCaseAll().then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess("操作成功");
+                                    that.clearSelection();
+                                }
+                            });
+                        }
                     })
                     .catch(() => {
                         that.msgError("已取消操作");
@@ -955,22 +1047,32 @@
             },
             //导出调解记录
             batchExportMediationRecord() {
-                // if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
-                //   this.msgError("所选数据存在已结案的数据，不能批量筛选号码");
-                //   return;
-                // }  
+                this.formLoading = false;
                 this.form.title = '导出调解记录';
+                this.form.exportRange = [];
+                this.form.isDesensitization = 1;
+                this.exportDialogVisible = true;
+            },
+            //导出调解记录
+            batchExportMediationRecordAll() {
+                this.formLoading = false;
+                this.form.title = '全选导出调解记录';
                 this.form.exportRange = [];
                 this.form.isDesensitization = 1;
                 this.exportDialogVisible = true;
             },
             //导出网调记录
             batchExportAdjestMent() {
-                // if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
-                //   this.msgError("所选数据存在已结案的数据，不能批量筛选号码");
-                //   return;
-                // }  
+                this.formLoading = false;
                 this.form.title = '导出网调记录';
+                this.form.exportRange = [];
+                this.form.isDesensitization = 1;
+                this.exportDialogVisible = true;
+            },
+            //导出网调记录
+            batchExportAdjestMentAll() {
+                this.formLoading = false;
+                this.form.title = '全选导出网调记录';
                 this.form.exportRange = [];
                 this.form.isDesensitization = 1;
                 this.exportDialogVisible = true;
@@ -979,6 +1081,7 @@
                 if (title == '导出调解记录') {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
+                            this.formLoading = true;
                             let queryParams = {
                                 caseIds: this.ids.join(","),
                                 exportRange: this.form.exportRange.toString(),
@@ -987,16 +1090,20 @@
                             cuttingAfterApi.postAdjudgedBatchExport(queryParams).then(res => {
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
+                                    this.formLoading = false;
                                     this.exportDialogVisible = false;
                                     this.download(res.msg);
                                     this.clearSelection();
                                 }
+                            }).catch(error => {
+                                this.formLoading = false;
                             })
                         }
                     });
                 } else if (title == '导出网调记录') {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
+                            this.formLoading = true;
                             let queryParams = {
                                 caseIds: this.ids.join(","),
                                 exportRange: this.form.exportRange.toString(),
@@ -1004,10 +1111,56 @@
                             cuttingAfterApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
+                                    this.formLoading = false;
                                     this.exportDialogVisible = false;
                                     this.download(res.msg);
                                     this.clearSelection();
                                 }
+                            }).catch(error => {
+                                this.formLoading = false;
+                            })
+                        }
+                    });
+                } else if (title == '全选导出调解记录') {
+                    this.$refs["form"].validate((valid) => {
+                        if (valid) {
+                            this.formLoading = true;
+                            let queryParams = {
+                                caseIds: this.ids.join(","),
+                                exportRange: this.form.exportRange.toString(),
+                                isDesensitization: this.form.isDesensitization,
+                            };
+                            cuttingAfterApi.batchExportMediationRecordAll(queryParams).then(res => {
+                                if (res.code === 200) {
+                                    this.msgSuccess("操作成功");
+                                    this.formLoading = false;
+                                    this.exportDialogVisible = false;
+                                    this.download(res.msg);
+                                    this.clearSelection();
+                                }
+                            }).catch(error => {
+                                this.formLoading = false;
+                            })
+                        }
+                    });
+                } else if (title == '全选导出网调记录') {
+                    this.$refs["form"].validate((valid) => {
+                        if (valid) {
+                            this.formLoading = true;
+                            let queryParams = {
+                                caseIds: this.ids.join(","),
+                                exportRange: this.form.exportRange.toString(),
+                            };
+                            cuttingAfterApi.batchExportNetworkAdjustRecordAll(queryParams).then(res => {
+                                if (res.code === 200) {
+                                    this.msgSuccess("操作成功");
+                                    this.formLoading = false;
+                                    this.exportDialogVisible = false;
+                                    this.download(res.msg);
+                                    this.clearSelection();
+                                }
+                            }).catch(error => {
+                                this.formLoading = false;
                             })
                         }
                     });
@@ -1034,11 +1187,40 @@
                     item.caseStatus :
                     this.selection.map((i) => i.caseStatus);
             },
+            //全选案件分发
+            handleDivisionAll(item) {
+                if (!item.id) {
+                    if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
+                        this.msgError("所选数据存在已结案的数据，不能批量分发");
+                        return;
+                    }
+                }
+                this.divisionData.title = "全选案件分发";
+                this.divisionData.dialogVisible = true;
+                this.divisionData.id = item.id ? item.id : this.ids.join(",");
+                this.divisionData.orgNo = item.id ?
+                    item.orgNo :
+                    this.selection.map((i) => i.orgNo).join(",");
+                this.divisionData.principal = item.id ?
+                    item.principal :
+                    this.selection.map((i) => i.principal).join(",");
+                this.divisionData.caseStatus = item.id ?
+                    item.caseStatus :
+                    this.selection.map((i) => i.caseStatus);
+            },
             handleFiltering() {
                 if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
                     this.msgError("所选数据存在已结案的数据，不能批量筛选号码");
                     return;
                 }
+                this.numberForm.title = '号码筛选';
+                this.numberForm.status = 1;
+                this.numberForm.jump = [1, 2];
+                this.numberForm.radioStatus = 1;
+                this.numberDialogVisible = true;
+            },
+            handleFilteringAll() {
+                this.numberForm.title = '全选号码筛选';
                 this.numberForm.status = 1;
                 this.numberForm.jump = [1, 2];
                 this.numberForm.radioStatus = 1;
@@ -1049,9 +1231,17 @@
                 this.supervisorData.title = "监督员分发";
                 this.supervisorData.dialogVisible = true;
             },
+            handleSupervisorAll() {
+                this.supervisorData.title = "全选监督员分发";
+                this.supervisorData.dialogVisible = true;
+            },
             handleBinding() {
                 this.bindingData.ids = this.ids;
                 this.bindingData.title = "公众号绑定";
+                this.bindingData.dialogVisible = true;
+            },
+            handleBindingAll() {
+                this.bindingData.title = "全选公众号绑定";
                 this.bindingData.dialogVisible = true;
             },
             handleClose(done) {
@@ -1152,17 +1342,35 @@
             phoneNumberFormSubmit() {
                 this.$refs["numberForm"].validate((valid) => {
                     if (valid) {
-                        divisionApi.screening(this.ids, this.numberForm.jump, this.numberForm.status, this
-                                .numberForm.radioStatus)
-                            .then(res => {
-                                if (res.code === 200) {
-                                    this.msgSuccess("操作成功");
-                                    this.numberDialogVisible = false;
-                                    this.clearSelection();
-                                } else if (res.code === 500) {
-                                    this.msgError(res.msg);
-                                }
-                            })
+                        this.numberFormLoading = true;
+                        if (this.numberForm.title == '全选号码筛选') {
+                            divisionApi.screeningAll(this.ids, this.numberForm.jump, this.numberForm.status,
+                                    this
+                                    .numberForm.radioStatus)
+                                .then(res => {
+                                    if (res.code === 200) {
+                                        this.msgSuccess("操作成功");
+                                        this.numberDialogVisible = false;
+                                        this.numberFormLoading = false;
+                                        this.clearSelection();
+                                    }
+                                }).catch(error => {
+                                    this.numberFormLoading = false;
+                                })
+                        } else {
+                            divisionApi.screening(this.ids, this.numberForm.jump, this.numberForm.status, this
+                                    .numberForm.radioStatus)
+                                .then(res => {
+                                    if (res.code === 200) {
+                                        this.msgSuccess("操作成功");
+                                        this.numberDialogVisible = false;
+                                        this.numberFormLoading = false;
+                                        this.clearSelection();
+                                    }
+                                }).catch(error => {
+                                    this.numberFormLoading = false;
+                                })
+                        }
                     }
                 });
             },
