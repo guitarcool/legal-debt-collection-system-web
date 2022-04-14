@@ -58,11 +58,11 @@ const operationApi = {
         })
     }, 
     //获取电子签章列表
-    signRecordlist(query) {
+    signRecordlist(data) {
         return request({
             url: '/report/signRecord/list',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     },
     //电子签章导出 

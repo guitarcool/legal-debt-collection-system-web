@@ -156,7 +156,7 @@
                         <div style="padding: 10px 0;font-weight:700">高级查询:</div>
                         <el-form-item label="案件状态：" class="custom-radio">
                             <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
-                                <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
+                                <el-checkbox v-for="item in statusOptions" v-show="item.dictValue!=13" :label="item.dictValue"
                                     :key="item.dictValue">
                                     {{ item.dictLabel }}</el-checkbox>
                             </el-checkbox-group>

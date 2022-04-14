@@ -27,8 +27,8 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="身份证号：">
-                    <el-input v-model="queryParams.respondentIdNo" placeholder="请输入手机号" clearable size="small"
-                        style="width: 240px" @keyup.enter.native="handleQuery" />
+                    <el-input v-model="queryParams.respondentIdNo" placeholder="请输入身份证号，多个身份证号用英文逗号连接" clearable size="small"
+                        style="width: 240px" type="textarea" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="合同号：">
                     <el-input clearable v-model="queryParams.orderNo" placeholder="请输入合同号，多个合同号用英文逗号连接" type="textarea"
@@ -42,10 +42,17 @@
             <template #filter>
                 <el-form-item label="案件状态：" class="custom-radio">
                     <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
-                        <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
+                        <el-checkbox v-for="item in statusOptions"  v-show="item.dictValue!=13"  :label="item.dictValue"
                             :key="item.dictValue">
                             {{ item.dictLabel }}</el-checkbox>
                     </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="还款状态：" class="custom-radio">
+                    <el-radio-group v-model="queryParams.repayStatus" @change="changeStatus">
+                        <el-radio label="">全部</el-radio>
+                        <el-radio v-for="item in repayStatus" :key="item.dictValue" :label="item.dictValue">
+                            {{item.dictLabel}}</el-radio>
+                    </el-radio-group>
                 </el-form-item>
             </template>
             <template #buttonArea></template>
@@ -182,6 +189,7 @@
                 total: 0,
                 // 角色表格数据
                 caseList: [],
+                repayStatus: [],
                 // 查询参数
                 searchParams: {},
                 queryParams: {
@@ -244,6 +252,10 @@
             //委案状态
             this.getDicts("entrust_status").then((response) => {
                 this.entrustType = response.data;
+            });
+            //还款状态
+            this.getDicts("repay_status").then((response) => {
+                this.repayStatus = response.data;
             });
         },
         // 是否显示过滤栏， 扣除页数，每页显示数，总数量参数，3个内的搜索参数，直接显示一行，不显示过滤

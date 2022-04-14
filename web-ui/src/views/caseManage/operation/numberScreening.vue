@@ -41,13 +41,6 @@
                     <el-input v-model="queryParams.phone" placeholder="请输入手机号" clearable size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
-                <el-form-item label="号码筛选状态：">
-                    <el-select clearable filterable size="small" v-model="queryParams.screenStatus" placeholder="请选择">
-                        <el-option v-for="item in screen_status" :key="item.dictValue" :label="item.dictLabel"
-                            :value="item.dictValue">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item label="号码筛选结果：">
                     <el-cascader collapse-tags :props="props" clearable filterable size="small"
                         v-model="queryParams.screenResults" :options="screenResultOptions" placeholder="请选择">

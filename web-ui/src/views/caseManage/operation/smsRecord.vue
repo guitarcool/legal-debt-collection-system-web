@@ -23,7 +23,8 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="调解员：">
-                    <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.mediationtors" placeholder="请选择">
+                    <el-select clearable multiple collapse-tags filterable size="small"
+                        v-model="queryParams.mediationtors" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -67,9 +68,10 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="短信发送渠道：">
-                    <el-select clearable filterable size="small" v-model="queryParams.providerType" placeholder="请选择">
-                        <el-option v-for="item in shortmsgProviderType" :key="item.dictValue"
-                            :label="item.dictLabel" :value="item.dictValue">
+                    <el-select @change="providerTypeChange" clearable filterable size="small"
+                        v-model="queryParams.providerType" placeholder="请选择">
+                        <el-option v-for="item in shortmsgProviderType" :key="item.dictValue" :label="item.dictLabel"
+                            :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -84,19 +86,31 @@
                     <el-input v-model="queryParams.passage" placeholder="请输入短信通道" clearable size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
-                <el-form-item label="短信送达状态：">
-                    <el-select clearable filterable size="small" v-model="queryParams.deliverStatus" placeholder="请选择">
-                        <el-option label="已送达" value="0"></el-option>
-                        <el-option label="接收中" value="1"></el-option>
-                        <el-option label="其他" value="2"></el-option>
+                <el-form-item label="短信送达状态：" v-show="queryParams.providerType">
+                    <el-select v-if="queryParams.providerType == 1" clearable multiple collapse-tags filterable
+                        size="small" v-model="queryParams.deliverStatuss" placeholder="请选择">
+                        <el-option v-for="item in shisuyunStatus" :key="item.dictValue" :label="item.dictLabel"
+                            :value="item.dictValue">
+                        </el-option>
+                    </el-select>
+                    <el-select v-if="queryParams.providerType == 2" clearable multiple collapse-tags filterable
+                        size="small" v-model="queryParams.deliverStatuss" placeholder="请选择">
+                        <el-option v-for="item in wodongStatus" :key="item.dictValue" :label="item.dictLabel"
+                            :value="item.dictValue">
+                        </el-option>
+                    </el-select>
+                    <el-select v-if="queryParams.providerType == 3" clearable multiple collapse-tags filterable
+                        size="small" v-model="queryParams.deliverStatuss" placeholder="请选择">
+                        <el-option v-for="item in xuanwuStatus" :key="item.dictValue" :label="item.dictLabel"
+                            :value="item.dictValue">
+                        </el-option>
                     </el-select>
                 </el-form-item>
             </template>
             <template #filter>
                 <el-form-item label="案件状态：" class="custom-radio">
                     <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
-                        <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
-                            :key="item.dictValue">
+                        <el-checkbox v-for="item in statusOptions" :label="item.dictValue" :key="item.dictValue">
                             {{ item.dictLabel }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
@@ -112,20 +126,23 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" size="mini"
-                        v-hasPermi="['report:shortmsgrecord:exportAll']" @click="handleExportAll">全选导出
+                    <el-button type="success" size="mini" v-hasPermi="['report:shortmsgrecord:exportAll']"
+                        @click="handleExportAll">全选导出
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" size="mini" :disabled="multiple" @click="handleMessage">重新发送短信</el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" size="mini" v-hasPermi="['shortMsg:sendsAll']" @click="handleMessageAll">全选重新发送短信</el-button>
+                    <el-button type="success" size="mini" v-hasPermi="['shortMsg:sendsAll']" @click="handleMessageAll">
+                        全选重新发送短信</el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection"></right-toolbar>
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
+                </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" max-height="550" :data="caseList" ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" max-height="550" :data="caseList" ref="multiTable" :row-key="getRowKeys"
+                @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
                 <el-table-column label="姓名" width="80" prop="name" :show-overflow-tooltip="true" fixed="left" />
@@ -143,9 +160,12 @@
                 </el-table-column>
                 <el-table-column label="送达状态" width="120" prop="deliverStatus">
                     <template slot-scope="scope" v-if="scope.row.deliverStatus != null">
-                        <span v-if="scope.row.providerType == 1">{{shisuyunStatusFormat(scope.row.deliverStatus) !=""?shisuyunStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
-                        <span v-if="scope.row.providerType == 2">{{wodongStatusFormat(scope.row.deliverStatus) !=""?wodongStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
-                        <span v-if="scope.row.providerType == 3">{{xuanwuStatusFormat(scope.row.deliverStatus) !=""?xuanwuStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
+                        <span
+                            v-if="scope.row.providerType == 1">{{shisuyunStatusFormat(scope.row.deliverStatus) !=""?shisuyunStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
+                        <span
+                            v-if="scope.row.providerType == 2">{{wodongStatusFormat(scope.row.deliverStatus) !=""?wodongStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
+                        <span
+                            v-if="scope.row.providerType == 3">{{xuanwuStatusFormat(scope.row.deliverStatus) !=""?xuanwuStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="送达时间" width="180" prop="deliverTime" />
@@ -167,13 +187,14 @@
                 <el-table-column label="产品名称" width="150" prop="platform" />
                 <el-table-column label="案件状态" width="150" :show-overflow-tooltip="true" :formatter="statusFormat"
                     prop="caseStatus" />
-                <el-table-column label="短信发送渠道" width="150" prop="providerType" :formatter="shortmsgProviderTypeFormat"/>
+                <el-table-column label="短信发送渠道" width="150" prop="providerType"
+                    :formatter="shortmsgProviderTypeFormat" />
                 <el-table-column label="委案状态" :formatter="getEntrustType" prop="entrustStatus">
                 </el-table-column>
                 <el-table-column label="操作" width="200" fixed="right" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" v-if="scope.row.caseId!=null&&scope.row.entrustStatus != 3" type="primary"
-                            @click="handleUpdate(scope.row)">案件详情
+                        <el-button size="mini" v-if="scope.row.caseId!=null&&scope.row.entrustStatus != 3"
+                            type="primary" @click="handleUpdate(scope.row)">案件详情
                         </el-button>
                         <el-button size="mini" v-if="scope.row.path" type="warning" @click="recordingPlay(scope.row)">
                             录音播放
@@ -185,9 +206,10 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <exportDialog @refresh="clearSelection"  :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
-            :requestApi="exportData.requestApi"></exportDialog>
-        <batchExport  @refresh="clearSelection" :title="batchexportData.title" :show.sync="batchexportData.dialogVisible" :params="batchexportData.params"></batchExport>
+        <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
+            :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
+        <batchExport @refresh="clearSelection" :title="batchexportData.title" :show.sync="batchexportData.dialogVisible"
+            :params="batchexportData.params"></batchExport>
     </div>
 </template>
 
@@ -221,16 +243,17 @@
                 // 角色表格数据
                 caseList: [],
                 // 查询参数
-                searchParams:{},
+                searchParams: {},
                 queryParams: {
                     pageNum: 1,
                     pageSize: 50,
                     caseStatus: "",
                     qttcStartNum: "",
                     qttcEndNum: "",
-                    replyContent:"",
+                    replyContent: "",
                     isAsc: "",
                     caseStatuss: [],
+                    deliverStatuss:[],
                 },
                 wodongStatus: [],
                 shisuyunStatus: [],
@@ -238,7 +261,7 @@
                 statusOptions: [],
                 chooseDaterange: [],
                 chooseDaterange2: [],
-                entrustType:[],
+                entrustType: [],
                 userList: [],
                 exportData: {
                     title: "",
@@ -251,7 +274,7 @@
                     dialogVisible: false,
                     params: "",
                 },
-                shortmsgProviderType:[],
+                shortmsgProviderType: [],
                 getRowKeys(row) {
                     return row.shortMsgId;
                 },
@@ -298,8 +321,8 @@
             getList(type) {
                 this.loading = true;
                 //查询
-                if(type == 1){
-		            this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
+                if (type == 1) {
+                    this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     operationApi.shortMsgRecordlist(this.searchParams).then((response) => {
                         this.clearSelection();
                         this.caseList = response.rows;
@@ -308,7 +331,7 @@
                     });
                 }
                 //切换页
-                else if(type == 2){
+                else if (type == 2) {
                     operationApi.shortMsgRecordlist(this.searchParams).then((response) => {
                         this.caseList = response.rows;
                         this.total = response.total;
@@ -343,8 +366,8 @@
                 this.single = selection.length != 1;
                 this.multiple = !selection.length;
             },
-            clearSelection(){
-                if(this.caseList.length>0){
+            clearSelection() {
+                if (this.caseList.length > 0) {
                     this.$refs.multiTable.clearSelection(); //清除选中的数据
                     this.selection = [];
                     this.ids = [];
@@ -442,6 +465,9 @@
                 audio.src = process.env.VUE_APP_BASE_API + val.path;
                 audio.play();
             },
+            providerTypeChange() {
+                this.queryParams.deliverStatuss = [];
+            }
         },
     };
 
