@@ -15,32 +15,42 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="submit">确 定</el-button>
+            <el-button type="primary" @click="submit" :loading="loading">{{loading?'审核中':'确定'}}</el-button>
+
         </div>
     </Dialog>
 </template>
 
 <script>
     import Dialog from '@/components/Dialog/index'
-    import { getToken } from "@/utils/auth";
-    import { initObj } from '@/utils/common'
+    import {
+        getToken
+    } from "@/utils/auth";
+    import {
+        initObj
+    } from '@/utils/common'
     import modifyApi from "@/api/case/modify/index";
     export default {
         //多元调解成功
         name: "applyAudit",
-        components: { Dialog },
-        data(){
-            return{
-                form:{
-                    type:'',
-                    id:'',
-                    reason:''
+        components: {
+            Dialog
+        },
+        data() {
+            return {
+                form: {
+                    type: '',
+                    id: '',
+                    reason: ''
                 },
                 rules: {
-                    type: [
-                        { required: true, message: '请选择审核结果', trigger: 'change' }
-                    ],
-                }
+                    type: [{
+                        required: true,
+                        message: '请选择审核结果',
+                        trigger: 'change'
+                    }],
+                },
+                loading: false
             }
         },
         props: {
@@ -61,66 +71,86 @@
                 type: String,
                 default: ''
             },
-            id:{
+            id: {
                 type: String,
             }
         },
         computed: {
             dialogVisible: {
-                get () {
+                get() {
                     return this.show
                 },
-                set (val) {
+                set(val) {
                     this.$emit('update:show', val)
                 }
             }
         },
-        created(){
+        created() {
 
         },
         methods: {
-            openDialog(){
+            openDialog() {
                 initObj(this.form);
                 this.form.type = 1
                 this.resetAddForm();
                 this.form.id = this.id;
+                this.loading = false;
             },
             //重置表单清除验证
-            resetAddForm(){
+            resetAddForm() {
                 try {
                     this.$refs['form'].resetFields()
                 } catch (e) {
 
                 }
             },
-            submit () {
+            submit() {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
-                        if(this.form.type==0 && this.form.reason == ''){
+                        this.loading = true;
+                        if (this.form.type == 0 && this.form.reason == '') {
                             this.msgError("请填写拒绝理由");
                             return
                         }
                         let param = {
-                            ids:this.id,
-                            type:this.form.type,
-                            reason:this.form.reason
+                            ids: this.id,
+                            type: this.form.type,
+                            reason: this.form.reason
                         }
-                        modifyApi.applyModify(param).then(res => {
-                            if (res.code === 200) {
-                                this.msgSuccess("操作成功");
-                                this.$emit('refresh')
-                                this.dialogVisible = false
-                            }
-                        })
+                        if (this.title == '全选审核信修申请') {
+                            modifyApi.applyModifyAll(param).then(res => {
+                                if (res.code === 200) {
+                                    this.msgSuccess("操作成功");
+                                    this.$emit('refresh')
+                                    this.loading = false;
+                                    this.dialogVisible = false;
+                                }
+                            }).catch(() => {
+                                this.loading = false;
+                            });
+                        } else {
+                            modifyApi.applyModify(param).then(res => {
+                                if (res.code === 200) {
+                                    this.msgSuccess("操作成功");
+                                    this.$emit('refresh')
+                                    this.loading = false;
+                                    this.dialogVisible = false;
+                                }
+                            }).catch(() => {
+                                this.loading = false;
+                            });
+                        }
                     }
                 });
             }
         }
     }
+
 </script>
 
 <style scoped>
-    .el-dialog__body{
+    .el-dialog__body {
         height: 20px;
     }
+
 </style>

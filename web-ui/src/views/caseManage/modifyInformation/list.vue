@@ -86,8 +86,18 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" size="mini" :disabled="multiple" @click="apply"
+                    <el-button type="success" size="mini" icon="el-icon-download"
+                        @click="handleExportAll" v-hasPermi="['case:letter:exportAll']">全选导出
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="warning" size="mini" :disabled="multiple" @click="apply"
                         v-hasPermi="['case:letter:review']">批量审核申请
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" size="mini" @click="applyAll"
+                        v-hasPermi="['case:letter:review']">全选批量审核申请
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -342,6 +352,12 @@
                 this.exportData.dialogVisible = true;
                 this.exportData.requestApi = "/case/letter/export";
             },
+            /** 导出按钮操作 */
+            handleExportAll() {
+                this.exportData.title = "全选案件导出";
+                this.exportData.dialogVisible = true;
+                this.exportData.requestApi = "/case/letter/exportAll";
+            },
             changeStatus() {
                 this.getList(1);
             },
@@ -365,6 +381,18 @@
                     }
                 }
                 this.applyData.title = '审核信修申请';
+                this.applyData.dialogVisible = true;
+                this.applyData.id = item.id ? item.id : this.ids.join(',');
+            },
+            //申请案件信修
+            applyAll(item) {
+                if (!item.id) {
+                    if (this.selection.filter(item => item.letterRepairStatus != 1).length > 0) {
+                        this.msgError('所选数据存在不符合批量申请信修操作的数据')
+                        return
+                    }
+                }
+                this.applyData.title = '全选审核信修申请';
                 this.applyData.dialogVisible = true;
                 this.applyData.id = item.id ? item.id : this.ids.join(',');
             },

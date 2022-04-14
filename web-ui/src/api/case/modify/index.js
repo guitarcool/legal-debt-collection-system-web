@@ -30,6 +30,14 @@ const modifyApi = {
             params:data
         })
     },
+    applyModifyAll(data) {
+        return request({
+            url: '/case/letter/reviewAll',
+            method: 'post',
+            timeout:500000,
+            params:data
+        })
+    },
 }
 
 // 下载用户导入模版
