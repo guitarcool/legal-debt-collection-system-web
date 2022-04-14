@@ -1145,7 +1145,7 @@
             /** 案件分发 */
             handleDivision(item) {
                 if (!item.id) {
-                    if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
+                    if (this.selection.filter((item) => item.caseStatuss.indexOf('13')>-1 == true).length > 0) {
                         this.msgError("所选数据存在已结案的数据，不能批量分发");
                         return;
                     }
@@ -1166,7 +1166,7 @@
             //全选案件分发
             handleDivisionAll(item) {
                 if (!item.id) {
-                    if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
+                    if (this.selection.filter((item) => item.caseStatuss.indexOf('13')>-1 == true).length > 0) {
                         this.msgError("所选数据存在已结案的数据，不能批量分发");
                         return;
                     }
@@ -1185,7 +1185,7 @@
                     this.selection.map((i) => i.caseStatus);
             },
             handleFiltering() {
-                if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
+                if (this.selection.filter((item) => item.caseStatuss.indexOf('13')>-1 == true).length > 0) {
                     this.msgError("所选数据存在已结案的数据，不能批量筛选号码");
                     return;
                 }

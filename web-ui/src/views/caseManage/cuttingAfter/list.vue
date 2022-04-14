@@ -839,7 +839,7 @@
                 this.addData.dialogVisible = true;
             },
             handleAppleCall() {
-                if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
+                if (this.selection.filter((item) => item.caseStatuss.indexOf('13')>-1 == true).length > 0) {
                     this.msgError("所选数据存在已结案的数据，不能批量拨打");
                     return;
                 }
@@ -1240,7 +1240,7 @@
             },
             //打开发送短信的弹窗
             handleMessage() {
-                if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
+                if (this.selection.filter((item) => item.caseStatuss.indexOf('13')>-1 == true).length > 0) {
                     this.msgError("所选数据存在已结案的数据，不能批量发送短信");
                     return;
                 }
