@@ -78,6 +78,10 @@
                     <el-button type="danger" size="mini" :disabled="multiple" v-hasPermi="['report:screenrecord:export']" @click="handleExport">导出
                     </el-button>
                 </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" size="mini" v-hasPermi="['report:screenrecord:exportAll']" @click="handleExportAll">全选导出
+                    </el-button>
+                </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection"></right-toolbar>
             </el-row>
 
@@ -297,6 +301,12 @@
                 this.exportData.title = "案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.requestApi = "/report/screenRecord/export";
+            },
+            /** 导出按钮操作 */
+            handleExportAll() {
+                this.exportData.title = "全选案件导出";
+                this.exportData.dialogVisible = true;
+                this.exportData.requestApi = "/report/screenRecord/exportAll";
             },
             handleUpdate(item) {
                 if (item.caseStatus < 7) {

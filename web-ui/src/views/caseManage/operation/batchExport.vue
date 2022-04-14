@@ -139,20 +139,38 @@
                     providerType: this.providerType,
                     sendTime: this.signatureDate ? this.signatureDate : '',
                 }
-                cuttingAfterApi.sendSmsBatchResend(param).then((res) => {
-                        if (res.code == 500) {
+                if (this.title == '全选重新发送短信') {
+                    cuttingAfterApi.batchResendAll(param).then((res) => {
+                            if (res.code == 500) {
+                                this.loading = false;
+                                this.msgError(res.msg);
+                            } else {
+                                this.dialogVisible = false;
+                                this.loading = false;
+                                this.msgSuccess(res.msg);
+                                this.$emit('refresh');
+                            }
+                        })
+                        .catch((error) => {
                             this.loading = false;
-                            this.msgError(res.msg);
-                        } else {
-                            this.dialogVisible = false;
+                        });
+                } else {
+                    cuttingAfterApi.sendSmsBatchResend(param).then((res) => {
+                            if (res.code == 500) {
+                                this.loading = false;
+                                this.msgError(res.msg);
+                            } else {
+                                this.dialogVisible = false;
+                                this.loading = false;
+                                this.msgSuccess(res.msg);
+                                this.$emit('refresh');
+                            }
+                        })
+                        .catch((error) => {
                             this.loading = false;
-                            this.msgSuccess(res.msg);
-                            this.$emit('refresh');
-                        }
-                    })
-                    .catch((error) => {
-                        this.loading = false;
-                    });
+                        });
+                }
+
             },
         },
     };

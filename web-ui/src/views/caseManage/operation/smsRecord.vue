@@ -112,7 +112,15 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" size="mini" :disabled="multiple" @click="handleMessage">重新发送短信</el-button>
+                    <el-button type="success" size="mini"
+                        v-hasPermi="['report:shortmsgrecord:exportAll']" @click="handleExportAll">全选导出
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="danger" size="mini" :disabled="multiple" @click="handleMessage">重新发送短信</el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" size="mini" v-hasPermi="['shortMsg:sendsAll']" @click="handleMessageAll">全选重新发送短信</el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection"></right-toolbar>
             </el-row>
@@ -323,6 +331,11 @@
                 this.batchexportData.dialogVisible = true;
                 this.batchexportData.params = this.ids.join(",");
             },
+            //打开发送短信的弹窗
+            handleMessageAll() {
+                this.batchexportData.title = "全选重新发送短信";
+                this.batchexportData.dialogVisible = true;
+            },
             // 多选框选中数据
             handleSelectionChange(selection) {
                 this.selection = selection;
@@ -343,6 +356,12 @@
                 this.exportData.title = "案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.requestApi = "/report/shortMsgRecord/export";
+            },
+            /** 导出按钮操作 */
+            handleExportAll() {
+                this.exportData.title = "全选案件导出";
+                this.exportData.dialogVisible = true;
+                this.exportData.requestApi = "/report/shortMsgRecord/exportAll";
             },
             handleUpdate(item) {
                 if (item.caseStatus < 7) {

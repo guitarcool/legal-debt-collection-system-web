@@ -23,7 +23,8 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="调解员：">
-                    <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.mediatorIds" placeholder="请选择">
+                    <el-select clearable multiple collapse-tags filterable size="small"
+                        v-model="queryParams.mediatorIds" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -81,8 +82,7 @@
             <template #filter>
                 <el-form-item label="案件状态：" class="custom-radio">
                     <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
-                        <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
-                            :key="item.dictValue">
+                        <el-checkbox v-for="item in statusOptions" :label="item.dictValue" :key="item.dictValue">
                             {{ item.dictLabel }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
@@ -93,16 +93,33 @@
         <div class="box-contnet-wrap">
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
-                    <el-button type="danger"  size="mini" :disabled="multiple" v-hasPermi="['report:callrecord:export']" @click="handleExport">导出
-                    </el-button>
-                    <el-button type="success"  size="mini" :disabled="multiple" v-hasPermi="['report:callrecord:batchDownloadSoundRecord']" @click="batchDownloadRecording">
-                        批量下载录音文件
+                    <el-button type="danger" size="mini" :disabled="multiple" v-hasPermi="['report:callrecord:export']"
+                        @click="handleExport">导出
                     </el-button>
                 </el-col>
-                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection"></right-toolbar>
+                <el-col :span="1.5">
+                    <el-button type="success" size="mini" v-hasPermi="['report:callrecord:exportAll']"
+                        @click="handleExportAll">全选导出
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="danger" size="mini" :disabled="multiple"
+                        v-hasPermi="['report:callrecord:batchDownloadSoundRecord']" @click="batchDownloadRecording(1)">
+                        下载录音文件
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" size="mini" v-hasPermi="['report:callrecord:batchDownloadSoundRecordAll']"
+                        @click="batchDownloadRecording(2)">
+                        全选下载录音文件
+                    </el-button>
+                </el-col>
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
+                </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" max-height="550" :data="caseList" ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" max-height="550" :data="caseList" ref="multiTable" :row-key="getRowKeys"
+                @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
                 <el-table-column label="订单号" prop="caseId" width="170" :show-overflow-tooltip="true" />
@@ -148,8 +165,8 @@
                 </el-table-column>
                 <el-table-column label="操作" width="200" fixed="right" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" v-if="scope.row.caseId!=null&&scope.row.entrustStatus != 3" type="primary"
-                            @click="handleUpdate(scope.row)">案件详情
+                        <el-button size="mini" v-if="scope.row.caseId!=null&&scope.row.entrustStatus != 3"
+                            type="primary" @click="handleUpdate(scope.row)">案件详情
                         </el-button>
                         <el-button size="mini" v-if="scope.row.path" type="warning" @click="recordingPlay(scope.row)">
                             录音播放
@@ -161,15 +178,17 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <exportDialog @refresh="clearSelection"  :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
-            :requestApi="exportData.requestApi"></exportDialog>
+        <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
+            :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
     </div>
 </template>
 
 <script>
     import operationApi from "@/api/case/operation/index";
     import SearchBar from "@/components/SearchBar/index";
-    import { downLoadZip } from "@/utils/zipdownload";
+    import {
+        downLoadZip
+    } from "@/utils/zipdownload";
     import exportDialog from "../components/exportDialog";
     export default {
         name: "callLogList",
@@ -194,16 +213,16 @@
                 // 角色表格数据
                 caseList: [],
                 // 查询参数
-                searchParams:{},
+                searchParams: {},
                 queryParams: {
                     pageNum: 1,
                     pageSize: 50,
-                    caseStatuss:[]
+                    caseStatuss: []
                 },
                 statusOptions: [],
                 chooseDaterange: [],
                 userList: [],
-                entrustType:[],
+                entrustType: [],
                 exportData: {
                     title: "",
                     dialogVisible: false,
@@ -240,8 +259,8 @@
             getList(type) {
                 this.loading = true;
                 //查询
-                if(type == 1){
-		            this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
+                if (type == 1) {
+                    this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     operationApi.callRecordlist(this.searchParams).then((response) => {
                         this.clearSelection();
                         this.caseList = response.rows;
@@ -250,7 +269,7 @@
                     });
                 }
                 //切换页
-                else if(type == 2){
+                else if (type == 2) {
                     operationApi.callRecordlist(this.searchParams).then((response) => {
                         this.caseList = response.rows;
                         this.total = response.total;
@@ -270,8 +289,8 @@
                 this.single = selection.length != 1;
                 this.multiple = !selection.length;
             },
-            clearSelection(){
-                if(this.caseList.length>0){
+            clearSelection() {
+                if (this.caseList.length > 0) {
                     this.$refs.multiTable.clearSelection(); //清除选中的数据
                     this.ids = [];
                     this.selection = [];
@@ -284,7 +303,13 @@
                 this.exportData.dialogVisible = true;
                 this.exportData.requestApi = "/report/callRecord/export";
             },
-            batchDownloadRecording() {
+            /** 导出按钮操作 */
+            handleExportAll() {
+                this.exportData.title = "全选案件导出";
+                this.exportData.dialogVisible = true;
+                this.exportData.requestApi = "/report/callRecord/exportAll";
+            },
+            batchDownloadRecording(type) {
                 const queryParams = this.ids.join(',')
                 this.$confirm("是否确认下载选中的录音文件?", "警告", {
                         confirmButtonText: "确定",
@@ -292,8 +317,14 @@
                         type: "warning",
                     })
                     .then(function () {
-                        downLoadZip("/report/callRecord/batchDownloadSoundRecord?ids=" + queryParams, "ruoyi");
-                         this.clearSelection();
+                        if (type == 1) {
+                            downLoadZip("/report/callRecord/batchDownloadSoundRecord?ids=" + queryParams, "ruoyi");
+                            this.clearSelection();
+                        } else {
+                            downLoadZip("/report/callRecord/batchDownloadSoundRecordAll?ids=" + queryParams,
+                                "ruoyi");
+                            this.clearSelection();
+                        }
                     })
                     .catch(function () {});
             },

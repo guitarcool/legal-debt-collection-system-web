@@ -231,6 +231,14 @@ const cuttingAfterApi = {
         data: data
         })
     },    
+    // 重发短信集合
+    batchResendAll(data) {
+        return request({
+        url: '/shortMsg/batchResendAll',
+        method: 'post',
+        data: data
+        })
+    },   
     //获取正确的短信内容
     turnContent(data) {
         return request({

@@ -70,6 +70,10 @@
                     <el-button type="danger" size="mini" :disabled="multiple" v-hasPermi="['report:signrecord:export']" @click="handleExport">导出
                     </el-button>
                 </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" size="mini" v-hasPermi="['report:signrecord:exportAll']" @click="handleExportAll">全选导出
+                    </el-button>
+                </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection"></right-toolbar>
             </el-row>
 
@@ -225,6 +229,11 @@
                 this.exportData.title = "案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.requestApi = "/report/signRecord/export";
+            },
+            handleExportAll(){
+                this.exportData.title = "全选案件导出";
+                this.exportData.dialogVisible = true;
+                this.exportData.requestApi = "/report/signRecord/exportAll";
             },
             handleUpdate(item) {
                 window.open(process.env.VUE_APP_BASE_API + item.clericalPath);
