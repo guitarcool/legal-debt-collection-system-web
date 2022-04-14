@@ -181,7 +181,7 @@
                     <el-col :span="24">
                         <el-form-item label="度言账户">
                             <el-select style="width:250px" filterable v-model="form.accountId" clearable placeholder="请选择">
-                                <el-option v-for="item in acountList" :key="item" :label="item" :value="item"
+                                <el-option v-for="item in acountList" :key="item.account_id" :label="item.name" :value="item.account_id"
                                     :disabled="item.status == 1"></el-option>
                             </el-select>
                         </el-form-item>
@@ -379,6 +379,7 @@
         created() {
             this.getList();
             this.getTreeselect();
+            this.getAccountList();
             this.getDicts("sys_normal_disable").then((response) => {
                 this.statusOptions = response.data;
             });
@@ -400,6 +401,13 @@
                         this.loading = false;
                     }
                 );
+            },
+            getAccountList(){
+                getAccountList().then((response) => {
+                    // response.data.forEach(element => {
+                    this.acountList = response.data
+                    // });
+                })
             },
             /** 查询部门下拉树结构 */
             getTreeselect() {
@@ -494,11 +502,6 @@
                 let token = JSON.parse(sessionStorage.getItem("token"));
                 // if(token!=0){
                 //   this.token = true;
-                getAccountList().then((response) => {
-                    // response.data.forEach(element => {
-                    this.acountList = response.data
-                    // });
-                })
                 // }      
             },
             /** 修改按钮操作 */
@@ -510,11 +513,6 @@
                 // let token = JSON.parse(sessionStorage.getItem("token"));
                 // if(token!=0){
                 //   this.token = true;
-                getAccountList().then((response) => {
-                    // response.data.forEach(element => {
-                    this.acountList = response.data
-                    // });
-                })
                 // }      
                 getUser(userId).then((response) => {
                     this.form = response.data;
@@ -522,7 +520,7 @@
                     this.roleOptions = response.roles;
                     this.form.postIds = response.postIds;
                     this.form.roleIds = response.roleIds;
-                    // this.form.accountId = response.accountId;
+                    this.form.accountId = Number(response.data.accountId)||'';
                     this.open = true;
                     this.title = "修改用户";
                     this.form.password = "";
