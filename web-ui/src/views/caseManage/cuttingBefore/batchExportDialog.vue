@@ -31,19 +31,19 @@
                         </li>
                     </ul>
                 </div>
-                <div class="margin-div" v-if="title == '批量生成律师函'">
+                <div class="margin-div" v-if="title == '批量生成律师函'|| title == '全选生成律师函'">
                     <p class="book-title">3、是否显示页码：</p>
                     <el-switch v-model="isShow" active-color="#13ce66" inactive-color="#ff4949" :active-value="1"
                         :inactive-value="0">
                     </el-switch>
                 </div>
-                <div class="margin-div" v-if="title == '批量生成律师函'">
+                <div class="margin-div" v-if="title == '批量生成律师函'|| title == '全选生成律师函'">
                     <p class="book-title">4、申请日期：</p>
                     <el-date-picker v-model="applyDate" type="date" placeholder="选择日期" format="yyyy-MM-dd"
                         value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </div>
-                <div class="margin-div" v-if="title == '批量生成律师函'">
+                <div class="margin-div" v-if="title == '批量生成律师函'|| title == '全选生成律师函'">
                     <p class="book-title">5、导出文档格式：</p>
                     <el-radio-group v-model="suffix">
                         <el-radio :label="1">.docx</el-radio>
@@ -156,6 +156,9 @@
                 if (this.title == "批量生成律师函") {
                     this.data[0].name = "律师函模版";
                 }
+                if (this.title == "全选生成律师函") {
+                    this.data[0].name = "律师函模版";
+                }
                 this.getList();
             },
             // 提交
@@ -170,7 +173,7 @@
                 let param = {};
                 param.ids = this.params;
                 param.templateId = this.templateId;
-                if (this.title == "批量生成律师函") {
+                if (this.title == "批量生成律师函" || this.title == "全选生成律师函") {
                     param.isShow = this.isShow;
                     param.needSignTemplate = this.needSignTemplate;
                     param.applyDate = this.applyDate;
@@ -274,10 +277,11 @@
                                 item.templateType == 2 &&
                                 item.status == 1
                             ) {
+                            console.log(item);
                                 this.data[0].children.push(item);
                             }
                         }
-                        if (this.title == "批量生成律师函") {
+                        if (this.title == "批量生成律师函" || this.title == "全选生成律师函") {
                             if (
                                 item.formatType == 0 &&
                                 item.templateType == 2 &&

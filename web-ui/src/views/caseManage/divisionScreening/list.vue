@@ -57,7 +57,7 @@
                 </el-form-item>
                 <el-form-item label="联系结果：">
                     <el-select size="small" multiple collapse-tags filterable clearable
-                        v-model="queryParams.medLabelArr" placeholder="请选择">
+                        v-model="queryParams.medLabels" placeholder="请选择">
                         <el-option v-for="item in contactResultOptions" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>

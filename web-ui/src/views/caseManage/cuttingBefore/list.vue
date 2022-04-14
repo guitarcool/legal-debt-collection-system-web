@@ -57,7 +57,7 @@
                 </el-form-item>
                 <el-form-item label="联系结果：">
                     <el-select size="small" multiple collapse-tags filterable clearable
-                        v-model="queryParams.medLabelArr" placeholder="请选择">
+                        v-model="queryParams.medLabels" placeholder="请选择">
                         <el-option v-for="item in contactResultOptions" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
@@ -194,8 +194,8 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" size="mini" @click="batchLawyer"
-                        v-hasPermi="['case:pretrial:instrumentBatchAll']">全选批量生成律师函
+                    <el-button type="success" size="mini" @click="batchLawyerAll"
+                        v-hasPermi="['case:pretrial:instrumentBatchAll']">全选生成律师函
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -246,7 +246,7 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="success" size="mini"
-                        v-hasPermi="['case:pretrial:shortMsg']" @click="handleMessage">全选批量短信发送
+                        v-hasPermi="['case:pretrial:shortMsg']" @click="handleMessageAll">全选批量短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -852,8 +852,8 @@
                 this.batchData.params = this.ids.join(",");
             },
             //批量生成律师函
-            batchLawyer() {
-                this.batchData.title = "全选批量生成律师函";
+            batchLawyerAll() {
+                this.batchData.title = "全选生成律师函";
                 this.batchData.dialogVisible = true;
                 this.batchData.requestApi = "/case/pretrial/instrument/batchAll";
             },
