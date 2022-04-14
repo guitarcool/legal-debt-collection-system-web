@@ -7,7 +7,7 @@
                     <p class="book-title">1、选择文书模版：</p>
                     <el-input clearable placeholder="输入关键字进行过滤" v-model="filterText">
                     </el-input>
-                    <el-scrollbar style="height:250px;" v-if="title =='批量生成多人多案文书'">
+                    <el-scrollbar style="height:250px;" v-if="title =='批量生成多人多案文书'||title == '全选生成多人多案文书'">
                         <el-tree :data="dataTwo" class="border-style" :props="defaultProps" node-key="id"
                             :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
                             @node-click="handleNodeClick" default-expand-all />
@@ -45,7 +45,7 @@
                         value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </div>
-                <div class="margin-div" v-if="title =='批量生成多人多案文书'">
+                <div class="margin-div" v-if="title =='批量生成多人多案文书'||title == '全选生成多人多案文书'">
                     <p class="book-title">4、每份文书的合并案件数量：</p>
                     <el-input v-model="caseNumOnePaper" style="width:220px" placeholder="请输入数量,不超过100个"></el-input>
                 </div>
@@ -63,16 +63,14 @@
                         <el-radio :label="3">.xlsx</el-radio>
                     </el-radio-group>
                 </div>
-                <div class="margin-div" v-show="title =='批量生成多人多案文书'">
+                <div class="margin-div" v-show="title =='批量生成多人多案文书'||title == '全选生成多人多案文书'">
                     <p class="book-title">6、自定义案件顺序：</p>
                     <div class="demo">
-                    <el-table :data="selection" border row-key="id" align="left">
-                        <el-table-column ref="tableColumn" v-for="(item, index) in col"
-                            :key="`col_${index}`"
-                            :prop="dropCol[index].prop"
-                            :label="item.label"> 
-                        </el-table-column>
-                    </el-table>                        
+                        <el-table :data="selection" border row-key="id" align="left">
+                            <el-table-column ref="tableColumn" v-for="(item, index) in col" :key="`col_${index}`"
+                                :prop="dropCol[index].prop" :label="item.label">
+                            </el-table-column>
+                        </el-table>
                     </div>
 
                 </div>
@@ -135,7 +133,7 @@
             filterText(val) {
                 this.$refs.tree.filter(val);
             },
-            selection(val){
+            selection(val) {
                 this.ids = val.map((item) => item.id);
             }
         },
@@ -145,32 +143,30 @@
                     children: "children",
                     label: "name",
                 },
-                col: [
-                    {
-                    label: '姓名',
-                    prop: 'respondentName'
+                col: [{
+                        label: '姓名',
+                        prop: 'respondentName'
                     },
                     {
-                    label: '订单号',
-                    prop: 'id'
+                        label: '订单号',
+                        prop: 'id'
                     },
                     {
-                    label: '合同号',
-                    prop: 'orderNo'
+                        label: '合同号',
+                        prop: 'orderNo'
                     }
                 ],
-                dropCol: [
-                    {
-                    label: '姓名',
-                    prop: 'respondentName'
+                dropCol: [{
+                        label: '姓名',
+                        prop: 'respondentName'
                     },
                     {
-                    label: '订单号',
-                    prop: 'id'
+                        label: '订单号',
+                        prop: 'id'
                     },
                     {
-                    label: '合同号',
-                    prop: 'orderNo'
+                        label: '合同号',
+                        prop: 'orderNo'
                     }
                 ],
                 filterText: "",
@@ -195,12 +191,12 @@
                 applyDate: "",
                 isShow: 0,
                 suffix: 1,
-                ids:[],
+                ids: [],
                 caseNumOnePaper: "",
                 templateIdArr: [],
                 loading: false,
                 needSignTemplate: [],
-                drawBodyWrapper:'',
+                drawBodyWrapper: '',
             };
         },
         computed: {
@@ -236,7 +232,7 @@
                 this.suffix = 1;
                 this.filterText = "";
                 this.getList();
-                this.$nextTick(()=>{
+                this.$nextTick(() => {
                     const drawBodyWrapper = document.querySelector('.el-dialog__body tbody')
                     this.drawBodyWrapper = drawBodyWrapper;
                     this.rowDrop()
@@ -247,9 +243,12 @@
                 const tbody = this.drawBodyWrapper
                 const _this = this
                 Sortable.create(tbody, {
-                    onEnd({ newIndex, oldIndex }) {
-                    const currRow = _this.selection.splice(oldIndex, 1)[0]
-                    _this.selection.splice(newIndex, 0, currRow)
+                    onEnd({
+                        newIndex,
+                        oldIndex
+                    }) {
+                        const currRow = _this.selection.splice(oldIndex, 1)[0]
+                        _this.selection.splice(newIndex, 0, currRow)
                     }
                 })
             },
@@ -270,11 +269,11 @@
                             ".docx" : this.suffix == 2 ?
                             ".pdf" : ".xlsx",
                     };
-                //批量
+                    //批量
                 } else {
-                    if (this.title == '批量生成多人多案文书') {
+                    if (this.title == '批量生成多人多案文书' || this.title == '全选生成多人多案文书') {
                         param.ids = this.ids.join(",");
-                        if (this.caseNumOnePaper > 100){
+                        if (this.caseNumOnePaper == ''||this.caseNumOnePaper > 100) {
                             this.msgError('请填写正确的合并数量')
                             return
                         }
@@ -293,7 +292,7 @@
                     param.caseNumOnePaper = this.caseNumOnePaper;
                     param.templateIdArr = this.templateIdArr.join(",");
                     param.needSignTemplate = this.needSignTemplate.join(","),
-                    param.applyDate = this.applyDate;
+                        param.applyDate = this.applyDate;
                     param.isShow = this.isShow;
                     param.suffix =
                         this.suffix == 1 ?

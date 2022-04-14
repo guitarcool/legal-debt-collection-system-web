@@ -51,18 +51,24 @@
         <div class="box-contnet-wrap">
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
-                    <el-button type="success" size="mini" :disabled="multiple" @click="handleMessage">批量文书短信发送
+                    <el-button type="danger" size="mini" :disabled="multiple" @click="handleMessage">批量文书短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="danger" size="mini" :disabled="multiple" v-hasPermi="['template:clerical:batchDownloadClerical']" @click="handleOnRecord">批量文书下载
+                    <el-button type="success" size="mini" v-hasPermi="['shortMsg:clericalRecords:sendsAll']"
+                        @click="handleMessageAll">全选文书短信发送
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="danger" size="mini" :disabled="multiple"
+                        v-hasPermi="['template:clerical:batchDownloadClerical']" @click="handleOnRecord">批量文书下载
                     </el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
-            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
-                :row-key="getRowKeys" @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange"
+                ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="合同号" prop="orderNo" :show-overflow-tooltip="true" fixed="left" width="150" />
                 <el-table-column label="订单号" prop="caseId" :show-overflow-tooltip="true" fixed="left" width="150" />
@@ -260,14 +266,14 @@
                     })
                     .then(() => {
                         let data = {
-                          clericalIds: that.ids.join(",")
+                            clericalIds: that.ids.join(",")
                         }
                         templateApi.batchDownloadClerical(data).then((res) => {
-                                if (res.code === 200) {
-                                    that.msgSuccess("操作成功");
-                                    that.clearSelection();
-                                    that.download(res.msg);
-                                }
+                            if (res.code === 200) {
+                                that.msgSuccess("操作成功");
+                                that.clearSelection();
+                                that.download(res.msg);
+                            }
                         });
                     })
                     .catch(() => {
@@ -280,10 +286,15 @@
                     this.msgError("所选数据存在已结案的数据，不能批量发送短信");
                     return;
                 }
-                this.batchDialogData.title = "批量短信发送";
+                this.batchDialogData.title = "批量文书短信发送";
                 this.batchDialogData.dialogVisible = true;
                 this.batchDialogData.red = false;
                 this.batchDialogData.params = this.ids.join(",");
+            },
+            handleMessageAll() {
+                this.batchDialogData.title = "全选文书短信发送";
+                this.batchDialogData.dialogVisible = true;
+                this.batchDialogData.red = false;
             },
         },
     };

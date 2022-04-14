@@ -54,13 +54,23 @@
         <div class="box-contnet-wrap">
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatus != 13" type="danger" size="mini" :disabled="multiple"
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="danger" size="mini" :disabled="multiple"
                         @click="handleCaseStatusMessage">批量短信发送
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="success" size="mini"
+                        @click="handleCaseStatusMessageAll">全选短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="warning" icon="el-icon-download" size="mini" @click="batchBook"
                         :disabled="multiple" v-hasPermi="['case:clerical:instrumentBatch']">批量生成调解文书
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-download" size="mini" @click="batchBookAll"
+                        v-hasPermi="['case:clerical:instrumentBatch']">全选生成调解文书
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -71,6 +81,11 @@
                 <el-col :span="1.5">
                     <el-button type="primary" icon="el-icon-download" size="mini" @click="batchBookTwo"
                         :disabled="multiple" v-hasPermi="['case:clerical:instrumentBatch']">批量生成多人多案文书
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-download" size="mini" @click="batchBookTwoAll"
+                        v-hasPermi="['case:clerical:instrumentBatch']">全选生成多人多案文书
                     </el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
@@ -307,6 +322,12 @@
                 this.mediationBookData.params = this.ids.join(",");
                 this.mediationBookData.id = "";
             },
+            batchBookAll() {
+                this.mediationBookData.title = "全选生成调解文书";
+                this.mediationBookData.dialogVisible = true;
+                this.mediationBookData.requestApi = "/case/caseInfo/instrument/batchAll";
+                this.mediationBookData.id = "";
+            },
             batchBookTwo() {
                 this.mediationBookData.title = "批量生成多人多案文书";
                 this.mediationBookData.selection = this.selection;
@@ -315,12 +336,20 @@
                 this.mediationBookData.params = this.ids.join(",");
                 this.mediationBookData.id = "";
             },
+            batchBookTwoAll() {
+                this.mediationBookData.title = "全选生成多人多案文书";
+                this.mediationBookData.selection = this.selection;
+                this.mediationBookData.dialogVisible = true;
+                this.mediationBookData.requestApi = "/case/caseInfo/mumc/instrument/batchAll";
+                this.mediationBookData.params = this.ids.join(",");
+                this.mediationBookData.id = "";
+            },
             changeStatus() {
                 this.getList(1);
             },
             //打开发送短信的弹窗
             handleCaseStatusMessage() {
-                if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
+                if (this.selection.filter((item) => item.caseStatuss.indexOf('13')>-1 == true).length > 0) {
                     this.msgError("所选数据存在已结案的数据，不能批量发送短信");
                     return;
                 }
@@ -328,6 +357,12 @@
                 this.batchexportDialogData.dialogVisible = true;
                 this.batchexportDialogData.red = false;
                 this.batchexportDialogData.params = this.ids.join(",");
+            },
+            //打开发送短信的弹窗
+            handleCaseStatusMessageAll() {
+                this.batchexportDialogData.title = "全选短信发送";
+                this.batchexportDialogData.dialogVisible = true;
+                this.batchexportDialogData.red = false;
             },
             handleMessage(item) {
                 this.messageData.title = "生成短信/邮件";

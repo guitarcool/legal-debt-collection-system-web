@@ -185,7 +185,7 @@
                         label: '定时发送'
                     }
                 ],
-                upload_url: process.env.VUE_APP_BASE_API + "/shortMsg/batchClericalSMSFile", //上传URL
+                upload_url: '',
                 files: null,
                 // 是否禁用上传
                 isUploading: false,
@@ -257,8 +257,8 @@
                 this.files = null;
                 this.data[0].children = [];
                 this.providerType = "";
-                this.filterDeliverStatus= [];
-                this.phoneStatus = [6,0,8,3,12,13,14];
+                this.filterDeliverStatus = [];
+                this.phoneStatus = [6, 0, 8, 3, 12, 13, 14];
                 this.filterRealtimeStatus = [3, 7, 5, 6, 8, 9, 10, -3];
                 this.filterNetworkStatus = [2, 4003];
                 this.getList();
@@ -372,6 +372,11 @@
                             withCredentials: true
                         });
                         instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken()
+                        if (this.title == '全选文书短信发送') {
+                            this.upload_url = process.env.VUE_APP_BASE_API + "/shortMsg/batchClericalWithFileSMSAll"; //上传URL
+                        } else {
+                            this.upload_url = process.env.VUE_APP_BASE_API + "/shortMsg/batchClericalSMSFile"; //上传URL
+                        }
                         var that = this
                         instance({
                             method: 'post',
@@ -409,20 +414,37 @@
                             providerType: this.providerType,
                             sendTime: this.signatureDate ? this.signatureDate : '',
                         }
-                        cuttingAfterApi.sendSmsWenshu(param).then((res) => {
-                                if (res.code == 500) {
+                        if (this.title == '全选文书短信发送') {
+                            cuttingAfterApi.batchClericalSMSAll(param).then((res) => {
+                                    if (res.code == 500) {
+                                        this.loading = false;
+                                        this.msgError(res.msg);
+                                    } else {
+                                        this.dialogVisible = false;
+                                        this.loading = false;
+                                        this.msgSuccess(res.msg);
+                                        this.$emit('refresh');
+                                    }
+                                })
+                                .catch((error) => {
                                     this.loading = false;
-                                    this.msgError(res.msg);
-                                } else {
-                                    this.dialogVisible = false;
+                                });
+                        } else {
+                            cuttingAfterApi.sendSmsWenshu(param).then((res) => {
+                                    if (res.code == 500) {
+                                        this.loading = false;
+                                        this.msgError(res.msg);
+                                    } else {
+                                        this.dialogVisible = false;
+                                        this.loading = false;
+                                        this.msgSuccess(res.msg);
+                                        this.$emit('refresh');
+                                    }
+                                })
+                                .catch((error) => {
                                     this.loading = false;
-                                    this.msgSuccess(res.msg);
-                                    this.$emit('refresh');
-                                }
-                            })
-                            .catch((error) => {
-                                this.loading = false;
-                            });
+                                });
+                        }
                     }
                 }
             },
@@ -529,9 +551,10 @@
         display: flex;
         align-items: center;
         padding: 5px;
-        p{
+
+        p {
             text-align: left;
-            width:154px;
+            width: 154px;
             white-space: pre;
         }
     }

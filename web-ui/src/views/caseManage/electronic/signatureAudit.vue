@@ -54,7 +54,11 @@
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
                     <el-button type="primary" size="mini" @click="editApply" :disabled="multiple"
-                        icon="el-icon-download">签章批量审核</el-button>
+                        icon="el-icon-download">批量签章审核</el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" size="mini" @click="editApplyAll" v-hasPermi="['sign:apply:checkAll']"
+                        icon="el-icon-download">全选签章审核</el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
@@ -262,6 +266,12 @@
                 this.applyData.type = 2;
                 this.applyData.dialogVisible = true;
                 this.applyData.ids = this.ids.join(",");
+            },
+            //批量申请审核
+            editApplyAll() {
+                this.applyData.title = "全选文书签章审核";
+                this.applyData.type = 2;
+                this.applyData.dialogVisible = true;
             },
             clearSelection() {
                 if (this.caseList.length > 0) {

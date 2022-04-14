@@ -215,6 +215,24 @@ const cuttingAfterApi = {
         data: data
         })
     }, 
+    // 发送短信集合
+    batchSMSAll(data) {
+        return request({
+        url: '/shortMsg/clerical/batchSMSAll',
+        method: 'post',
+        timeout:500000,
+        data: data
+        })
+    }, 
+    // 发送文书短信集合
+    batchClericalSMSAll(data) {
+        return request({
+        url: '/shortMsg/batchClericalSMSAll',
+        method: 'post',
+        timeout:500000,
+        data: data
+        })
+    },  
     // 发送文书短信集合
     sendSmsWenshu(data) {
         return request({

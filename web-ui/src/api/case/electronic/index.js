@@ -49,6 +49,15 @@ const electronicApi = {
             params: query
         })
     },
+    //审核
+    applyCheckAll(query) {
+        return request({
+            url: '/sign/apply/checkAll',
+            method: 'post',
+            timeout:500000,
+            params: query
+        })
+    },
     // //查看案件信息
     // applyCheck(caseId) {
     //     return request({
