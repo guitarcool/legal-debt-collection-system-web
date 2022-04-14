@@ -130,6 +130,15 @@ const cuttingAfterApi = {
             params:data
         })
     },
+    //申请案件信修
+    applyLetterRepairAll(data){
+        return request({
+            url: '/case/postAdjudged/applyLetterRepairAll',
+            timeout:500000,
+            method: 'post',
+            params:data
+        })
+    },
     //增加已拨次数
     addPhoneNumber(data){
         return request({
@@ -156,6 +165,14 @@ const cuttingAfterApi = {
     pendingExecute(ids){
         return request({
             url: '/case/postAdjudged/pendingExecute/'+ids,
+            method: 'post',
+        })
+    },  
+    // 批量待执行立案
+    pendingExecuteAll(ids){
+        return request({
+            url: '/case/postAdjudged/pendingExecuteAll/'+ids,
+            timeout:500000,
             method: 'post',
         })
     },  
@@ -189,6 +206,15 @@ const cuttingAfterApi = {
         data: data
         })
     },  
+    // 发送短信集合
+    sendSmsCollectionAll(data) {
+        return request({
+        url: '/case/postAdjudged/batchSMS',
+        method: 'post',
+        timeout:500000,
+        data: data
+        })
+    }, 
     // 发送文书短信集合
     sendSmsWenshu(data) {
         return request({
@@ -226,6 +252,7 @@ const cuttingAfterApi = {
         return request({
             url: '/case/postAdjudged/batchExportMediationRecordAll',
             method: 'get',
+            timeout:500000,
             params: query
         })
     },
@@ -242,6 +269,7 @@ const cuttingAfterApi = {
         return request({
             url: '/case/postAdjudged/batchExportNetworkAdjustRecordAll',
             method: 'get',
+            timeout:500000,
             params: query
         })
     },  

@@ -158,12 +158,12 @@
                                 <!-- <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
                                     :key="item.dictValue">
                                     {{ item.dictLabel }}</el-checkbox> -->
-                                <el-checkbox :label="7">待立案</el-checkbox>
-                                <el-checkbox :label="8">已立案</el-checkbox>
-                                <el-checkbox :label="9">已判决</el-checkbox>
-                                <el-checkbox :label="10">待执行立案</el-checkbox>
-                                <el-checkbox :label="11">已执行立案</el-checkbox>
-                                <el-checkbox :label="12">已强制执行</el-checkbox>
+                                <el-checkbox :label="'7'">待立案</el-checkbox>
+                                <el-checkbox :label="'8'">已立案</el-checkbox>
+                                <el-checkbox :label="'9'">已判决</el-checkbox>
+                                <el-checkbox :label="'10'">待执行立案</el-checkbox>
+                                <el-checkbox :label="'11'">已执行立案</el-checkbox>
+                                <el-checkbox :label="'12'">已强制执行</el-checkbox>
                             </el-checkbox-group>
                         </el-form-item>
                         <el-form-item label="财保状态：" class="custom-radio">
@@ -190,7 +190,8 @@
                 </transition>
             </template>
             <template #buttonArea>
-                <el-button size="mini" icon="el-icon-zoom-in" type="success" @click="implicitQuery" style="margin-left:16px">高级查询</el-button>
+                <el-button size="mini" icon="el-icon-zoom-in" type="success" @click="implicitQuery"
+                    style="margin-left:16px">高级查询</el-button>
             </template>
         </search-bar>
         <div class="queryDiv">
@@ -199,48 +200,73 @@
         <div class="box-contnet-wrap" style="margin-top:0">
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatus === 7" type="primary" size="mini" :disabled="multiple"
-                        @click="handleAdd(7)" v-hasPermi="['case:adjudged:filedCase']">批量变更为已立案
+                    <el-button v-if="queryParams.caseStatuss.indexOf('7')>-1 == true" type="primary" size="mini"
+                        :disabled="multiple" @click="handleAdd(7)" v-hasPermi="['case:adjudged:filedCase']">批量变更为已立案
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatus === 8" type="primary" size="mini" :disabled="multiple"
-                        @click="handleAdd(8)" v-hasPermi="['case:adjudged:judged']">批量变更为已判决
+                    <el-button v-if="queryParams.caseStatuss.indexOf('8')>-1 == true" type="primary" size="mini"
+                        :disabled="multiple" @click="handleAdd(8)" v-hasPermi="['case:adjudged:judged']">批量变更为已判决
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatus === 9" type="primary" size="mini" :disabled="multiple"
-                        @click="handleprojectEdit" v-hasPermi="['case:adjudged:pendingExecute']">批量变更为待执行立案
+                    <el-button v-if="queryParams.caseStatuss.indexOf('9')>-1 == true" type="primary" size="mini"
+                        :disabled="multiple" @click="handleprojectEdit(1)"
+                        v-hasPermi="['case:adjudged:pendingExecute']">
+                        批量变更为待执行立案
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatus === 10" type="primary" size="mini" :disabled="multiple"
-                        @click="handleAdd(10)" v-hasPermi="['case:adjudged:executedBatch']">批量变更为已执行立案
+                    <el-button v-if="queryParams.caseStatuss.indexOf('9')>-1 == true" type="success" size="mini"
+                        @click="handleprojectEdit(2)" v-hasPermi="['case:adjudged:pendingExecuteAll']">
+                        全选批量变更为待执行立案
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatus === 11" type="primary" size="mini" :disabled="multiple"
-                        @click="handleAdd(11)" v-hasPermi="['case:adjudged:enforcedBatch']">批量变更为强制执行
+                    <el-button v-if="queryParams.caseStatuss.indexOf('10')>-1 == true" type="primary" size="mini"
+                        :disabled="multiple" @click="handleAdd(10)" v-hasPermi="['case:adjudged:executedBatch']">
+                        批量变更为已执行立案
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatus === 12" type="primary" size="mini" :disabled="multiple"
-                        @click="handleEnforce" v-hasPermi="['case:adjudged:closed']">批量变更为强制结案
+                    <el-button v-if="queryParams.caseStatuss.indexOf('11')>-1 == true" type="primary" size="mini"
+                        :disabled="multiple" @click="handleAdd(11)" v-hasPermi="['case:adjudged:enforcedBatch']">
+                        批量变更为强制执行
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="warning" size="mini" :disabled="multiple" @click="handleAppleEdit"
+                    <el-button v-if="queryParams.caseStatuss.indexOf('12')>-1 == true" type="primary" size="mini"
+                        :disabled="multiple" @click="handleEnforce(1)" v-hasPermi="['case:adjudged:closed']">批量变更为强制结案
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatuss.indexOf('12')>-1 == true" type="success" size="mini"
+                        @click="handleEnforce(2)" v-hasPermi="['case:adjudged:closedAll']">全选批量变更为强制结案
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="warning" size="mini" :disabled="multiple" @click="handleAppleEdit(1)"
                         v-hasPermi="['case:adjudged:letterRepair']">批量申请案件信修
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatus != 13&&token" type="danger" size="mini" :disabled="multiple"
-                        @click="handleAppleCall">批量预测式外呼
+                    <el-button type="success" size="mini" @click="handleAppleEdit(2)"
+                        v-hasPermi="['case:adjudged:letterRepairAll']">全选批量申请案件信修
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatus != 13" type="success" size="mini" :disabled="multiple"
-                        v-hasPermi="['shortMsg:sends']" @click="handleMessage">批量短信发送
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false &&token" type="danger"
+                        size="mini" :disabled="multiple" @click="handleAppleCall">批量预测式外呼
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="primary" size="mini"
+                        :disabled="multiple" v-hasPermi="['shortMsg:sends']" @click="handleMessage">批量短信发送
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="success" size="mini"
+                        v-hasPermi="['case:adjudged:shortMsg']" @click="handleMessage">全选批量短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -250,17 +276,30 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
+                    <el-button type="success" size="mini" v-hasPermi="['case:adjudged:batchExportMediationRecordAll']"
+                        @click="batchExportMediationRecordAll">
+                        全选批量导出调解记录
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
                     <el-button type="danger" size="mini" :disabled="multiple"
                         v-hasPermi="['case:adjudged:batchExportNetworkAdjustRecord']" @click="batchExportAdjestMent">
                         批量导出网调记录
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" size="mini"
+                        v-hasPermi="[' case:adjudged:batchExportNetworkAdjustRecordAll']"
+                        @click="batchExportAdjestMentAll">
+                        全选批量导出网调记录
                     </el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
-                :row-key="getRowKeys" @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange"
+                ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
                 <el-table-column label="手机号" width="120" prop="respondentPhone" fixed="left" />
@@ -344,19 +383,20 @@
         </div>
         <el-dialog :title="form.title" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
             <el-form style="margin: 0 auto;" ref="form" :model="form" :rules="rules" label-width="100px">
-                <el-form-item v-if="form.title=='导出调解记录'" label="导出范围：" prop="exportRange">
+                <el-form-item v-if="form.title=='导出调解记录'||form.title=='全选导出调解记录'" label="导出范围：" prop="exportRange">
                     <el-checkbox-group v-model="form.exportRange">
                         <el-checkbox :label="1">最近一次调解记录</el-checkbox>
                         <el-checkbox :label="2">全部调解记录</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item v-if="form.title=='导出网调记录'" label="导出范围：" prop="exportRange">
+                <el-form-item v-if="form.title=='导出网调记录'||form.title=='全选导出网调记录'" label="导出范围：" prop="exportRange">
                     <el-checkbox-group v-model="form.exportRange">
                         <el-checkbox :label="1">最近一次网调记录</el-checkbox>
                         <el-checkbox :label="2">全部网调记录</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item v-if="form.title=='导出调解记录'" label="是否脱敏：" prop="isDesensitization">
+                <el-form-item v-if="form.title=='导出调解记录'||form.title=='全选导出调解记录'" label="是否脱敏："
+                    prop="isDesensitization">
                     <el-radio-group v-model="form.isDesensitization">
                         <el-radio :label="1">是</el-radio>
                         <el-radio :label="0">否</el-radio>
@@ -365,7 +405,8 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="phoneSubmit(form.title)">确 定</el-button>
+                <el-button type="primary" @click="phoneSubmit(form.title)" :loading="formLoading">
+                    {{formLoading?'导出中':'确定'}}</el-button>
             </span>
         </el-dialog>
         <recordDialog :title="recordData.title" :show.sync="recordData.dialogVisible" :id="recordData.id">
@@ -402,6 +443,7 @@
             return {
                 // 遮罩层
                 loading: false,
+                formLoading: false,
                 // 选中数组
                 ids: [],
                 // 非单个禁用
@@ -425,7 +467,7 @@
                     letterRepairStatus: "",
                     contactStatus: "",
                     repayStatus: "",
-                    caseStatuss:[],
+                    caseStatuss: [],
                     orderByColumn: "",
                     isAsc: "",
                 },
@@ -813,22 +855,21 @@
                 }
             },
             //批量操作
-            handleprojectEdit() {
+            handleprojectEdit(type) {
                 let cannotChoose = [];
                 this.selection.forEach((item) => {
                     if (item.caseStatus === 9) {
                         cannotChoose.push(item.id);
                     }
                 });
-                console.log(cannotChoose);
-                if (cannotChoose.length > 0) {
-                    var that = this;
-                    this.$confirm(`是否变更为待执行立案?`, "提示", {
-                            confirmButtonText: "确定",
-                            cancelButtonText: "取消",
-                            type: "warning",
-                        })
-                        .then(() => {
+                var that = this;
+                this.$confirm(`是否变更为待执行立案?`, "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        type: "warning",
+                    })
+                    .then(() => {
+                        if (cannotChoose.length > 0 && type == 1) {
                             let ids = that.ids.join(",");
                             cuttingAfterApi.pendingExecute(ids).then((res) => {
                                 if (res.code === 200) {
@@ -836,11 +877,19 @@
                                     that.clearSelection();
                                 }
                             });
-                        })
-                        .catch(() => {
-                            that.msgError("已取消操作");
-                        });
-                }
+                        } else {
+                            let ids = that.ids.join(",");
+                            cuttingAfterApi.pendingExecuteAll(ids).then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess("操作成功");
+                                    that.clearSelection();
+                                }
+                            });
+                        }
+                    })
+                    .catch(() => {
+                        that.msgError("已取消操作");
+                    });
             },
             //导出调解记录
             batchExportMediationRecord() {
@@ -849,9 +898,23 @@
                 this.form.isDesensitization = 1;
                 this.dialogVisible = true;
             },
+            //导出调解记录
+            batchExportMediationRecordAll() {
+                this.form.title = '全选导出调解记录';
+                this.form.exportRange = [];
+                this.form.isDesensitization = 1;
+                this.dialogVisible = true;
+            },
             //导出网调记录
             batchExportAdjestMent() {
                 this.form.title = '导出网调记录';
+                this.form.exportRange = [];
+                this.form.isDesensitization = 1;
+                this.dialogVisible = true;
+            },
+            //导出网调记录
+            batchExportAdjestMentAll() {
+                this.form.title = '全选导出网调记录';
                 this.form.exportRange = [];
                 this.form.isDesensitization = 1;
                 this.dialogVisible = true;
@@ -867,6 +930,7 @@
                 if (title == '导出调解记录') {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
+                            this.formLoading = true;
                             let queryParams = {
                                 caseIds: this.ids.join(","),
                                 exportRange: this.form.exportRange.toString(),
@@ -876,15 +940,19 @@
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
                                     this.dialogVisible = false;
+                                    this.formLoading = false;
                                     this.clearSelection();
                                     this.download(res.msg);
                                 }
-                            })
+                            }).catch(() => {
+                                this.formLoading = false;
+                            });
                         }
                     });
                 } else if (title == '导出网调记录') {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
+                            this.formLoading = true;
                             let queryParams = {
                                 caseIds: this.ids.join(","),
                                 exportRange: this.form.exportRange.toString(),
@@ -893,10 +961,56 @@
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
                                     this.dialogVisible = false;
+                                    this.formLoading = false;
                                     this.clearSelection();
                                     this.download(res.msg);
                                 }
-                            })
+                            }).catch(() => {
+                                this.formLoading = false;
+                            });
+                        }
+                    });
+                } else if (title == '全选导出调解记录') {
+                    this.$refs["form"].validate((valid) => {
+                        if (valid) {
+                            this.formLoading = true;
+                            let queryParams = {
+                                caseIds: this.ids.join(","),
+                                exportRange: this.form.exportRange.toString(),
+                                isDesensitization: this.form.isDesensitization,
+                            };
+                            cuttingAfterApi.batchExportMediationRecordAll(queryParams).then(res => {
+                                if (res.code === 200) {
+                                    this.msgSuccess("操作成功");
+                                    this.formLoading = false;
+                                    this.dialogVisible = false;
+                                    this.clearSelection();
+                                    this.download(res.msg);
+                                }
+                            }).catch(() => {
+                                this.formLoading = false;
+                            });
+                        }
+                    });
+                } else if (title == '全选导出网调记录') {
+                    this.$refs["form"].validate((valid) => {
+                        if (valid) {
+                            this.formLoading = true;
+                            let queryParams = {
+                                caseIds: this.ids.join(","),
+                                exportRange: this.form.exportRange.toString(),
+                            };
+                            cuttingAfterApi.batchExportNetworkAdjustRecordAll(queryParams).then(res => {
+                                if (res.code === 200) {
+                                    this.msgSuccess("操作成功");
+                                    this.formLoading = false;
+                                    this.dialogVisible = false;
+                                    this.clearSelection();
+                                    this.download(res.msg);
+                                }
+                            }).catch(() => {
+                                this.formLoading = false;
+                            });
                         }
                     });
                 }
@@ -914,22 +1028,22 @@
                 this.single = selection.length != 1;
                 this.multiple = !selection.length;
             },
-            /** 导出按钮操作 */
-            handleExport() {
-                const queryParams = this.queryParams;
-                this.$confirm("是否确认导出所有数据项?", "警告", {
-                        confirmButtonText: "确定",
-                        cancelButtonText: "取消",
-                        type: "warning",
-                    })
-                    .then(function () {
-                        return divisionApi.export(queryParams);
-                    })
-                    .then((response) => {
-                        this.download(response.msg);
-                    })
-                    .catch(function () {});
-            },
+            // /** 导出按钮操作 */
+            // handleExport() {
+            //     const queryParams = this.queryParams;
+            //     this.$confirm("是否确认导出所有数据项?", "警告", {
+            //             confirmButtonText: "确定",
+            //             cancelButtonText: "取消",
+            //             type: "warning",
+            //         })
+            //         .then(function () {
+            //             return divisionApi.export(queryParams);
+            //         })
+            //         .then((response) => {
+            //             this.download(response.msg);
+            //         })
+            //         .catch(function () {});
+            // },
             /** 案件分发 */
             handleDivision(item) {
                 this.divisionData.title = "案件分发";
@@ -998,7 +1112,7 @@
                 return this.selectDictLabel(this.xuanwuStatus, deliverStatus);
             },
             //申请案件信修
-            handleAppleEdit() {
+            handleAppleEdit(type) {
                 let cannotChoose = [];
                 this.selection.forEach((item) => {
                     if (item.letterRepairStatus == 1 || item.letterRepairStatus == 2) {
@@ -1020,17 +1134,29 @@
                             type: "warning",
                         })
                         .then(() => {
-                            let param = {
-                                ids: that.ids.join(","),
-                            };
-                            cuttingAfterApi.applyCaseEdit(param).then((res) => {
-                                if (res.code === 200) {
-                                    that.msgSuccess(res.msg);
-                                    that.clearSelection();
-                                } else if (res.code === 500) {
-                                    that.msgError(res.msg);
-                                }
-                            });
+                            if (type == 1) {
+                                let param = {
+                                    ids: that.ids.join(","),
+                                };
+                                cuttingAfterApi.applyCaseEdit(param).then((res) => {
+                                    if (res.code === 200) {
+                                        that.msgSuccess(res.msg);
+                                        that.clearSelection();
+                                    } else if (res.code === 500) {
+                                        that.msgError(res.msg);
+                                    }
+                                });
+                            } else {
+                                cuttingAfterApi.applyLetterRepairAll().then((res) => {
+                                    if (res.code === 200) {
+                                        that.msgSuccess(res.msg);
+                                        that.clearSelection();
+                                    } else if (res.code === 500) {
+                                        that.msgError(res.msg);
+                                    }
+                                });
+                            }
+
                         })
                         .catch(() => {
                             that.msgError("已取消操作");
@@ -1038,7 +1164,7 @@
                 }
             },
             //批量强制执行
-            handleEnforce() {
+            handleEnforce(type) {
                 let cannotChoose = [];
                 this.selection.forEach((item) => {
                     if (item.caseStatus != 12) {
@@ -1061,15 +1187,25 @@
                             type: "warning",
                         })
                         .then(() => {
-                            let param = {};
-                            cuttingAfterApi
-                                .common(`/case/postAdjudged/closed?id=${ids}`, param)
-                                .then((res) => {
-                                    if (res.code === 200) {
-                                        that.msgSuccess("操作成功");
-                                        that.clearSelection();
-                                    }
-                                });
+                            if (type == 1) {
+                                let param = {};
+                                cuttingAfterApi.common(`/case/postAdjudged/closed?id=${ids}`, param)
+                                    .then((res) => {
+                                        if (res.code === 200) {
+                                            that.msgSuccess("操作成功");
+                                            that.clearSelection();
+                                        }
+                                    });
+                            } else {
+                                let param = {};
+                                cuttingAfterApi.common(`/case/postAdjudged/closedAll?id=${ids}`, param)
+                                    .then((res) => {
+                                        if (res.code === 200) {
+                                            that.msgSuccess("操作成功");
+                                            that.clearSelection();
+                                        }
+                                    });
+                            }
                         })
                         .catch(() => {
                             that.msgError("已取消操作");
@@ -1132,6 +1268,12 @@
                 this.batchexportDialogData.dialogVisible = true;
                 this.batchexportDialogData.red = false;
                 this.batchexportDialogData.params = this.ids.join(",");
+            },
+            //打开发送短信的弹窗
+            handleMessageAll() {
+                this.batchexportDialogData.title = "全选批量短信发送";
+                this.batchexportDialogData.dialogVisible = true;
+                this.batchexportDialogData.red = false;
             },
             //高级查询
             implicitQuery() {
