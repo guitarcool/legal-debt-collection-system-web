@@ -380,8 +380,7 @@
                 </el-table-column>
                 <el-table-column label="最近一次调解时间" width="160" prop="mediateTime">
                 </el-table-column>
-                <el-table-column label="前通话记录" width="160" prop="lastCallTime" sortable="custom"
-                    :sort-orders="['descending', 'ascending']"></el-table-column>
+                <el-table-column label="前通话记录" width="160" prop="lastCallTime"></el-table-column>
                 <el-table-column label="最近一次短信发送状态" width="160" prop="deliverStatus">
                     <template slot-scope="scope" v-if="scope.row.deliverStatus != null">
                         <span

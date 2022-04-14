@@ -346,8 +346,7 @@
                 </el-table-column>
                 <el-table-column label="最近一次网调标签" width="150" :formatter="getAdjustType" prop="networkAdjustLabel">
                 </el-table-column>
-                <el-table-column label="前通话记录" width="160" prop="lastCallTime" sortable="custom"
-                    :sort-orders="['descending', 'ascending']"></el-table-column>
+                <el-table-column label="前通话记录" width="160" prop="lastCallTime"></el-table-column>
                 <el-table-column label="最近一次网调时间" width="160" prop="networkAdjustTime">
                 </el-table-column>
                 <el-table-column label="调解员" prop="principalName" width="140" />
