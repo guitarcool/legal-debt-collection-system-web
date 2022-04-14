@@ -271,27 +271,27 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="primary" size="mini" :disabled="multiple"
-                        v-hasPermi="['case:adjudged:batchExportMediationRecord']" @click="batchExportMediationRecord">
-                        批量导出调解记录
+                        v-hasPermi="['case:adjudged:batchExportMediationRecord']" @click="batchExportMediationRecord('导出调解记录')">
+                        批量调解记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="success" size="mini" v-hasPermi="['case:adjudged:batchExportMediationRecordAll']"
-                        @click="batchExportMediationRecordAll">
-                        全选批量导出调解记录
+                        @click="batchExportMediationRecord('全选导出调解记录')">
+                        全选导出调解记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" size="mini" :disabled="multiple"
-                        v-hasPermi="['case:adjudged:batchExportNetworkAdjustRecord']" @click="batchExportAdjestMent">
-                        批量导出网调记录
+                        v-hasPermi="['case:adjudged:batchExportNetworkAdjustRecord']" @click="batchExportMediationRecord('导出网调记录')">
+                        导出网调记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="success" size="mini"
                         v-hasPermi="[' case:adjudged:batchExportNetworkAdjustRecordAll']"
-                        @click="batchExportAdjestMentAll">
-                        全选批量导出网调记录
+                        @click="batchExportMediationRecord('全选导出网调记录')">
+                        全选导出网调记录
                     </el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
@@ -892,29 +892,9 @@
                     });
             },
             //导出调解记录
-            batchExportMediationRecord() {
-                this.form.title = '导出调解记录';
-                this.form.exportRange = [];
-                this.form.isDesensitization = 1;
-                this.dialogVisible = true;
-            },
-            //导出调解记录
-            batchExportMediationRecordAll() {
-                this.form.title = '全选导出调解记录';
-                this.form.exportRange = [];
-                this.form.isDesensitization = 1;
-                this.dialogVisible = true;
-            },
-            //导出网调记录
-            batchExportAdjestMent() {
-                this.form.title = '导出网调记录';
-                this.form.exportRange = [];
-                this.form.isDesensitization = 1;
-                this.dialogVisible = true;
-            },
-            //导出网调记录
-            batchExportAdjestMentAll() {
-                this.form.title = '全选导出网调记录';
+            batchExportMediationRecord(title) {
+                this.form.title = title;
+                this.formLoading = false;
                 this.form.exportRange = [];
                 this.form.isDesensitization = 1;
                 this.dialogVisible = true;

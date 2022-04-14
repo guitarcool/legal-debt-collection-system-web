@@ -115,7 +115,12 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" size="mini" @click="handleAdd" v-hasPermi="['case:financial:import']">
+                    <el-button type="success" size="mini" @click="handleExportAll"
+                        icon="el-icon-download" v-hasPermi="['case:financial:exportAll']">全选导出
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="danger" size="mini" @click="handleAdd" v-hasPermi="['case:financial:import']">
                         批量导入还款信息
                     </el-button>
                 </el-col>
@@ -156,14 +161,14 @@
                 <el-table-column label="还款状态" width="150" :show-overflow-tooltip="true" :formatter="repayStatusFormat"
                     prop="repayStatus">
                 </el-table-column>
-                <el-table-column label="汇款账户" width="150" prop="accountNo" />
+                <el-table-column label="汇款账户" width="180" prop="accountNo" />
                 <el-table-column label="汇款金额" width="150" prop="amount" />
                 <el-table-column label="汇款类型" width="150" :show-overflow-tooltip="true" :formatter="repayTypeFormat"
                     prop="repayType">
                 </el-table-column>
-                <el-table-column label="收款账户" width="150" prop="accountNoShou" />
-                <el-table-column label="收款账户名" width="150" prop="accountName" />
-                <el-table-column label="开户行名称" width="150" prop="openbankName" />
+                <el-table-column label="收款账户" width="180" :show-overflow-tooltip="true" prop="accountNoShou" />
+                <el-table-column label="收款账户名" width="150" :show-overflow-tooltip="true" prop="accountName" />
+                <el-table-column label="开户行名称" width="150" :show-overflow-tooltip="true" prop="openbankName" />
                 <el-table-column label="回款渠道" width="150" :show-overflow-tooltip="true" :formatter="payChannalFormat"
                     prop="payChannal">
                 </el-table-column>
@@ -420,6 +425,12 @@
                 this.exportData.title = "案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.requestApi = "/case/financial/export";
+            },
+            /** 导出按钮操作 */
+            handleExportAll() {
+                this.exportData.title = "全选案件导出";
+                this.exportData.dialogVisible = true;
+                this.exportData.requestApi = "/case/financial/exportAll";
             },
             changeStatus() {
                 this.getList(1);

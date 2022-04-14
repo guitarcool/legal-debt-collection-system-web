@@ -8,15 +8,16 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="订单号：">
-                    <el-input v-model="queryParams.caseId" placeholder="请输入订单号" clearable size="small" style="width: 240px"
-                        @keyup.enter.native="handleQuery" />
+                    <el-input v-model="queryParams.caseId" placeholder="请输入订单号" clearable size="small"
+                        style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="催收机构：">
                     <el-input v-model="queryParams.deptId" placeholder="请输入催收机构，多个催收机构用英文逗号连接" clearable type="textarea"
                         size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="调解员：">
-                    <el-select clearable filterable collapse-tags  multiple size="small" @change="handleMediation" v-model="mediation" placeholder="请选择">
+                    <el-select clearable filterable collapse-tags multiple size="small" @change="handleMediation"
+                        v-model="mediation" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -61,30 +62,51 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-download" size="mini" @click="handleExportAll"
+                        v-hasPermi="['case:withdrawal:exportAll']">全选导出
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
                     <el-button type="primary" size="mini" :disabled="multiple"
-                        v-hasPermi="['case:withdrawal:batchExportMediationRecord']" @click="batchExportMediationRecord">
-                        批量导出调解记录
+                        v-hasPermi="['case:withdrawal:batchExportMediationRecord']"
+                        @click="batchExportMediationRecord('导出调解记录')">
+                        导出调解记录
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" size="mini" v-hasPermi="['case:withdrawal:batchExportMediationRecordAll']"
+                        @click="batchExportMediationRecord('全选导出调解记录')">
+                        全选导出调解记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" size="mini" :disabled="multiple"
-                        v-hasPermi="['case:withdrawal:batchExportNetworkAdjustRecord']" @click="batchExportAdjestMent">
-                        批量导出网调记录
+                        v-hasPermi="['case:withdrawal:batchExportNetworkAdjustRecord']"
+                        @click="batchExportMediationRecord('导出网调记录')">
+                        导出网调记录
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" size="mini"
+                        v-hasPermi="['case:withdrawal:batchExportNetworkAdjustRecordAll']"
+                        @click="batchExportMediationRecord('全选导出网调记录')">
+                        全选导出网调记录
                     </el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" max-height="550" border :data="caseList" ref="multiTable" :row-key="getRowKeys"
-                @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" max-height="550" border :data="caseList" ref="multiTable"
+                :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
-                <el-table-column label="姓名" width="80" prop="respondentName" :show-overflow-tooltip="true" fixed="left" />
+                <el-table-column label="姓名" width="80" prop="respondentName" :show-overflow-tooltip="true"
+                    fixed="left" />
                 <el-table-column label="订单号" prop="caseId" width="170" :show-overflow-tooltip="true" />
-                <el-table-column label="催收机构" width="150" prop="deptName" :show-overflow-tooltip="true"/>
+                <el-table-column label="催收机构" width="150" prop="deptName" :show-overflow-tooltip="true" />
                 <el-table-column label="调解员" width="150" prop="mediationName" />
-                <el-table-column label="借款平台名称" width="180" prop="platform" :show-overflow-tooltip="true"/>
+                <el-table-column label="借款平台名称" width="180" prop="platform" :show-overflow-tooltip="true" />
                 <el-table-column label="逾期天数" width="150" prop="overdueDay" />
                 <el-table-column label="账龄" width="150" prop="overdueAge" />
                 <el-table-column label="借款本金" width="150" prop="capital" />
@@ -95,8 +117,7 @@
                 </el-table-column>
                 <el-table-column label="最近一次网调标签" width="150" :formatter="getAdjustType" prop="netLabel">
                 </el-table-column>
-                <el-table-column label="最近一次调解标签" width="150" :formatter="getContactResultOptions"
-                    prop="medLable">
+                <el-table-column label="最近一次调解标签" width="150" :formatter="getContactResultOptions" prop="medLable">
                 </el-table-column>
                 <el-table-column label="退案日期" prop="withdrawalTime" width="150" />
             </el-table>
@@ -106,19 +127,20 @@
         </div>
         <el-dialog :title="form.title" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
             <el-form style="margin: 0 auto;" ref="form" :model="form" :rules="rules" label-width="100px">
-                <el-form-item v-if="form.title=='导出调解记录'" label="导出范围：" prop="exportRange">
+                <el-form-item v-if="form.title=='导出调解记录'||form.title=='全选导出调解记录'" label="导出范围：" prop="exportRange">
                     <el-checkbox-group v-model="form.exportRange">
                         <el-checkbox :label="1">最近一次调解记录</el-checkbox>
                         <el-checkbox :label="2">全部调解记录</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item v-if="form.title=='导出网调记录'" label="导出范围：" prop="exportRange">
+                <el-form-item v-if="form.title=='导出网调记录'||form.title=='全选导出网调记录'" label="导出范围：" prop="exportRange">
                     <el-checkbox-group v-model="form.exportRange">
                         <el-checkbox :label="1">最近一次网调记录</el-checkbox>
                         <el-checkbox :label="2">全部网调记录</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item v-if="form.title=='导出调解记录'" label="是否脱敏：" prop="isDesensitization">
+                <el-form-item v-if="form.title=='导出调解记录'||form.title=='全选导出调解记录'" label="是否脱敏："
+                    prop="isDesensitization">
                     <el-radio-group v-model="form.isDesensitization">
                         <el-radio :label="1">是</el-radio>
                         <el-radio :label="0">否</el-radio>
@@ -127,11 +149,12 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="phoneSubmit(form.title)">确 定</el-button>
+                <el-button type="primary" @click="phoneSubmit(form.title)" :loading="formLoading">
+                    {{formLoading?'导出中':'确定'}}</el-button>
             </span>
         </el-dialog>
-        <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
-            :requestApi="exportData.requestApi"></exportDialog>
+        <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
+            :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
     </div>
 </template>
 
@@ -150,6 +173,7 @@
             return {
                 // 遮罩层
                 loading: false,
+                formLoading: false,
                 // 选中数组
                 ids: [],
                 // 非单个禁用
@@ -163,18 +187,18 @@
                 // 角色表格数据
                 caseList: [],
                 // 查询参数
-                mediation:[],
+                mediation: [],
                 queryParams: {
                     pageNum: 1,
                     pageSize: 50,
                 },
-                searchParams:{},
+                searchParams: {},
                 repayStatus: [],
                 selection: [],
                 userList: [],
-                adjustType:[],
-                contactResultOptions:[],
-                chooseDaterange:[],
+                adjustType: [],
+                contactResultOptions: [],
+                chooseDaterange: [],
                 otherParam: {},
                 token: null,
                 rules: {
@@ -241,8 +265,8 @@
             getList(type) {
                 this.loading = true;
                 //查询
-                if(type == 1){
-		            this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
+                if (type == 1) {
+                    this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     withDrawalApi.list(this.searchParams).then((response) => {
                         this.clearSelection();
                         this.otherParam = response.otherParam;
@@ -252,7 +276,7 @@
                     });
                 }
                 //切换页
-                else if(type == 2){
+                else if (type == 2) {
                     withDrawalApi.list(this.searchParams).then((response) => {
                         this.otherParam = response.otherParam;
                         this.caseList = response.rows;
@@ -268,24 +292,10 @@
                     this.selection = [];
                 }
             },
-            //导出调解记录
-            batchExportMediationRecord() {
-                // if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
-                //   this.msgError("所选数据存在已结案的数据，不能批量筛选号码");
-                //   return;
-                // }  
-                this.form.title = '导出调解记录';
-                this.form.exportRange = [];
-                this.form.isDesensitization = 1;
-                this.dialogVisible = true;
-            },
-            //导出网调记录
-            batchExportAdjestMent() {
-                // if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
-                //   this.msgError("所选数据存在已结案的数据，不能批量筛选号码");
-                //   return;
-                // }  
-                this.form.title = '导出网调记录';
+            //导出调解记录,网调记录
+            batchExportMediationRecord(title) {
+                this.form.title = title;
+                this.formLoading = false;
                 this.form.exportRange = [];
                 this.form.isDesensitization = 1;
                 this.dialogVisible = true;
@@ -306,17 +316,18 @@
                     this.queryParams.withdrawalEndDate = value[1];
                 }
             },
-            handleMediation(value){
+            handleMediation(value) {
                 if (value == null) {
                     this.queryParams.mediationId = "";
                 } else {
                     this.queryParams.mediationId = value.toString()
-                }    
+                }
             },
             phoneSubmit(title) {
                 if (title == '导出调解记录') {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
+                            this.formLoading = true;
                             let queryParams = {
                                 caseIds: this.ids.join(","),
                                 exportRange: this.form.exportRange.toString(),
@@ -325,16 +336,20 @@
                             withDrawalApi.batchExportMediationRecord(queryParams).then(res => {
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
+                                    this.formLoading = false;
                                     this.dialogVisible = false;
                                     this.clearSelection();
                                     this.download(res.msg);
                                 }
-                            })
+                            }).catch(() => {
+                                this.formLoading = false;
+                            });
                         }
                     });
                 } else if (title == '导出网调记录') {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
+                            this.formLoading = true;
                             let queryParams = {
                                 caseIds: this.ids.join(","),
                                 exportRange: this.form.exportRange.toString(),
@@ -342,11 +357,57 @@
                             withDrawalApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
+                                    this.formLoading = false;
                                     this.dialogVisible = false;
                                     this.clearSelection();
                                     this.download(res.msg);
                                 }
-                            })
+                            }).catch(() => {
+                                this.formLoading = false;
+                            });
+                        }
+                    });
+                } else if (title == '全选导出调解记录') {
+                    this.$refs["form"].validate((valid) => {
+                        if (valid) {
+                            this.formLoading = true;
+                            let queryParams = {
+                                caseIds: this.ids.join(","),
+                                exportRange: this.form.exportRange.toString(),
+                                isDesensitization: this.form.isDesensitization,
+                            };
+                            withDrawalApi.batchExportMediationRecordAll(queryParams).then(res => {
+                                if (res.code === 200) {
+                                    this.msgSuccess("操作成功");
+                                    this.formLoading = false;
+                                    this.dialogVisible = false;
+                                    this.clearSelection();
+                                    this.download(res.msg);
+                                }
+                            }).catch(() => {
+                                this.formLoading = false;
+                            });
+                        }
+                    });
+                } else if (title == '全选导出网调记录') {
+                    this.$refs["form"].validate((valid) => {
+                        if (valid) {
+                            this.formLoading = true;
+                            let queryParams = {
+                                caseIds: this.ids.join(","),
+                                exportRange: this.form.exportRange.toString(),
+                            };
+                            withDrawalApi.batchExportNetworkAdjustRecordAll(queryParams).then(res => {
+                                if (res.code === 200) {
+                                    this.msgSuccess("操作成功");
+                                    this.formLoading = false;
+                                    this.dialogVisible = false;
+                                    this.clearSelection();
+                                    this.download(res.msg);
+                                }
+                            }).catch(() => {
+                                this.formLoading = false;
+                            });
                         }
                     });
                 }
@@ -370,6 +431,12 @@
                 this.exportData.title = "案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.requestApi = "/case/withdrawal/export";
+            },
+            /** 导出按钮操作 */
+            handleExportAll() {
+                this.exportData.title = "全选案件导出";
+                this.exportData.dialogVisible = true;
+                this.exportData.requestApi = "/case/withdrawal/exportAll";
             },
             changeStatus() {
                 this.getList(1);

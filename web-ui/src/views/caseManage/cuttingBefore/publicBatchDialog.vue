@@ -2,25 +2,25 @@
     <Dialog :title="title" :height="350" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
         <template v-slot:default>
             <el-form style="margin: 0 auto;" ref="form" :model="form" :rules="rules" label-width="100px">
-                <el-form-item v-if="title=='批量导出调解记录'||title=='全选批量导出调解记录'" label="导出范围：" prop="exportRange">
+                <el-form-item v-if="title=='导出调解记录'||title=='全选导出调解记录'" label="导出范围：" prop="exportRange">
                     <el-checkbox-group v-model="form.exportRange">
                         <el-checkbox :label="1">最近一次调解记录</el-checkbox>
                         <el-checkbox :label="2">全部调解记录</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item v-if="title=='批量导出调解记录'||title=='全选批量导出调解记录'" label="是否脱敏：" prop="isDesensitization">
+                <el-form-item v-if="title=='导出调解记录'||title=='全选导出调解记录'" label="是否脱敏：" prop="isDesensitization">
                     <el-radio-group v-model="form.isDesensitization">
                         <el-radio :label="1">是</el-radio>
                         <el-radio :label="0">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="title=='批量导出网调记录'||title=='全选批量导出网调记录'" label="导出范围：" prop="exportRange">
+                <el-form-item v-if="title=='导出网调记录'||title=='全选导出网调记录'" label="导出范围：" prop="exportRange">
                     <el-checkbox-group v-model="form.exportRange">
                         <el-checkbox :label="1">最近一次网调记录</el-checkbox>
                         <el-checkbox :label="2">全部网调记录</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item v-if="title=='批量转电话调解失败'||title=='全选批量转电话调解失败'" label="失败原因：" prop="content">
+                <el-form-item v-if="title=='批量转电话调解失败'||title=='全选转电话调解失败'" label="失败原因：" prop="content">
                     <el-input v-model="form.content" :rows="6" type="textarea" placeholder="请输入电话调解失败原因"></el-input>
                 </el-form-item>
             </el-form>
@@ -115,7 +115,7 @@
                 this.loading = false;
             },
             submit() {
-                if (this.title == '批量导出调解记录') {
+                if (this.title == '导出调解记录') {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
                             this.loading = true;
@@ -137,7 +137,7 @@
                             });
                         }
                     });
-                } else if (this.title == '批量导出网调记录') {
+                } else if (this.title == '导出网调记录') {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
                             this.loading = true;
@@ -178,7 +178,7 @@
                             });
                         }
                     });
-                } else if (this.title == '全选批量导出网调记录') {
+                } else if (this.title == '全选导出网调记录') {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
                             this.loading = true;
@@ -199,7 +199,7 @@
                             });
                         }
                     });
-                } else if (this.title == '全选批量导出调解记录') {
+                } else if (this.title == '全选导出调解记录') {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
                             this.loading = true;
@@ -221,7 +221,7 @@
                             });
                         }
                     });
-                } else if (this.title == '全选批量转电话调解失败') {
+                } else if (this.title == '全选转电话调解失败') {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
                             this.loading = true;

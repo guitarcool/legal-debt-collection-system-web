@@ -18,6 +18,14 @@ const withDrawalApi = {
             params: query
         })
     },
+    //调解记录优化
+    batchExportMediationRecordAll(query){
+        return request({
+            url: '/case/withdrawal/batchExportMediationRecordAll',
+            method: 'get',
+            params: query
+        })
+    },
     //网调记录优化
     batchExportNetworkAdjustRecord(query){
         return request({
@@ -25,7 +33,15 @@ const withDrawalApi = {
             method: 'get',
             params: query
         })
-    },             
+    },  
+    //网调记录优化
+    batchExportNetworkAdjustRecordAll(query){
+        return request({
+            url: '/case/withdrawal/batchExportNetworkAdjustRecordAll',
+            method: 'get',
+            params: query
+        })
+    },            
 }
 
 // 下载用户导入模版

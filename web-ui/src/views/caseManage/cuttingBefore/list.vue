@@ -252,28 +252,28 @@
                 <el-col :span="1.5">
                     <el-button type="warning" size="mini" :disabled="multiple"
                         v-hasPermi="['case:pretrial:batchExportMediationRecord']"
-                        @click="batchExportMediationRecord('批量导出调解记录')">
-                        批量导出调解记录
+                        @click="batchExportMediationRecord('导出调解记录')">
+                        导出调解记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="success" size="mini" v-hasPermi="['case:pretrial:batchExportMediationRecordAll']"
-                        @click="batchExportMediationRecord('全选批量导出调解记录')">
-                        全选批量导出调解记录
+                        @click="batchExportMediationRecord('全选导出调解记录')">
+                        全选导出调解记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="primary" size="mini" :disabled="multiple"
                         v-hasPermi="['case:pretrial:batchExportNetworkAdjustRecord']"
-                        @click="batchExportMediationRecord('批量导出网调记录')">
-                        批量导出网调记录
+                        @click="batchExportMediationRecord('导出网调记录')">
+                        导出网调记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="success" size="mini"
                         v-hasPermi="['case:pretrial:batchExportNetworkAdjustRecordAll']"
-                        @click="batchExportMediationRecord('全选批量导出网调记录')">
-                        全选批量导出网调记录
+                        @click="batchExportMediationRecord('全选导出网调记录')">
+                        全选导出网调记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -286,7 +286,7 @@
                 <el-col :span="1.5">
                     <el-button v-hasPermi="['case:pretrial:batchMediationFailedAll']"
                         v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('2')>-1 == true"
-                        type="success" size="mini" @click="batchExportMediationRecord('全选批量转电话调解失败')">全选批量转电话调解失败
+                        type="success" size="mini" @click="batchExportMediationRecord('全选转电话调解失败')">全选转电话调解失败
                     </el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">

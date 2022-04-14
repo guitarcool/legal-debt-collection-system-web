@@ -288,24 +288,24 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" icon="el-icon-download" size="mini" :disabled="multiple"
-                        @click="batchExportMediationRecord">
+                        @click="batchExportMediationRecord('导出调解记录')">
                         导出调解记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-download" size="mini" @click="batchExportMediationRecordAll"
+                    <el-button type="success" icon="el-icon-download" size="mini" @click="batchExportMediationRecord('全选导出调解记录')"
                         v-hasPermi="['case:adjudged:batchExportMediationRecordAll']">
                         全选导出调解记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" icon="el-icon-download" size="mini" :disabled="multiple"
-                        @click="batchExportAdjestMent">
+                        @click="batchExportMediationRecord('导出网调记录')">
                         导出网调记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-download" size="mini" @click="batchExportAdjestMentAll"
+                    <el-button type="success" icon="el-icon-download" size="mini" @click="batchExportMediationRecord('全选导出网调记录')"
                         v-hasPermi="[' case:adjudged:batchExportNetworkAdjustRecordAll']">
                         全选导出网调记录
                     </el-button>
@@ -1045,34 +1045,10 @@
                         that.msgError("已取消操作");
                     });
             },
-            //导出调解记录
-            batchExportMediationRecord() {
+            //导出调解记录网调记录
+            batchExportMediationRecord(title) {
                 this.formLoading = false;
-                this.form.title = '导出调解记录';
-                this.form.exportRange = [];
-                this.form.isDesensitization = 1;
-                this.exportDialogVisible = true;
-            },
-            //导出调解记录
-            batchExportMediationRecordAll() {
-                this.formLoading = false;
-                this.form.title = '全选导出调解记录';
-                this.form.exportRange = [];
-                this.form.isDesensitization = 1;
-                this.exportDialogVisible = true;
-            },
-            //导出网调记录
-            batchExportAdjestMent() {
-                this.formLoading = false;
-                this.form.title = '导出网调记录';
-                this.form.exportRange = [];
-                this.form.isDesensitization = 1;
-                this.exportDialogVisible = true;
-            },
-            //导出网调记录
-            batchExportAdjestMentAll() {
-                this.formLoading = false;
-                this.form.title = '全选导出网调记录';
+                this.form.title = title;
                 this.form.exportRange = [];
                 this.form.isDesensitization = 1;
                 this.exportDialogVisible = true;
