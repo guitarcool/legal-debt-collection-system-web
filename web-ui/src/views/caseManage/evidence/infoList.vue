@@ -81,6 +81,10 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
+                    <el-button type="success" icon="el-icon-plus" size="mini" v-hasPermi="['evidence:package:removeAll']" @click="deleteDataAll">全选删除
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
                     <el-button type="warning" icon="el-icon-download" size="mini" :disabled="multiple"
                         @click="handleExport" v-hasPermi="['evidence:package:detailExport']">导出
                     </el-button>
@@ -461,6 +465,24 @@
                     )
                     .then(function () {
                         return evidenceApi.delData(userIds);
+                    })
+                    .then(() => {
+                        this.clearSelection();
+                        this.msgSuccess("删除成功");
+                    })
+                    .catch(function () {});
+            },
+            deleteDataAll() {
+                this.$confirm(
+                        '是否确认删除全部的数据项?',
+                        "警告", {
+                            confirmButtonText: "确定",
+                            cancelButtonText: "取消",
+                            type: "warning",
+                        }
+                    )
+                    .then(function () {
+                        return evidenceApi.delDataAll();
                     })
                     .then(() => {
                         this.clearSelection();

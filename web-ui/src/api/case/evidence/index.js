@@ -49,6 +49,13 @@ const evidenceApi = {
             method: 'delete'
         })
     },
+    delDataAll() {
+        return request({
+            url: '/evidence/package/removeAll',
+            timeout:500000,
+            method: 'delete'
+        })
+    },
     deleteEvidenceMaterial(data) {
         return request({
             url: '/evidence/package/deleteEvidenceMaterial',
