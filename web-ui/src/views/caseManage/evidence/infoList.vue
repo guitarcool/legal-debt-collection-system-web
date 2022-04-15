@@ -92,12 +92,12 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="warning" icon="el-icon-download" size="mini" @click="handleDownZip"
-                        :disabled="multiple" v-hasPermi="['evidence:package:downloadAll']">下载证据包
+                        :disabled="multiple" v-hasPermi="['evidence:package:download']">下载证据包
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="success" icon="el-icon-download" size="mini" @click="handleDownZipAll"
-                        v-hasPermi="['evidence:package:download']">全选下载证据包
+                        v-hasPermi="['evidence:package:downloadAll']">全选下载证据包
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
