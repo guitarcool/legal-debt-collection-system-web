@@ -276,7 +276,7 @@ const cuttingAfterApi = {
     //裁后调解记录优化
     batchExportMediationRecordAll(query){
         return request({
-            url: '/case/postAdjudged/batchExportMediationRecordAll',
+            url: 'case/assignment/batchExportMediationRecordAll',
             method: 'get',
             timeout:500000,
             params: query
@@ -293,7 +293,7 @@ const cuttingAfterApi = {
     //裁后网调记录记录优化
     batchExportNetworkAdjustRecordAll(query){
         return request({
-            url: '/case/postAdjudged/batchExportNetworkAdjustRecordAll',
+            url: 'case/assignment/batchExportNetworkAdjustRecordAll',
             method: 'get',
             timeout:500000,
             params: query

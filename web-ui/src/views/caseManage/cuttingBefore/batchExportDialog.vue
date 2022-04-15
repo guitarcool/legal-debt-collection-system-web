@@ -267,7 +267,7 @@
                     status: "",
                 };
                 templateApi.templateList(param).then((response) => {
-                    //console.log(response)
+                    console.log(response)
                     this.caseList = response.data || [];
                     this.caseList.forEach((item) => {
                         if (this.title == "批量生成律师函短信") {
@@ -282,6 +282,7 @@
                             }
                         }
                         if (this.title == "批量生成律师函" || this.title == "全选生成律师函") {
+                            console.log(item);
                             if (
                                 item.formatType == 0 &&
                                 item.templateType == 2 &&
