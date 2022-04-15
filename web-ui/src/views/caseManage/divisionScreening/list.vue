@@ -306,7 +306,7 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="success" icon="el-icon-download" size="mini" @click="batchExportMediationRecord('全选导出网调记录')"
-                        v-hasPermi="[' case:adjudged:batchExportNetworkAdjustRecordAll']">
+                        v-hasPermi="['case:adjudged:batchExportNetworkAdjustRecordAll']">
                         全选导出网调记录
                     </el-button>
                 </el-col>
