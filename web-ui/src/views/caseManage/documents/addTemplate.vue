@@ -543,11 +543,11 @@
             this.form.formatType = this.form.formatType.toString()
             this.managerId = null;
             if (this.form.manager) {
-              if (this.userList.some(tag => tag.userId === this.form.manager)) {
+              if (this.userList.some(tag => tag.userId == this.form.manager)) {
                 this.form.manager = Number(this.form.manager)
               }else{
                 this.managerId = Number(this.form.manager);
-                this.form.manager = this.form.createName
+                this.form.manager = this.form.managerName;
               }
             }
             if (this.form.deptId) {
