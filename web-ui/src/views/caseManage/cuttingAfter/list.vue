@@ -322,7 +322,7 @@
                 <el-table-column label="标的金额" width="150" prop="subjectAmount" sortable="custom"
                     :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="已还金额" width="150" prop="paidAmount" sortable="custom"
-                    :sort-orders="['descending', 'ascending']" />
+                 :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="剩余待还总额" width="200" prop="remainingBalance" />
                 <el-table-column label="还款状态" :formatter="getRepayStatus" prop="repayStatus">
                 </el-table-column>
@@ -815,9 +815,15 @@
             },
             /** 排序触发事件 */
             handleSortChange(column, prop, order) {
-                this.searchParams.orderByColumn = column.prop;
-                this.searchParams.isAsc = column.order;
-                this.getList(2);
+                if(order){
+                    this.searchParams.orderByColumn = column.prop;
+                    this.searchParams.isAsc = column.order;
+                    this.getList(2);
+                }else{
+                    this.searchParams.orderByColumn = '';
+                    this.searchParams.isAsc = '';
+                    this.getList(2);
+                }
             },
             /** 批量统一弹窗 */
             handleAdd(val) {

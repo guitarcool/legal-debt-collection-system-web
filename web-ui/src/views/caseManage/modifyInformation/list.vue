@@ -322,9 +322,15 @@
             },
             /** 排序触发事件 */
             handleSortChange(column, prop, order) {
-                this.searchParams.orderByColumn = column.prop;
-                this.searchParams.isAsc = column.order;
-                this.getList(2);
+                if(order){
+                    this.searchParams.orderByColumn = column.prop;
+                    this.searchParams.isAsc = column.order;
+                    this.getList(2);
+                }else{
+                    this.searchParams.orderByColumn = '';
+                    this.searchParams.isAsc = '';
+                    this.getList(2);
+                }
             },
             /** 搜索按钮操作 */
             handleQuery() {
