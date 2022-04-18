@@ -208,7 +208,7 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="success" size="mini" @click="handleAppleEdit(2)"
-                        v-hasPermi="[' case:pretrial:letterRepairAll']">全选批量申请案件信修
+                        v-hasPermi="['case:pretrial:letterRepairAll']">全选批量申请案件信修
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
