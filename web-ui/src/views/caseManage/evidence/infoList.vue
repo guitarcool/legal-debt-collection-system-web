@@ -443,7 +443,7 @@
                 this.messageData.dialogVisible = true;
                 this.messageData.type = type;
                 this.messageData.requestApi = '/evidence/package/notice/mail'
-                this.messageData.params = this.caseIds.join(',')
+                this.messageData.params = this.ids.join(',')
             },
             //全选生成通知邮件
             handleMessageAll(type){
