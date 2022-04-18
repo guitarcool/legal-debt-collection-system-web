@@ -560,7 +560,12 @@
                     {
                         value: '1',
                         label: '大于',
-                        children: [{
+                        children: [
+                            {
+                                value: '6',
+                                label: '6天',
+                            },
+                            {
                                 value: '7',
                                 label: '7天',
                             },
@@ -622,7 +627,12 @@
                     {
                         value: '1',
                         label: '大于',
-                        children: [{
+                        children: [
+                            {
+                                value: '6',
+                                label: '6天',
+                            },
+                            {
                                 value: '7',
                                 label: '7天',
                             },
