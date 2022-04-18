@@ -34,11 +34,11 @@ const electronicApi = {
         })
     },
     //审核列表信息
-    applyList(query) {
+    applyList(data) {
         return request({
             url: '/sign/apply/list',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     },
     //审核
