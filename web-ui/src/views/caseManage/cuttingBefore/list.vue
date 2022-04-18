@@ -1001,7 +1001,8 @@
                                 }
                             });
                         } else {
-                            cuttingBeforeApi.batchPendingAll().then((res) => {
+                            let data = {};
+                            cuttingBeforeApi.batchPendingAll(data).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess(res.msg);
                                     that.clearSelection();
