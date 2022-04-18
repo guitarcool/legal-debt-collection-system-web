@@ -1041,14 +1041,14 @@
                     .then(() => {
                         let ids = that.ids.join(",");
                         if (type == 1) {
-                            cuttingBeforeApi.casePropertyAll(ids).then((res) => {
+                            cuttingBeforeApi.caseProperty(ids).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
                                     that.clearSelection();
                                 }
                             });
                         } else {
-                            cuttingBeforeApi.caseProperty(ids).then((res) => {
+                            cuttingBeforeApi.casePropertyAll(ids).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
                                     that.clearSelection();
