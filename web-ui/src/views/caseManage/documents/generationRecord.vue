@@ -51,7 +51,11 @@
         <div class="box-contnet-wrap">
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
-                    <el-button type="danger" size="mini" :disabled="multiple" @click="handleMessage">批量文书短信发送
+                    <el-button type="danger" size="mini" :disabled="multiple" @click="handleMessage(1)">批量文书短信发送(旧)
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="danger" size="mini" :disabled="multiple" @click="handleMessage(2)">批量文书短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -287,12 +291,16 @@
                     });
             },
             //打开发送短信的弹窗
-            handleMessage() {
+            handleMessage(type) {
                 if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
                     this.msgError("所选数据存在已结案的数据，不能批量发送短信");
                     return;
                 }
-                this.batchDialogData.title = "批量文书短信发送";
+                if(type == 1){
+                    this.batchDialogData.title = "批量文书短信发送(旧)";
+                }else{
+                    this.batchDialogData.title = "批量文书短信发送";
+                }
                 this.batchDialogData.dialogVisible = true;
                 this.batchDialogData.red = false;
                 this.batchDialogData.params = this.ids.join(",");

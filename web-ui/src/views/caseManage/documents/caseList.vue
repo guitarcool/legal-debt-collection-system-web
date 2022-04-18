@@ -62,7 +62,12 @@
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="danger" size="mini" :disabled="multiple"
-                        @click="handleCaseStatusMessage">批量短信发送
+                        @click="handleCaseStatusMessage(1)">批量短信发送(旧)
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="danger" size="mini" :disabled="multiple"
+                        @click="handleCaseStatusMessage(2)">批量短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -366,12 +371,16 @@
                 this.getList(1);
             },
             //打开发送短信的弹窗
-            handleCaseStatusMessage() {
+            handleCaseStatusMessage(type) {
                 if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
                     this.msgError("所选数据存在已结案的数据，不能批量发送短信");
                     return;
                 }
-                this.batchexportDialogData.title = "批量短信发送";
+                if(type == 1){
+                    this.batchexportDialogData.title = "批量短信发送(旧)";
+                }else{
+                    this.batchexportDialogData.title = "批量短信发送";
+                }
                 this.batchexportDialogData.dialogVisible = true;
                 this.batchexportDialogData.red = false;
                 this.batchexportDialogData.params = this.ids.join(",");

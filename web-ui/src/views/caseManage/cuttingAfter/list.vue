@@ -261,12 +261,17 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="primary" size="mini"
-                        :disabled="multiple" v-hasPermi="['shortMsg:sends']" @click="handleMessage">批量短信发送
+                        :disabled="multiple" v-hasPermi="['shortMsg:sends']" @click="handleMessage(1)">批量短信发送(旧)
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="primary" size="mini"
+                        :disabled="multiple" v-hasPermi="['shortMsg:sends']" @click="handleMessage(2)">批量短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="success" size="mini"
-                        v-hasPermi="['case:adjudged:shortMsg']" @click="handleMessage">全选批量短信发送
+                        v-hasPermi="['case:adjudged:shortMsg']" @click="handleMessageAll">全选批量短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -883,8 +888,8 @@
                                 }
                             });
                         } else {
-                            let ids = that.ids.join(",");
-                            cuttingAfterApi.pendingExecuteAll(ids).then((res) => {
+                            let data = {};
+                            cuttingAfterApi.pendingExecuteAll(data).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
                                     that.clearSelection();
@@ -1244,12 +1249,16 @@
                 }
             },
             //打开发送短信的弹窗
-            handleMessage() {
+            handleMessage(type) {
                 if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {
                     this.msgError("所选数据存在已结案的数据，不能批量发送短信");
                     return;
                 }
-                this.batchexportDialogData.title = "批量短信发送";
+                if(type == 1){
+                    this.batchexportDialogData.title = "批量短信发送(旧)";
+                }else{
+                    this.batchexportDialogData.title = "批量短信发送";
+                }
                 this.batchexportDialogData.dialogVisible = true;
                 this.batchexportDialogData.red = false;
                 this.batchexportDialogData.params = this.ids.join(",");

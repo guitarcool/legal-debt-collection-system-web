@@ -169,11 +169,12 @@ const cuttingAfterApi = {
         })
     },  
     // 批量待执行立案
-    pendingExecuteAll(ids){
+    pendingExecuteAll(data){
         return request({
-            url: '/case/postAdjudged/pendingExecuteAll/'+ids,
+            url: '/case/postAdjudged/pendingExecuteAll/',
             timeout:500000,
             method: 'post',
+            data
         })
     },  
     //下载模版
@@ -276,7 +277,7 @@ const cuttingAfterApi = {
     //裁后调解记录优化
     batchExportMediationRecordAll(query){
         return request({
-            url: 'case/assignment/batchExportMediationRecordAll',
+            url: 'case/postAdjudged/batchExportMediationRecordAll',
             method: 'get',
             timeout:500000,
             params: query
@@ -293,7 +294,7 @@ const cuttingAfterApi = {
     //裁后网调记录记录优化
     batchExportNetworkAdjustRecordAll(query){
         return request({
-            url: 'case/assignment/batchExportNetworkAdjustRecordAll',
+            url: 'case/postAdjudged/batchExportNetworkAdjustRecordAll',
             method: 'get',
             timeout:500000,
             params: query
