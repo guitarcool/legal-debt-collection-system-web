@@ -577,7 +577,7 @@
                         </el-collapse>
                         <el-form-item>
                             <el-button type="primary" @click="submitForm('ruleForm')"
-                                v-hasPermi="['case:mediationRecord:adjudgedAdd']">保存
+                                v-hasPermi="['case:mediationRecord:add']">保存
                             </el-button>
                             <el-button @click="resetForm('ruleForm')">重置</el-button>
                         </el-form-item>
@@ -609,7 +609,7 @@
                                 :href="item.dictValue">{{item.dictValue}}</a>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" v-hasPermi="['case:networkAdjustRecord:adjudgedAdd']"
+                            <el-button type="primary" v-hasPermi="['case:networkAdjustRecord:add']"
                                 @click="adjustmentSubmit">保存</el-button>
                             <el-button @click="resetForm('adjustmentForm')">重置</el-button>
                         </el-form-item>
