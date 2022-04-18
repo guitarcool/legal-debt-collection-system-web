@@ -74,7 +74,7 @@
                 <el-table-column label="签章内容" prop="signContent" width="100" />
                 <el-table-column label="案件状态" width="120" :formatter="caseStatusFormat" prop="caseStatus" />
                 <el-table-column label="提交人" prop="submitterName" />
-                <el-table-column label="审核提交时间" width="120" prop="submitTime" sortable="custom"
+                <el-table-column label="审核提交时间" width="140" prop="submitTime" sortable="custom"
                     :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="签章时间" width="120" prop="signTime" sortable="custom"
                     :sort-orders="['descending', 'ascending']" />

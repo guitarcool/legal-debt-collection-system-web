@@ -72,7 +72,7 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="success" size="mini"
-                        @click="handleCaseStatusMessageAll">全选短信发送
+                        @click="handleCaseStatusMessageAll" v-hasPermi="['shortMsg:clerical:sendsAll']">全选短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -82,7 +82,7 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="success" icon="el-icon-download" size="mini" @click="batchBookAll"
-                        v-hasPermi="['case:clerical:instrumentBatch']">全选生成调解文书
+                        v-hasPermi="['case:clerical:instrumentBatchAll']">全选生成调解文书
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -97,7 +97,7 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="success" icon="el-icon-download" size="mini" @click="batchBookTwoAll"
-                        v-hasPermi="['case:clerical:instrumentBatch']">全选生成多人多案文书
+                        v-hasPermi="['case:clerical:mumc:instrumentBatchAll']">全选生成多人多案文书
                     </el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
