@@ -289,7 +289,7 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="success" size="mini"
-                        v-hasPermi="[' case:adjudged:batchExportNetworkAdjustRecordAll']"
+                        v-hasPermi="['case:adjudged:batchExportNetworkAdjustRecordAll']"
                         @click="batchExportMediationRecord('全选导出网调记录')">
                         全选导出网调记录
                     </el-button>
