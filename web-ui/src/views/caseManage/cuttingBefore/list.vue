@@ -819,7 +819,7 @@
             },
             /** 排序触发事件 */
             handleSortChange(column, prop, order) {
-                if(order){
+                if(column.order){
                     this.searchParams.orderByColumn = column.prop;
                     this.searchParams.isAsc = column.order;
                     this.getList(2);
