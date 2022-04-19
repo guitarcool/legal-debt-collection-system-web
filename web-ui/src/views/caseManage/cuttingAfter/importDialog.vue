@@ -81,6 +81,10 @@ export default {
       type: Number,
       default: -999,
     },
+    importData: {
+      type: Array,
+      default: [],
+    },
   },
   data() {
     return {
@@ -147,19 +151,19 @@ export default {
     /** 下载模版操作 */
     importTemplate() {
       if (this.id === 7) {
-        cuttingAfterApi.importFiledCaseTemplate().then((response) => {
+        cuttingAfterApi.importFiledCaseTemplate(this.importData).then((response) => {
           this.download(response.msg);
         });
       } else if (this.id === 8) {
-        cuttingAfterApi.importJudgedTemplate().then((response) => {
+        cuttingAfterApi.importJudgedTemplate(this.importData).then((response) => {
           this.download(response.msg);
         });
       } else if (this.id === 10) {
-        cuttingAfterApi.importExecutedTemplate().then((response) => {
+        cuttingAfterApi.importExecutedTemplate(this.importData).then((response) => {
           this.download(response.msg);
         });
       } else if (this.id === 11) {
-        cuttingAfterApi.importEnforcedTemplate().then((response) => {
+        cuttingAfterApi.importEnforcedTemplate(this.importData).then((response) => {
           this.download(response.msg);
         });
       }

@@ -416,7 +416,7 @@
         <recordDialog :title="recordData.title" :show.sync="recordData.dialogVisible" :id="recordData.id">
         </recordDialog>
         <importDialog @refresh="clearSelection" :title="addData.title" :headline="addData.headline"
-            :show.sync="addData.dialogVisible" :id="addData.id"></importDialog>
+            :show.sync="addData.dialogVisible" :id="addData.id" :importData="addData.importData"></importDialog>
         <testCall @refresh="clearSelection" :title="callData.title" :show.sync="callData.dialogVisible"
             :ids="callData.ids">
         </testCall>
@@ -504,6 +504,7 @@
                     headline: "",
                     dialogVisible: false,
                     id: null,
+                    importData:[],
                 },
                 callData: {
                     title: "",
@@ -1025,6 +1026,12 @@
             handleSelectionChange(selection) {
                 this.selection = selection;
                 this.ids = selection.map((item) => item.id);
+                this.addData.importData = selection.map( item => {
+                    return {
+                    respondentName: item.respondentName,
+                    id: item.id,
+                    }
+                });
                 this.single = selection.length != 1;
                 this.multiple = !selection.length;
             },

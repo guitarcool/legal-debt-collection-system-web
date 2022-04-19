@@ -148,17 +148,19 @@ const cuttingAfterApi = {
         })
     },
     //下载模版
-    importFiledCaseTemplate() {
+    importFiledCaseTemplate(data) {
         return request({
             url: '/case/postAdjudged/importFiledCaseTemplate',
-            method: 'get'
+            method: 'post',
+            data
         })
     }, 
     //下载模版
-    importJudgedTemplate() {
+    importJudgedTemplate(data) {
         return request({
             url: '/case/postAdjudged/importJudgedTemplate',
-            method: 'get'
+            method: 'post',
+            data
         })
     },   
     // 批量待执行立案
@@ -171,24 +173,26 @@ const cuttingAfterApi = {
     // 批量待执行立案
     pendingExecuteAll(data){
         return request({
-            url: '/case/postAdjudged/pendingExecuteAll/',
+            url: '/case/postAdjudged/pendingExecuteAll',
             timeout:500000,
             method: 'post',
             data
         })
     },  
     //下载模版
-    importExecutedTemplate() {
+    importExecutedTemplate(data) {
         return request({
             url: '/case/postAdjudged/importExecutedTemplate',
-            method: 'get'
+            method: 'post',
+            data
         })
     }, 
     //下载模版
-    importEnforcedTemplate() {
+    importEnforcedTemplate(data) {
         return request({
             url: '/case/postAdjudged/importEnforcedTemplate',
-            method: 'get'
+            method: 'post',
+            data
         })
     }, 
     // 发送短信单条
