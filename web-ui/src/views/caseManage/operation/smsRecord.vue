@@ -87,19 +87,19 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="短信送达状态：" v-show="queryParams.providerType">
-                    <el-select v-if="queryParams.providerType == 1" clearable multiple collapse-tags filterable
+                    <el-select v-show="queryParams.providerType == 1" clearable multiple collapse-tags filterable
                         size="small" v-model="queryParams.deliverStatuss" placeholder="请选择">
                         <el-option v-for="item in shisuyunStatus" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
-                    <el-select v-if="queryParams.providerType == 2" clearable multiple collapse-tags filterable
+                    <el-select v-show="queryParams.providerType == 2" clearable multiple collapse-tags filterable
                         size="small" v-model="queryParams.deliverStatuss" placeholder="请选择">
                         <el-option v-for="item in wodongStatus" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
-                    <el-select v-if="queryParams.providerType == 3" clearable multiple collapse-tags filterable
+                    <el-select v-show="queryParams.providerType == 3" clearable multiple collapse-tags filterable
                         size="small" v-model="queryParams.deliverStatuss" placeholder="请选择">
                         <el-option v-for="item in xuanwuStatus" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
