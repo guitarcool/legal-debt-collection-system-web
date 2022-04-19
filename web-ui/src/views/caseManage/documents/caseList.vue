@@ -324,12 +324,21 @@
                 this.multiple = !selection.length;
             },
             handleUpdate(item) {
-                this.$router.push({
-                    name: "documentInfo",
-                    query: {
-                        documentId: item.id
-                    }
-                });
+                if (['1','2','3','4','5','6'].includes(item.caseStatus)) {
+                    this.$router.push({
+                        name: 'cutBeforeInfo',
+                        query: {
+                            beforeId: item.id
+                        }
+                    })
+                } else if (['7','8','9','10','11','12'].includes(item.caseStatus)) {
+                    this.$router.push({
+                        name: 'cutAfterInfo',
+                        query: {
+                            afterId: item.id
+                        }
+                    })
+                }
             },
             handleMediation(item) {
                 this.mediationBookData.title = "生成调解文书";
