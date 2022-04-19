@@ -1121,7 +1121,7 @@
                                 exportRange: this.form.exportRange.toString(),
                                 isDesensitization: this.form.isDesensitization,
                             };
-                            cuttingAfterApi.batchExportMediationRecordAll(queryParams).then(res => {
+                            cuttingAfterApi.assignmentMediationRecordAll(queryParams).then(res => {
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
                                     this.formLoading = false;
@@ -1142,7 +1142,7 @@
                                 caseIds: this.ids.join(","),
                                 exportRange: this.form.exportRange.toString(),
                             };
-                            cuttingAfterApi.batchExportNetworkAdjustRecordAll(queryParams).then(res => {
+                            cuttingAfterApi.assignmentNetworkAdjustRecordAll(queryParams).then(res => {
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
                                     this.formLoading = false;

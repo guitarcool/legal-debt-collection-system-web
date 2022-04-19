@@ -261,7 +261,7 @@ const cuttingAfterApi = {
     //获取正确的短信内容
     turnContent(data) {
         return request({
-        url:'shortMsg/turnContent',
+        url:'/shortMsg/turnContent',
         method: 'post',
         data: data
         })
@@ -277,7 +277,16 @@ const cuttingAfterApi = {
     //裁后调解记录优化
     batchExportMediationRecordAll(query){
         return request({
-            url: 'case/postAdjudged/batchExportMediationRecordAll',
+            url: '/case/postAdjudged/batchExportMediationRecordAll',
+            method: 'get',
+            timeout:500000,
+            params: query
+        })
+    },
+    //分案调解记录优化
+    assignmentMediationRecordAll(query){
+        return request({
+            url: '/case/assignment/batchExportMediationRecordAll',
             method: 'get',
             timeout:500000,
             params: query
@@ -294,7 +303,16 @@ const cuttingAfterApi = {
     //裁后网调记录记录优化
     batchExportNetworkAdjustRecordAll(query){
         return request({
-            url: 'case/postAdjudged/batchExportNetworkAdjustRecordAll',
+            url: '/case/postAdjudged/batchExportNetworkAdjustRecordAll',
+            method: 'get',
+            timeout:500000,
+            params: query
+        })
+    },  
+    //分案网调记录记录优化
+    assignmentNetworkAdjustRecordAll(query){
+        return request({
+            url: '/case/assignment/batchExportNetworkAdjustRecordAll',
             method: 'get',
             timeout:500000,
             params: query
