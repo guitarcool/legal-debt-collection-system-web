@@ -273,7 +273,7 @@
                 //     return;
                 // }
                 this.active = 2;
-                templateApi.info(this.templateId).then(
+                templateApi.wituoutPermiInfo(this.templateId).then(
                     response => {
                         this.textarea = response.data.content;
                     }

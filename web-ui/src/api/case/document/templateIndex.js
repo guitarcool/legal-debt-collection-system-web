@@ -17,6 +17,13 @@ const templateApi = {
             method: 'get'
         })
     },
+    //详情
+    wituoutPermiInfo(id) {
+        return request({
+            url: '/template/info/wituoutPermi/' + id,
+            method: 'get'
+        })
+    },
     // //文书详情
     // shortMsginfo(id) {
     //     return request({
