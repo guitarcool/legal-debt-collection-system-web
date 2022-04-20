@@ -273,11 +273,20 @@
                 //     return;
                 // }
                 this.active = 2;
-                templateApi.info(this.templateId).then(
-                    response => {
-                        this.textarea = response.data.content;
-                    }
-                );
+                if(this.title == '全选文书短信发送'){
+                    templateApi.wituoutPermiInfo(this.templateId).then(
+                        response => {
+                            this.textarea = response.data.content;
+                        }
+                    );                        
+                }else{
+                    templateApi.info(this.templateId).then(
+                        response => {
+                            this.textarea = response.data.content;
+                        }
+                    );       
+                }
+
             },
             upperActive() {
                 this.active = 1;
