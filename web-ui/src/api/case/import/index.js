@@ -55,7 +55,7 @@ const importApi = {
     //下载短信模版
     downloadcaseInfoTemplate(query){
         return request({
-            url: ` /case/caseInfo/clerical/notice/batch?ids=${query.ids}&phoneStatus=${query.phoneStatus}&applyTime=${query.applyTime}&templateId=${query.templateId}`,
+            url: `/case/caseInfo/clerical/notice/batch?ids=${query.ids}&phoneStatus=${query.phoneStatus}&applyTime=${query.applyTime}&templateId=${query.templateId}`,
             method: 'get',
         })
     },  
@@ -65,7 +65,14 @@ const importApi = {
             url: `/case/caseInfo/notice/wenShuBatch?ids=${query.ids}&phoneStatus=${query.phoneStatus}&applyTime=${query.applyTime}&templateId=${query.templateId}`,
             method: 'get',
         })
-    },     
+    },   
+    //下载文书短信模版
+    wenShucaseInfoBatchTemplate(query){
+        return request({
+            url: `/case/caseInfo/wenshu/notice/wenShuBatch?ids=${query.ids}&phoneStatus=${query.phoneStatus}&applyTime=${query.applyTime}&templateId=${query.templateId}`,
+            method: 'get',
+        })
+    },   
 }
 // 下载用户导入模版
 export default importApi

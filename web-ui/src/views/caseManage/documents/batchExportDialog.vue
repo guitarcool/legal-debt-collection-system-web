@@ -314,7 +314,7 @@
                     applyTime: this.applyTime,
                     phoneStatus: this.phoneStatus
                 }
-                if (this.tltle == '全选短信发送') {
+                if (this.title == '全选短信发送') {
                     importApi.downloadcaseInfoTemplate(param).then((response) => {
                         this.download(response.msg);
                     });

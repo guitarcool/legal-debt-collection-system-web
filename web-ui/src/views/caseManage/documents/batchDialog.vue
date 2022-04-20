@@ -314,9 +314,15 @@
                     applyTime: this.applyTime,
                     phoneStatus: this.phoneStatus
                 }
-                importApi.wenShuBatchTemplate(param).then((response) => {
-                    this.download(response.msg);
-                });
+                if (this.title == '全选文书短信发送') {
+                    importApi.wenShucaseInfoBatchTemplate(param).then((response) => {
+                        this.download(response.msg);
+                    });
+                }else{
+                    importApi.wenShuBatchTemplate(param).then((response) => {
+                        this.download(response.msg);
+                    });
+                }
             },
             //获取当前时间
             timestampToTime() {
