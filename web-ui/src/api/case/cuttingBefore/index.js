@@ -278,6 +278,13 @@ const cuttingBeforeApi = {
         method: 'post',
         data: data
         })
+    },  
+    //下载短信模版
+    downloadSmsTemplate(query){
+        return request({
+            url: `/case/pretrial/notice/batch?ids=${query.ids}&phoneStatus=${query.phoneStatus}&applyTime=${query.applyTime}&templateId=${query.templateId}`,
+            method: 'get',
+        })
     },        
 }
 

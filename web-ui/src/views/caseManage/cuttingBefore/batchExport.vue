@@ -314,9 +314,15 @@
                     applyTime: this.applyTime,
                     phoneStatus: this.phoneStatus
                 }
-                importApi.downloadSmsTemplate(param).then((response) => {
-                    this.download(response.msg);
-                });
+                if (this.title == '全选批量短信发送') {
+                    cuttingBeforeApi.downloadSmsTemplate(param).then((response) => {
+                        this.download(response.msg);
+                    });
+                }else{
+                    importApi.downloadSmsTemplate(param).then((response) => {
+                        this.download(response.msg);
+                    });
+                }
             },
             //获取当前时间
             timestampToTime() {
