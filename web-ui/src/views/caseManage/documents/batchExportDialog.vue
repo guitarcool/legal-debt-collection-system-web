@@ -388,14 +388,14 @@
                             // config: {
                             //     headers: {'Content-Type': 'multipart/form-data'}
                             // }
-                        }).then(function (res) {
-                            if (res.code == 500) {
+                        }).then((res) => {
+                            if (res.data.code == 500) {
                                 that.loading = false;
-                                that.msgError(res.msg);
+                                that.msgError(res.data.msg);
                             } else {
                                 that.dialogVisible = false;
                                 that.loading = false;
-                                that.msgSuccess(res.msg);
+                                that.msgSuccess(res.data.msg);
                                 that.$emit('refresh');
                             }
                         }).catch(error => {

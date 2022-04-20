@@ -201,10 +201,8 @@
                             // config: {
                             //     headers: {'Content-Type': 'multipart/form-data'}
                             // }
-                        }).then(function (response) {
-                            console.log(response)
-                            //that.msgSuccess(response.data.msg);
-                            that.$alert(response.data.msg, "导入结果", {
+                        }).then((res) => {
+                            that.$alert(res.data.msg, "导入结果", {
                                 dangerouslyUseHTMLString: true
                             });
                             that.dialogVisible = false;
