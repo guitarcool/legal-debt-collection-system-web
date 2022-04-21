@@ -99,7 +99,7 @@
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
         <applyAudit @refresh="clearSelection" :type="applyData.type" :title="applyData.title"
-            :show.sync="applyData.dialogVisible" :id="applyData.id" :ids="applyData.ids"></applyAudit>
+            :show.sync="applyData.dialogVisible" :id="applyData.id" :ids="applyData.ids"  :total="applyData.total"></applyAudit>
     </div>
 </template>
 
@@ -153,6 +153,7 @@
                     dialogVisible: false,
                     id: -1,
                     type: -1,
+                    total: ""
                 },
                 selection: [],
                 signTime: [],
@@ -277,6 +278,7 @@
             editApplyAll() {
                 this.applyData.title = "全选文书签章审核";
                 this.applyData.type = 2;
+                this.applyData.total = this.total;
                 this.applyData.dialogVisible = true;
             },
             clearSelection() {

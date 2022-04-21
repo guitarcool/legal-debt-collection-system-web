@@ -118,7 +118,7 @@
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
         <exportDialog @refresh="clearSelection"  :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
-            :requestApi="exportData.requestApi"></exportDialog>
+            :requestApi="exportData.requestApi" :total="exportData.total"></exportDialog>
     </div>
 </template>
 
@@ -169,6 +169,7 @@
                     dialogVisible: false,
                     ids: "",
                     requestApi: "",
+                    total: ""
                 },
                 screenResultOptions:[],
                 screen_status:[],
@@ -299,6 +300,7 @@
             handleExportAll() {
                 this.exportData.title = "全选案件导出";
                 this.exportData.dialogVisible = true;
+                this.exportData.total = this.total;
                 this.exportData.requestApi = "/report/screenRecord/exportAll";
             },
             handleUpdate(item) {

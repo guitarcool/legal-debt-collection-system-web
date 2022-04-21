@@ -4,6 +4,7 @@
             <!-- 查看字段表 -->
             <div class="see-field" v-loading="loading">
                 <div  class="margin-div">
+                <div v-if="title == '全选生成通知邮件'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
                     <p class="book-title">{{type==1?'1、选择邮件模版':'1、选择短信模版'}}</p>
                     <el-scrollbar style="height: 250px">
                         <el-input
@@ -74,6 +75,10 @@
             params:{    //就是选择的ids
                 type: String,
                 default: ''
+            },
+            total:{
+                type: String,
+                default: '--'           
             }
         },
         watch: {

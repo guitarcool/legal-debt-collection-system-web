@@ -2,6 +2,7 @@
     <Dialog :title="title" :height="600" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
         <template v-slot:default>
             <!-- 查看字段表 -->
+            <div v-if="title == '全选生成律师函'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
             <div class="see-field" v-loading="loading" :element-loading-text="`拼命加载中，${num}秒...`"
                 element-loading-spinner="el-icon-loading">
                 <div class="margin-div" customClass="loading-style">
@@ -101,6 +102,10 @@
                 type: String,
                 default: "",
             },
+            total:{
+                type: String | Number,
+                default: '--'           
+            }
         },
         watch: {
             filterText(val) {
@@ -267,7 +272,6 @@
                     status: "",
                 };
                 templateApi.templateList(param).then((response) => {
-                    console.log(response)
                     this.caseList = response.data || [];
                     this.caseList.forEach((item) => {
                         if (this.title == "批量生成律师函短信") {
@@ -277,12 +281,10 @@
                                 item.templateType == 2 &&
                                 item.status == 1
                             ) {
-                            console.log(item);
                                 this.data[0].children.push(item);
                             }
                         }
                         if (this.title == "批量生成律师函" || this.title == "全选生成律师函") {
-                            console.log(item);
                             if (
                                 item.formatType == 0 &&
                                 item.templateType == 2 &&

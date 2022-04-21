@@ -2,6 +2,7 @@
     <Dialog :title="title" :height="600" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
         <template v-slot:default>
             <!-- 查看字段表 -->
+            <div v-if="title == '全选生成多人多案文书'||title == '全选生成调解文书'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
             <div class="see-field" v-loading="loading">
                 <div class="margin-div">
                     <p class="book-title">1、选择文书模版：</p>
@@ -128,6 +129,10 @@
                 type: Array,
                 default: [],
             },
+            total:{
+                type: String | Number,
+                default: '--'           
+            }
         },
         watch: {
             filterText(val) {

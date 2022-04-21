@@ -127,6 +127,7 @@
         </div>
         <el-dialog :title="form.title" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
             <el-form style="margin: 0 auto;" ref="form" :model="form" :rules="rules" label-width="100px">
+                <div v-if="form.title=='全选导出网调记录'||form.title=='全选导出调解记录'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
                 <el-form-item v-if="form.title=='导出调解记录'||form.title=='全选导出调解记录'" label="导出范围：" prop="exportRange">
                     <el-checkbox-group v-model="form.exportRange">
                         <el-checkbox :label="1">最近一次调解记录</el-checkbox>
@@ -154,7 +155,7 @@
             </span>
         </el-dialog>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
-            :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
+            :ids="exportData.ids" :requestApi="exportData.requestApi" :total="exportData.total"></exportDialog>
     </div>
 </template>
 
@@ -223,6 +224,7 @@
                     dialogVisible: false,
                     ids: "",
                     requestApi: "",
+                    total: ""
                 },
                 getRowKeys(row) {
                     return row.id;
@@ -436,6 +438,7 @@
             handleExportAll() {
                 this.exportData.title = "全选案件导出";
                 this.exportData.dialogVisible = true;
+                this.exportData.total = this.total;
                 this.exportData.requestApi = "/case/withdrawal/exportAll";
             },
             changeStatus() {

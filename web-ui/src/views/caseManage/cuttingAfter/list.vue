@@ -387,6 +387,7 @@
         </div>
         <el-dialog :title="form.title" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
             <el-form style="margin: 0 auto;" ref="form" :model="form" :rules="rules" label-width="100px">
+                <div v-if="form.title=='全选导出网调记录'||form.title=='全选导出调解记录'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
                 <el-form-item v-if="form.title=='导出调解记录'||form.title=='全选导出调解记录'" label="导出范围：" prop="exportRange">
                     <el-checkbox-group v-model="form.exportRange">
                         <el-checkbox :label="1">最近一次调解记录</el-checkbox>
@@ -422,7 +423,7 @@
         </testCall>
         <batchExportDialog @refresh="clearSelection" :title="batchexportDialogData.title"
             :show.sync="batchexportDialogData.dialogVisible" :red="batchexportDialogData.red"
-            :params="batchexportDialogData.params"></batchExportDialog>
+            :params="batchexportDialogData.params" :total="batchexportDialogData.total"></batchExportDialog>
     </div>
 </template>
 
@@ -516,6 +517,7 @@
                     dialogVisible: false,
                     red: "",
                     params: "",
+                    total: "",
                 },
                 networkSortresult: [],
                 realtimeSortresult: [],
@@ -1285,6 +1287,7 @@
                 this.batchexportDialogData.title = "全选批量短信发送";
                 this.batchexportDialogData.dialogVisible = true;
                 this.batchexportDialogData.red = false;
+                this.batchexportDialogData.total = this.total;
             },
             //高级查询
             implicitQuery() {

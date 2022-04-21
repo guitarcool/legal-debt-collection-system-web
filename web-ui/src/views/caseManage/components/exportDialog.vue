@@ -2,6 +2,7 @@
     <Dialog :title="title" :height="300" :show.sync="dialogVisible" width="30%" @openDialog="openDialog">
         <template v-slot:default>
             <el-form ref="form" :model="form" :rules="rules">
+                <div v-if="title == '全选案件导出'||title == '全选导出'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
                 <el-form-item label="是否脱敏：" prop="desensitization">
                     <el-radio-group v-model="form.desensitization">
                         <el-radio :label="1">是</el-radio>
@@ -62,6 +63,10 @@
             ids: {
                 type: String,
                 default: ''
+            },
+            total:{
+                type: String | Number,
+                default: '--'           
             }
         },
         computed: {

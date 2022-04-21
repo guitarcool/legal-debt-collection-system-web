@@ -398,14 +398,14 @@
             :show.sync="exportDialogData.dialogVisible" :id="exportDialogData.id"
             :contractNo="exportDialogData.contractNo" @refresh="clearSelection"></exportDialog>
         <batchExportDialog @refresh="clearSelection" :requestApi="batchData.requestApi" :title="batchData.title"
-            :show.sync="batchData.dialogVisible" :params="batchData.params"></batchExportDialog>
+            :show.sync="batchData.dialogVisible" :params="batchData.params" :total="batchData.total"></batchExportDialog>
         <testCall @refresh="clearSelection" :title="callData.title" :show.sync="callData.dialogVisible"
             :ids="callData.ids">
         </testCall>
         <batchExport @refresh="clearSelection" :title="batchexportData.title" :show.sync="batchexportData.dialogVisible"
-            :red="batchexportData.red" :params="batchexportData.params"></batchExport>
+            :red="batchexportData.red" :params="batchexportData.params" :total="batchexportData.total"></batchExport>
         <publicBatchDialog @refresh="clearSelection" :title="publicBatchData.title"
-            :show.sync="publicBatchData.dialogVisible" :params="publicBatchData.params"></publicBatchDialog>
+            :show.sync="publicBatchData.dialogVisible" :params="publicBatchData.params" :total="publicBatchData.total"></publicBatchDialog>
     </div>
 </template>
 
@@ -482,6 +482,7 @@
                     title: "",
                     dialogVisible: false,
                     params: "",
+                    total: ""
                 },
                 contactResultOptions: [],
                 letterRepairStatusOptions: [],
@@ -494,6 +495,7 @@
                     id: "",
                     requestApi: "",
                     params: "",
+                    total: ""
                 },
                 userList: [],
                 idList: [],
@@ -517,6 +519,7 @@
                     dialogVisible: false,
                     red: "",
                     params: "",
+                    total: ""
                 },
                 dialogVisible: false,
                 getRowKeys(row) {
@@ -879,6 +882,7 @@
             batchLawyerAll() {
                 this.batchData.title = "全选生成律师函";
                 this.batchData.dialogVisible = true;
+                this.batchData.total = this.total;
                 this.batchData.requestApi = "/case/pretrial/instrument/batchAll";
             },
             handleUpdate(item) {
@@ -1036,6 +1040,7 @@
             batchExportMediationRecord(title) {
                 this.publicBatchData.title = title;
                 this.publicBatchData.params = this.ids.join(",");
+                this.publicBatchData.total = this.total;
                 this.publicBatchData.dialogVisible = true;
             },
             //申请财保
@@ -1135,6 +1140,7 @@
             handleMessageAll() {
                 this.batchexportData.title = "全选批量短信发送";
                 this.batchexportData.dialogVisible = true;
+                this.batchexportData.total = this.total;
                 this.batchexportData.red = false;
             },
             //高级查询

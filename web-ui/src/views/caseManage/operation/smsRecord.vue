@@ -207,9 +207,9 @@
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
-            :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
+            :ids="exportData.ids" :requestApi="exportData.requestApi" :total="exportData.total"></exportDialog>
         <batchExport @refresh="clearSelection" :title="batchexportData.title" :show.sync="batchexportData.dialogVisible"
-            :params="batchexportData.params"></batchExport>
+            :params="batchexportData.params" :total="batchexportData.total"></batchExport>
     </div>
 </template>
 
@@ -268,11 +268,13 @@
                     dialogVisible: false,
                     ids: "",
                     requestApi: "",
+                    total: ""
                 },
                 batchexportData: {
                     title: "",
                     dialogVisible: false,
                     params: "",
+                    total: ""
                 },
                 shortmsgProviderType: [],
                 getRowKeys(row) {
@@ -358,6 +360,7 @@
             handleMessageAll() {
                 this.batchexportData.title = "全选重新发送短信";
                 this.batchexportData.dialogVisible = true;
+                this.batchexportData.total = this.total;
             },
             // 多选框选中数据
             handleSelectionChange(selection) {
@@ -384,6 +387,7 @@
             handleExportAll() {
                 this.exportData.title = "全选案件导出";
                 this.exportData.dialogVisible = true;
+                this.exportData.total = this.total;
                 this.exportData.requestApi = "/report/shortMsgRecord/exportAll";
             },
             handleUpdate(item) {

@@ -1,6 +1,7 @@
 <template>
     <Dialog :title="title" :height="350" :show.sync="dialogVisible" width="40%" @openDialog="openDialog">
         <template v-slot:default>
+            <div v-if="title == '全选公众号绑定'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
             <el-form ref="form" :model="form" :rules="rules" label-width="160px">
                 <el-form-item label="请选择绑定公众号：" prop="wechatId">
                     <el-select style="width: 100%" filterable v-model="form.wechatId" placeholder="请选择">
@@ -60,6 +61,10 @@
                 type: Array,
                 default: []
             },
+            total:{
+                type: String | Number,
+                default: '--'           
+            }
         },
         computed: {
             dialogVisible: {

@@ -220,7 +220,7 @@
         <applyAudit @refresh="clearSelection" :title="applyData.title" :show.sync="applyData.dialogVisible"
             :id="applyData.id" :item="applyData.item"></applyAudit>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
-            :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
+            :ids="exportData.ids" :requestApi="exportData.requestApi" :total="exportData.total"></exportDialog>
     </div>
 </template>
 
@@ -314,6 +314,7 @@
                     dialogVisible: false,
                     ids: "",
                     requestApi: "",
+                    total: ""
                 },
                 getRowKeys(row) {
                     return row.id;
@@ -437,6 +438,7 @@
             handleExportAll() {
                 this.exportData.title = "全选案件导出";
                 this.exportData.dialogVisible = true;
+                this.exportData.total = this.total;
                 this.exportData.requestApi = "/case/financial/exportAll";
             },
             changeStatus() {

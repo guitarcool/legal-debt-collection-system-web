@@ -108,7 +108,7 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
             <batchDialog @refresh="clearSelection" :title="batchDialogData.title"
-                :show.sync="batchDialogData.dialogVisible" :red="batchDialogData.red" :params="batchDialogData.params">
+                :show.sync="batchDialogData.dialogVisible" :red="batchDialogData.red" :params="batchDialogData.params"  :total="batchDialogData.total">
             </batchDialog>
         </div>
     </div>
@@ -165,6 +165,7 @@
                     dialogVisible: false,
                     red: "",
                     params: "",
+                    total: ""
                 },
                 getRowKeys(row) {
                     return row.id;
@@ -308,6 +309,7 @@
             handleMessageAll() {
                 this.batchDialogData.title = "全选文书短信发送";
                 this.batchDialogData.dialogVisible = true;
+                this.batchDialogData.total = this.total;
                 this.batchDialogData.red = false;
             },
         },

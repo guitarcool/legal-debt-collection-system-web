@@ -160,9 +160,9 @@
             :id="addData.id">
         </importDialog>
         <applyAudit @refresh="clearSelection" :title="applyData.title" :show.sync="applyData.dialogVisible"
-            :id="applyData.id"></applyAudit>
+            :id="applyData.id" :total="applyData.total"></applyAudit>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
-            :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
+            :ids="exportData.ids" :requestApi="exportData.requestApi" :total="exportData.total" ></exportDialog>
     </div>
 </template>
 
@@ -226,7 +226,8 @@
                 applyData: {
                     title: '',
                     dialogVisible: false,
-                    id: ''
+                    id: '',
+                    total: ""
                 },
                 selection: [],
                 userList: [],
@@ -235,6 +236,7 @@
                     dialogVisible: false,
                     ids: "",
                     requestApi: "",
+                    total: ""
                 },
                 screenResultOptions:[],
                 screen_status:[],
@@ -362,6 +364,7 @@
             handleExportAll() {
                 this.exportData.title = "全选案件导出";
                 this.exportData.dialogVisible = true;
+                this.exportData.total = this.total;
                 this.exportData.requestApi = "/case/letter/exportAll";
             },
             changeStatus() {
@@ -400,6 +403,7 @@
                 }
                 this.applyData.title = '全选审核信修申请';
                 this.applyData.dialogVisible = true;
+                this.applyData.total = this.total;
                 this.applyData.id = item.id ? item.id : this.ids.join(',');
             },
             /** 导入 */

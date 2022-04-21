@@ -1,6 +1,7 @@
 <template>
     <Dialog :title="title" :height="480" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
         <template v-slot:default>
+            <div v-if="title == '全选审核信修申请'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
             <el-form ref="form" :model="form" :rules="rules" label-width="140px">
                 <el-form-item label="审批结果：" prop="type">
                     <el-radio-group v-model="form.type">
@@ -73,6 +74,10 @@
             },
             id: {
                 type: String,
+            },
+            total:{
+                type: String | Number,
+                default: '--'           
             }
         },
         computed: {

@@ -2,6 +2,7 @@
     <Dialog :title="title" :height="350" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
         <template v-slot:default>
             <el-form style="margin: 0 auto;" ref="form" :model="form" :rules="rules" label-width="100px">
+            <div v-if="title == '全选导出调解记录'||title=='全选转电话调解失败'||title=='全选导出网调记录'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
                 <el-form-item v-if="title=='导出调解记录'||title=='全选导出调解记录'" label="导出范围：" prop="exportRange">
                     <el-checkbox-group v-model="form.exportRange">
                         <el-checkbox :label="1">最近一次调解记录</el-checkbox>
@@ -84,6 +85,10 @@
                 type: String,
                 default: ''
             },
+            total:{
+                type: String | Number,
+                default: '--'           
+            }
         },
         computed: {
             dialogVisible: {

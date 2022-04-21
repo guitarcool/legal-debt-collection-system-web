@@ -179,7 +179,7 @@
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
-            :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
+            :ids="exportData.ids" :requestApi="exportData.requestApi" :total="exportData.total"></exportDialog>
     </div>
 </template>
 
@@ -228,6 +228,7 @@
                     dialogVisible: false,
                     ids: "",
                     requestApi: "",
+                    total: ""
                 },
                 getRowKeys(row) {
                     return row.callRecordId;
@@ -307,6 +308,7 @@
             handleExportAll() {
                 this.exportData.title = "全选案件导出";
                 this.exportData.dialogVisible = true;
+                this.exportData.total = this.total;
                 this.exportData.requestApi = "/report/callRecord/exportAll";
             },
             batchDownloadRecording(type) {

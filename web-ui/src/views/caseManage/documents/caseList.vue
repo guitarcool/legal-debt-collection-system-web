@@ -151,12 +151,12 @@
         </div>
         <mediationBook @refresh="clearSelection" :params="mediationBookData.params" :selection="mediationBookData.selection"
             :title="mediationBookData.title" :show.sync="mediationBookData.dialogVisible" :id="mediationBookData.id"
-            :requestApi="mediationBookData.requestApi"></mediationBook>
+            :requestApi="mediationBookData.requestApi" :total="mediationBookData.total"></mediationBook>
         <message @refresh="clearSelection" :params="messageData.params" :title="messageData.title"
             :show.sync="messageData.dialogVisible" :requestApi="messageData.requestApi" :id="messageData.id"></message>
         <batchExportDialog @refresh="clearSelection" :title="batchexportDialogData.title"
             :show.sync="batchexportDialogData.dialogVisible" :red="batchexportDialogData.red"
-            :params="batchexportDialogData.params"></batchExportDialog>
+            :params="batchexportDialogData.params" :total="batchexportDialogData.total"></batchExportDialog>
         <!--<divisionDialog @refresh="getList" :title="divisionData.title" :show.sync="divisionData.dialogVisible" :id="divisionData.id" :principal="divisionData.principal" :orgNo="divisionData.orgNo"></divisionDialog>-->
         <!--<recordDialog :title="recordData.title" :show.sync="recordData.dialogVisible" :id="recordData.id"></recordDialog>-->
     </div>
@@ -226,7 +226,8 @@
                     id: "",
                     requestApi: "",
                     params: "",
-                    selection: []
+                    selection: [],
+                    total: ""
                 },
                 messageData: {
                     title: "",
@@ -244,6 +245,7 @@
                     dialogVisible: false,
                     red: "",
                     params: "",
+                    total: ""
                 },
             };
         },
@@ -357,6 +359,7 @@
             batchBookAll() {
                 this.mediationBookData.title = "全选生成调解文书";
                 this.mediationBookData.dialogVisible = true;
+                this.mediationBookData.total = this.total;
                 this.mediationBookData.requestApi = "/case/caseInfo/instrument/batchAll";
                 this.mediationBookData.id = "";
             },
@@ -372,6 +375,7 @@
                 this.mediationBookData.title = "全选生成多人多案文书";
                 this.mediationBookData.selection = this.selection;
                 this.mediationBookData.dialogVisible = true;
+                this.mediationBookData.total = this.total;
                 this.mediationBookData.requestApi = "/case/caseInfo/mumc/instrument/batchAll";
                 this.mediationBookData.params = this.ids.join(",");
                 this.mediationBookData.id = "";
@@ -398,6 +402,7 @@
             handleCaseStatusMessageAll() {
                 this.batchexportDialogData.title = "全选短信发送";
                 this.batchexportDialogData.dialogVisible = true;
+                this.batchexportDialogData.total = this.total;
                 this.batchexportDialogData.red = false;
             },
             handleMessage(item) {

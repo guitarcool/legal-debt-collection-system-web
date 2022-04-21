@@ -415,6 +415,7 @@
         <el-dialog :title="numberForm.title" :visible.sync="numberDialogVisible" width="50%"
             :before-close="handleClose">
             <el-form style="margin: 0 auto;" ref="numberForm" :model="numberForm" :rules="rules" label-width="100px">
+                <div v-if="numberForm.title=='全选号码筛选'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
                 <el-form-item label="筛选服务：" prop="radioStatus">
                     <el-radio-group v-model="numberForm.radioStatus">
                         <el-radio :label="1">手机号在网状态</el-radio>
@@ -442,23 +443,23 @@
                 <el-button @click="numberDialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="phoneNumberFormSubmit" :loading="numberFormLoading">
                     {{numberFormLoading?'筛选中':'确定'}}</el-button>
-
             </span>
         </el-dialog>
         <divisionDialog @refresh="clearSelection" :title="divisionData.title" :show.sync="divisionData.dialogVisible"
             :id="divisionData.id" :principal="divisionData.principal" :orgNo="divisionData.orgNo"
-            :caseStatus="divisionData.caseStatus"></divisionDialog>
+            :caseStatus="divisionData.caseStatus" :total="divisionData.total"></divisionDialog>
         <supervisorDialog @refresh="clearSelection" :title="supervisorData.title" :ids="supervisorData.ids"
-            :show.sync="supervisorData.dialogVisible"></supervisorDialog>
+            :show.sync="supervisorData.dialogVisible" :total="supervisorData.total"></supervisorDialog>
         <recordDialog :title="recordData.title" :show.sync="recordData.dialogVisible" :id="recordData.id">
         </recordDialog>
         <bindingCase @refresh="clearSelection" :title="bindingData.title" :show.sync="bindingData.dialogVisible"
-            :ids="bindingData.ids">
+            :ids="bindingData.ids" :total="bindingData.total">
         </bindingCase>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
-            :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
+            :ids="exportData.ids" :requestApi="exportData.requestApi" :total="exportData.total"></exportDialog>
         <el-dialog :title="form.title" :visible.sync="exportDialogVisible" width="50%" :before-close="handleClose">
             <el-form style="margin: 0 auto;" ref="form" :model="form" :rules="exportRules" label-width="100px">
+                <div v-if="form.title=='全选导出网调记录'||form.title=='全选导出调解记录'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
                 <el-form-item v-if="form.title=='导出调解记录'||form.title=='全选导出调解记录'" label="导出范围：" prop="exportRange">
                     <el-checkbox-group v-model="form.exportRange">
                         <el-checkbox :label="1">最近一次调解记录</el-checkbox>
@@ -698,16 +699,19 @@
                     orgNo: "",
                     principal: "",
                     caseStatus: "",
+                    total:''
                 },
                 bindingData: {
                     title: "",
                     dialogVisible: false,
-                    ids: []
+                    ids: [],
+                    total:''
                 },
                 supervisorData: {
                     title: "",
                     dialogVisible: false,
-                    ids: ''
+                    ids: '',
+                    total:''
                 },
                 recordData: {
                     title: "",
@@ -740,6 +744,7 @@
                     dialogVisible: false,
                     ids: "",
                     requestApi: "",
+                    total: "",
                 },
                 form: {
                     exportRange: [],
@@ -964,6 +969,7 @@
             handleExportAll() {
                 this.exportData.title = "全选导出";
                 this.exportData.dialogVisible = true;
+                this.exportData.total = this.total;
                 this.exportData.requestApi = "/case/assignment/exportAll";
             },
             //暂停
@@ -1187,6 +1193,7 @@
                     }
                 }
                 this.divisionData.title = "全选案件分发";
+                this.divisionData.total = this.total;
                 this.divisionData.dialogVisible = true;
                 this.divisionData.id = item.id ? item.id : this.ids.join(",");
                 this.divisionData.orgNo = item.id ?
@@ -1225,6 +1232,7 @@
             handleSupervisorAll() {
                 this.supervisorData.title = "全选监督员分发";
                 this.supervisorData.dialogVisible = true;
+                this.supervisorData.total = this.total;
             },
             handleBinding() {
                 this.bindingData.ids = this.ids;
@@ -1234,6 +1242,7 @@
             handleBindingAll() {
                 this.bindingData.title = "全选公众号绑定";
                 this.bindingData.dialogVisible = true;
+                this.bindingData.total = this.total;
             },
             handleClose(done) {
                 this.$confirm('确认关闭？')

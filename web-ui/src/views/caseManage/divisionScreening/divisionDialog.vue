@@ -2,6 +2,7 @@
     <Dialog :title="title" :height="680" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
         <template v-slot:default>
             <!-- 分配权限内容 -->
+            <div v-if="title == '全选案件分发'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
             <div class="division-content">
                 <div class="radio-box">
                     <el-radio-group v-model="divisionFlag" @change="changeDivisionFlag">
@@ -97,6 +98,10 @@
             caseStatus: {
                 type: Array | Number,
                 default: -1
+            },
+            total:{
+                type: String | Number,
+                default: '--'           
             }
         },
         watch: {
@@ -171,8 +176,7 @@
                 this.divisionFlag = 1;
                 this.exist = false;
                 //整合部门数据和用户数据成一棵树
-                let arr = this.deptList.concat(this.userList)
-                console.log(arr);
+                let arr = this.deptList.concat(this.userList);
                 this.deptOptions = this.handleTree(arr, "deptId", 'parentId', 'children', this.rootId);
                 if (typeof this.caseStatus == "number") {
                     if (this.caseStatus == 0) {

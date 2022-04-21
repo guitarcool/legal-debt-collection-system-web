@@ -3,6 +3,7 @@
         <Dialog :title="title" :height="600" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
             <template v-slot:default>
                 <!-- 查看字段表 -->
+                <div v-if="title == '全选文书短信发送'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
                 <div class="see-field" v-loading="loading">
                     <div v-show="active ==1">
                         <div class="margin-div">
@@ -159,6 +160,10 @@
                 type: String,
                 default: ''
             },
+            total:{
+                type: String | Number,
+                default: '--'           
+            }
         },
         watch: {
             filterText(val) {

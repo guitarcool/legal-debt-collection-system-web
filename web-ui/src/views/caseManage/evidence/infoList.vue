@@ -214,7 +214,7 @@
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
         <message @refresh="clearSelection" :params="messageData.params" :title="messageData.title"
-            :show.sync="messageData.dialogVisible" :type="messageData.type" :requestApi="messageData.requestApi">
+            :show.sync="messageData.dialogVisible" :type="messageData.type" :total="messageData.total" :requestApi="messageData.requestApi">
         </message>
         <batchExportDialog @refresh="clearSelection" :title="batchexportDialogData.title"
             :show.sync="batchexportDialogData.dialogVisible" :red="batchexportDialogData.red"
@@ -226,7 +226,7 @@
             :show.sync="evidenceData.dialogVisible">
         </newEvidenceImport>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
-            :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
+            :ids="exportData.ids" :total="exportData.total" :requestApi="exportData.requestApi"></exportDialog>
     </div>
 </template>
 
@@ -291,7 +291,8 @@
                     dialogVisible: false,
                     type: 0,
                     requestApi: '',
-                    params: ''
+                    params: '',
+                    total:''
                 },
                 batchexportDialogData: {
                     title: "",
@@ -314,6 +315,7 @@
                     dialogVisible: false,
                     ids: "",
                     requestApi: "",
+                    total: ""
                 },
                 getRowKeys(row) {
                     return row.id;
@@ -419,6 +421,7 @@
             handleExportAll(){
                 this.exportData.title = "全选案件导出";
                 this.exportData.dialogVisible = true;
+                this.exportData.total = this.total;
                 this.exportData.requestApi = "/evidence/package/detail/exportAll";
             },
             handleDownZip() {
@@ -450,6 +453,7 @@
                 this.messageData.title = type == 1 ? '全选生成通知邮件' : '生成通知短信'
                 this.messageData.dialogVisible = true;
                 this.messageData.type = type;
+                this.messageData.total = this.total;
                 this.messageData.requestApi = '/evidence/package/notice/mailAll'
             },
             deleteData() {
