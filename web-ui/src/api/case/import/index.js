@@ -46,31 +46,35 @@ const importApi = {
         })
     },
     //下载短信模版
-    downloadSmsTemplate(query){
+    downloadSmsTemplate(data){
         return request({
-            url: `/case/caseInfo/notice/batch?ids=${query.ids}&phoneStatus=${query.phoneStatus}&applyTime=${query.applyTime}&templateId=${query.templateId}`,
-            method: 'get',
+            url: '/shortMsg/batchGenerateNotice',
+            method: 'post',
+            data
         })
     },  
     //下载短信模版
-    downloadcaseInfoTemplate(query){
+    downloadcaseInfoTemplate(data){
         return request({
-            url: `/case/caseInfo/clerical/notice/batch?ids=${query.ids}&phoneStatus=${query.phoneStatus}&applyTime=${query.applyTime}&templateId=${query.templateId}`,
-            method: 'get',
+            url: '/case/caseInfo/clerical/notice/batch',
+            method: 'post',
+            data
         })
     },  
     //下载文书短信模版
-    wenShuBatchTemplate(query){
+    wenShuBatchTemplate(data){
         return request({
-            url: `/case/caseInfo/notice/wenShuBatch?ids=${query.ids}&phoneStatus=${query.phoneStatus}&applyTime=${query.applyTime}&templateId=${query.templateId}`,
-            method: 'get',
+            url: '/shortMsg/batchGenerateClericalNotice',
+            method: 'post',
+            data
         })
     },   
     //下载文书短信模版
-    wenShucaseInfoBatchTemplate(query){
+    wenShucaseInfoBatchTemplate(data){
         return request({
-            url: `/case/caseInfo/wenshu/notice/wenShuBatch?ids=${query.ids}&phoneStatus=${query.phoneStatus}&applyTime=${query.applyTime}&templateId=${query.templateId}`,
-            method: 'get',
+            url: '/case/caseInfo/wenshu/notice/wenShuBatch',
+            method: 'post',
+            data
         })
     },   
 }

@@ -338,10 +338,11 @@ const cuttingAfterApi = {
         })
     },  
     //下载短信模版
-    downloadSmsTemplate(query){
+    downloadSmsTemplate(data){
         return request({
-            url: `/case/postAdjudged/notice/batch?ids=${query.ids}&phoneStatus=${query.phoneStatus}&applyTime=${query.applyTime}&templateId=${query.templateId}`,
-            method: 'get',
+            url: '/case/postAdjudged/notice/batch',
+            method: 'post',
+            data
         })
     },         
 }

@@ -322,10 +322,16 @@
             /** 下载模版操作 */
             importTemplate() {
                 let param = {
+                    content: this.textarea,
+                    applyTime: this.applyTime,
                     ids: this.params,
                     templateId: this.templateId,
-                    applyTime: this.applyTime,
-                    phoneStatus: this.phoneStatus
+                    providerType: this.providerType,
+                    filterDeliverStatus: this.filterDeliverStatus,
+                    filterRealtimeStatus: this.filterRealtimeStatus,
+                    filterNetworkStatus: this.filterNetworkStatus,
+                    phoneStatus: this.phoneStatus,
+                    sendTime: this.signatureDate ? this.signatureDate : '',
                 }
                 if (this.title == '全选批量短信发送') {
                     cuttingBeforeApi.downloadSmsTemplate(param).then((response) => {
