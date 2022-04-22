@@ -533,8 +533,10 @@
                                 </el-option>
                                 <el-option v-if="borrowerInfo" :label="`本人 ${firstInfo.name} 虚拟号`"
                                     :value="`本人,${firstInfo.name},虚拟号`"></el-option>
-                                <el-option v-if="borrowerInfo" :label="`本人 ${firstInfo.name} 微信`"
-                                    :value="`本人,${firstInfo.name},微信`"></el-option>
+                                <el-option v-if="borrowerInfo" :label="`本人 ${firstInfo.name} 社交号码`"
+                                    :value="`本人,${firstInfo.name},社交号码`"></el-option>
+                                <el-option v-if="borrowerInfo" :label="`本人 ${firstInfo.name} 法院外呼`"
+                                    :value="`本人,${firstInfo.name},法院外呼`"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item class="big-margin" label="标签" prop="medLabel">
