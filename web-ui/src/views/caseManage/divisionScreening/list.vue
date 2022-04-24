@@ -327,7 +327,8 @@
                 </el-table-column>
                 <el-table-column label="姓名" prop="respondentName" :show-overflow-tooltip="true" fixed="left"
                     width="80" />
-                <el-table-column label="标的金额" prop="subjectAmount" width="110" :show-overflow-tooltip="true" />
+                <el-table-column label="标的金额" prop="subjectAmount" width="110" :show-overflow-tooltip="true" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="案件状态" :formatter="statusFormat" prop="caseStatus" width="120">
                 </el-table-column>
                 <el-table-column label="订单号" prop="id" :show-overflow-tooltip="true" width="170" />
