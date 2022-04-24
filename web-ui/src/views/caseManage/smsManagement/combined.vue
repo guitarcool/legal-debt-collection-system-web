@@ -20,10 +20,10 @@
                     <el-table-column label="操作" fixed="right" align="center">
                         <template slot-scope="scope">
                             <el-button size="mini" type="warning" @click="edit(scope.row)"
-                                v-hasPermi="['template:info:edit']">编辑
+                                v-hasPermi="['employeeIpBind:edit']">编辑
                             </el-button>
                             <el-button size="mini" type="danger" @click="deleteToggle(scope.row)"
-                                v-hasPermi="['template:info:switch']">删除
+                                v-hasPermi="['employeeIpBind:del']">删除
                             </el-button>
                         </template>
                     </el-table-column>

@@ -107,7 +107,7 @@
                     this.form = {
                         ipAddress: this.editList.ipAddress,
                         employeeId: this.editList.employeeId,
-                        id:this.id
+                        id: this.id
                     }
                 } else {
                     this.form = {

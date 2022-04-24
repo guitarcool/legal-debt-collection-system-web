@@ -80,7 +80,7 @@
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
                     <el-button type="danger" size="mini" :disabled="multiple"
-                        v-hasPermi="['report:shortmsgrecord:export']" @click="handleExport">导出
+                        v-hasPermi="['shortLinkVisitLog:export']" @click="handleExport">导出
                     </el-button>
                 </el-col>
                 <!-- <el-col :span="1.5">
@@ -89,7 +89,7 @@
                     </el-button>
                 </el-col> -->
                 <el-col :span="1.5">
-                    <el-button type="primary" size="mini" v-hasPermi="['report:shortmsgrecord:exportAll']"
+                    <el-button type="primary" size="mini" v-hasPermi="['employeeIpBind:bind']"
                         @click="setUpIP">员工IP设置
                     </el-button>
                 </el-col>
