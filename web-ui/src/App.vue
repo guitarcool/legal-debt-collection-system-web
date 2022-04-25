@@ -11,7 +11,7 @@
                     <p>度言</p>
                 </div>
                 <!-- <div>
-                  <el-button type="success" plain>成功按钮</el-button>
+                  <el-button type="success" plain @click="gorouter">成功按钮</el-button>
                 </div> -->
                 <div id="ctiIframe" class="modal-main"></div>
             </div>
@@ -94,6 +94,17 @@
                     return a
                 }
             },
+            // gorouter(){
+            //     let id = 0;
+            //     ++id;
+            //     console.log(id);
+            //     this.$router.push({
+            //         path: `/division/cutBeforeDetails/${id}`,
+            //         query: {
+            //             beforeId: id
+            //         }
+            //     });
+            // },
             /** 查询token */
             getList() {
                 let accountId = JSON.parse(sessionStorage.getItem("accountId"));
@@ -171,34 +182,32 @@
                             let name = result[1];
                             console.log(id, name);
                             if (name == 'cutBeforeInfo') {
-                                console.log('cutBeforeInfo', 1);
-                                if (this.$route.name == 'cutBeforeInfo') {
-                                    //新增或修改单个参数
-                                    this.$router.replace({
-                                        query: merge(this.$route.query, {
-                                            beforeId: id
-                                        })
-                                    })
-                                }
+                                // if (this.$route.name == 'cutBeforeInfo') {
+                                //     //新增或修改单个参数
+                                //     this.$router.replace({
+                                //         query: merge(this.$route.query, {
+                                //             beforeId: id
+                                //         })
+                                //     })
+                                // }
                                 this.$router.push({
-                                    name: "cutBeforeInfo",
+                                    path: `/division/cutBeforeDetails/${id}`,
                                     query: {
                                         beforeId: id
                                     }
                                 });
 
                             } else if (name == 'cutAfterInfo') {
-                                console.log('cutAfterInfo', 2);
-                                if (this.$route.name == 'cutAfterInfo') {
-                                    //新增或修改单个参数
-                                    this.$router.replace({
-                                        query: merge(this.$route.query, {
-                                            afterId: id
-                                        })
-                                    })
-                                }
+                                // if (this.$route.name == 'cutAfterInfo') {
+                                //     //新增或修改单个参数
+                                //     this.$router.replace({
+                                //         query: merge(this.$route.query, {
+                                //             afterId: id
+                                //         })
+                                //     })
+                                // }
                                 this.$router.push({
-                                    name: "cutAfterInfo",
+                                    path: `/division/cutAfterDetails/${id}`,
                                     query: {
                                         afterId: id
                                     }

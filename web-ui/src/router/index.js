@@ -25,173 +25,201 @@ import Layout from '@/layout'
  */
 
 // 公共路由
-export const constantRoutes = [
-  {
-    path: '/redirect',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: '/redirect/:path(.*)',
-        component: (resolve) => require(['@/views/redirect'], resolve)
-      }
-    ]
-  },
-  {
-    path: '/login',
-    component: (resolve) => require(['@/views/login'], resolve),
-    hidden: true
-  },
-  {
-    path: '/404',
-    component: (resolve) => require(['@/views/error/404'], resolve),
-    hidden: true
-  },
-  {
-    path: '/401',
-    component: (resolve) => require(['@/views/error/401'], resolve),
-    hidden: true
-  },
-  {
-    path: '',
-    component: Layout,
-    redirect: 'index',
-    children: [
-      {
-        path: 'index',
-        component: (resolve) => require(['@/views/index'], resolve),
-        name: '首页',
-        meta: { title: '首页', icon: 'dashboard', noCache: true, affix: true }
-      }
-    ]
-  },
-  {
-    path: '/user',
-    component: Layout,
-    hidden: true,
-    redirect: 'noredirect',
-    children: [
-      {
-        path: 'profile',
-        component: (resolve) => require(['@/views/system/user/profile/index'], resolve),
-        name: 'Profile',
-        meta: { title: '个人中心', icon: 'user' }
-      }
-    ]
-  },
-  {
-    path: '/dict',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'type/data/:dictId(\\d+)',
-        component: (resolve) => require(['@/views/system/dict/data'], resolve),
-        name: 'Data',
-        meta: { title: '字典数据', icon: '' }
-      }
-    ]
-  },
-  {
-    path: '/job',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'log',
-        component: (resolve) => require(['@/views/monitor/job/log'], resolve),
-        name: 'JobLog',
-        meta: { title: '调度日志' }
-      }
-    ]
-  },
-  {
-    path: '/gen',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'edit/:tableId(\\d+)',
-        component: (resolve) => require(['@/views/tool/gen/editTable'], resolve),
-        name: 'GenEdit',
-        meta: { title: '修改生成配置' }
-      }
-    ]
-  },
-  {
-    path: '/case',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'info',
-        component: (resolve) => require(['@/views/caseManage/caseImport/info'], resolve),
-        name:'caseInfo',
-        meta: { title: '案件详情' }
-      },
-      {
-        path: 'infoList',
-        component: (resolve) => require(['@/views/caseManage/evidence/infoList'], resolve),
-        name:'infoList',
-        meta: { title: '证据链包明细' }
-      }
-    ]
-  },
-  // {
-  //   path: '/division',
-  //   component: Layout,
-  //   hidden: true,
-  //   children: [
-  //     {
-  //       path: 'info',
-  //       component: (resolve) => require(['@/views/caseManage/divisionScreening/info'], resolve),
-  //       name:'divisionInfo',
-  //       meta: { title: '分案详情' }
-  //     }
-  //   ]
-  // },
-  {
-    path: '/division',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'cutBeforeInfo',
-        component: (resolve) => require(['@/views/caseManage/cuttingBefore/info'], resolve),
-        name:'cutBeforeInfo',
-        meta: { title: '裁前详情' }
-      },
-      {
-        path: 'cutAfterInfo',
-        component: (resolve) => require(['@/views/caseManage/cuttingAfter/info'], resolve),
-        name:'cutAfterInfo',
-        meta: { title: '裁后详情' }
-      },
-      {
-        path: 'info',
-        component: (resolve) => require(['@/views/caseManage/divisionScreening/info'], resolve),
-        name:'divisionInfo',
-        meta: { title: '分案详情' }
-      }
-    ]
-  },
-  {
-    path: '/document',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'documentInfo',
-        component: (resolve) => require(['@/views/caseManage/documents/caseInfo'], resolve),
-        name:'documentInfo',
-        meta: { title: '案例详情' }
-      }
-    ]
-  }
+export const constantRoutes = [{
+        path: '/redirect',
+        component: Layout,
+        hidden: true,
+        children: [{
+            path: '/redirect/:path(.*)',
+            component: (resolve) => require(['@/views/redirect'], resolve)
+        }]
+    },
+    {
+        path: '/login',
+        component: (resolve) => require(['@/views/login'], resolve),
+        hidden: true
+    },
+    {
+        path: '/404',
+        component: (resolve) => require(['@/views/error/404'], resolve),
+        hidden: true
+    },
+    {
+        path: '/401',
+        component: (resolve) => require(['@/views/error/401'], resolve),
+        hidden: true
+    },
+    {
+        path: '',
+        component: Layout,
+        redirect: 'index',
+        children: [{
+            path: 'index',
+            component: (resolve) => require(['@/views/index'], resolve),
+            name: '首页',
+            meta: {
+                title: '首页',
+                icon: 'dashboard',
+                noCache: true,
+                affix: true
+            }
+        }]
+    },
+    {
+        path: '/user',
+        component: Layout,
+        hidden: true,
+        redirect: 'noredirect',
+        children: [{
+            path: 'profile',
+            component: (resolve) => require(['@/views/system/user/profile/index'], resolve),
+            name: 'Profile',
+            meta: {
+                title: '个人中心',
+                icon: 'user'
+            }
+        }]
+    },
+    {
+        path: '/dict',
+        component: Layout,
+        hidden: true,
+        children: [{
+            path: 'type/data/:dictId(\\d+)',
+            component: (resolve) => require(['@/views/system/dict/data'], resolve),
+            name: 'Data',
+            meta: {
+                title: '字典数据',
+                icon: ''
+            }
+        }]
+    },
+    {
+        path: '/job',
+        component: Layout,
+        hidden: true,
+        children: [{
+            path: 'log',
+            component: (resolve) => require(['@/views/monitor/job/log'], resolve),
+            name: 'JobLog',
+            meta: {
+                title: '调度日志'
+            }
+        }]
+    },
+    {
+        path: '/gen',
+        component: Layout,
+        hidden: true,
+        children: [{
+            path: 'edit/:tableId(\\d+)',
+            component: (resolve) => require(['@/views/tool/gen/editTable'], resolve),
+            name: 'GenEdit',
+            meta: {
+                title: '修改生成配置'
+            }
+        }]
+    },
+    {
+        path: '/case',
+        component: Layout,
+        hidden: true,
+        children: [{
+                path: 'info',
+                component: (resolve) => require(['@/views/caseManage/caseImport/info'], resolve),
+                name: 'caseInfo',
+                meta: {
+                    title: '案件详情'
+                }
+            },
+            {
+                path: 'infoList',
+                component: (resolve) => require(['@/views/caseManage/evidence/infoList'], resolve),
+                name: 'infoList',
+                meta: {
+                    title: '证据链包明细'
+                }
+            }
+        ]
+    },
+    // {
+    //   path: '/division',
+    //   component: Layout,
+    //   hidden: true,
+    //   children: [
+    //     {
+    //       path: 'info',
+    //       component: (resolve) => require(['@/views/caseManage/divisionScreening/info'], resolve),
+    //       name:'divisionInfo',
+    //       meta: { title: '分案详情' }
+    //     }
+    //   ]
+    // },
+    {
+        path: '/division',
+        component: Layout,
+        hidden: true,
+        children: [{
+                path: 'cutBeforeDetails/:beforeId(\\d+)',
+                component: (resolve) => require(['@/views/caseManage/cuttingBefore/info'], resolve),
+                name: 'cutBeforeDetails',
+                meta: {
+                    title: '裁前详情(外呼)'
+                }
+            },
+            {
+                path: 'cutBeforeInfo',
+                component: (resolve) => require(['@/views/caseManage/cuttingBefore/info'], resolve),
+                name: 'cutBeforeInfo',
+                meta: {
+                    title: '裁前详情'
+                }
+            },
+            {
+                path: 'cutAfterInfo',
+                component: (resolve) => require(['@/views/caseManage/cuttingAfter/info'], resolve),
+                name: 'cutAfterInfo',
+                meta: {
+                    title: '裁后详情'
+                }
+            },
+            {
+                path: 'cutAfterInfoDetails/:afterId(\\d+)',
+                component: (resolve) => require(['@/views/caseManage/cuttingAfter/info'], resolve),
+                name: 'cutAfterDetails',
+                meta: {
+                    title: '裁后详情(外呼)'
+                }
+            },
+            {
+                path: 'info',
+                component: (resolve) => require(['@/views/caseManage/divisionScreening/info'], resolve),
+                name: 'divisionInfo',
+                meta: {
+                    title: '分案详情'
+                }
+            }
+        ]
+    },
+    {
+        path: '/document',
+        component: Layout,
+        hidden: true,
+        children: [{
+            path: 'documentInfo',
+            component: (resolve) => require(['@/views/caseManage/documents/caseInfo'], resolve),
+            name: 'documentInfo',
+            meta: {
+                title: '案例详情'
+            }
+        }]
+    }
 ]
 
 export default new Router({
-  mode: 'history', // 后端支持可开
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+    mode: 'history', // 后端支持可开
+    scrollBehavior: () => ({
+        y: 0
+    }),
+    routes: constantRoutes
 })
