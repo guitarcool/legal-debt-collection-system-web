@@ -492,7 +492,7 @@
                         this.caseList = response.data || [];
                         this.caseList.forEach(item => {
                             //短信模版
-                            if (item.formatType == 1 && item.status == 1) {
+                            if (item.formatType == 3 && item.status == 1) {
                                 if (item.templateType == 0) {
                                     this.data[0].children.push(item)
                                 }
