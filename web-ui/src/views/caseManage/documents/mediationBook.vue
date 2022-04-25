@@ -312,6 +312,7 @@
                 axios({
                     method: "post",
                     url: url,
+                    timeout:600000,
                     responseType: "blob",
                     params: param,
                     headers: {

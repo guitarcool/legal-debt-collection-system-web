@@ -408,6 +408,7 @@
                             method: 'post',
                             url: that.upload_url,
                             data: formData,
+                            timeout:600000,
                             processData: false, // 告诉axios不要去处理发送的数据(重要参数)
                             contentType: false, // 告诉axios不要去设置Content-Type请求头
                             // config: {

@@ -52,7 +52,7 @@ const evidenceApi = {
     delDataAll() {
         return request({
             url: '/evidence/package/removeAll',
-            timeout:500000,
+            timeout:600000,
             method: 'delete'
         })
     },

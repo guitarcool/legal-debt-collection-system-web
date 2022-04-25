@@ -49,7 +49,7 @@ const cuttingBeforeApi = {
     casePropertyAll(ids){
         return request({
             url: '/case/property/all'+ids,
-            timeout:500000,
+            timeout:600000,
             method: 'post',
         })
     },
@@ -129,7 +129,7 @@ const cuttingBeforeApi = {
         return request({
             url: '/case/pretrial/applyLetterRepairAll',
             method: 'post',
-            timeout:500000,
+            timeout:600000,
             params:data
         })
     },
@@ -184,7 +184,7 @@ const cuttingBeforeApi = {
         return request({
         url: '/case/pretrial/batchSMS',
         method: 'post',
-        timeout:500000,
+        timeout:600000,
         data: data
         })
     },    
@@ -208,7 +208,7 @@ const cuttingBeforeApi = {
     batchExportMediationRecordAll(query){
         return request({
             url: '/case/pretrial/batchExportMediationRecordAll',
-            timeout:500000,
+            timeout:600000,
             method: 'get',
             params: query
         })
@@ -225,7 +225,7 @@ const cuttingBeforeApi = {
     batchExportNetworkAdjustRecordAll(query){
         return request({
             url: '/case/pretrial/batchExportNetworkAdjustRecordAll',
-            timeout:500000,
+            timeout:600000,
             method: 'get',
             params: query
         })
@@ -242,7 +242,7 @@ const cuttingBeforeApi = {
     batchMediationFailedAll(data){
         return request({
             url: '/case/pretrial/batchMediationFailedAll',
-            timeout:500000,
+            timeout:600000,
             method: 'post',
             data: data
         })
@@ -259,7 +259,7 @@ const cuttingBeforeApi = {
     batchPendingAll(data){
         return request({
             url: '/case/pretrial/batchPendingAll',
-            timeout:500000,
+            timeout:600000,
             method: 'post',
             data: data
         })

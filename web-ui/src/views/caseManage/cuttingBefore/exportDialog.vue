@@ -180,6 +180,7 @@
         axios({
             method: "get",
             url: baseUrl + url,
+            timeout:600000,
             responseType: "blob",
             headers: {
               Authorization: "Bearer " + getToken()

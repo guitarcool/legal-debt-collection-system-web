@@ -194,6 +194,7 @@
                 axios({
                     method: "get",
                     url: url,
+                    timeout:600000,
                     responseType: "blob",
                     params: param,
                     headers: {

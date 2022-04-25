@@ -54,7 +54,7 @@ const electronicApi = {
         return request({
             url: '/sign/apply/checkAll',
             method: 'post',
-            timeout:500000,
+            timeout:600000,
             params: query
         })
     },

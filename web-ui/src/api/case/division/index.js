@@ -59,7 +59,7 @@ const divisionApi = {
         return request({
             url: '/case/assignment/assignmentCaseAll',
             method: 'post',
-            timeout:500000,
+            timeout:600000,
             data:data
         })
     },
@@ -74,7 +74,7 @@ const divisionApi = {
         return request({
             url: '/case/assignment/supervisorAssignmentAll',
             method: 'post',
-            timeout:500000,
+            timeout:600000,
             data:data
         })
     },
@@ -106,7 +106,7 @@ const divisionApi = {
         return request({
             url: `/case/assignment/screeningAll?ids=${ids}&jump=${jump}&status=${status}&type=${radioStatus}`,
             method: 'post',
-            timeout:500000,
+            timeout:600000,
         })
     },
     //暂停
@@ -122,7 +122,7 @@ const divisionApi = {
         return request({
             url: '/case/assignment/suspendCaseAll',
             method: 'get',
-            timeout:500000,
+            timeout:600000,
         })
     },
     //恢复
@@ -138,7 +138,7 @@ const divisionApi = {
         return request({
             url: '/case/assignment/recoverCaseAll',
             method: 'get',
-            timeout:500000,
+            timeout:600000,
         })
     },
     //退案
@@ -153,7 +153,7 @@ const divisionApi = {
         return request({
             url: '/case/assignment/withdrawalCaseAll',
             method: 'get',
-            timeout:500000,
+            timeout:600000,
         })
     },
     //公众号列表查询
@@ -177,7 +177,7 @@ const divisionApi = {
         return request({
             url: '/admin/wechat/case/bindAll',
             method: 'post',
-            timeout:500000,
+            timeout:600000,
             data:data
         })
     },

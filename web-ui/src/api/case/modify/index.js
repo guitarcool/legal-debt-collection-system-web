@@ -34,7 +34,7 @@ const modifyApi = {
         return request({
             url: '/case/letter/reviewAll',
             method: 'post',
-            timeout:500000,
+            timeout:600000,
             params:data
         })
     },

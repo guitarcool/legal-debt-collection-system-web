@@ -134,7 +134,7 @@ const cuttingAfterApi = {
     applyLetterRepairAll(data){
         return request({
             url: '/case/postAdjudged/applyLetterRepairAll',
-            timeout:500000,
+            timeout:600000,
             method: 'post',
             params:data
         })
@@ -174,7 +174,7 @@ const cuttingAfterApi = {
     pendingExecuteAll(data){
         return request({
             url: '/case/postAdjudged/pendingExecuteAll',
-            timeout:500000,
+            timeout:600000,
             method: 'post',
             data
         })
@@ -216,7 +216,7 @@ const cuttingAfterApi = {
         return request({
         url: '/case/postAdjudged/batchSMS',
         method: 'post',
-        timeout:500000,
+        timeout:600000,
         data: data
         })
     }, 
@@ -225,7 +225,7 @@ const cuttingAfterApi = {
         return request({
         url: '/shortMsg/clerical/batchSMSAll',
         method: 'post',
-        timeout:500000,
+        timeout:600000,
         data: data
         })
     }, 
@@ -234,7 +234,7 @@ const cuttingAfterApi = {
         return request({
         url: '/shortMsg/batchClericalSMSAll',
         method: 'post',
-        timeout:500000,
+        timeout:600000,
         data: data
         })
     },  
@@ -258,6 +258,7 @@ const cuttingAfterApi = {
     batchResendAll(data) {
         return request({
         url: '/shortMsg/batchResendAll',
+        timeout:600000,
         method: 'post',
         data: data
         })
@@ -283,7 +284,7 @@ const cuttingAfterApi = {
         return request({
             url: '/case/postAdjudged/batchExportMediationRecordAll',
             method: 'get',
-            timeout:500000,
+            timeout:600000,
             params: query
         })
     },
@@ -292,7 +293,7 @@ const cuttingAfterApi = {
         return request({
             url: '/case/assignment/batchExportMediationRecordAll',
             method: 'get',
-            timeout:500000,
+            timeout:600000,
             params: query
         })
     },
@@ -309,7 +310,7 @@ const cuttingAfterApi = {
         return request({
             url: '/case/postAdjudged/batchExportNetworkAdjustRecordAll',
             method: 'get',
-            timeout:500000,
+            timeout:600000,
             params: query
         })
     },  
@@ -318,7 +319,7 @@ const cuttingAfterApi = {
         return request({
             url: '/case/assignment/batchExportNetworkAdjustRecordAll',
             method: 'get',
-            timeout:500000,
+            timeout:600000,
             params: query
         })
     },  
