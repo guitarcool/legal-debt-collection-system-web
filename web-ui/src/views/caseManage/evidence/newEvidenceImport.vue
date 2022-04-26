@@ -5,7 +5,7 @@
                 <div class="evidence-import">
                     <!--<p>若对已有案件进行数据更新，请填写内部订单号及需更新的字段项，无需更改的字段项请勿填写，否则数据将被覆盖！</p>-->
                     <el-upload class="upload-demo covered-with" action="string" :limit="1" :http-request="handleUplod"
-                        :disabled="isUploading" :on-change="fileOnChange" :on-remove="removeFile"
+                        accept=".zip" :disabled="isUploading"  :on-change="fileOnChange" :on-remove="removeFile"
                         :before-upload="beforeAvatarUpload" drag :file-list="fileList">
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
@@ -101,57 +101,60 @@
                 }
             },
             submit() {
-                this.loading = true;
-                let formData = new FormData();
-                formData.append("file", this.files);
-                formData.append("id", this.id);
-                const instance = axios.create({
-                    withCredentials: true
-                });
-                instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken()
-                if (this.title == "证据包导入") {
-                    var that = this
-                    instance({
-                        method: 'post',
-                        url: process.env.VUE_APP_BASE_API + '/evidence/package/batchImportData',
-                        data: formData,
-                        timeout:600000,
-                        processData: false, // 告诉axios不要去处理发送的数据(重要参数)
-                        contentType: false, // 告诉axios不要去设置Content-Type请求头
-                    }).then(function (response) {
-                        console.log(response)
-                        that.$alert(response.data.msg, "导入结果", {
-                            dangerouslyUseHTMLString: true
-                        });
-                        that.dialogVisible = false;
-                        that.loading = false;
-                        that.$emit('refresh');
-                    }).catch(error => {
-                        that.msgError(error);
-                        that.loading = false;
-                    })
-                } else if (this.title == "新增文件") {
-                    var that = this
-                    instance({
-                        method: 'post',
-                        url: process.env.VUE_APP_BASE_API +
-                            '/evidence/package/addEvidenceMaterial',
-                        data: formData,
-                        processData: false, // 告诉axios不要去处理发送的数据(重要参数)
-                        contentType: false, // 告诉axios不要去设置Content-Type请求头
-                    }).then(function (response) {
-                        console.log(response)
-                        that.$alert(response.data.msg, "导入结果", {
-                            dangerouslyUseHTMLString: true
-                        });
-                        that.dialogVisible = false;
-                        that.loading = false;
-                        that.$emit('refresh');
-                    }).catch(error => {
-                        that.msgError(error);
-                        that.loading = false;
-                    })
+                if (this.files) {
+                    this.loading = true;
+                    let formData = new FormData();
+                    formData.append("file", this.files);
+                    formData.append("id", this.id);
+                    const instance = axios.create({
+                        withCredentials: true
+                    });
+                    instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken()
+                    if (this.title == "证据包导入") {
+                        var that = this
+                        instance({
+                            method: 'post',
+                            url: process.env.VUE_APP_BASE_API + '/evidence/package/batchImportData',
+                            data: formData,
+                            timeout: 600000,
+                            processData: false, // 告诉axios不要去处理发送的数据(重要参数)
+                            contentType: false, // 告诉axios不要去设置Content-Type请求头
+                        }).then(function (response) {
+                            console.log(response)
+                            that.$alert(response.data.msg, "导入结果", {
+                                dangerouslyUseHTMLString: true
+                            });
+                            that.dialogVisible = false;
+                            that.loading = false;
+                            that.$emit('refresh');
+                        }).catch(error => {
+                            that.msgError(error);
+                            that.loading = false;
+                        })
+                    } else if (this.title == "新增文件") {
+                        var that = this
+                        instance({
+                            method: 'post',
+                            url: process.env.VUE_APP_BASE_API +
+                                '/evidence/package/addEvidenceMaterial',
+                            data: formData,
+                            processData: false, // 告诉axios不要去处理发送的数据(重要参数)
+                            contentType: false, // 告诉axios不要去设置Content-Type请求头
+                        }).then(function (response) {
+                            console.log(response)
+                            that.$alert(response.data.msg, "导入结果", {
+                                dangerouslyUseHTMLString: true
+                            });
+                            that.dialogVisible = false;
+                            that.loading = false;
+                            that.$emit('refresh');
+                        }).catch(error => {
+                            that.msgError(error);
+                            that.loading = false;
+                        })
+                    }
                 }
+
             },
             // 文件上传中处理
             handleFileUploadProgress(event, file, fileList) {

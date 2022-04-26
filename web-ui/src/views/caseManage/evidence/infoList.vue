@@ -19,42 +19,48 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="授权协议：" prop="haveAuthProtocol">
-                    <el-select clearable size="small" filterable v-model="queryParams.haveAuthProtocol" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.haveAuthProtocol"
+                        placeholder="请选择">
                         <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="放款凭证：" prop="haveLoanCertificate">
-                    <el-select clearable size="small" filterable v-model="queryParams.haveLoanCertificate" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.haveLoanCertificate"
+                        placeholder="请选择">
                         <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="注册协议：" prop="haveRegistProtocol">
-                    <el-select clearable size="small" filterable v-model="queryParams.haveRegistProtocol" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.haveRegistProtocol"
+                        placeholder="请选择">
                         <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="融担协议：" prop="haveFinanceContract">
-                    <el-select clearable size="small" filterable v-model="queryParams.haveFinanceContract" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.haveFinanceContract"
+                        placeholder="请选择">
                         <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="还款详情：" prop="haveRepayDetails">
-                    <el-select clearable size="small" filterable v-model="queryParams.haveRepayDetails" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.haveRepayDetails"
+                        placeholder="请选择">
                         <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="还款记录：" prop="haveRepayRecord">
-                    <el-select clearable size="small" filterable v-model="queryParams.haveRepayRecord" placeholder="请选择">
+                    <el-select clearable size="small" filterable v-model="queryParams.haveRepayRecord"
+                        placeholder="请选择">
                         <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
@@ -81,7 +87,8 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-plus" size="mini" v-hasPermi="['evidence:package:removeAll']" @click="deleteDataAll">全选删除
+                    <el-button type="success" icon="el-icon-plus" size="mini"
+                        v-hasPermi="['evidence:package:removeAll']" @click="deleteDataAll">全选删除
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -90,8 +97,8 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-download" size="mini"
-                        @click="handleExportAll" v-hasPermi="['evidence:package:detailExportAll']">全选导出
+                    <el-button type="success" icon="el-icon-download" size="mini" @click="handleExportAll"
+                        v-hasPermi="['evidence:package:detailExportAll']">全选导出
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -214,7 +221,8 @@
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
         <message @refresh="clearSelection" :params="messageData.params" :title="messageData.title"
-            :show.sync="messageData.dialogVisible" :type="messageData.type" :total="messageData.total" :requestApi="messageData.requestApi">
+            :show.sync="messageData.dialogVisible" :type="messageData.type" :total="messageData.total"
+            :requestApi="messageData.requestApi">
         </message>
         <batchExportDialog @refresh="clearSelection" :title="batchexportDialogData.title"
             :show.sync="batchexportDialogData.dialogVisible" :red="batchexportDialogData.red"
@@ -292,7 +300,7 @@
                     type: 0,
                     requestApi: '',
                     params: '',
-                    total:''
+                    total: ''
                 },
                 batchexportDialogData: {
                     title: "",
@@ -418,21 +426,42 @@
                 }).catch(function () {});
             },
             /** 全选案件导出按钮操作 */
-            handleExportAll(){
+            handleExportAll() {
                 this.exportData.title = "全选案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.total = this.total;
                 this.exportData.requestApi = "/evidence/package/detail/exportAll";
             },
             handleDownZip() {
-                let id = this.ids.join(',')
-                //console.log(id)
-                downLoadZip("/evidence/package/download?ids=" + id, '证据包');
-                this.clearSelection();
+                this.$confirm('此操作将下载证据包, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let id = this.ids.join(',')
+                    downLoadZip("/evidence/package/download?ids=" + id, '证据包');
+                    this.clearSelection();
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消操作'
+                    });
+                });
             },
-            handleDownZipAll(){
-                downLoadZip("/evidence/package/downloadAll", '证据包');
-                this.clearSelection();
+            handleDownZipAll() {
+                this.$confirm('此操作将全选下载证据包, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    downLoadZip("/evidence/package/downloadAll", '证据包');
+                    this.clearSelection();
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消操作'
+                    });
+                });
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
@@ -449,7 +478,7 @@
                 this.messageData.params = this.ids.join(',')
             },
             //全选生成通知邮件
-            handleMessageAll(type){
+            handleMessageAll(type) {
                 this.messageData.title = type == 1 ? '全选生成通知邮件' : '生成通知短信'
                 this.messageData.dialogVisible = true;
                 this.messageData.type = type;
