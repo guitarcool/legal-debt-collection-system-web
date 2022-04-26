@@ -184,7 +184,7 @@ export const constantRoutes = [{
                 }
             },
             {
-                path: 'cutAfterInfoDetails/:afterId(\\d+)',
+                path: 'cutAfterDetails/:afterId(\\d+)',
                 component: (resolve) => require(['@/views/caseManage/cuttingAfter/info'], resolve),
                 name: 'cutAfterDetails',
                 meta: {
