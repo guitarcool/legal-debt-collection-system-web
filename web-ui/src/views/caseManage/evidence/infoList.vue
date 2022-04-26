@@ -242,9 +242,18 @@
     import SearchBar from '@/components/SearchBar/index'
     import exportDialog from "../components/exportDialog";
     import evidenceApi from "@/api/case/evidence/index";
+    import axios from 'axios'
     import {
-        downLoadZip
+        downLoadZip,
+        resolveBlob
     } from "@/utils/zipdownload";
+    import {
+        getToken
+    } from '@/utils/auth'
+    const mimeMap = {
+        xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        zip: 'application/zip'
+    }
     import message from '../components/message'
     import batchExportDialog from "./batchExportDialog";
     import editEvidence from "./editEvidence";
@@ -449,19 +458,39 @@
                 });
             },
             handleDownZipAll() {
-                this.$confirm('此操作将全选下载证据包, 是否继续?', '提示', {
+                const h = this.$createElement;
+                this.$msgbox({
+                    title: '消息',
+                    message: h('p', '此操作将全选下载证据包, 是否继续?'),
+                    showCancelButton: true,
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    downLoadZip("/evidence/package/downloadAll", '证据包');
-                    this.clearSelection();
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消操作'
-                    });
-                });
+                    beforeClose: (action, instance, done) => {
+                        if (action === 'confirm') {
+                            instance.confirmButtonLoading = true;
+                            instance.confirmButtonText = '下载中...';
+                            let str = "/evidence/package/downloadAll";
+                            let filename = "证据包";
+                            const baseUrl = process.env.VUE_APP_BASE_API
+                            var url = baseUrl + str;
+                            axios({
+                                method: 'get',
+                                url: url,
+                                responseType: 'blob',
+                                headers: {
+                                    'Authorization': 'Bearer ' + getToken()
+                                }
+                            }).then(res => {
+                                resolveBlob(res, mimeMap.zip)
+                                this.clearSelection();
+                                done();
+                                instance.confirmButtonLoading = false;
+                            })
+                        } else {
+                            done();
+                        }
+                    }
+                }).then(action => {});
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
