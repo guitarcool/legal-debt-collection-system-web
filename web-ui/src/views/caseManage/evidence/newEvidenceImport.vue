@@ -68,7 +68,7 @@
                 default: ''
             },
             id: {
-                type: Number,
+                type: Number||String,
                 default: 0
             },
         },
@@ -153,6 +153,8 @@
                             that.loading = false;
                         })
                     }
+                }else{
+                    this.msgError('请选择要上传的文件后在提交');
                 }
 
             },

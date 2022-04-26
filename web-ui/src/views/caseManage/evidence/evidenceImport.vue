@@ -213,6 +213,8 @@
                             that.msgError(error);
                             that.loading = false;
                         })
+                    }else{
+                        this.msgError('请选择要上传的文件后在提交');
                     }
                 });
             },
