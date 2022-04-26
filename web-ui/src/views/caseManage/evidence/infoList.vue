@@ -244,7 +244,6 @@
     import evidenceApi from "@/api/case/evidence/index";
     import axios from 'axios'
     import {
-        downLoadZip,
         resolveBlob
     } from "@/utils/zipdownload";
     import {
@@ -442,20 +441,40 @@
                 this.exportData.requestApi = "/evidence/package/detail/exportAll";
             },
             handleDownZip() {
-                this.$confirm('此操作将下载证据包, 是否继续?', '提示', {
+                const h = this.$createElement;
+                let id = this.ids.join(',');
+                this.$msgbox({
+                    title: '消息',
+                    message: h('p', '此操作将下载所勾选的证据包, 是否继续?'),
+                    showCancelButton: true,
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    let id = this.ids.join(',')
-                    downLoadZip("/evidence/package/download?ids=" + id, '证据包');
-                    this.clearSelection();
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消操作'
-                    });
-                });
+                    beforeClose: (action, instance, done) => {
+                        if (action === 'confirm') {
+                            instance.confirmButtonLoading = true;
+                            instance.confirmButtonText = '下载中...';
+                            let str = "/evidence/package/download?ids=" +id;
+                            let filename = "证据包";
+                            const baseUrl = process.env.VUE_APP_BASE_API
+                            var url = baseUrl + str;
+                            axios({
+                                method: 'get',
+                                url: url,
+                                responseType: 'blob',
+                                headers: {
+                                    'Authorization': 'Bearer ' + getToken()
+                                }
+                            }).then(res => {
+                                resolveBlob(res, mimeMap.zip)
+                                this.clearSelection();
+                                done();
+                                instance.confirmButtonLoading = false;
+                            })
+                        } else {
+                            done();
+                        }
+                    }
+                }).then(action => {});
             },
             handleDownZipAll() {
                 const h = this.$createElement;
