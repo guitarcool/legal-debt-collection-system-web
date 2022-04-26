@@ -35,7 +35,7 @@
                 <div class="evidence-import">
                     <!--<p>若对已有案件进行数据更新，请填写内部订单号及需更新的字段项，无需更改的字段项请勿填写，否则数据将被覆盖！</p>-->
                     <el-upload class="upload-demo covered-with" action="string" :limit="1" :http-request="handleUplod"
-                        :disabled="isUploading" :on-change="fileOnChange" :on-remove="removeFile"
+                        :disabled="isUploading" accept=".zip" :on-change="fileOnChange" :on-remove="removeFile"
                         :before-upload="beforeAvatarUpload" drag :file-list="fileList">
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
@@ -179,7 +179,7 @@
             },
             submit() {
                 this.$refs["form"].validate((valid) => {
-                    if (valid) {
+                    if (valid&&this.files) {
                         this.loading = true;
                         let formData = new FormData();
                         formData.append("file", this.files);
