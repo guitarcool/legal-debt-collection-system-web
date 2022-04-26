@@ -474,7 +474,7 @@
                             done();
                         }
                     }
-                }).then(action => {});
+                }).then(action => {}).catch(()=>{});//注意这里，这里是重点！
             },
             handleDownZipAll() {
                 const h = this.$createElement;
@@ -509,7 +509,7 @@
                             done();
                         }
                     }
-                }).then(action => {});
+                }).then(action => {}).catch(()=>{});//注意这里，这里是重点！
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
