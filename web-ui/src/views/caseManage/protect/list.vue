@@ -339,7 +339,7 @@
                         });
                     })
                     .catch(() => {
-                        that.msgError("已取消操作");
+                        that.msgInfo("已取消操作");
                     });
             },
         },

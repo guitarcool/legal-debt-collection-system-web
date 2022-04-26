@@ -1517,7 +1517,7 @@
                             });
                     })
                     .catch(() => {
-                        that.msgError("已取消操作");
+                        that.msgInfo("已取消操作");
                     });
             },
             // 表体字体颜色设置
@@ -1786,7 +1786,7 @@
                             });
                     })
                     .catch(() => {
-                        that.msgError("已取消操作");
+                        that.msgInfo("已取消操作");
                     });
             },
             //移入待立案
@@ -1807,7 +1807,7 @@
                         });
                     })
                     .catch(() => {
-                        that.msgError("已取消操作");
+                        that.msgInfo("已取消操作");
                     });
             },
             //强制结案
@@ -1830,7 +1830,7 @@
                             });
                     })
                     .catch(() => {
-                        that.msgError("已取消操作");
+                        that.msgInfo("已取消操作");
                     });
             },
             recordingPlay(val) {
@@ -1884,7 +1884,7 @@
                         }
                     })
                     .catch(() => {
-                        that.msgError("已取消操作");
+                        that.msgInfo("已取消操作");
                     });
             },
             //申请案件信修
@@ -1908,7 +1908,7 @@
                         });
                     })
                     .catch(() => {
-                        that.msgError("已取消操作");
+                        that.msgInfo("已取消操作");
                     });
             },
             //下载附件

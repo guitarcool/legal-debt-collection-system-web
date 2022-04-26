@@ -308,7 +308,7 @@
             these.msgError(error);
           })
         }).catch(() => {
-          that.msgError("已取消操作");
+          that.msgInfo("已取消操作");
         });
       },
       // editSubmit() {
@@ -365,7 +365,7 @@
       //       these.msgError(error);
       //     })
       //   }).catch(() => {
-      //     that.msgError("已取消操作");
+      //     that.msgInfo("已取消操作");
       //   });
       // },
       // 文件上传中处理

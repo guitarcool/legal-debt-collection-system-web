@@ -873,7 +873,7 @@
               that.draggableList.splice(index, 1)
             })
           }).catch(() => {
-            that.msgError("已取消操作");
+            that.msgInfo("已取消操作");
           })
         } else {
           this.draggableList.splice(index, 1)
