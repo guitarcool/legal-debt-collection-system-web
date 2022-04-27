@@ -2,7 +2,9 @@
     <Dialog :title="title" :height="600" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
         <template v-slot:default>
             <!-- 查看字段表 -->
-            <div v-if="title == '全选生成多人多案文书'||title == '全选生成调解文书'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
+            <div v-if="title == '全选生成多人多案文书'||title == '全选生成调解文书'"
+                style="padding:10px 0;color:red;font-size:16px;line-height:24px">注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!
+            </div>
             <div class="see-field" v-loading="loading">
                 <div class="margin-div">
                     <p class="book-title">1、选择文书模版：</p>
@@ -122,16 +124,16 @@
                 default: "",
             },
             params: {
-                type: String,
-                default: "",
+                type: Array,
+                default: [],
             },
             selection: {
                 type: Array,
                 default: [],
             },
-            total:{
+            total: {
                 type: String | Number,
-                default: '--'           
+                default: '--'
             }
         },
         watch: {
@@ -278,7 +280,7 @@
                 } else {
                     if (this.title == '批量生成多人多案文书' || this.title == '全选生成多人多案文书') {
                         param.ids = this.ids.join(",");
-                        if (this.caseNumOnePaper == ''||this.caseNumOnePaper > 100) {
+                        if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
                             this.msgError('请填写正确的合并数量')
                             return
                         }
@@ -312,33 +314,42 @@
                 axios({
                     method: "post",
                     url: url,
-                    timeout:600000,
+                    timeout: 600000,
                     responseType: "blob",
                     data: param,
                     headers: {
                         Authorization: "Bearer " + getToken()
                     },
                 }).then((res) => {
-                    let data = res.data
-                    let _self = this
-                    let fileReader = new FileReader();
-                    fileReader.onload = function () {
-                        try {
-                            let jsonData = JSON.parse(this.result); // 说明是普通对象数据，后台转换失败
-                            _self.$message({
-                                message: jsonData.msg,
-                                type: "error",
-                            }); // 弹出的提示信息
-                            _self.loading = false;
-                        } catch (err) { // 解析成对象失败，说明是正常的文件流
-                            _self.resolveBlob(res, mimeMap.zip);
-                            _self.needSignTemplate = [];
-                            _self.dialogVisible = false;
-                            _self.loading = false;
-                            _self.$emit('refresh')
+                    if (this.title == '批量生成调解文书' || this.title == '全选生成调解文书') {
+                        if(res.data.code == 200){
+                            this.msgSuccess('文书生成任务已提交，请在文书下载模块中查看文书生成进度。');
+                        }else{
+                            this.msgError(res.data.msg);
                         }
-                    };
-                    fileReader.readAsText(data) // 注意别落掉此代码，可以将 Blob 或者 File 对象转根据特殊的编码格式转化为内容(字符串形式)
+                    } else {
+                        let data = res.data
+                        let _self = this
+                        let fileReader = new FileReader();
+                        fileReader.onload = function () {
+                            try {
+                                let jsonData = JSON.parse(this.result); // 说明是普通对象数据，后台转换失败
+                                _self.$message({
+                                    message: jsonData.msg,
+                                    type: "error",
+                                }); // 弹出的提示信息
+                                _self.loading = false;
+                            } catch (err) { // 解析成对象失败，说明是正常的文件流
+                                _self.resolveBlob(res, mimeMap.zip);
+                                _self.needSignTemplate = [];
+                                _self.dialogVisible = false;
+                                _self.loading = false;
+                                _self.$emit('refresh')
+                            }
+                        };
+                        fileReader.readAsText(data) // 注意别落掉此代码，可以将 Blob 或者 File 对象转根据特殊的编码格式转化为内容(字符串形式)
+                    }
+
                 }).catch((error) => {
                     this.needSignTemplate = [];
                     this.loading = false;

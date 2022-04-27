@@ -353,7 +353,7 @@
                 this.mediationBookData.title = "批量生成调解文书";
                 this.mediationBookData.dialogVisible = true;
                 this.mediationBookData.requestApi = "/case/caseInfo/instrument/batch";
-                this.mediationBookData.params = this.ids.join(",");
+                this.mediationBookData.params = this.ids;
                 this.mediationBookData.id = "";
             },
             batchBookAll() {
