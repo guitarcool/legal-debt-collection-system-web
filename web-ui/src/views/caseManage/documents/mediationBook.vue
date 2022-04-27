@@ -322,10 +322,10 @@
                     },
                 }).then((res) => {
                     if (this.title == '批量生成调解文书' || this.title == '全选生成调解文书') {
-                        if(res.data.code == 200){
+                        if(res.code == 200){
                             this.msgSuccess('文书生成任务已提交，请在文书下载模块中查看文书生成进度。');
                         }else{
-                            this.msgError(res.data.msg);
+                            this.msgError(res.msg);
                         }
                     } else {
                         let data = res.data
