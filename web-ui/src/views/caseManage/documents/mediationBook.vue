@@ -314,7 +314,7 @@
                     url: url,
                     timeout:600000,
                     responseType: "blob",
-                    params: param,
+                    data: param,
                     headers: {
                         Authorization: "Bearer " + getToken()
                     },
