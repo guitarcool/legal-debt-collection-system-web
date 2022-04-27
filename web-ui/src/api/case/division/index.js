@@ -189,6 +189,22 @@ const divisionApi = {
             params: query
         })
     },
+    //批量生成调解文书
+    instrumentlist(data) {
+        return request({
+            url: '/case/caseInfo/instrument/batch',
+            method: 'post',
+            data
+        })
+    },
+    //全选生成调解文书
+    instrumentlistAll(data) {
+        return request({
+            url: '/case/caseInfo/instrument/batchAll',
+            method: 'post',
+            data
+        })
+    },
 }
 
 // 下载用户导入模版

@@ -81,7 +81,9 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">关闭</el-button>
-            <el-button type="primary" @click="submit">确 定</el-button>
+            <el-button type="primary" @click="submitTwo" v-if="title == '批量生成调解文书' || title == '全选生成调解文书'">确 定
+            </el-button>
+            <el-button type="primary" @click="submit" v-else>确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -93,6 +95,7 @@
         getToken
     } from "@/utils/auth";
     import templateApi from "@/api/case/document/templateIndex";
+    import divisionApi from "@/api/case/division/index";
     import draggable from 'vuedraggable'
     import Sortable from 'sortablejs'
     const mimeMap = {
@@ -260,6 +263,59 @@
                 })
             },
             // 提交上传文件
+            submitTwo() {
+                this.templateIdArr = this.chooseData.map((item) => item.id);
+                this.needSignTemplate = this.chooseData.map((item) => item.switch ? item.switch : false);
+                let param = {};
+                //批量生成调解文书
+                param.ids = this.params;
+                if (this.templateIdArr.length <= 0) {
+                    this.msgError("请选择模版");
+                    return;
+                }
+                param.caseNumOnePaper = this.caseNumOnePaper;
+                param.templateIdArr = this.templateIdArr.join(",");
+                param.needSignTemplate = this.needSignTemplate.join(","),
+                    param.applyDate = this.applyDate;
+                param.isShow = this.isShow;
+                param.suffix =
+                    this.suffix == 1 ?
+                    ".docx" :
+                    this.suffix == 2 ?
+                    ".pdf" :
+                    ".xlsx";
+                this.loading = true;
+                if (this.title == '批量生成调解文书') {
+                    divisionApi.instrumentlist(param).then((response) => {
+                        if (response.code == 200) {
+                            this.dialogVisible = false;
+                            this.loading = false;
+                            this.msgSuccess('文书生成任务已提交，请在文书下载模块中查看文书生成进度。');
+                        } else {
+                            this.loading = false;
+                            this.msgError(response.msg);
+                        }
+                    }).catch((error) => {
+                        this.needSignTemplate = [];
+                        this.loading = false;
+                    });
+                } else if (this.title == '全选生成调解文书') {
+                    divisionApi.instrumentlistAll(param).then((response) => {
+                        if (response.code == 200) {
+                            this.dialogVisible = false;
+                            this.loading = false;
+                            this.msgSuccess('文书生成任务已提交，请在文书下载模块中查看文书生成进度。');
+                        } else {
+                            this.loading = false;
+                            this.msgError(response.msg);
+                        }
+                    }).catch((error) => {
+                        this.needSignTemplate = [];
+                        this.loading = false;
+                    });
+                }
+            },
+            // 提交上传文件
             submit() {
                 this.templateIdArr = this.chooseData.map((item) => item.id);
                 this.needSignTemplate = this.chooseData.map((item) => item.switch ? item.switch : false);
@@ -321,38 +377,26 @@
                         Authorization: "Bearer " + getToken()
                     },
                 }).then((res) => {
-                    if (this.title == '批量生成调解文书' || this.title == '全选生成调解文书') {
-                        if(res.code == 200){
-                            this.dialogVisible = false;
-                            this.loading = false;
-                            this.msgSuccess('文书生成任务已提交，请在文书下载模块中查看文书生成进度。');
-                        }else{
-                            this.loading = false;
-                            this.msgError(res.msg);
+                    let data = res.data
+                    let _self = this
+                    let fileReader = new FileReader();
+                    fileReader.onload = function () {
+                        try {
+                            let jsonData = JSON.parse(this.result); // 说明是普通对象数据，后台转换失败
+                            _self.$message({
+                                message: jsonData.msg,
+                                type: "error",
+                            }); // 弹出的提示信息
+                            _self.loading = false;
+                        } catch (err) { // 解析成对象失败，说明是正常的文件流
+                            _self.resolveBlob(res, mimeMap.zip);
+                            _self.needSignTemplate = [];
+                            _self.dialogVisible = false;
+                            _self.loading = false;
+                            _self.$emit('refresh')
                         }
-                    } else {
-                        let data = res.data
-                        let _self = this
-                        let fileReader = new FileReader();
-                        fileReader.onload = function () {
-                            try {
-                                let jsonData = JSON.parse(this.result); // 说明是普通对象数据，后台转换失败
-                                _self.$message({
-                                    message: jsonData.msg,
-                                    type: "error",
-                                }); // 弹出的提示信息
-                                _self.loading = false;
-                            } catch (err) { // 解析成对象失败，说明是正常的文件流
-                                _self.resolveBlob(res, mimeMap.zip);
-                                _self.needSignTemplate = [];
-                                _self.dialogVisible = false;
-                                _self.loading = false;
-                                _self.$emit('refresh')
-                            }
-                        };
-                        fileReader.readAsText(data) // 注意别落掉此代码，可以将 Blob 或者 File 对象转根据特殊的编码格式转化为内容(字符串形式)
-                    }
-
+                    };
+                    fileReader.readAsText(data) // 注意别落掉此代码，可以将 Blob 或者 File 对象转根据特殊的编码格式转化为内容(字符串形式)
                 }).catch((error) => {
                     this.needSignTemplate = [];
                     this.loading = false;
