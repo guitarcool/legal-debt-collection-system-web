@@ -141,7 +141,7 @@
             :id="addData.id">
         </importDialog>
         <exportDialog :title="exportData.title" @refresh="clearSelection" :show.sync="exportData.dialogVisible"
-            :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
+            :ids="exportData.ids" :total="exportData.total" :requestApi="exportData.requestApi"></exportDialog>
     </div>
 </template>
 
@@ -210,6 +210,7 @@
                     title: "",
                     dialogVisible: false,
                     ids: "",
+                    total: "",
                     requestApi: "",
                 },
                 options: [{
@@ -336,6 +337,7 @@
             handleExportAll(){
                 this.exportData.title = "全选案件导出";
                 this.exportData.dialogVisible = true;
+                this.exportData.total = this.total;
                 this.exportData.requestApi = "/case/caseInfo/exportAll";
             },
             /** 案件导入 */

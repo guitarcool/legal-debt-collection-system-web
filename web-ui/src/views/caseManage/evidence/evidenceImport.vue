@@ -179,7 +179,7 @@
             },
             submit() {
                 this.$refs["form"].validate((valid) => {
-                    if (valid&&this.files) {
+                    if (valid && this.files) {
                         this.loading = true;
                         let formData = new FormData();
                         formData.append("file", this.files);
@@ -196,7 +196,7 @@
                             method: 'post',
                             url: process.env.VUE_APP_BASE_API + '/evidence/package/importData',
                             data: formData,
-                            timeout:600000,
+                            timeout: 600000,
                             processData: false, // 告诉axios不要去处理发送的数据(重要参数)
                             contentType: false, // 告诉axios不要去设置Content-Type请求头
                             // config: {
@@ -213,8 +213,8 @@
                             that.msgError(error);
                             that.loading = false;
                         })
-                    }else{
-                        this.msgError('请选择要上传的文件后在提交');
+                    } else {
+                        this.msgError('请确认是否上传了正确的文件在提交！');
                     }
                 });
             },
@@ -225,11 +225,19 @@
             },
             fileOnChange(file) {
                 this.isUploading = false;
-                this.files = file.raw;
+                // 以检查文件是否为.zip;
+                const fileName = file.name;
+                const fileType = fileName.substring(fileName.lastIndexOf('.'));
+                if (fileType === '.zip') {
+                    this.files = file.raw;
+                } else {
+                    this.files = '';
+                    this.msgError('仅允许导入zip格式文件！');
+                }
                 //this.uploadSectionFile()
             },
             removeFile(file) {
-                this.files = null
+                this.files = ''
             },
             handleUplod() {
 

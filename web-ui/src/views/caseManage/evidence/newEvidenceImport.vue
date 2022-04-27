@@ -5,7 +5,7 @@
                 <div class="evidence-import">
                     <!--<p>若对已有案件进行数据更新，请填写内部订单号及需更新的字段项，无需更改的字段项请勿填写，否则数据将被覆盖！</p>-->
                     <el-upload class="upload-demo covered-with" action="string" :limit="1" :http-request="handleUplod"
-                        accept=".zip" :disabled="isUploading"  :on-change="fileOnChange" :on-remove="removeFile"
+                        accept=".zip" :disabled="isUploading" :on-change="fileOnChange" :on-remove="removeFile"
                         :before-upload="beforeAvatarUpload" drag :file-list="fileList">
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
@@ -68,7 +68,7 @@
                 default: ''
             },
             id: {
-                type: Number||String,
+                type: Number || String,
                 default: 0
             },
         },
@@ -153,8 +153,8 @@
                             that.loading = false;
                         })
                     }
-                }else{
-                    this.msgError('请选择要上传的文件后在提交');
+                } else {
+                    this.msgError('请确认是否上传了正确的文件在提交！');
                 }
 
             },
@@ -165,11 +165,19 @@
             },
             fileOnChange(file) {
                 this.isUploading = false;
-                this.files = file.raw;
+                // 以检查文件是否为.zip;
+                const fileName = file.name;
+                const fileType = fileName.substring(fileName.lastIndexOf('.'));
+                if (fileType === '.zip') {
+                    this.files = file.raw;
+                } else {
+                    this.files = '';
+                    this.msgError('仅允许导入zip格式文件！');
+                }
                 //this.uploadSectionFile()
             },
             removeFile(file) {
-                this.files = null
+                this.files = ''
             },
             handleUplod() {
 

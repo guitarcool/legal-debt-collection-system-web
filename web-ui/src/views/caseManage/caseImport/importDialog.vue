@@ -28,8 +28,9 @@
                 <el-link type="info" style="font-size: 16px; margin: 10px 0; color: #1890ff" @click="importTemplate"><i
                         class="el-icon-download"></i>点击下载导入模版</el-link>
                 <el-upload ref="upload" :limit="1" class="covered-with" accept=".xlsx, .xls" :headers="upload.headers"
-                    :action="upload.url" :on-change='handleFileUploadchange' :on-progress="handleFileUploadProgress"
-                    :on-success="handleFileSuccess" :disabled="upload.isUploading" :auto-upload="false" drag>
+                    :action="upload.url" :on-change='handleFileUploadChange' :on-remove="removeFile"
+                    :on-progress="handleFileUploadProgress" :on-success="handleFileSuccess"
+                    :disabled="upload.isUploading" :auto-upload="false" drag>
                     <!-- :action="upload.url + '?batchNo=' + upload.batchNo" -->
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">
@@ -96,7 +97,7 @@
                     url: process.env.VUE_APP_BASE_API + "/case/caseInfo/importData",
                 },
                 loading: false,
-                fileList: [],
+                file: '',
             };
         },
         computed: {
@@ -112,6 +113,7 @@
         created() {},
         methods: {
             openDialog() {
+                this.removeFile();
                 this.loading = false;
             },
             // // 提交上传文件
@@ -126,18 +128,28 @@
             //     });
             //   }
             // },
+            removeFile(file) {
+                this.file = ''
+            },
             // 提交上传文件
             submit() {
-                if (this.fileList.length > 0) {
+                if (this.file) {
                     this.loading = true;
+                    this.$refs.upload.submit();
                 } else {
-                    this.msgError('请选择要上传的文件后在提交');
+                    this.msgError('请确认是否上传了正确的文件在提交！');
                 }
-                this.$refs.upload.submit();
             },
-            handleFileUploadchange(file, fileList) {
-                console.log(file, fileList);
-                this.fileList = fileList
+            handleFileUploadChange(file, fileList) {
+                // 以检查文件是否为.xls .xlsx;
+                const fileName = file.name;
+                const fileType = fileName.substring(fileName.lastIndexOf('.'));
+                if (fileType === '.xls' || fileType === '.xlsx') {
+                    this.file = file;
+                } else {
+                    this.file = '';
+                    this.msgError('仅允许导入"xls"或"xlsx"格式文件！');
+                }
             },
             // 文件上传中处理
             handleFileUploadProgress(event, file, fileList) {

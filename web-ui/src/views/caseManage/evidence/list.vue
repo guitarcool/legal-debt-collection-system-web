@@ -129,7 +129,7 @@
         <evidenceImport @refresh="clearSelection" :title="evidenceData.title" :show.sync="evidenceData.dialogVisible">
         </evidenceImport>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
-            :ids="exportData.ids" :requestApi="exportData.requestApi"></exportDialog>
+            :ids="exportData.ids" :total="exportData.total" :requestApi="exportData.requestApi"></exportDialog>
     </div>
 </template>
 
@@ -182,6 +182,7 @@
                     title: "",
                     dialogVisible: false,
                     ids: "",
+                    total: "",
                     requestApi: "",
                 },
                 getRowKeys(row) {
@@ -257,6 +258,7 @@
             handleExportAll(){
                 this.exportData.title = "全选案件导出";
                 this.exportData.dialogVisible = true;
+                this.exportData.total = this.total;
                 this.exportData.requestApi = "/evidence/package/exportAll";
             },
             /** 搜索按钮操作 */
