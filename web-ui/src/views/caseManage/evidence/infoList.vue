@@ -549,6 +549,7 @@
                     })
                     .then(() => {
                         this.clearSelection();
+                        this.getList(2);
                         this.msgSuccess("删除成功");
                     })
                     .catch(function () {});
@@ -567,6 +568,7 @@
                     })
                     .then(() => {
                         this.clearSelection();
+                        this.getList(2);
                         this.msgSuccess("删除成功");
                     })
                     .catch(function () {});
