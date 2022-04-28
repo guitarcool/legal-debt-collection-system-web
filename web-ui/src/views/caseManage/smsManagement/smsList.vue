@@ -16,7 +16,7 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="操作员：">
-                    <el-select clearable filterable size="small" v-model="queryParams.createBy" placeholder="请选择">
+                    <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.operatorIds" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -24,7 +24,7 @@
                 </el-form-item>
                 <el-form-item label="调解员：">
                     <el-select clearable multiple collapse-tags filterable size="small"
-                        v-model="queryParams.mediationtors" placeholder="请选择">
+                        v-model="queryParams.mediatorIds" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -35,9 +35,9 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="发送时间：">
-                    <el-date-picker v-model="chooseDaterange" type="daterange" size="small" range-separator="至"
-                        start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" @change="handleChange"
-                        value-format="yyyy-MM-dd">
+                    <el-date-picker v-model="chooseDaterange" type="datetimerange" size="small" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd HH:mm:ss" @change="handleChange"
+                        value-format="yyyy-MM-dd HH:mm:ss">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="短信送达结果：">
@@ -46,9 +46,9 @@
                     </el-cascader>
                 </el-form-item>
                 <el-form-item label="送达时间：">
-                    <el-date-picker v-model="chooseDaterange2" type="daterange" size="small" range-separator="至"
-                        start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" @change="handleChange2"
-                        value-format="yyyy-MM-dd">
+                    <el-date-picker v-model="chooseDaterange2" type="datetimerange" size="small" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd HH:mm:ss" @change="handleChange2"
+                        value-format="yyyy-MM-dd HH:mm:ss">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="模版名称：">
