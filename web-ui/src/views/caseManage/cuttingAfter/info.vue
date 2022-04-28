@@ -1315,7 +1315,7 @@
                     if (infoType === "subject") {
                         this.subjectInfo = response.data;
                         if (this.firstInfo.isDesensitization && !this.isDesensitization) {
-                            this.subjectInfo.dueBankAccount = this.subjectInfo.dueBankAccount.replace(
+                            this.subjectInfo.dueBankAccount = this.subjectInfo.dueBankAccount?.replace(
                                 /^(.{4})(?:\d+)(.{4})$/, "$1 **** **** $2");
                         }
                     } else if (infoType === "contact") {
@@ -1324,18 +1324,18 @@
                         this.relationalContactList = response.data.relatedInfo || [];
                         if (this.firstInfo.isDesensitization && !this.isDesensitization) {
                             this.contactInfosList.forEach(element => {
-                                return element.phone = element.phone.replace(/(\d{3})\d*(\d{4})/,
+                                return element.phone = element.phone?.replace(/(\d{3})\d*(\d{4})/,
                                     "$1****$2")
                             });
                             this.relationalContactList.forEach(element => {
-                                return element.relatedContact = element.relatedContact.replace(
+                                return element.relatedContact = element.relatedContact?.replace(
                                     /(\d{3})\d*(\d{4})/, "$1****$2")
                             });
                         }
                     } else if (infoType === "borrower") {
                         this.borrowerInfo = response.data;
                         if (this.firstInfo.isDesensitization && !this.isDesensitization) {
-                            this.borrowerInfo.respondentIdNo = this.borrowerInfo.respondentIdNo.replace(
+                            this.borrowerInfo.respondentIdNo = this.borrowerInfo.respondentIdNo?.replace(
                                 /(?<=\d{3})\d{12}(?=\d{2})/, "************");
                         }
                     } else if (infoType === "repayAccount") {
@@ -1395,7 +1395,7 @@
                         this.medRecordList = response.data;
                         if (this.firstInfo.isDesensitization && !this.isDesensitization) {
                             this.medRecordList.forEach(element => {
-                                return element.medTel = element.medTel.replace(/(\d{3})\d*(\d{4})/,
+                                return element.medTel = element.medTel?.replace(/(\d{3})\d*(\d{4})/,
                                     "$1****$2")
                             });
                         }
@@ -1407,7 +1407,7 @@
                         this.callRecordList = response.data;
                         if (this.firstInfo.isDesensitization && !this.isDesensitization) {
                             this.callRecordList.forEach(element => {
-                                return element.callee = element.callee.replace(/(\d{3})\d*(\d{4})/,
+                                return element.callee = element.callee?.replace(/(\d{3})\d*(\d{4})/,
                                     "$1****$2")
                             });
                         }
@@ -1415,7 +1415,7 @@
                         this.msgRecordList = response.data;
                         if (this.firstInfo.isDesensitization && !this.isDesensitization) {
                             this.msgRecordList.forEach(element => {
-                                return element.phone = element.phone.replace(/(\d{3})\d*(\d{4})/,
+                                return element.phone = element.phone?.replace(/(\d{3})\d*(\d{4})/,
                                     "$1****$2")
                             });
                         }
