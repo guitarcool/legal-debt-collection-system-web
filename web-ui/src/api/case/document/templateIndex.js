@@ -198,6 +198,21 @@ const templateApi = {
             data: data
         })
     },
+    //异步列表
+    asyncList(data) {
+        return request({
+            url: '/async/file/list',
+            method: 'post',
+            data: data
+        })
+    },
+    // 重新执行
+    getreExec() {
+        return request({
+        url: 'async/file/reExec',
+        method: 'get'
+        })
+    },
 }
 
 // 下载用户导入模版

@@ -335,7 +335,7 @@
                     //批量
                 } else {
                     if (this.title == '批量生成多人多案文书' || this.title == '全选生成多人多案文书') {
-                        param.ids = this.ids.join(",");
+                        param.ids = this.ids;
                         if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
                             this.msgError('请填写正确的合并数量')
                             return
