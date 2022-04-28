@@ -3,7 +3,8 @@
         <div class="box-contnet-wrap">
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
-                    <el-button type="danger" size="mini" icon="el-icon-s-help" v-hasPermi="['async:file:reExec']" @click="handleexecution">重新执行
+                    <el-button type="danger" size="mini" icon="el-icon-s-help" v-hasPermi="['async:file:reExec']"
+                        @click="handleexecution">重新执行
                     </el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
@@ -21,9 +22,12 @@
                 <el-table-column label="执行结果" prop="execResult">
                     <template slot-scope="scope" v-if="scope.row.execResult != null">
                         <span v-if="scope.row.execResult == '生成失败'" style="color:red">{{scope.row.execResult}}</span>
-                        <span v-if="scope.row.execResult == '生成成功'" style="color:green">{{scope.row.execResult}}</span>
+                        <span v-else-if="scope.row.execResult == '生成成功'"
+                            style="color:green">{{scope.row.execResult}}</span>
+                        <span v-else>{{scope.row.execResult}}</span>
                     </template>
                 </el-table-column>
+                <el-table-column label="操作人" prop="createName"></el-table-column>
                 <!-- <el-table-column label="入参信息" prop="reqInfo" :show-overflow-tooltip="true" width="200"></el-table-column> -->
                 <!-- <el-table-column label="执行结果信息" prop="resultInfo" width="280" :show-overflow-tooltip="true"></el-table-column> -->
                 <el-table-column label="操作" width="200" fixed="right" align="center">
