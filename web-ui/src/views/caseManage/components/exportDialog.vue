@@ -100,6 +100,10 @@
                 }
             },
             submit() {
+                if(this.total > 50000){
+                        this.msgError('筛选出的数据量超出系统导出条数50000上限，请重新筛选后再进行全选导出');
+                        return;
+                }
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
                         this.loading = true;
