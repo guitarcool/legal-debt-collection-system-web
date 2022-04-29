@@ -106,7 +106,7 @@
                         :disabled="multiple" v-hasPermi="['evidence:package:download']">下载证据包
                     </el-button>
                 </el-col>
-                <el-col :span="1.5">
+                <!-- <el-col :span="1.5">
                     <el-button type="success" icon="el-icon-download" size="mini" @click="handleDownZipAll"
                         v-hasPermi="['evidence:package:downloadAll']">全选下载证据包
                     </el-button>
@@ -120,7 +120,7 @@
                     <el-button type="success" icon="el-icon-download" size="mini" @click="handleMessageAll(1)"
                         v-hasPermi="['evidence:package:mailAll']">全选生成通知邮件
                     </el-button>
-                </el-col>
+                </el-col> -->
                 <!-- <el-col :span="1.5">
                     <el-button type="primary" icon="el-icon-download" size="mini"
                         @click="generateANotificationTextMessage" :disabled="multiple"
