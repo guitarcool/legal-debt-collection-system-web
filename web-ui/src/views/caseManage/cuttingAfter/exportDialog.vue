@@ -193,6 +193,8 @@
                 this.textarea = "";
                 this.signatureDate = null;
                 this.data[0].children = [];
+                this.data[1].children = [];
+                this.data[2].children = [];
                 this.getList();
             },
             nextActive() {

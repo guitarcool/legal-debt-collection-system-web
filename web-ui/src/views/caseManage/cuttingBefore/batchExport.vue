@@ -261,6 +261,8 @@
                 this.signatureDate = null;
                 this.files = null;
                 this.data[0].children = [];
+                this.data[1].children = [];
+                this.data[2].children = [];
                 this.providerType = "";
                 this.filterDeliverStatus= [];
                 this.phoneStatus = [6,0,8,3,12,13,14];
