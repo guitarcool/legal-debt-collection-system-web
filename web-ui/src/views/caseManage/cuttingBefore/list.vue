@@ -775,6 +775,7 @@
                     cuttingBeforeApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
+                        this.clearTable();//清除排序
                         this.otherParam = response.otherParam;
                         this.caseList = response.rows;
                         response.rows.forEach(element => {
@@ -831,6 +832,9 @@
                     this.searchParams.isAsc = '';
                     this.getList(2);
                 }
+            },
+            clearTable(){
+                this.$refs.multiTable.clearSort();
             },
             changeStatus() {
                 this.getList(1);

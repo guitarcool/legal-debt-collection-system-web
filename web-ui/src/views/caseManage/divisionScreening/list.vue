@@ -901,6 +901,7 @@
                     divisionApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
+                        this.clearTable();
                         this.otherParam = response.otherParam;
                         this.caseList = response.rows;
                         this.total = response.total;
@@ -936,6 +937,9 @@
                     this.searchParams.isAsc = '';
                     this.getList(2);
                 }
+            },
+            clearTable(){
+                this.$refs.multiTable.clearSort();
             },
             jumpChange(value) {
                 this.numberForm.jump = value;

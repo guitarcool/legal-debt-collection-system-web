@@ -257,6 +257,7 @@
                     shortLinkApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
+                        this.clearTable();//清除排序
                         this.caseList = response.rows||[];
                         this.total = response.total;
                         this.loading = false;
@@ -391,6 +392,9 @@
                     this.searchParams.isAsc = '';
                     this.getList(2);
                 }
+            },
+            clearTable(){
+                this.$refs.multiTable.clearSort();
             },
             setUpIP() {
                 this.combinedData.title = "员工IP设置";

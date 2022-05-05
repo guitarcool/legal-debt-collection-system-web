@@ -291,6 +291,7 @@
                     modifyApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
+                        this.clearTable();
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
@@ -333,6 +334,9 @@
                     this.searchParams.isAsc = '';
                     this.getList(2);
                 }
+            },
+            clearTable(){
+                this.$refs.multiTable.clearSort();
             },
             /** 搜索按钮操作 */
             handleQuery() {

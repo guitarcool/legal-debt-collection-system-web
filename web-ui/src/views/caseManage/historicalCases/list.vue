@@ -627,6 +627,7 @@
                     cuttingAfterApi.historical(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
+                        this.clearTable();
                         this.otherParam = response.otherParam;
                         this.caseList = response.rows;
                         response.rows.forEach(element => {
@@ -683,6 +684,9 @@
                     this.searchParams.isAsc = '';
                     this.getList(2);
                 }
+            },
+            clearTable(){
+                this.$refs.multiTable.clearSort();
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
