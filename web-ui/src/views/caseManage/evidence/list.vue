@@ -119,9 +119,6 @@
                         <!-- <el-button size="mini" type="warning" v-if="scope.row.status == 0"
                             @click="handleMove(scope.row)" v-hasPermi="['evidence:package:edit']">移交
                         </el-button> -->
-                        <!-- <el-button size="mini" type="warning" @click="handleUpdate(scope.row)"
-                            v-hasPermi="['evidence:package:detailList']">下载证据包
-                        </el-button> -->
                     </template>
                 </el-table-column>
             </el-table>

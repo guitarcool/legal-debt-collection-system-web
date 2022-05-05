@@ -446,6 +446,10 @@
             handleDownZip() {
                 const h = this.$createElement;
                 let id = this.ids.join(',');
+                if(this.ids.length > 200){
+                    this.msgError('勾选的数据量超出系统下载条数200上限，请重新勾选后再进行下载');
+                    return;
+                }
                 this.$msgbox({
                     title: '消息',
                     message: h('p', '此操作将下载所勾选的证据包, 是否继续?'),
