@@ -122,7 +122,7 @@
                 </el-table-column>
                 <el-table-column label="送达时间" width="180" prop="deliverTime" sortable="custom"
                     :sort-orders="['descending', 'ascending']" />
-                <el-table-column label="查看次数" prop="seeCount" sortable="custom"
+                <el-table-column label="查看次数" width="100" prop="seeCount" sortable="custom"
                     :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="首次查看时间" width="180" prop="firstSeeTime" />
                 <el-table-column label="最新查看时间" width="180" prop="lastSeeTime" sortable="custom"
@@ -214,7 +214,7 @@
                 },
                 shortmsgProviderType: [],
                 getRowKeys(row) {
-                    return row.shortMsgId;
+                    return row.caseId;
                 },
                 shortmsgOptions: [],
                 props: {
@@ -255,8 +255,9 @@
                 if (type == 1) {
                     this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     shortLinkApi.list(this.searchParams).then((response) => {
+                        this.queryParams.orderByColumn = "";
                         this.clearSelection();
-                        this.caseList = response.rows;
+                        this.caseList = response.rows||[];
                         this.total = response.total;
                         this.loading = false;
                     }).catch(() => {
