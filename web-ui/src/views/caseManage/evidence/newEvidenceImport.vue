@@ -5,7 +5,7 @@
                 <div class="evidence-import">
                     <!--<p>若对已有案件进行数据更新，请填写内部订单号及需更新的字段项，无需更改的字段项请勿填写，否则数据将被覆盖！</p>-->
                     <el-upload class="upload-demo covered-with" action="string" :limit="1" :http-request="handleUplod"
-                        accept=".zip" :disabled="isUploading" :on-change="fileOnChange" :on-remove="removeFile"
+                        :accept="accept" :disabled="isUploading" :on-change="fileOnChange" :on-remove="removeFile"
                         :before-upload="beforeAvatarUpload" drag :file-list="fileList">
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
@@ -17,6 +17,8 @@
                         </div>
                         <div class="el-upload__tip" style="color:red" slot="tip" v-if="title == '证据包导入'">
                             提示：仅允许导入zip格式文件！</div>
+                        <div class="el-upload__tip" style="color:red" slot="tip" v-if="title == '新增文件'">
+                            提示：仅允许导入.png .jpg .pdf .excel格式文件！</div>
                     </el-upload>
                 </div>
             </div>
@@ -64,6 +66,10 @@
                 default: false
             },
             title: {
+                type: String,
+                default: ''
+            },
+            accept: {
                 type: String,
                 default: ''
             },

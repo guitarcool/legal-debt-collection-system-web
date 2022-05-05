@@ -231,7 +231,7 @@
             :show.sync="editData.dialogVisible">
         </editEvidence>
         <newEvidenceImport @refresh="clearSelection" :id="evidenceData.id" :title="evidenceData.title"
-            :show.sync="evidenceData.dialogVisible">
+            :show.sync="evidenceData.dialogVisible" :accept="evidenceData.accept" >
         </newEvidenceImport>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
             :ids="exportData.ids" :total="exportData.total" :requestApi="exportData.requestApi"></exportDialog>
@@ -325,6 +325,7 @@
                     title: "",
                     dialogVisible: false,
                     id: null,
+                    accept:'',
                 },
                 exportData: {
                     title: "",
@@ -392,10 +393,12 @@
             handleImport() {
                 this.evidenceData.title = "证据包导入";
                 this.evidenceData.id = this.pid;
+                this.evidenceData.accept = ".zip";
                 this.evidenceData.dialogVisible = true;
             },
             newlyAdded(row) {
                 this.evidenceData.title = "新增文件";
+                this.evidenceData.accept = ".png, .jpg, .pdf, .excel";
                 this.evidenceData.dialogVisible = true;
                 this.evidenceData.id = row.id;
             },
