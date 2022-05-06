@@ -282,17 +282,17 @@
                     this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     templateApi.caseList(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
+                        this.caseList = response.rows||[];
+                        this.total = response.total;
                         this.clearSelection();
                         this.clearTable();
-                        this.caseList = response.rows;
-                        this.total = response.total;
                         this.loading = false;
                     });
                 }
                 //切换页
                 else if (type == 2) {
                     templateApi.caseList(this.searchParams).then((response) => {
-                        this.caseList = response.rows;
+                        this.caseList = response.rows||[];
                         this.total = response.total;
                         this.loading = false;
                     });
