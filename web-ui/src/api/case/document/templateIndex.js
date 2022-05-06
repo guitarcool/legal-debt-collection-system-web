@@ -207,9 +207,9 @@ const templateApi = {
         })
     },
     // 重新执行
-    getreExec() {
+    getreExec(id) {
         return request({
-        url: 'async/file/reExec',
+        url: `async/file/reExec/${id}`,
         method: 'get'
         })
     },

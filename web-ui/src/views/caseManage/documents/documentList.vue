@@ -1,12 +1,28 @@
 <template>
     <div class="app-container">
+        <search-bar v-show="showSearch" :model="queryParams" :has-filter="hasFilter" :flag="true" @submit="getList(1)"
+            @resetAll="resetAll">
+            <template #default>
+                <el-form-item label="操作人：">
+                    <el-select clearable filterable size="small" v-model="queryParams.createId"
+                        placeholder="请选择">
+                        <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
+                            :value="item.userId">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="执行结果：">
+                    <el-select clearable filterable size="small" v-model="queryParams.execResult" placeholder="请选择">
+                        <el-option label="生成中" value="waiting"></el-option>
+                        <el-option label="生成成功" value="success"></el-option>
+                        <el-option label="生成失败" value="fail"></el-option>
+                    </el-select>
+                </el-form-item>
+            </template>
+            <template #buttonArea></template>
+        </search-bar>
         <div class="box-contnet-wrap">
             <el-row :gutter="10" class="mb8">
-                <el-col :span="1.5">
-                    <el-button type="danger" size="mini" icon="el-icon-s-help" v-hasPermi="['async:file:reExec']"
-                        @click="handleexecution">重新执行
-                    </el-button>
-                </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
@@ -35,6 +51,9 @@
                         <el-button size="mini" type="primary" v-if="scope.row.resultInfo"
                             @click="documemtDownload(scope.row.resultInfo)">下载
                         </el-button>
+                        <el-button type="danger" size="mini" icon="el-icon-s-help" v-hasPermi="['async:file:reExec']"
+                            @click="handleexecution(scope.row.id)">重新执行
+                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -46,11 +65,15 @@
 </template>
 
 <script>
+    import SearchBar from "@/components/SearchBar/index";
+    import divisionApi from "@/api/case/division/index";
     import templateApi from "@/api/case/document/templateIndex";
 
     export default {
         name: "documentList",
-        components: {},
+        components: {
+            SearchBar
+        },
         data() {
             return {
                 // 遮罩层
@@ -83,6 +106,7 @@
             };
         },
         created() {
+            this.getUsers();
             this.getList(1);
         },
         // 是否显示过滤栏， 扣除页数，每页显示数，总数量参数，3个内的搜索参数，直接显示一行，不显示过滤
@@ -94,6 +118,12 @@
             },
         },
         methods: {
+            //获取调解员
+            getUsers() {
+                divisionApi.userList().then((response) => {
+                    this.userList = response.data.userList || [];
+                });
+            },
             /** 查询角色列表 */
             getList(type) {
                 this.loading = true;
@@ -130,7 +160,7 @@
                     this.getList(2);
                 }
             },
-            clearTable(){
+            clearTable() {
                 this.$refs.multiTable.clearSort();
             },
             // 多选框选中数据
@@ -162,7 +192,7 @@
                         that.msgInfo("已取消操作");
                     });
             },
-            handleexecution() {
+            handleexecution(val) {
                 var that = this;
                 this.$confirm(`是否确认重新执行?`, "提示", {
                         confirmButtonText: "确定",
@@ -170,11 +200,10 @@
                         type: "warning",
                     })
                     .then(() => {
-                        let data = {};
-                        templateApi.getreExec(data).then((res) => {
+                        templateApi.getreExec(val).then((res) => {
                             if (res.code === 200) {
                                 that.msgSuccess("操作成功");
-                                that.clearSelection();
+                                that.getList(2);
                             }
                         });
                     })
