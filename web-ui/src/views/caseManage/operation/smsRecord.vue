@@ -131,10 +131,10 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="danger" size="mini" :disabled="multiple" @click="handleMessage">重新发送短信</el-button>
+                    <el-button type="danger" size="mini" :disabled="multiple" @click="handleMessage" v-hasPermi="['report:shortmsgrecord:batchResend']">重新发送短信</el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" size="mini" v-hasPermi="['shortMsg:sendsAll']" @click="handleMessageAll">
+                    <el-button type="success" size="mini" v-hasPermi="['report:shortmsgrecord:batchResendAll']" @click="handleMessageAll">
                         全选重新发送短信</el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">

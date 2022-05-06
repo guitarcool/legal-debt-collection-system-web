@@ -51,21 +51,21 @@
         <div class="box-contnet-wrap">
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
-                    <el-button type="danger" size="mini" :disabled="multiple" @click="handleMessage(1)">批量文书短信发送(旧)
+                    <el-button type="danger" size="mini" :disabled="multiple" v-hasPermi="['case:clericalRecord:batchClericalSMSFile']" @click="handleMessage(1)">批量文书短信发送(旧)
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="danger" size="mini" :disabled="multiple" @click="handleMessage(2)">批量文书短信发送
+                    <el-button type="danger" size="mini" :disabled="multiple" v-hasPermi="['case:clericalRecord:batchClericalSMS']" @click="handleMessage(2)">批量文书短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" size="mini" v-hasPermi="['shortMsg:clericalRecords:sendsAll']"
+                    <el-button type="success" size="mini" v-hasPermi="['case:clericalRecord:batchClericalSMSAll']"
                         @click="handleMessageAll">全选文书短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" size="mini" :disabled="multiple"
-                        v-hasPermi="['template:clerical:batchDownloadClerical']" @click="handleOnRecord">批量文书下载
+                        v-hasPermi="['case:clericalRecord:batchDownloadClerical']" @click="handleOnRecord">批量文书下载
                     </el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">

@@ -401,9 +401,9 @@
                         });
                         instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken()
                         if (this.title == '全选文书短信发送') {
-                            this.upload_url = process.env.VUE_APP_BASE_API + "/shortMsg/batchClericalWithFileSMSAll"; //上传URL
-                        } else {
-                            this.upload_url = process.env.VUE_APP_BASE_API + "/shortMsg/batchClericalSMSFile"; //上传URL
+                            this.upload_url = process.env.VUE_APP_BASE_API + "/case/clericalRecord/batchClericalSMSAll"; //上传URL
+                        } else if (this.tltle == '批量文书短信发送(旧)') {
+                            this.upload_url = process.env.VUE_APP_BASE_API + "/case/clericalRecord/batchClericalSMSFile"; //上传URL
                         }
                         var that = this
                         instance({

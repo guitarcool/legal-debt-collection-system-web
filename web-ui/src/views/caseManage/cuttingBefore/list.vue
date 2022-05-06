@@ -244,17 +244,17 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="danger" size="mini"
-                        :disabled="multiple" v-hasPermi="['shortMsg:sends']" @click="handleMessage(1)">批量短信发送(旧)
+                        :disabled="multiple" v-hasPermi="['case:pretrial:batchSMSFile']" @click="handleMessage(1)">批量短信发送(旧)
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="danger" size="mini"
-                        :disabled="multiple" v-hasPermi="['shortMsg:sends']" @click="handleMessage(2)">批量短信发送
+                        :disabled="multiple" v-hasPermi="['case:pretrial:batchSMS']" @click="handleMessage(2)">批量短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="success" size="mini"
-                        v-hasPermi="['case:pretrial:shortMsg']" @click="handleMessageAll">全选批量短信发送
+                        v-hasPermi="['case:pretrial:batchSMSAll']" @click="handleMessageAll">全选批量短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">

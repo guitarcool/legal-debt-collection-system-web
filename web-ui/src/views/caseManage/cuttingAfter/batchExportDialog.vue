@@ -3,7 +3,7 @@
         <Dialog :title="title" :height="600" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
             <template v-slot:default>
                 <!-- 查看字段表 -->
-                <div v-if="title == '全选批量短信发送'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
+                <div v-if="title == '全选短信发送'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
                 <div class="see-field" v-loading="loading">
                     <div v-show="active ==1">
                         <div class="margin-div">
@@ -280,7 +280,7 @@
                 //     return;
                 // }
                 this.active = 2;
-                // if(this.title == '全选批量短信发送'){
+                // if(this.title == '全选短信发送'){
                 templateApi.wituoutPermiInfo(this.templateId).then(
                     response => {
                         this.textarea = response.data.content;
@@ -335,7 +335,7 @@
                     providerType: this.providerType,
                     sendTime: this.signatureDate ? this.signatureDate : '',
                 }
-                if (this.title == '全选批量短信发送') {
+                if (this.title == '全选短信发送') {
                     cuttingAfterApi.downloadSmsTemplate(param).then((response) => {
                         this.download(response.msg);
                     });
@@ -399,10 +399,10 @@
                             withCredentials: true
                         });
                         instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken();
-                        if (this.title == '全选批量短信发送') {
+                        if (this.title == '全选短信发送') {
                             this.upload_url = process.env.VUE_APP_BASE_API + "/case/postAdjudged/batchSMSFileAll"; //上传URL
-                        } else {
-                            this.upload_url = process.env.VUE_APP_BASE_API + "/shortMsg/batchSMSFile"; //上传URL
+                        } else if (this.tltle == '批量短信发送(旧)') {
+                            this.upload_url = process.env.VUE_APP_BASE_API + "/case/postAdjudged/batchSMSFile"; //上传URL
                         }
                         var that = this
                         instance({
@@ -442,7 +442,7 @@
                             providerType: this.providerType,
                             sendTime: this.signatureDate ? this.signatureDate : '',
                         }
-                        if (this.title == '全选批量短信发送') {
+                        if (this.title == '全选短信发送') {
                             cuttingAfterApi.sendSmsCollectionAll(param).then((res) => {
                                     if (res.code == 500) {
                                         this.loading = false;

@@ -116,7 +116,7 @@ const templateApi = {
     //文书生成记录
     recordList(query) {
         return request({
-            url: '/template/clerical/list',
+            url: '/case/clericalRecord/list',
             method: 'get',
             params: query
         })
@@ -193,7 +193,7 @@ const templateApi = {
     //批量下载文书
     batchDownloadClerical(data) {
         return request({
-            url: '/template/clerical/batchDownloadClerical',
+            url: '/case/clericalRecord/batchDownloadClerical',
             method: 'post',
             data: data
         })

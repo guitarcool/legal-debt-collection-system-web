@@ -3,7 +3,8 @@
         <Dialog :title="title" :height="600" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
             <template v-slot:default>
                 <!-- 查看字段表 -->
-                <div v-if="title == '全选短信发送'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
+                <div v-if="title == '全选短信发送'" style="padding:10px 0;color:red;font-size:16px;line-height:24px">
+                    注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
                 <div class="see-field" v-loading="loading">
                     <div v-show="active ==1">
                         <div class="margin-div">
@@ -81,8 +82,9 @@
                                 <span>点击下载：</span>
                                 <el-link type="info" style="font-size: 16px; margin: 10px 0; color: #1890ff"
                                     @click="importTemplate"><i class="el-icon-download"></i>批量生成短信内容</el-link>
-                                <el-upload v-if="title == '批量短信发送(旧)'" class="upload-demo" :limit="1" action="string" :http-request="handleUplod"
-                                    :disabled="isUploading" :on-change="fileOnChange" :on-remove="removeFile">
+                                <el-upload v-if="title == '批量短信发送(旧)'" class="upload-demo" :limit="1" action="string"
+                                    :http-request="handleUplod" :disabled="isUploading" :on-change="fileOnChange"
+                                    :on-remove="removeFile">
                                     <el-button size="mini" type="primary">上传短信内容<i
                                             class="el-icon-upload el-icon--right"></i></el-button>
                                 </el-upload>
@@ -160,9 +162,9 @@
                 type: String,
                 default: ''
             },
-            total:{
+            total: {
                 type: String | Number,
-                default: '--'           
+                default: '--'
             }
         },
         watch: {
@@ -285,7 +287,7 @@
                     response => {
                         this.textarea = response.data.content;
                     }
-                );                        
+                );
                 // }else{
                 //     templateApi.info(this.templateId).then(
                 //         response => {
@@ -339,7 +341,7 @@
                     importApi.downloadcaseInfoTemplate(param).then((response) => {
                         this.download(response.msg);
                     });
-                }else{
+                } else {
                     importApi.downloadSmsTemplate(param).then((response) => {
                         this.download(response.msg);
                     });
@@ -401,16 +403,16 @@
                         instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken()
                         if (this.tltle == '全选短信发送') {
                             this.upload_url = process.env.VUE_APP_BASE_API +
-                            "/case/caseInfo/clerical/batchSMSFileAll"; //上传URL
-                        } else {
-                            this.upload_url = process.env.VUE_APP_BASE_API + "/shortMsg/batchSMSFile"; //上传URL
+                                "/case/caseInfo/clerical/batchSMSFileAll"; //上传URL
+                        } else if (this.tltle == '批量短信发送(旧)') {
+                            this.upload_url = process.env.VUE_APP_BASE_API + "/case/clerical/batchSMSFile"; //上传URL
                         }
                         var that = this
                         instance({
                             method: 'post',
                             url: that.upload_url,
                             data: formData,
-                            timeout:600000,
+                            timeout: 600000,
                             processData: false, // 告诉axios不要去处理发送的数据(重要参数)
                             contentType: false, // 告诉axios不要去设置Content-Type请求头
                             // config: {

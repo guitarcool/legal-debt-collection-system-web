@@ -202,19 +202,19 @@ const cuttingAfterApi = {
         method: 'post',
         data: data
         })
-    },
-    // 发送短信集合
+    }, 
+    // 发送短信
     sendSmsCollection(data) {
         return request({
-        url: '/shortMsg/batchSMS',
+        url: '/case/postAdjudged/batchSMS',
         method: 'post',
         data: data
         })
     },  
-    // 发送短信集合
+    // 全选发送短信
     sendSmsCollectionAll(data) {
         return request({
-        url: '/case/postAdjudged/batchSMS',
+        url: '/case/postAdjudged/batchSMSAll',
         method: 'post',
         timeout:600000,
         data: data
@@ -223,41 +223,41 @@ const cuttingAfterApi = {
     // 发送短信集合
     batchSMSAll(data) {
         return request({
-        url: '/shortMsg/clerical/batchSMSAll',
+        url: '/case/clerical/batchSMSAll',
         method: 'post',
         timeout:600000,
         data: data
         })
     }, 
-    // 发送文书短信集合
+    // 全选发送文书短信
     batchClericalSMSAll(data) {
         return request({
-        url: '/shortMsg/batchClericalSMSAll',
+        url: '/case/clericalRecord/batchClericalSMSAll',
         method: 'post',
         timeout:600000,
         data: data
         })
     },  
-    // 发送文书短信集合
+    // 发送文书短信
     sendSmsWenshu(data) {
         return request({
-        url: '/shortMsg/batchClericalSMS',
+        url: '/case/clericalRecord/batchClericalSMS',
         method: 'post',
         data: data
         })
     },  
-    // 重发短信集合
+    // 重新发送短信
     sendSmsBatchResend(data) {
         return request({
-        url: '/shortMsg/batchResend',
+        url: '/report/shortMsgRecord/batchResend',
         method: 'post',
         data: data
         })
     },    
-    // 重发短信集合
+    // 全选重新发送短信
     batchResendAll(data) {
         return request({
-        url: '/shortMsg/batchResendAll',
+        url: '/report/shortMsgRecord/batchResendAll',
         timeout:600000,
         method: 'post',
         data: data

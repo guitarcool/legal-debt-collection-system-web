@@ -62,17 +62,17 @@
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="danger" size="mini" :disabled="multiple"
-                        @click="handleCaseStatusMessage(1)">批量短信发送(旧)
+                        @click="handleCaseStatusMessage(1)" v-hasPermi="['case:clerical:batchSMSFile']">批量短信发送(旧)
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="danger" size="mini" :disabled="multiple"
-                        @click="handleCaseStatusMessage(2)">批量短信发送
+                        @click="handleCaseStatusMessage(2)" v-hasPermi="['case:clerical:batchSMS']">批量短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="success" size="mini"
-                        @click="handleCaseStatusMessageAll" v-hasPermi="['shortMsg:clerical:sendsAll']">全选短信发送
+                        @click="handleCaseStatusMessageAll" v-hasPermi="['case:clerical:batchSMSAll']">全选短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">

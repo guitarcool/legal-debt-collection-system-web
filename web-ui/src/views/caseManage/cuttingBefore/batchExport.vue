@@ -401,8 +401,8 @@
                         instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken()
                         if(this.title == '全选批量短信发送'){
                             this.upload_url = process.env.VUE_APP_BASE_API + "/shortMsg/pretrialCase/batchSMSFileAll"; //上传URL
-                        }else{
-                            this.upload_url = process.env.VUE_APP_BASE_API + "/shortMsg/batchSMSFile"; //上传URL
+                        } else if (this.tltle == '批量短信发送(旧)') {
+                            this.upload_url = process.env.VUE_APP_BASE_API + "/case/pretrial/batchSMSFile"; //上传URL
                         }
                         var that = this
                         instance({

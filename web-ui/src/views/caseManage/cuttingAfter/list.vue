@@ -261,17 +261,17 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="primary" size="mini"
-                        :disabled="multiple" v-hasPermi="['shortMsg:sends']" @click="handleMessage(1)">批量短信发送(旧)
+                        :disabled="multiple" v-hasPermi="['case:adjudged:batchSMSFile']" @click="handleMessage(1)">批量短信发送(旧)
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="primary" size="mini"
-                        :disabled="multiple" v-hasPermi="['shortMsg:sends']" @click="handleMessage(2)">批量短信发送
+                        :disabled="multiple" v-hasPermi="['case:adjudged:batchSMS']" @click="handleMessage(2)">批量短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="success" size="mini"
-                        v-hasPermi="['case:adjudged:shortMsg']" @click="handleMessageAll">全选批量短信发送
+                        v-hasPermi="['case:adjudged:batchSMSAll']" @click="handleMessageAll">全选短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -1288,7 +1288,7 @@
             },
             //打开发送短信的弹窗
             handleMessageAll() {
-                this.batchexportDialogData.title = "全选批量短信发送";
+                this.batchexportDialogData.title = "全选短信发送";
                 this.batchexportDialogData.dialogVisible = true;
                 this.batchexportDialogData.red = false;
                 this.batchexportDialogData.total = this.total;

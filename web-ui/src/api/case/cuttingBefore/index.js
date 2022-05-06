@@ -174,7 +174,7 @@ const cuttingBeforeApi = {
     // 发送短信集合
     sendSmsCollection(data) {
         return request({
-        url: '/shortMsg/batchSMS',
+        url: '/case/pretrial/batchSMS',
         method: 'post',
         data: data
         })
@@ -182,7 +182,7 @@ const cuttingBeforeApi = {
     // 发送短信集合
     sendSmsCollectionAll(data) {
         return request({
-        url: '/case/pretrial/batchSMS',
+        url: '/case/pretrial/batchSMSAll',
         method: 'post',
         timeout:600000,
         data: data
