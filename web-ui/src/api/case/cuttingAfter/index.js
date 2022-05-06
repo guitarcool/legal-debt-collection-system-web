@@ -220,15 +220,23 @@ const cuttingAfterApi = {
         data: data
         })
     }, 
-    // 发送短信集合
+    // 案例列表全选发送短信
     batchSMSAll(data) {
         return request({
-        url: '/case/clerical/batchSMSAll',
+        url: '/case/clerical/batchSMSFileAll',
         method: 'post',
         timeout:600000,
         data: data
         })
     }, 
+    // 案例列表发送短信
+    sendSmsbatchSMS(data) {
+        return request({
+        url: '/case/clerical/batchSMS',
+        method: 'post',
+        data: data
+        })
+    },  
     // 全选发送文书短信
     batchClericalSMSAll(data) {
         return request({

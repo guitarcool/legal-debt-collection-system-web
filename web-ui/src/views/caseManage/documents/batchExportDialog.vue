@@ -461,7 +461,7 @@
                                     this.loading = false;
                                 });
                         } else {
-                            cuttingAfterApi.sendSmsCollection(param).then((res) => {
+                            cuttingAfterApi.sendSmsbatchSMS(param).then((res) => {
                                     if (res.code == 500) {
                                         this.loading = false;
                                         this.msgError(res.msg);
