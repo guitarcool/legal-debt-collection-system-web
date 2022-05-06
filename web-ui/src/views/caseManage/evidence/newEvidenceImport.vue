@@ -171,16 +171,28 @@
             },
             fileOnChange(file) {
                 this.isUploading = false;
-                // 以检查文件是否为.zip;
-                const fileName = file.name;
-                const fileType = fileName.substring(fileName.lastIndexOf('.'));
-                if (fileType === '.zip') {
-                    this.files = file.raw;
-                } else {
-                    this.files = '';
-                    this.msgError('仅允许导入zip格式文件！');
+                if(this.title == '新增文件'){
+                    // 以检查文件是否为.png .jpg .pdf .excel;
+                    const fileName = file.name;
+                    const fileType = fileName.substring(fileName.lastIndexOf('.'));
+                    if (fileType === '.png'||fileType === '.jpg'||fileType === '.pdf'||fileType === '.excel') {
+                        this.files = file.raw;
+                    } else {
+                        this.files = '';
+                        this.msgError('仅允许导入.png .jpg .pdf .excel格式文件！');
+                    } 
+                }else if(this.title == '证据包导入'){
+                    // 以检查文件是否为.zip;
+                    const fileName = file.name;
+                    const fileType = fileName.substring(fileName.lastIndexOf('.'));
+                    if (fileType === '.zip') {
+                        this.files = file.raw;
+                    } else {
+                        this.files = '';
+                        this.msgError('仅允许导入zip格式文件！');
+                    }                    
                 }
-                //this.uploadSectionFile()
+
             },
             removeFile(file) {
                 this.files = ''
