@@ -401,10 +401,10 @@
                             withCredentials: true
                         });
                         instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken()
-                        if (this.tltle == '全选短信发送') {
+                        if (this.title == '全选短信发送') {
                             this.upload_url = process.env.VUE_APP_BASE_API +
                                 "/case/caseInfo/clerical/batchSMSFileAll"; //上传URL
-                        } else if (this.tltle == '批量短信发送(旧)') {
+                        } else if (this.title == '批量短信发送(旧)') {
                             this.upload_url = process.env.VUE_APP_BASE_API + "/case/clerical/batchSMSFile"; //上传URL
                         }
                         var that = this
