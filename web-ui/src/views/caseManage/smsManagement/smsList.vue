@@ -297,7 +297,7 @@
             // 多选框选中数据
             handleSelectionChange(selection) {
                 this.selection = selection;
-                this.ids = selection.map((item) => item.caseId);
+                this.ids = selection.map((item) => item.id);
                 this.single = selection.length != 1;
                 this.multiple = !selection.length;
             },

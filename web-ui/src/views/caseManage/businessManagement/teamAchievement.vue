@@ -230,7 +230,12 @@
                         this.memberList = response.data.memberList;
                         this.productList = response.data.productList;
                     }
-                );
+                ).catch(() => {
+                    this.businessList = [];
+                    this.channelList = [];
+                    this.memberList = [];
+                    this.productList = [];
+                });
             },
             /** 查询当前用户 */
             getListByDept(deptId) {

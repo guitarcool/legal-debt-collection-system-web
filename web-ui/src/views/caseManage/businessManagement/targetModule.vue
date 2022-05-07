@@ -186,7 +186,11 @@
                         this.total = response.total;
                         this.loading = false;
                     }
-                );
+                    ).catch(() => {
+                        this.teamUserList = [];
+                        this.total = 0;
+                        this.loading = false;
+                    });
             },
             /** 查询产品回款列表 */
             getproductList() {
@@ -197,7 +201,11 @@
                         this.total = response.total;
                         this.loading = false;
                     }
-                );
+                    ).catch(() => {
+                        this.productList = [];
+                        this.total = 0;
+                        this.loading = false;
+                    });
             },
             handleAddTinfoTarget(row) {
                 this.infoTargetData.title = "详情";

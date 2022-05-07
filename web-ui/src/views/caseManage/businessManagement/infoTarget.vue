@@ -78,7 +78,11 @@
                 businessApi.productDetail(queryParams).then((response) => {
                     this.caseList = response.data.userList;
                     this.loading = false;
-                });
+                }
+                ).catch(() => {
+					this.caseList = [];
+					this.loading = false;
+				});
             },
         },
     };

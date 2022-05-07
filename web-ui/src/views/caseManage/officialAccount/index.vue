@@ -147,6 +147,11 @@
                         }
                         this.total = response.total;
                         this.loading = false;
+                    }
+                    ).catch(() => {
+                        this.caseList = [];
+                        this.total = 0;
+                        this.loading = false;
                     });
                 }
                 //切换页
@@ -160,6 +165,11 @@
                             });
                         }
                         this.total = response.total;
+                        this.loading = false;
+                    }
+                    ).catch(() => {
+                        this.caseList = [];
+                        this.total = 0;
                         this.loading = false;
                     });
                 }

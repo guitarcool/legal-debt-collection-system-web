@@ -196,8 +196,8 @@
             getList() {
                 businessApi.getPersonal(this.queryParams).then(
                     response => {
-                        this.business = response.data.business;
-                        this.feedback = response.data.feedback;
+                        this.business = response.data.business||{};
+                        this.feedback = response.data.feedback||{};
                     }
                 );
             },
