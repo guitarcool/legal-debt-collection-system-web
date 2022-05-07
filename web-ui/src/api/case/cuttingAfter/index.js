@@ -223,7 +223,7 @@ const cuttingAfterApi = {
     // 案例列表全选发送短信
     batchSMSAll(data) {
         return request({
-        url: '/case/clerical/batchSMSFileAll',
+        url: '/case/clerical/batchSMSAll',
         method: 'post',
         timeout:600000,
         data: data
