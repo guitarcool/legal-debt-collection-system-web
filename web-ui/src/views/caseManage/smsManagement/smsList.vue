@@ -214,7 +214,7 @@
                 },
                 shortmsgProviderType: [],
                 getRowKeys(row) {
-                    return row.caseId;
+                    return row.id;
                 },
                 shortmsgOptions: [],
                 props: {
