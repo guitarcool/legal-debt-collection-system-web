@@ -127,7 +127,7 @@
                 default: "",
             },
             params: {
-                type: Array,
+                type: String | Array,
                 default: [],
             },
             selection: {
@@ -300,6 +300,7 @@
                         this.loading = false;
                     });
                 } else if (this.title == '全选生成调解文书') {
+                    param.ids = [];
                     divisionApi.instrumentlistAll(param).then((response) => {
                         if (response.code == 200) {
                             this.dialogVisible = false;
@@ -334,8 +335,18 @@
                     };
                     //批量
                 } else {
-                    if (this.title == '批量生成多人多案文书' || this.title == '全选生成多人多案文书') {
+                    if (this.title == '批量生成多人多案文书') {
                         param.ids = this.ids;
+                        if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
+                            this.msgError('请填写正确的合并数量')
+                            return
+                        }
+                        if (this.templateIdArr.length <= 0) {
+                            this.msgError("请选择模版");
+                            return;
+                        }
+                    } else if (this.title == '全选生成多人多案文书') {
+                        param.ids = [];
                         if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
                             this.msgError('请填写正确的合并数量')
                             return

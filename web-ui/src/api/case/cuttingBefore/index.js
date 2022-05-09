@@ -39,18 +39,20 @@ const cuttingBeforeApi = {
         })
     },
     // 批量诉前财保
-    caseProperty(ids){
+    caseProperty(data){
         return request({
-            url: '/case/property/'+ids,
+            url: '/case/property/',
             method: 'post',
+            data:data
         })
     },
     // 批量诉前财保
-    casePropertyAll(ids){
+    casePropertyAll(data){
         return request({
-            url: '/case/property/all'+ids,
+            url: '/case/property/all',
             timeout:600000,
             method: 'post',
+            data:data
         })
     },
      //诉前财保
