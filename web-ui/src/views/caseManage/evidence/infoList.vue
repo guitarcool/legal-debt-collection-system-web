@@ -230,7 +230,7 @@
         <editEvidence @refresh="clearSelection" :id="editData.id" :title="editData.title"
             :show.sync="editData.dialogVisible">
         </editEvidence>
-        <newEvidenceImport @refresh="clearSelection" :id="evidenceData.id" :title="evidenceData.title"
+        <newEvidenceImport @refresh="getList(1)" :id="evidenceData.id" :title="evidenceData.title"
             :show.sync="evidenceData.dialogVisible" :accept="evidenceData.accept" >
         </newEvidenceImport>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"

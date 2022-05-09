@@ -994,14 +994,16 @@
                             divisionApi.suspendCase(this.ids).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
-                                    that.clearSelection();
+                                    that.getList(1);
+                                    //that.clearSelection();
                                 }
                             })
                         } else if (type == 2) {
                             divisionApi.suspendCaseAll().then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
-                                    that.clearSelection();
+                                    that.getList(1);
+                                    //that.clearSelection();
                                 }
                             })
                         }
@@ -1027,14 +1029,16 @@
                             divisionApi.recoverCase(this.ids).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
-                                    that.clearSelection();
+                                    that.getList(1);
+                                    //that.clearSelection();
                                 }
                             });
                         } else if (type == 2) {
                             divisionApi.recoverCaseAll().then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
-                                    that.clearSelection();
+                                    that.getList(1);
+                                    //that.clearSelection();
                                 }
                             });
                         }

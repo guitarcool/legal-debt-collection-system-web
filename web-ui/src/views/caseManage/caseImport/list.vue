@@ -137,7 +137,7 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <importDialog @refresh="clearSelection" :title="addData.title" :show.sync="addData.dialogVisible"
+        <importDialog @refresh="getList(1)" :title="addData.title" :show.sync="addData.dialogVisible"
             :id="addData.id">
         </importDialog>
         <exportDialog :title="exportData.title" @refresh="clearSelection" :show.sync="exportData.dialogVisible"

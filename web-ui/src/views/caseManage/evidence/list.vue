@@ -126,7 +126,7 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <evidenceImport @refresh="clearSelection" :title="evidenceData.title" :show.sync="evidenceData.dialogVisible">
+        <evidenceImport @refresh="getList(1)" :title="evidenceData.title" :show.sync="evidenceData.dialogVisible">
         </evidenceImport>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
             :ids="exportData.ids" :total="exportData.total" :requestApi="exportData.requestApi"></exportDialog>

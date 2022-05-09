@@ -115,7 +115,7 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <addTemplate @refresh="clearSelection" :title="addTemplateData.title" :show.sync="addTemplateData.dialogVisible"
+        <addTemplate @refresh="getList(1)" :title="addTemplateData.title" :show.sync="addTemplateData.dialogVisible"
             :id="addTemplateData.id"></addTemplate>
         <seeField :title="seeFieldData.title" :show.sync="seeFieldData.dialogVisible" :id="seeFieldData.id"></seeField>
         <combined :title="combinedData.title" :show.sync="combinedData.dialogVisible" :id="combinedData.id"></combined>
@@ -263,6 +263,7 @@
                     .then(() => {
                         this.clearSelection();
                         this.msgSuccess("删除成功");
+                        this.getList(1);
                     })
                     .catch(function () {});
             },
