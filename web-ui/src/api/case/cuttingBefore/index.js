@@ -41,12 +41,12 @@ const cuttingBeforeApi = {
     // 批量诉前财保
     caseProperty(data){
         return request({
-            url: '/case/property/',
+            url: '/case/property/batch',
             method: 'post',
             data:data
         })
     },
-    // 批量诉前财保
+    // 全选诉前财保
     casePropertyAll(data){
         return request({
             url: '/case/property/all',
