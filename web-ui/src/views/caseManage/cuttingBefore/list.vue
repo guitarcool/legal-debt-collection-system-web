@@ -1063,16 +1063,18 @@
                         type: "warning",
                     })
                     .then(() => {
-                        let ids = that.ids.join(",");
+                        let data = {
+                            ids: that.ids.join(",")||''
+                        }
                         if (type == 1) {
-                            cuttingBeforeApi.caseProperty(ids).then((res) => {
+                            cuttingBeforeApi.caseProperty(data).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
                                     that.clearSelection();
                                 }
                             });
                         } else {
-                            cuttingBeforeApi.casePropertyAll(ids).then((res) => {
+                            cuttingBeforeApi.casePropertyAll(data).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
                                     that.clearSelection();
