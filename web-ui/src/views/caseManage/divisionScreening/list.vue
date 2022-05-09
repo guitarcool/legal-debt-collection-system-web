@@ -243,21 +243,21 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="primary" icon="el-icon-video-pause" size="mini" :disabled="multiple"
-                        @click="suspendCase(1)" v-hasPermi="['case:assignment:suspendCase']">暂停案件
+                        @click="suspendCase(1)" v-if="queryParams.entrustStatus == 1" v-hasPermi="['case:assignment:suspendCase']">暂停案件
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="success" icon="el-icon-video-pause" size="mini" @click="suspendCase(2)"
-                        v-hasPermi="['case:assignment:suspendCaseAll']">全选暂停案件
+                       v-if="queryParams.entrustStatus == 1" v-hasPermi="['case:assignment:suspendCaseAll']">全选暂停案件
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="primary" icon="el-icon-video-play" size="mini" :disabled="multiple"
-                        @click="recoveryCase(1)" v-hasPermi="['case:assignment:recoverCase']">恢复案件
+                        @click="recoveryCase(1)" v-if="queryParams.entrustStatus == 2" v-hasPermi="['case:assignment:recoverCase']">恢复案件
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-video-play" size="mini" @click="recoveryCase(2)"
+                    <el-button type="success" icon="el-icon-video-play" size="mini" v-if="queryParams.entrustStatus == 2" @click="recoveryCase(2)"
                         v-hasPermi="['case:assignment:recoverCaseAll']">全选恢复案件
                     </el-button>
                 </el-col>
