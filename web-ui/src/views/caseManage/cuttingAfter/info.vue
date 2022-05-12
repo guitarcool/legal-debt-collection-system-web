@@ -8,11 +8,13 @@
                     <span>【案件状态：{{statusFormat(firstInfo.caseStatus)}}】</span>
                 </div>
                 <div>
-                    <el-button circle size="mini" icon="el-icon-edit" v-hasPermi="['case:postAdjudged:getCaseEditData']" @click="editInformation"></el-button>
+                    <el-button circle size="mini" icon="el-icon-edit" v-hasPermi="['case:postAdjudged:getCaseEditData']"
+                        @click="editInformation"></el-button>
                     <el-button v-if="firstInfo.isDesensitization" :disabled="isDisable" circle size="mini"
                         icon="el-icon-view" @click="viewData"></el-button>
                     <el-button size="mini" type="primary" v-if="buttonChange" @click="nextCase(1)">上一案</el-button>
-                    <el-button size="mini" style="margin-right:10px" type="primary" v-if="buttonChange"  @click="nextCase(2)">下一案</el-button>
+                    <el-button size="mini" style="margin-right:10px" type="primary" v-if="buttonChange"
+                        @click="nextCase(2)">下一案</el-button>
                     <el-dropdown style="margin-right:10px" v-if="firstInfo.caseStatus != 13" @command="changeButton">
                         <el-button type="primary" size="mini">
                             变更案件状态<i class="el-icon-arrow-down el-icon--right"></i>
@@ -665,8 +667,8 @@
                             <el-table-column label="汇款时间" width="150" prop="remittanceTime">
                                 <template slot-scope="scope">
                                     <span>{{
-              parseTime(scope.row.remittanceTime, "{y}-{m}-{d}")
-            }}</span>
+                                        parseTime(scope.row.remittanceTime, "{y}-{m}-{d}")
+                                    }}</span>
                                 </template>
                             </el-table-column>
                             <el-table-column label="还款状态" width="150" :show-overflow-tooltip="true"
@@ -827,15 +829,7 @@
                             </el-table-column>
                             <el-table-column label="操作" align="center">
                                 <template slot-scope="scope">
-                                    <el-button v-if="scope.row.beforeStatus == 7 && scope.row.status == 8" size="mini"
-                                        type="warning" @click="addStatus(scope.row)">修改</el-button>
-                                    <el-button v-if="scope.row.beforeStatus == 8 && scope.row.status == 9" size="mini"
-                                        type="warning" @click="addStatus(scope.row)">修改</el-button>
-                                    <el-button v-if="scope.row.beforeStatus == 10 && scope.row.status == 11" size="mini"
-                                        type="warning" @click="addStatus(scope.row)">修改</el-button>
-                                    <el-button v-if="scope.row.beforeStatus == 11 && scope.row.status == 12" size="mini"
-                                        type="warning" @click="addStatus(scope.row)">修改</el-button>
-                                    <el-button v-if="scope.row.beforeStatus == 5 && scope.row.status == 10" size="mini"
+                                    <el-button v-if="combination[scope.row.beforeStatus]&& combination[scope.row.beforeStatus] == scope.row.status" size="mini"
                                         type="warning" @click="addStatus(scope.row)">修改</el-button>
                                 </template>
                             </el-table-column>
@@ -883,8 +877,8 @@
         </reimbursement>
         <erweima :title="erweimaData.title" :url="erweimaData.url" :show.sync="erweimaData.dialogVisible">
         </erweima>
-        <editInformation :title="information.title" :id="id" @refresh="getAdjudgedInfo"
-            :type="information.type" :show.sync="information.dialogVisible">
+        <editInformation :title="information.title" :id="id" @refresh="getAdjudgedInfo" :type="information.type"
+            :show.sync="information.dialogVisible">
         </editInformation>
     </div>
 </template>
@@ -1126,22 +1120,29 @@
                 adjustType: [],
                 wodongStatus: [],
                 shisuyunStatus: [],
-                xuanwuStatus:[],
+                xuanwuStatus: [],
                 contactResultOptions: [],
                 contactStatusOptions: [],
                 token: null,
                 isDisable: false,
                 idList: [],
-                buttonChange: false
+                buttonChange: false,
+                combination: {
+                    7: 8,
+                    8: 9,
+                    10: 11,
+                    11: 12,
+                    5: 10
+                }
             };
         },
         created() {
             //案件id
             this.id = this.$route.query.afterId;
-            if(this.$route.query.afterList&&this.$route.query.afterList.length>0){
+            if (this.$route.query.afterList && this.$route.query.afterList.length > 0) {
                 this.idList = this.$route.query.afterList;
                 this.buttonChange = true;
-            }else{
+            } else {
                 this.idList = [];
                 this.buttonChange = false;
             }
@@ -1229,10 +1230,10 @@
             //监控路由参数，实现自己跳自己刷新数据
             $route() {
                 this.id = this.$route.query.afterId;
-                if(this.$route.query.afterList&&this.$route.query.afterList.length>0){
+                if (this.$route.query.afterList && this.$route.query.afterList.length > 0) {
                     this.idList = this.$route.query.afterList;
                     this.buttonChange = true;
-                }else{
+                } else {
                     this.idList = [];
                     this.buttonChange = false;
                 }
@@ -1482,7 +1483,7 @@
                 // 控制弹窗组件显示
                 this.normal.dialogVisible = true;
             },
-            editInformation(){
+            editInformation() {
                 this.information.title = '裁后详情案件信息编辑';
                 this.information.type = 'after';
                 this.information.requestApi = "/case/adjudged/mediationFailed";
@@ -1974,7 +1975,9 @@
                 this.id = this.idList[idx];
                 //新增或修改单个参数
                 this.$router.replace({
-                    query: merge(this.$route.query,{afterId: this.id})
+                    query: merge(this.$route.query, {
+                        afterId: this.id
+                    })
                 })
             },
         },
