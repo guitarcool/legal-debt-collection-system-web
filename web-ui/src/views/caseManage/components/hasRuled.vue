@@ -94,8 +94,8 @@
                 type: String,
             },
            statusId:{
-                type: Number,
-            }           
+                type: String|Number,
+            }        
         },
         computed: {
             dialogVisible: {

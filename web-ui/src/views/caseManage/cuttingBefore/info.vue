@@ -830,15 +830,7 @@
                             </el-table-column>
                             <el-table-column label="操作" align="center">
                                 <template slot-scope="scope">
-                                    <el-button v-if="scope.row.beforeStatus == 7 && scope.row.status == 8" size="mini"
-                                        type="warning" @click="addStatus(scope.row)">修改</el-button>
-                                    <el-button v-if="scope.row.beforeStatus == 8 && scope.row.status == 9" size="mini"
-                                        type="warning" @click="addStatus(scope.row)">修改</el-button>
-                                    <el-button v-if="scope.row.beforeStatus == 10 && scope.row.status == 11" size="mini"
-                                        type="warning" @click="addStatus(scope.row)">修改</el-button>
-                                    <el-button v-if="scope.row.beforeStatus == 11 && scope.row.status == 12" size="mini"
-                                        type="warning" @click="addStatus(scope.row)">修改</el-button>
-                                    <el-button v-if="scope.row.beforeStatus == 5 && scope.row.status == 10" size="mini"
+                                    <el-button v-if="combination[scope.row.beforeStatus]&& combination[scope.row.beforeStatus] == scope.row.status" size="mini"
                                         type="warning" @click="addStatus(scope.row)">修改</el-button>
                                 </template>
                             </el-table-column>
@@ -1137,6 +1129,13 @@
                 isDisable: false,
                 idList: [],
                 buttonChange: false,
+                combination: {
+                    7: 8,
+                    8: 9,
+                    10: 11,
+                    11: 12,
+                    5: 10
+                }
             };
         },
         created() {

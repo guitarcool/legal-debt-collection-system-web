@@ -25,6 +25,13 @@ const cuttingAfterApi = {
             method: 'get'
         })
     },
+    //详情
+    getCaseInfo(id) {
+        return request({
+            url: '/case/caseInfo/getCaseInfo?caseId='+id,
+            method: 'get'
+        })
+    },
     //裁后案件详情第二部分
     getCaseBaseInfo(data) {
         return request({

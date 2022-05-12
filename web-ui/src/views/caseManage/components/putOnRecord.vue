@@ -120,7 +120,7 @@
                 type: String,
             },
            statusId:{
-                type: Number,
+                type: String|Number,
             }
         },
         computed: {
@@ -149,7 +149,7 @@
                 }
             },
             getInfo() {
-                cuttingAfterApi.info(this.id).then((response) => {
+                cuttingAfterApi.getCaseInfo(this.id).then((response) => {
                     this.form.caseNo = response.data.caseNo;
                     this.form.court = response.data.court;
                     this.form.judge = response.data.judge;

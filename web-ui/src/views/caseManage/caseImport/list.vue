@@ -118,7 +118,7 @@
                     :sort-orders="['descending', 'ascending']" width="120" />
                 <el-table-column label="尚欠期数" prop="overdueTerm" sortable="custom"
                     :sort-orders="['descending', 'ascending']" width="120" />
-                <el-table-column label="尚欠本金" prop="remainingBalance" width="120" sortable="custom"
+                <el-table-column label="尚欠本金" prop="overdueCapital" width="120" sortable="custom"
                     :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="逾期年利率" prop="overYearRate" width="100" />
                 <el-table-column label="资产受让方" prop="assetAssignee" :show-overflow-tooltip="true" width="200" />
