@@ -125,7 +125,7 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <applyAudit @refresh="clearSelection" :title="applyData.title" :show.sync="applyData.dialogVisible"
+        <applyAudit @refresh="getList(1)" :title="applyData.title" :show.sync="applyData.dialogVisible"
             :id="applyData.id" :cid="applyData.cid" :item="applyData.item"></applyAudit>
     </div>
 </template>
