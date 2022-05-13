@@ -122,7 +122,7 @@
                 }
             },
             getInfo() {
-                cuttingAfterApi.info(this.id).then((response) => {
+                cuttingAfterApi.getCaseInfo(this.id).then((response) => {
                     this.form.judgmentDate = response.data.judgmentDate;
                     this.form.name = response.data.judgmentName;
                     this.form.judgmentJudge = response.data.judgmentJudge;            
