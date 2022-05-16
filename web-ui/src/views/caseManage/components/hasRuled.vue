@@ -2,8 +2,8 @@
     <Dialog :title="title" :height="480" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
         <template v-slot:default>
             <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-                <el-form-item label="庭审时间：" prop="name">
-                    <el-input v-model="form.name"></el-input>
+                <el-form-item label="庭审时间：" prop="trialDate">
+                    <el-input v-model="form.trialDate"></el-input>
                 </el-form-item>
                 <el-form-item label="判决审判员：" prop="judgmentJudge">
                     <el-input v-model="form.judgmentJudge"></el-input>
@@ -55,7 +55,7 @@
         data(){
             return{
                 form:{
-                    name:'',
+                    trialDate:'',
                     id:'',
                     judgmentJudge:'',
                     judgmentClerk:'',
@@ -66,8 +66,8 @@
                 // 是否禁用上传
                 isUploading: false,
                 rules: {
-                    name: [
-                        { required: true, message: '请填写判决书名称', trigger: 'blur' }
+                    trialDate: [
+                        { required: true, message: '请填写庭审时间', trigger: 'blur' }
                     ]
                 }
             }
@@ -124,7 +124,7 @@
             getInfo() {
                 cuttingAfterApi.info(this.id).then((response) => {
                     this.form.judgmentDate = response.data.judgmentDate;
-                    this.form.name = response.data.judgmentName;
+                    this.form.trialDate = response.data.judgmentName;
                     this.form.judgmentJudge = response.data.judgmentJudge;            
                     this.form.judgmentClerk = response.data.judgmentClerk;                      
                 });
@@ -148,7 +148,7 @@
                         if(this.statusId !=0 && this.statusId ){
                             formData.append("statusId", this.statusId);
                         }
-                        formData.append("name", this.form.name);
+                        formData.append("trialDate", this.form.trialDate);
                         formData.append("judgmentJudge", this.form.judgmentJudge);
                         formData.append("judgmentClerk", this.form.judgmentClerk);
                         formData.append("judgmentDate", this.form.judgmentDate);

@@ -1507,9 +1507,11 @@
                         type: "warning",
                     })
                     .then(() => {
-                        let param = {};
+                        let param = {
+                            caseId:that.id
+                        };
                         cuttingAfterApi
-                            .common(`/case/postAdjudged/pendingExecute?id=${that.id}`, param)
+                            .common(`/case/postAdjudged/pendingExecute`, param)
                             .then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
@@ -1776,9 +1778,11 @@
                         type: "warning",
                     })
                     .then(() => {
-                        let param = {};
+                        let param = {
+                            caseId:that.id
+                        };
                         cuttingAfterApi
-                            .common(`/case/adjudged/multipleMediation/${that.id}`, param)
+                            .common(`/case/adjudged/multipleMediation`, param)
                             .then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
@@ -1799,8 +1803,10 @@
                         type: "warning",
                     })
                     .then(() => {
-                        let param = {};
-                        cuttingAfterApi.common(`/case/adjudged/pending?id=${that.id}`, param).then((res) => {
+                        let param = {
+                            caseId:that.id
+                        };
+                        cuttingAfterApi.common(`/case/adjudged/pending`, param).then((res) => {
                             if (res.code === 200) {
                                 that.msgSuccess("操作成功");
                                 that.getAdjudgedInfo();
@@ -1820,9 +1826,11 @@
                         type: "warning",
                     })
                     .then(() => {
-                        let param = {};
+                        let param = {
+                            caseId : that.id
+                        };
                         cuttingAfterApi
-                            .common(`/case/postAdjudged/closed?id=${that.id}`, param)
+                            .common(`/case/postAdjudged/closed`, param)
                             .then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");

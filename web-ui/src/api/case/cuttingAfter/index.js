@@ -157,7 +157,7 @@ const cuttingAfterApi = {
     //下载模版
     importFiledCaseTemplate(data) {
         return request({
-            url: '/case/postAdjudged/importFiledCaseTemplate',
+            url: '/case/postAdjudged/downloadFiledCaseTemplate',
             method: 'post',
             data
         })
@@ -165,16 +165,17 @@ const cuttingAfterApi = {
     //下载模版
     importJudgedTemplate(data) {
         return request({
-            url: '/case/postAdjudged/importJudgedTemplate',
+            url: '/case/postAdjudged/downloadJudgedTemplate',
             method: 'post',
             data
         })
     },   
     // 批量待执行立案
-    pendingExecute(ids){
+    pendingExecute(data){
         return request({
-            url: '/case/postAdjudged/pendingExecute/'+ids,
+            url: '/case/postAdjudged/batchPendingExecute',
             method: 'post',
+            data
         })
     },  
     // 批量待执行立案
@@ -189,7 +190,7 @@ const cuttingAfterApi = {
     //下载模版
     importExecutedTemplate(data) {
         return request({
-            url: '/case/postAdjudged/importExecutedTemplate',
+            url: '/case/postAdjudged/downloadExecutedTemplate',
             method: 'post',
             data
         })
@@ -197,7 +198,7 @@ const cuttingAfterApi = {
     //下载模版
     importEnforcedTemplate(data) {
         return request({
-            url: '/case/postAdjudged/importEnforcedTemplate',
+            url: '/case/postAdjudged/downloadEnforcedTemplate',
             method: 'post',
             data
         })

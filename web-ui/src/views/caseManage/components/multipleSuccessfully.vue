@@ -3,13 +3,13 @@
         <template v-slot:default>
             <el-form ref="form" :model="form" :rules="rules" label-width="90px">
                 <el-form-item label="用户接入：">
-                    <el-radio-group v-model="form.jieru">
+                    <el-radio-group v-model="form.userAccess">
                         <el-radio label="是">是</el-radio>
                         <el-radio label="否">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="协议名称：">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="form.agreementName"></el-input>
                 </el-form-item>
                 <el-form-item label="附件：">
                     <el-upload
@@ -44,8 +44,8 @@
         data(){
             return{
                 form:{
-                    name:'',
-                    jieru:'',
+                    agreementName:'',
+                    userAccess:'',
                     id:''
                 },
                 upload_url: '',//上传URL
@@ -115,12 +115,12 @@
                 //     }
                 // });
                 let formData = new FormData();
-                formData.append("id", this.id);
+                formData.append("caseId", this.id);
                 if(this.files != null){
                     formData.append("file", this.files);
                 }
-                formData.append("name", this.form.name);
-                formData.append("jieru", this.form.jieru);
+                formData.append("agreementName", this.form.agreementName);
+                formData.append("userAccess", this.form.userAccess);
                 //console.log(formData.get('file'));
                 const instance = axios.create({
                     withCredentials: true

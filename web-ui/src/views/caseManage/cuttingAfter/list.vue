@@ -201,18 +201,18 @@
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('7')>-1 == true" type="primary" size="mini"
-                        :disabled="multiple" @click="handleAdd(7)" v-hasPermi="['case:adjudged:filedCase']">批量变更为已立案
+                        :disabled="multiple" @click="handleAdd(7)" v-hasPermi="['case:adjudged:batchFiledCase']">批量变更为已立案
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('8')>-1 == true" type="primary" size="mini"
-                        :disabled="multiple" @click="handleAdd(8)" v-hasPermi="['case:adjudged:judged']">批量变更为已判决
+                        :disabled="multiple" @click="handleAdd(8)" v-hasPermi="['case:adjudged:batchJudgedCase']">批量变更为已判决
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('9')>-1 == true" type="primary" size="mini"
                         :disabled="multiple" @click="handleprojectEdit(1)"
-                        v-hasPermi="['case:adjudged:pendingExecute']">
+                        v-hasPermi="['case:adjudged:batchPendingExecute']">
                         批量变更为待执行立案
                     </el-button>
                 </el-col>
@@ -224,13 +224,13 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('10')>-1 == true" type="primary" size="mini"
-                        :disabled="multiple" @click="handleAdd(10)" v-hasPermi="['case:adjudged:executedBatch']">
+                        :disabled="multiple" @click="handleAdd(10)" v-hasPermi="['case:adjudged:batchExecuted']">
                         批量变更为已执行立案
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('11')>-1 == true" type="primary" size="mini"
-                        :disabled="multiple" @click="handleAdd(11)" v-hasPermi="['case:adjudged:enforcedBatch']">
+                        :disabled="multiple" @click="handleAdd(11)" v-hasPermi="['case:adjudged:batchEnforced']">
                         批量变更为强制执行
                     </el-button>
                 </el-col>
@@ -897,8 +897,10 @@
                     })
                     .then(() => {
                         if (cannotChoose.length > 0 && type == 1) {
-                            let ids = that.ids.join(",");
-                            cuttingAfterApi.pendingExecute(ids).then((res) => {
+                            let data = {
+                                caseId : that.ids.join(",")
+                            }
+                            cuttingAfterApi.pendingExecute(data).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
                                     that.clearSelection();
@@ -1201,8 +1203,10 @@
                         })
                         .then(() => {
                             if (type == 1) {
-                                let param = {};
-                                cuttingAfterApi.common(`/case/postAdjudged/closed?id=${ids}`, param)
+                                let param = {
+                                    caseId: ids
+                                };
+                                cuttingAfterApi.common(`/case/postAdjudged/closed`, param)
                                     .then((res) => {
                                         if (res.code === 200) {
                                             that.msgSuccess("操作成功");
@@ -1211,7 +1215,7 @@
                                     });
                             } else {
                                 let param = {};
-                                cuttingAfterApi.common(`/case/postAdjudged/closedAll?id=${ids}`, param)
+                                cuttingAfterApi.common(`/case/postAdjudged/closedAll`, param)
                                     .then((res) => {
                                         if (res.code === 200) {
                                             that.msgSuccess("操作成功");
