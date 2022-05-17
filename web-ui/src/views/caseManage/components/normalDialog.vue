@@ -25,7 +25,7 @@
             return{
                 form:{
                     content:'',
-                    id:''
+                    caseId:''
                 },
                 rules:{
                     content: [
@@ -74,7 +74,7 @@
             openDialog(){
                 initObj(this.form)
                 this.resetAddForm();
-                this.form.id = this.id
+                this.form.caseId = this.id
             },
             //重置表单清除验证
             resetAddForm(){
