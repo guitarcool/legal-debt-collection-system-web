@@ -117,7 +117,7 @@
                 }
             },
             getInfo() {
-                cuttingAfterApi.info(this.id).then((response) => {
+                cuttingAfterApi.getCaseInfo(this.id).then((response) => {
                     this.form.reason = response.data.nonPerformReason;
                     this.form.court = response.data.expecteEnforceCourt;
                     this.form.time = response.data.estimateExecuteTime;            

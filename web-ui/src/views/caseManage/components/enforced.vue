@@ -120,7 +120,7 @@
                 }
             },
             getInfo() {
-                cuttingAfterApi.info(this.id).then((response) => {
+                cuttingAfterApi.getCaseInfo(this.id).then((response) => {
                     this.form.serial = response.data.enforceSerial;
                     this.form.serialNo = response.data.enforceSerialNo;
                     this.form.time = response.data.enforceTime;            

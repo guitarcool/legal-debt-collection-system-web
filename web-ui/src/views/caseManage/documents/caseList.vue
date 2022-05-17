@@ -85,11 +85,11 @@
                         v-hasPermi="['case:clerical:instrumentBatchAll']">全选生成调解文书
                     </el-button>
                 </el-col>
-                <el-col :span="1.5">
+                <!-- <el-col :span="1.5">
                     <el-button type="success" icon="el-icon-share" size="mini" @click="batchMessage"
                         :disabled="multiple" v-hasPermi="['case:clerical:noticeBatch']">批量生成短信/邮件
                     </el-button>
-                </el-col>
+                </el-col> -->
                 <el-col :span="1.5">
                     <el-button type="primary" icon="el-icon-download" size="mini" @click="batchBookTwo"
                         :disabled="multiple" v-hasPermi="['case:clerical:instrumentBatch']">批量生成多人多案文书
@@ -139,9 +139,9 @@
                         <el-button size="mini" type="warning" @click="handleMediation(scope.row)"
                             v-hasPermi="['case:clerical:instrument']">生成调解文书
                         </el-button>
-                        <el-button size="mini" type="success" @click="handleMessage(scope.row)"
+                        <!-- <el-button size="mini" type="success" @click="handleMessage(scope.row)"
                             v-hasPermi="['case:clerical:notice']">生成短信/邮件
-                        </el-button>
+                        </el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -419,20 +419,20 @@
                 this.batchexportDialogData.total = this.total;
                 this.batchexportDialogData.red = false;
             },
-            handleMessage(item) {
-                this.messageData.title = "生成短信/邮件";
-                this.messageData.dialogVisible = true;
-                this.messageData.requestApi = "/case/caseInfo/notice";
-                this.messageData.id = item.id;
-                this.messageData.params = "";
-            },
-            batchMessage() {
-                this.messageData.title = "批量生成短信/邮件";
-                this.messageData.dialogVisible = true;
-                this.messageData.requestApi = "/case/caseInfo/notice/batch";
-                this.messageData.params = this.ids.join(",");
-                this.messageData.id = "";
-            },
+            // handleMessage(item) {
+            //     this.messageData.title = "生成短信/邮件";
+            //     this.messageData.dialogVisible = true;
+            //     this.messageData.requestApi = "/case/caseInfo/notice";
+            //     this.messageData.id = item.id;
+            //     this.messageData.params = "";
+            // },
+            // batchMessage() {
+            //     this.messageData.title = "批量生成短信/邮件";
+            //     this.messageData.dialogVisible = true;
+            //     this.messageData.requestApi = "/case/caseInfo/notice/batch";
+            //     this.messageData.params = this.ids.join(",");
+            //     this.messageData.id = "";
+            // },
             clearSelection() {
                 if (this.caseList.length > 0) {
                     this.$refs.multiTable.clearSelection(); //清除选中的数据
