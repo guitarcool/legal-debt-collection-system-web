@@ -1478,8 +1478,12 @@
             },
             //电话调解失败，多元调解失败
             fail(item) {
+                if(item.cName == '多元调解失败'){
+                    this.normal.requestApi = "/case/pretrial/multiMediateFail";
+                }else{
+                    this.normal.requestApi = "/case/pretrial/mediationFailed";
+                }
                 this.normal.title = item.cName;
-                this.normal.requestApi = "/case/pretrial/mediationFailed";
                 this.normal.confirmTip = item.cName;
                 // 控制弹窗组件显示
                 this.normal.dialogVisible = true;
