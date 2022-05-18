@@ -376,12 +376,6 @@
                         <el-button size="mini" type="primary" @click="handleUpdate(scope.row)"
                             v-hasPermi="['case:pretrial:query']">查看
                         </el-button>
-                        <!-- <el-button
-              size="mini"
-              type="success"
-              @click="handleExportMessage(scope.row)"
-              >律师函短信
-            </el-button> -->
                         <el-button size="mini" type="danger" @click="handleExport(scope.row)">律师函
                         </el-button>
                     </template>
@@ -413,7 +407,6 @@
     import SearchBar from "@/components/SearchBar/index";
     import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
     import exportDialog from "./exportDialog";
-    // import divisionDialog from './divisionDialog'
     import recordDialog from "./recordDialog";
     import batchExportDialog from "./batchExportDialog";
     import publicBatchDialog from "./publicBatchDialog";
@@ -880,7 +873,7 @@
                 this.batchData.title = "批量生成律师函";
                 this.batchData.dialogVisible = true;
                 this.batchData.requestApi = "/case/pretrial/instrument/batch";
-                this.batchData.params = this.ids.join(",");
+                this.batchData.params = this.ids;
             },
             //批量生成律师函
             batchLawyerAll() {

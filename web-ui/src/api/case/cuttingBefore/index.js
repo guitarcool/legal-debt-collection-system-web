@@ -280,7 +280,23 @@ const cuttingBeforeApi = {
             method: 'post',
             data
         })
-    },        
+    }, 
+    //批量生成律师函
+    instrumentBatch(data) {
+        return request({
+            url: '/case/pretrial/instrument/batch',
+            method: 'post',
+            data
+        })
+    },
+    //全选生成律师函
+    instrumentBatchAll(data) {
+        return request({
+            url: '/case/pretrial/instrument/batchAll',
+            method: 'post',
+            data
+        })
+    },       
 }
 
 // 下载用户导入模版

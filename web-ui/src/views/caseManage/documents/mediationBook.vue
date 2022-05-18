@@ -286,7 +286,7 @@
                     ".xlsx";
                 this.loading = true;
                 if (this.title == '批量生成调解文书') {
-                    if(param.ids.length > 200){
+                    if (param.ids.length > 200) {
                         this.msgError('勾选的数据量超出生成文书条数200上限，请重新勾选后再进行提交');
                         return;
                     }
@@ -304,7 +304,7 @@
                         this.loading = false;
                     });
                 } else if (this.title == '全选生成调解文书') {
-                    if(this.total.length > 200){
+                    if (this.total.length > 200) {
                         this.msgError('筛选的数据量超出生成文书条数200上限，请重新筛选后再进行提交');
                         return;
                     }

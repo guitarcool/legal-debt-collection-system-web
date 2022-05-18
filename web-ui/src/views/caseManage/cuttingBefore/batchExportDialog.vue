@@ -2,17 +2,12 @@
     <Dialog :title="title" :height="600" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
         <template v-slot:default>
             <!-- 查看字段表 -->
-            <div v-if="title == '全选生成律师函'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
+            <div v-if="title == '全选生成律师函'" style="padding:10px 0;color:red;font-size:16px;line-height:24px">
+                注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
             <div class="see-field" v-loading="loading" :element-loading-text="`拼命加载中，${num}秒...`"
                 element-loading-spinner="el-icon-loading">
                 <div class="margin-div" customClass="loading-style">
-                    <p class="book-title">
-                        {{
-              title == "批量生成律师函短信"
-                ? "1、选择律师函短信模版"
-                : "1、选择律师函模版"
-            }}
-                    </p>
+                    <p class="book-title">1、选择律师函模版</p>
                     <el-scrollbar style="height: 250px">
                         <el-input clearable placeholder="输入关键字进行过滤" v-model="filterText">
                         </el-input>
@@ -56,25 +51,18 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">关闭</el-button>
-            <el-button type="primary" @click="submit">确 定</el-button>
+            <el-button type="primary" @click="submitTwo" v-if="title == '批量生成律师函' || title == '全选生成律师函'">确定</el-button>
         </div>
     </Dialog>
 </template>
 
 <script>
     import Dialog from "@/components/Dialog/index";
-    import {
-        getToken
-    } from "@/utils/auth";
-    import axios from "axios";
     import templateApi from "@/api/case/document/templateIndex";
     import {
         interval
     } from "@/utils/ruoyi";
-    const mimeMap = {
-        xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        zip: "application/zip",
-    };
+    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
     export default {
         name: "batchExportDialog",
         components: {
@@ -99,12 +87,12 @@
                 default: "",
             },
             params: {
-                type: String,
-                default: "",
+                type: String | Array,
+                default: [],
             },
-            total:{
+            total: {
                 type: String | Number,
-                default: '--'           
+                default: '--'
             }
         },
         watch: {
@@ -121,7 +109,7 @@
                 filterText: "",
                 caseList: [],
                 data: [{
-                    name: "律师函短信模版",
+                    name: "律师函模版",
                     children: [],
                 }, ],
                 templateId: "",
@@ -155,9 +143,6 @@
                 this.isShow = 0;
                 this.filterText = "";
                 this.data[0].children = [];
-                if (this.title == "批量生成律师函短信") {
-                    this.data[0].name = "律师函短信模版";
-                }
                 if (this.title == "批量生成律师函") {
                     this.data[0].name = "律师函模版";
                 }
@@ -165,85 +150,6 @@
                     this.data[0].name = "律师函模版";
                 }
                 this.getList();
-            },
-            // 提交
-            submit() {
-                if (!this.templateId) {
-                    this.msgError("请选择模版");
-                    return;
-                }
-                this.loading = true;
-                this.timekeeping();
-                //console.log(this.params)
-                let param = {};
-                param.ids = this.params;
-                param.templateId = this.templateId;
-                if (this.title == "批量生成律师函" || this.title == "全选生成律师函") {
-                    param.isShow = this.isShow;
-                    param.needSignTemplate = this.needSignTemplate;
-                    param.applyDate = this.applyDate;
-                    param.suffix =
-                        this.suffix == 1 ?
-                        ".docx" :
-                        this.suffix == 2 ?
-                        ".pdf" :
-                        ".xlsx";
-                }
-                const baseUrl = process.env.VUE_APP_BASE_API;
-                var url = baseUrl + this.requestApi;
-                axios({
-                    method: "get",
-                    url: url,
-                    timeout:600000,
-                    responseType: "blob",
-                    params: param,
-                    headers: {
-                        Authorization: "Bearer " + getToken()
-                    },
-                }).then((res) => {
-                    let data = res.data
-                    let _self = this
-                    let fileReader = new FileReader();
-                    fileReader.onload = function () {
-                        try {
-                            let jsonData = JSON.parse(this.result); // 说明是普通对象数据，后台转换失败
-                            _self.$message({
-                                message: jsonData.msg,
-                                type: "error",
-                            }); // 弹出的提示信息
-                            _self.loading = false;
-                        } catch (err) { // 解析成对象失败，说明是正常的文件流
-                            _self.resolveBlob(res, mimeMap.zip);
-                            _self.dialogVisible = false;
-                            _self.loading = false;
-                            _self.$emit('refresh');
-                        }
-                    };
-                    fileReader.readAsText(data) // 注意别落掉此代码，可以将 Blob 或者 File 对象转根据特殊的编码格式转化为内容(字符串形式)
-                }).catch((error) => {
-                    // console.log(error)
-                    this.loading = false;
-                });
-            },
-            resolveBlob(res, mimeType) {
-                const aLink = document.createElement("a");
-                var blob = new Blob([res.data], {
-                    type: mimeType
-                });
-                // //从response的headers中获取filename, 后端response.setHeader("Content-disposition", "attachment; filename=xxxx.docx") 设置的文件名;
-                var patt = new RegExp("filename=([^;]+\\.[^\\.;]+);*");
-                var contentDisposition = decodeURI(res.headers["content-disposition"]);
-                var result = patt.exec(contentDisposition);
-                var fileName = result[1];
-                fileName = fileName.replace(/\"/g, "");
-                aLink.href = URL.createObjectURL(blob);
-                aLink.setAttribute("download", fileName); // 设置下载文件名称
-                document.body.appendChild(aLink);
-                aLink.click();
-                document.body.appendChild(aLink);
-                this.dialogVisible = false;
-                this.loading = false;
-                this.$emit('refresh');
             },
             timekeeping() {
                 this.num = 0;
@@ -275,16 +181,6 @@
                 templateApi.templateList(param).then((response) => {
                     this.caseList = response.data || [];
                     this.caseList.forEach((item) => {
-                        if (this.title == "批量生成律师函短信") {
-                            //律师函短信模版
-                            if (
-                                item.formatType == 1 &&
-                                item.templateType == 2 &&
-                                item.status == 1
-                            ) {
-                                this.data[0].children.push(item);
-                            }
-                        }
                         if (this.title == "批量生成律师函" || this.title == "全选生成律师函") {
                             if (
                                 item.formatType == 0 &&
@@ -318,7 +214,59 @@
                 if (item.switch == true) {
                     this.needSignTemplate = item.id;
                 }
-            }
+            },
+            // 提交
+            submitTwo() {
+                if (!this.templateId) {
+                    this.msgError("请选择模版");
+                    return;
+                }
+                this.loading = true;
+                this.timekeeping();
+                let param = {};
+                param.ids = this.params;
+                param.templateId = this.templateId;
+                param.isShow = this.isShow;
+                param.needSignTemplate = this.needSignTemplate;
+                param.applyDate = this.applyDate;
+                param.suffix = this.suffix == 1 ? ".docx" : (this.suffix == 2 ? ".pdf" : ".xlsx");
+                if (this.title == '批量生成律师函') {
+                    if (param.ids.length > 200) {
+                        this.msgError('勾选的数据量超出生成律师函条数200上限，请重新勾选后再进行提交');
+                        return;
+                    }
+                    cuttingBeforeApi.instrumentBatch(param).then((response) => {
+                        if (response.code == 200) {
+                            this.dialogVisible = false;
+                            this.loading = false;
+                            this.msgSuccess('生成律师函任务已提交，请在律师函下载模块中查看律师函生成进度。');
+                        } else {
+                            this.loading = false;
+                            this.msgError(response.msg);
+                        }
+                    }).catch((error) => {
+                        this.loading = false;
+                    });
+                } else if (this.title == '全选生成律师函') {
+                    if (this.total.length > 200) {
+                        this.msgError('筛选的数据量超出生成律师函条数200上限，请重新筛选后再进行提交');
+                        return;
+                    }
+                    param.ids = [];
+                    cuttingBeforeApi.instrumentBatchAll(param).then((response) => {
+                        if (response.code == 200) {
+                            this.dialogVisible = false;
+                            this.loading = false;
+                            this.msgSuccess('生成律师函任务已提交，请在律师函下载模块中查看律师函生成进度。');
+                        } else {
+                            this.loading = false;
+                            this.msgError(response.msg);
+                        }
+                    }).catch((error) => {
+                        this.loading = false;
+                    });
+                }
+            },
         },
     };
 
