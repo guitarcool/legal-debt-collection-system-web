@@ -885,7 +885,7 @@
             handleprojectEdit(type) {
                 let cannotChoose = [];
                 this.selection.forEach((item) => {
-                    if (item.caseStatus === 9) {
+                    if (item.caseStatus == 9) {
                         cannotChoose.push(item.id);
                     }
                 });
