@@ -8,13 +8,7 @@
           <el-input v-model="contractNo" placeholder="请输入合同号" clearable size="small" style="width: 240px" />
         </div>
         <div class="margin-div">
-          <p class="book-title">
-            {{
-              title == "生成律师函短信"
-                ? "2、选择律师函短信模版"
-                : "2、选择律师函模版"
-            }}
-          </p>
+          <p class="book-title">2、选择律师函模版</p>
           <el-scrollbar style="height: 250px">
             <el-input clearable placeholder="输入关键字进行过滤" v-model="filterText">
             </el-input>
@@ -148,9 +142,6 @@
         this.suffix = 1;
         this.isShow = 0;
         this.data[0].children = [];
-        if (this.title == "生成律师函短信") {
-          this.data[0].name = "律师函短信模版";
-        }
         if (this.title == "生成律师函") {
           this.data[0].name = "律师函模版";
         }
@@ -248,16 +239,6 @@
           //console.log(response)
           this.caseList = response.data || [];
           this.caseList.forEach((item) => {
-            if (this.title == "生成律师函短信") {
-              //律师函短信模版
-              if (
-                item.formatType == 1 &&
-                item.templateType == 2 &&
-                item.status == 1
-              ) {
-                this.data[0].children.push(item);
-              }
-            }
             if (this.title == "生成律师函") {
               if (
                 item.formatType == 0 &&
