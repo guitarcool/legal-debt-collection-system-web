@@ -134,47 +134,28 @@
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="还款ID" prop="id" width="60" :show-overflow-tooltip="true" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
-                <el-table-column label="还款提交时间" sortable="custom" :sort-orders="['descending', 'ascending']"
-                    prop="createTime" width="170" :show-overflow-tooltip="true" />
                 <el-table-column label="姓名" width="80" prop="respondentName" :show-overflow-tooltip="true"
                     fixed="left" />
+                <el-table-column label="还款提交时间" sortable="custom" :sort-orders="['descending', 'ascending']"
+                    prop="createTime" width="170" :show-overflow-tooltip="true" />
+                <el-table-column label="审核状态" :formatter="reviewStatusFormat" prop="reviewStatus"></el-table-column>
                 <el-table-column label="身份证号" width="80" prop="respondentIdNo" :show-overflow-tooltip="true" />
-                <el-table-column label="案件状态" width="150" :show-overflow-tooltip="true" :formatter="statusFormat"
-                    prop="caseStatus">
-                </el-table-column>
-                <el-table-column label="订单号" prop="caseId" width="170" :show-overflow-tooltip="true" />
-                <el-table-column label="合同号" width="150" prop="orderNo" :show-overflow-tooltip="true" />
-                <el-table-column label="手机号" width="150" prop="respondentPhone" />
-                <el-table-column label="案件类型" width="150" :show-overflow-tooltip="true" :formatter="caseTypeFormat"
-                    prop="caseType">
-                </el-table-column>
-                <el-table-column label="账龄" prop="overdueAge" />
-                <el-table-column label="标的金额" width="150" sortable="custom" :sort-orders="['descending', 'ascending']"
-                    prop="subjectAmount" />
-                <el-table-column label="已还金额" width="150" sortable="custom" :sort-orders="['descending', 'ascending']"
-                    prop="paidAmount" />
-                <el-table-column label="剩余待还总额" width="150" sortable="custom" :sort-orders="['descending', 'ascending']"
-                    prop="remainingBalance" />
+                <el-table-column label="还款状态" width="150" :show-overflow-tooltip="true" :formatter="repayStatusFormat"
+                    prop="repayStatus" />
                 <el-table-column label="还款类型" width="150" prop="type">
                     <template slot-scope="scope">
                         <span>{{scope.row.type== 1?'结清':'部分还款'}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="还款状态" width="150" :show-overflow-tooltip="true" :formatter="repayStatusFormat"
-                    prop="repayStatus">
-                </el-table-column>
-                <el-table-column label="汇款账户" width="180" prop="accountNo" />
+                <el-table-column label="回款渠道" width="150" :show-overflow-tooltip="true" :formatter="payChannalFormat"
+                    prop="payChannal" />
                 <el-table-column label="汇款金额" width="150" prop="amount" />
                 <el-table-column label="汇款类型" width="150" :show-overflow-tooltip="true" :formatter="repayTypeFormat"
-                    prop="repayType">
-                </el-table-column>
+                    prop="repayType" />
+                <el-table-column label="汇款账户" width="180" prop="accountNo" />
                 <el-table-column label="收款账户" width="180" :show-overflow-tooltip="true" prop="accountNoShou" />
                 <el-table-column label="收款账户名" width="150" :show-overflow-tooltip="true" prop="accountName" />
                 <el-table-column label="开户行名称" width="150" :show-overflow-tooltip="true" prop="openbankName" />
-                <el-table-column label="回款渠道" width="150" :show-overflow-tooltip="true" :formatter="payChannalFormat"
-                    prop="payChannal">
-                </el-table-column>
-                <el-table-column label="逾期年利率" prop="overYearRate" width="100" />
                 <el-table-column label="汇款时间" width="150" sortable="custom" :sort-orders="['descending', 'ascending']"
                     prop="remittanceTime">
                     <template slot-scope="scope">
@@ -182,19 +163,22 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="交易流水号" width="150" prop="serialNo" />
-                <el-table-column label="审核状态" :formatter="reviewStatusFormat" prop="reviewStatus"></el-table-column>
+                <el-table-column label="标的金额" width="150" sortable="custom" :sort-orders="['descending', 'ascending']"
+                    prop="subjectAmount" />
+                <el-table-column label="已还金额" width="150" sortable="custom" :sort-orders="['descending', 'ascending']"
+                    prop="paidAmount" />
+                <el-table-column label="剩余待还总额" width="150" sortable="custom" :sort-orders="['descending', 'ascending']"
+                    prop="remainingBalance" />
+                <el-table-column label="合同号" width="150" prop="orderNo" :show-overflow-tooltip="true" />
+                <el-table-column label="手机号" width="150" prop="respondentPhone" />
+                <el-table-column label="账龄" prop="overdueAge" />
+                <el-table-column label="案件状态" width="150" :show-overflow-tooltip="true" :formatter="statusFormat"
+                    prop="caseStatus">
+                </el-table-column>
                 <el-table-column label="提交人" prop="createName" />
                 <el-table-column label="审核人" prop="reviewName" />
-                <el-table-column label="案件分配时间" prop="distributionTime" width="130" sortable="custom"
-                    :sort-orders="['descending', 'ascending']">
-                    <template slot-scope="scope" v-if="scope.row.distributionTime">
-                        <span>{{
-                    parseTime(scope.row.distributionTime, "{y}-{m}-{d}")
-                    }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="委案状态" :formatter="getEntrustType" prop="entrustStatus">
-                </el-table-column>
+                <el-table-column label="订单号" prop="caseId" width="170" :show-overflow-tooltip="true" />
+                <el-table-column label="委案状态" :formatter="getEntrustType" prop="entrustStatus" />
                 <el-table-column label="操作" width="300" fixed="right" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" type="success" @click="seeErweima(scope.row)">汇款凭证
