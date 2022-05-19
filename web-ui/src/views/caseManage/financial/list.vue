@@ -52,7 +52,8 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="回款渠道：">
-                    <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.payChannals" placeholder="请选择">
+                    <el-select clearable multiple collapse-tags filterable size="small"
+                        v-model="queryParams.payChannals" placeholder="请选择">
                         <el-option v-for="item in payChannalOptions" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
@@ -66,8 +67,7 @@
             <template #filter>
                 <el-form-item label="案件状态：" class="custom-radio">
                     <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
-                        <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
-                            :key="item.dictValue">
+                        <el-checkbox v-for="item in statusOptions" :label="item.dictValue" :key="item.dictValue">
                             {{ item.dictLabel }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
@@ -116,8 +116,8 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" size="mini" @click="handleExportAll"
-                        icon="el-icon-download" v-hasPermi="['case:financial:exportAll']">全选导出
+                    <el-button type="success" size="mini" @click="handleExportAll" icon="el-icon-download"
+                        v-hasPermi="['case:financial:exportAll']">全选导出
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -129,12 +129,13 @@
                 </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
-                :row-key="getRowKeys" @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange"
+                ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="还款ID" prop="id" width="60" :show-overflow-tooltip="true" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
-                <el-table-column label="还款提交时间" sortable="custom" :sort-orders="['descending', 'ascending']" prop="createTime" width="170" :show-overflow-tooltip="true" />
+                <el-table-column label="还款提交时间" sortable="custom" :sort-orders="['descending', 'ascending']"
+                    prop="createTime" width="170" :show-overflow-tooltip="true" />
                 <el-table-column label="姓名" width="80" prop="respondentName" :show-overflow-tooltip="true"
                     fixed="left" />
                 <el-table-column label="身份证号" width="80" prop="respondentIdNo" :show-overflow-tooltip="true" />
@@ -194,12 +195,16 @@
                 </el-table-column>
                 <el-table-column label="委案状态" :formatter="getEntrustType" prop="entrustStatus">
                 </el-table-column>
-                <el-table-column label="操作" width="250" fixed="right" align="center">
+                <el-table-column label="操作" width="300" fixed="right" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" type="success" @click="seeErweima(scope.row)">汇款凭证
                         </el-button>
                         <el-button size="mini" type="primary" v-if="scope.row.reviewStatus == 0"
                             @click="apply(scope.row)" v-hasPermi="['case:financial:review']">审核
+                        </el-button>
+                        <el-button size="mini" type="danger"
+                            v-if="scope.row.reviewStatus == 1&&scope.row.entrustStatus != 3" @click="unApply(scope.row)"
+                            v-hasPermi="['case:financial:unReview']">撤销审核
                         </el-button>
                         <el-button size="mini" type="warning" v-if="scope.row.entrustStatus != 3"
                             @click="handleUpdate(scope.row)" v-hasPermi="['case:pretrial:query']">查看
@@ -399,17 +404,17 @@
             },
             /** 排序触发事件 */
             handleSortChange(column, prop, order) {
-                if(column.order){
+                if (column.order) {
                     this.searchParams.orderByColumn = column.prop;
                     this.searchParams.isAsc = column.order;
                     this.getList(2);
-                }else{
+                } else {
                     this.searchParams.orderByColumn = '';
                     this.searchParams.isAsc = '';
                     this.getList(2);
                 }
             },
-            clearTable(){
+            clearTable() {
                 this.$refs.multiTable.clearSort();
             },
             /** 搜索按钮操作 */
@@ -482,6 +487,30 @@
                 this.applyData.dialogVisible = true;
                 this.applyData.id = item.id;
                 this.applyData.item = JSON.stringify(item)
+            },
+            //撤销审核
+            unApply(item) {
+                var that = this;
+                this.$confirm(`是否变更还款申请审核状态为待审核?`, "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        type: "warning",
+                    })
+                    .then(() => {
+                        let data = {
+                            id: item.id
+                        }
+                        financeApi.applyunReview(data).then((res) => {
+                            if (res.code === 200) {
+                                that.msgSuccess(res.msg);
+                            } else if (res.code === 500) {
+                                that.msgError(res.msg);
+                            }
+                        });
+                    })
+                    .catch(() => {
+                        that.msgInfo("已取消操作");
+                    });
             },
             /** 导入 */
             handleAdd() {

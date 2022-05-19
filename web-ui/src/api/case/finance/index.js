@@ -23,11 +23,20 @@ const financeApi = {
             params: query
         })
     },
+    //审核
     applyModify(data) {
         return request({
             url: '/case/financial/review',
             method: 'post',
             params:data
+        })
+    },
+    //撤销审核
+    applyunReview(data) {
+        return request({
+            url: '/case/financial/unReview',
+            method: 'post',
+            data
         })
     },
     //还款提交人
