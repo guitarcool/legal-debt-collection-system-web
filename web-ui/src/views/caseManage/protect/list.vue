@@ -12,13 +12,24 @@
                         @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="调解员：">
-                    <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.principals" placeholder="请选择">
+                    <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.principals"
+                        placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="财保批次号：" prop="batchNo">
+                    <el-input v-model="queryParams.batchNo" placeholder="请输入财保批次号" clearable size="small"
+                        style="width: 240px" @keyup.enter.native="handleQuery" />
+                </el-form-item>
                 <el-form-item label="财保申请时间：">
+                    <el-date-picker size="small" v-model="chooseDaterange" type="daterange" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" @change="handleChange"
+                        value-format="yyyy-MM-dd">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="财保冻结时间：">
                     <el-date-picker size="small" v-model="chooseDaterange" type="daterange" range-separator="至"
                         start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" @change="handleChange"
                         value-format="yyyy-MM-dd">
@@ -48,8 +59,7 @@
             <template #filter>
                 <el-form-item label="案件状态：" class="custom-radio">
                     <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
-                        <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
-                            :key="item.dictValue">
+                        <el-checkbox v-for="item in statusOptions" :label="item.dictValue" :key="item.dictValue">
                             {{ item.dictLabel }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
@@ -67,31 +77,51 @@
 
         <div class="box-contnet-wrap">
             <el-row :gutter="10" class="mb8">
+                <el-col :span="1.5">
+                    <el-button type="danger" icon="el-icon-download" size="mini" :disabled="multiple"
+                        @click="handleExport" v-hasPermi="['case:property:batchUnfreeze']">导出
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="primary" size="mini" :disabled="multiple" @click="handleAdd()" v-hasPermi="['case:property:batchPass']">批量审核通过
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="danger" size="mini" :disabled="multiple" @click="applyBatch('批量财保审核驳回')" v-hasPermi="['case:property:batchReject']">批量审核驳回
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" size="mini" :disabled="multiple" @click="handleAppleEdit('批量解冻')" v-hasPermi="['case:property:batchUnfreeze']">批量解冻
+                    </el-button>
+                </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
-            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
-                :row-key="getRowKeys" @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange"
+                ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
+                <el-table-column label="财保批次号" prop="proBatchNo" width="110" :show-overflow-tooltip="true"
+                    fixed="left" />
                 <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="130" sortable="custom"
                     :sort-orders="['descending', 'ascending']">
                     <template slot-scope="scope" v-if="scope.row.distributionTime">
                         <span>{{
-              parseTime(scope.row.distributionTime, "{y}-{m}-{d}")
-            }}</span>
+                            parseTime(scope.row.distributionTime, "{y}-{m}-{d}")
+                        }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="姓名" prop="respondentName" fixed="left" />
+                <el-table-column label="姓名" width="100" prop="respondentName" fixed="left" />
                 <el-table-column label="案件状态" width="120" :formatter="caseStatusFormat" prop="caseStatus" />
                 <el-table-column label="订单号" width="180" prop="cid" :show-overflow-tooltip="true" />
                 <el-table-column label="财保申请状态" :formatter="statusFormat" prop="status" width="120" />
                 <el-table-column label="性别" prop="respondentSex" />
                 <el-table-column label="民族" prop="respondentNation" />
                 <el-table-column label="出生日期" width="120" prop="respondentBirthday" />
-                <el-table-column label="身份证号" width="180" prop="respondentIdNo" />
+                <el-table-column label="身份证号" width="180" prop="respondentIdNo" sortable="custom"
+                    :sort-orders="['descending', 'ascending']"/>
                 <el-table-column label="手机号" width="120" prop="respondentPhone" />
-                <el-table-column label="户籍地址" width="150" prop="respondentAddress" />
+                <el-table-column label="户籍地址" width="180" prop="respondentAddress" :show-overflow-tooltip="true" />
                 <el-table-column label="标的金额" width="120" prop="subjectAmount" sortable="custom"
                     :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="逾期年利率" prop="overYearRate" width="100" />
@@ -105,18 +135,23 @@
                 <el-table-column label="财保冻结时间" width="150" prop="frozenStartTime" sortable="custom"
                     :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="首次冻结金额" width="120" prop="frozenAmount" />
-                <!-- <template slot-scope="scope">
-                        <span>{{ parseTime(scope.row.remittanceTime,'{y}-{m}-{d}') }}</span>
-                    </template> -->
-                <el-table-column label="有无车" width="80" prop="vehicle" />
-                <el-table-column label="有无房" width="80" prop="house" :formatter="houseFormat" />
-                <el-table-column label="操作" width="180" fixed="right" align="center">
+                <el-table-column label="车辆情况" width="80" prop="vehicle" />
+                <el-table-column label="房屋情况" width="80" prop="house" :formatter="houseFormat" />
+                <el-table-column label="财保类型" :formatter="statusFormat" prop="proType" width="120" />
+                <el-table-column label="财保保险单号" width="180" prop="proInsureNo" :show-overflow-tooltip="true" />
+                <el-table-column label="财保保险公司名称" width="180" prop="proInsureCo" :show-overflow-tooltip="true" />
+                <el-table-column label="财保申请费" width="100" prop="proApplyFee" />
+                <el-table-column label="操作" width="220" fixed="right" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="primary" v-if="scope.row.status == 1" @click="apply(scope.row)"
-                            v-hasPermi="['case:financial:review']">审核
+                        <el-button size="mini" type="primary" v-if="scope.row.status == 1"
+                            @click="apply(scope.row,'财保申请审核')" v-hasPermi="['case:financial:review']">审核
+                        </el-button>
+                        <el-button size="mini" type="success" @click="apply(scope.row,'财保申请修改')" v-hasPermi="['case:property:edit']">修改</el-button>
+                        <el-button size="mini" type="danger" v-if="scope.row.status == 2"
+                            @click="handleExamine(scope.row)" v-hasPermi="['case:property:unReview']">反审
                         </el-button>
                         <el-button size="mini" type="warning" v-if="scope.row.status == 2"
-                            @click="handleAppleEdit(scope.row)">冻结结束
+                            @click="handleAppleEdit(scope.row)">解冻
                         </el-button>
                     </template>
                 </el-table-column>
@@ -127,6 +162,12 @@
         </div>
         <applyAudit @refresh="getList(1)" :title="applyData.title" :show.sync="applyData.dialogVisible"
             :id="applyData.id" :cid="applyData.cid" :item="applyData.item"></applyAudit>
+        <applyAuditBatch @refresh="getList(1)" :title="batchData.title" :show.sync="batchData.dialogVisible"
+            :ids="batchData.ids"></applyAuditBatch>
+        <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
+            :ids="exportData.ids" :requestApi="exportData.requestApi" :total="exportData.total"></exportDialog>
+        <importDialog @refresh="clearSelection" :title="addData.title" :headline="addData.headline"
+            :show.sync="addData.dialogVisible" :id="addData.id" :importData="addData.importData"></importDialog>
     </div>
 </template>
 
@@ -134,12 +175,18 @@
     import SearchBar from "@/components/SearchBar/index";
     import divisionApi from "@/api/case/division/index";
     import applyAudit from "./applyAudit";
+    import exportDialog from "../components/exportDialog";
+    import applyAuditBatch from "./applyAuditBatch";
+    import importDialog from "./importDialog";
 
     export default {
         name: "list",
         components: {
             SearchBar,
-            applyAudit
+            applyAudit,
+            applyAuditBatch,
+            exportDialog,
+            importDialog
         },
         data() {
             return {
@@ -181,12 +228,30 @@
                     dialogVisible: false,
                     id: "",
                 },
+                batchData: {
+                    title: "",
+                    dialogVisible: false,
+                    ids: [],
+                },
                 applyData: {
                     title: "",
                     dialogVisible: false,
                     id: -999,
                     cid: '',
                     item: "",
+                },
+                exportData: {
+                    title: "",
+                    dialogVisible: false,
+                    ids: "",
+                    requestApi: "",
+                },
+                addData: {
+                    title: "",
+                    headline: "",
+                    dialogVisible: false,
+                    id: null,
+                    importData: [],
                 },
                 selection: [],
                 chooseDaterange: [],
@@ -236,8 +301,7 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
-                    }
-                    ).catch(() => {
+                    }).catch(() => {
                         this.caseList = [];
                         this.total = 0;
                         this.loading = false;
@@ -249,8 +313,7 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
-                    }
-                    ).catch(() => {
+                    }).catch(() => {
                         this.caseList = [];
                         this.total = 0;
                         this.loading = false;
@@ -259,18 +322,25 @@
             },
             /** 排序触发事件 */
             handleSortChange(column, prop, order) {
-                if(column.order){
+                if (column.order) {
                     this.searchParams.orderByColumn = column.prop;
                     this.searchParams.isAsc = column.order;
                     this.getList(2);
-                }else{
+                } else {
                     this.searchParams.orderByColumn = '';
                     this.searchParams.isAsc = '';
                     this.getList(2);
                 }
             },
-            clearTable(){
+            clearTable() {
                 this.$refs.multiTable.clearSort();
+            },
+            /** 导出按钮操作 */
+            handleExport() {
+                this.exportData.ids = this.ids.toString()
+                this.exportData.title = "案件导出";
+                this.exportData.dialogVisible = true;
+                this.exportData.requestApi = "/case/assignment/export";
             },
             /** 搜索按钮操作 */
             handleQuery() {
@@ -307,12 +377,24 @@
                 return this.selectDictLabel(this.house, row.house);
             },
             //申请审核
-            apply(item) {
-                this.applyData.title = "财保申请审核";
+            apply(item, title) {
+                this.applyData.title = title;
                 this.applyData.dialogVisible = true;
                 this.applyData.id = item.id;
                 this.applyData.cid = item.cid;
                 this.applyData.item = JSON.stringify(item);
+            },
+            //批量财保审核拒绝
+            applyBatch(title) {
+                this.batchData.title = title;
+                this.batchData.dialogVisible = true;
+                this.batchData.ids = this.ids;
+            },
+            /** 批量统一弹窗 */
+            handleAdd() {
+                this.addData.headline = "待审核变更为冻结中";
+                this.addData.title = "批量财保审核通过";
+                this.addData.dialogVisible = true;
             },
             resetAll() {
                 this.chooseDaterange = [];
@@ -333,10 +415,45 @@
                     this.userList = response.data.userList || [];
                 });
             },
-            //申请冻结结束
+            //申请冻结结束,批量申请冻结结束
             handleAppleEdit(val) {
                 var that = this;
-                this.$confirm(`是否申请冻结结束?`, "提示", {
+                this.$confirm(`是否申请解除冻结?`, "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        type: "warning",
+                    })
+                    .then(() => {
+                        if (val == '批量解冻') {
+                            let data = {
+                                ids: this.ids,
+                            };
+                            divisionApi.property(data).then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess("操作成功");
+                                    that.clearSelection();
+                                }
+                            });
+                        } else {
+                            let param = {
+                                id: val.id,
+                            };
+                            divisionApi.property(param).then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess("操作成功");
+                                    that.clearSelection();
+                                }
+                            });
+                        }
+                    })
+                    .catch(() => {
+                        that.msgInfo("已取消操作");
+                    });
+            },
+            //申请冻结结束
+            handleExamine(val) {
+                var that = this;
+                this.$confirm(`是否将冻结中的案件撤回为"待审核"状态?`, "提示", {
                         confirmButtonText: "确定",
                         cancelButtonText: "取消",
                         type: "warning",
