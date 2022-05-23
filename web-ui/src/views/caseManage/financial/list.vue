@@ -105,7 +105,7 @@
             </template>
         </search-bar>
         <div class="queryDiv">
-            查询结果统计：<span>列表案件量：{{otherParam.caseTotalCount?otherParam.caseTotalCount:''}}件；</span>
+            查询结果统计：<span>列表案件量：{{otherParam.caseTotalCount?otherParam.caseTotalCount:''}}件；</span><span>列表已还金额：{{otherParam.subjectTotalAmount?otherParam.subjectTotalAmount:''}}元；</span>
             <!-- <span>列表标的金额：{{otherParam.subjectTotalAmount?otherParam.subjectTotalAmount:''}}元；</span><span>列表剩余待还总额：{{otherParam.totalRemainingBalance?otherParam.totalRemainingBalance:''}}元；</span> -->
         </div>
         <div class="box-contnet-wrap" style="margin-top:0">
@@ -591,7 +591,7 @@
 
     .queryDiv {
         height: 30px;
-        padding: 5px 20px;
+        padding: 5px 10px;
         background: #FCFFC9;
 
         span {

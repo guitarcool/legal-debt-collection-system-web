@@ -1412,7 +1412,7 @@
 
     .queryDiv {
         height: 30px;
-        padding: 5px 20px;
+        padding: 5px 10px;
         background: #FCFFC9;
 
         span {
