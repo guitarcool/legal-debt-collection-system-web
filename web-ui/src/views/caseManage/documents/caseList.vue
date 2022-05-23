@@ -7,12 +7,21 @@
                     <el-input clearable v-model="queryParams.batchNo" placeholder="请输入案件批次号" size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
+                <el-form-item label="财保批次号：" prop="batchNo">
+                    <el-input clearable v-model="queryParams.batchNo" placeholder="请输入财保批次号" size="small"
+                        style="width: 240px" @keyup.enter.native="handleQuery" />
+                </el-form-item>
+                <el-form-item label="借款平台名称：" prop="batchNo">
+                    <el-input clearable v-model="queryParams.batchNo" placeholder="请输入借款平台名称" size="small"
+                        style="width: 240px" @keyup.enter.native="handleQuery" />
+                </el-form-item>
                 <el-form-item label="订单号：">
                     <el-input clearable v-model="queryParams.id" placeholder="请输入订单号" size="small" style="width: 240px"
                         @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="调解员：">
-                    <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.principals" placeholder="请选择">
+                    <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.principals"
+                        placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -27,8 +36,8 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="身份证号：">
-                    <el-input v-model="queryParams.respondentIdNo" placeholder="请输入身份证号，多个身份证号用英文逗号连接" clearable size="small"
-                        style="width: 240px" type="textarea" @keyup.enter.native="handleQuery" />
+                    <el-input v-model="queryParams.respondentIdNo" placeholder="请输入身份证号，多个身份证号用英文逗号连接" clearable
+                        size="small" style="width: 240px" type="textarea" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="合同号：">
                     <el-input clearable v-model="queryParams.orderNo" placeholder="请输入合同号，多个合同号用英文逗号连接" type="textarea"
@@ -38,11 +47,16 @@
                     <el-input v-model="queryParams.remark" placeholder="请输入备注查询内容" clearable size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
+                <el-form-item label="证据材料情况：">
+                    <el-cascader collapse-tags :props="props" clearable filterable size="small"
+                        v-model="queryParams.deliverResult" :options="shortmsgOptions" placeholder="请选择">
+                    </el-cascader>
+                </el-form-item>
             </template>
             <template #filter>
                 <el-form-item label="案件状态：" class="custom-radio">
                     <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
-                        <el-checkbox v-for="item in statusOptions"  v-show="item.dictValue!=13&&item.dictValue!=0"  :label="item.dictValue"
+                        <el-checkbox v-for="item in statusOptions" v-show="item.dictValue!=0" :label="item.dictValue"
                             :key="item.dictValue">
                             {{ item.dictLabel }}</el-checkbox>
                     </el-checkbox-group>
@@ -54,6 +68,13 @@
                             {{item.dictLabel}}</el-radio>
                     </el-radio-group>
                 </el-form-item>
+                <el-form-item label="财保状态：" class="custom-radio">
+                    <el-radio-group v-model="queryParams.preStatus" @change="changeStatus">
+                        <el-radio label="">全部</el-radio>
+                        <el-radio v-for="item in protects" :key="item.dictValue" :label="item.dictValue">
+                            {{ item.dictLabel }}</el-radio>
+                    </el-radio-group>
+                </el-form-item>
             </template>
             <template #buttonArea></template>
         </search-bar>
@@ -61,13 +82,15 @@
         <div class="box-contnet-wrap">
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="danger" size="mini" :disabled="multiple"
-                        @click="handleCaseStatusMessage(1)" v-hasPermi="['case:clerical:batchSMSFile']">批量短信发送(旧)
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="danger" size="mini"
+                        :disabled="multiple" @click="handleCaseStatusMessage(1)"
+                        v-hasPermi="['case:clerical:batchSMSFile']">批量短信发送(旧)
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="danger" size="mini" :disabled="multiple"
-                        @click="handleCaseStatusMessage(2)" v-hasPermi="['case:clerical:batchSMS']">批量短信发送
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="danger" size="mini"
+                        :disabled="multiple" @click="handleCaseStatusMessage(2)"
+                        v-hasPermi="['case:clerical:batchSMS']">批量短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -104,24 +127,26 @@
                 </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange" ref="multiTable" :row-key="getRowKeys"
-                @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange"
+                ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
-                <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="130"
-                    sortable="custom" :sort-orders="['descending', 'ascending']">
+                <el-table-column label="姓名" prop="respondentName" :show-overflow-tooltip="true" fixed="left"
+                    width="80" />
+                <el-table-column label="手机号" prop="respondentPhone" width="120" />
+                <el-table-column label="身份证号" width="180" prop="respondentIdNo" />
+                <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="130" sortable="custom"
+                    :sort-orders="['descending', 'ascending']">
                     <template slot-scope="scope" v-if="scope.row.distributionTime">
                         <span>{{
               parseTime(scope.row.distributionTime, "{y}-{m}-{d}")
             }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="姓名" prop="respondentName" :show-overflow-tooltip="true" fixed="left"
-                    width="80" />
                 <el-table-column label="订单号" prop="id" :show-overflow-tooltip="true" width="170" />
                 <el-table-column label="合同号" prop="orderNo" :show-overflow-tooltip="true" width="120" />
-                <el-table-column label="手机号" prop="respondentPhone" width="120" />
-                <el-table-column label="合同金额" sortable="custom" :sort-orders="['descending', 'ascending']" prop="contractAmount" width="120" />
+                <el-table-column label="合同金额" sortable="custom" :sort-orders="['descending', 'ascending']"
+                    prop="contractAmount" width="120" />
                 <el-table-column label="剩余期数" prop="remainTerms" width="120" />
                 <el-table-column label="剩余待还本金" prop="overdueCapital" width="120" />
                 <el-table-column label="剩余待还总额" prop="remainingBalance" width="160">
@@ -149,8 +174,9 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <mediationBook @refresh="clearSelection" :params="mediationBookData.params" :selection="mediationBookData.selection"
-            :title="mediationBookData.title" :show.sync="mediationBookData.dialogVisible" :id="mediationBookData.id"
+        <mediationBook @refresh="clearSelection" :params="mediationBookData.params"
+            :selection="mediationBookData.selection" :title="mediationBookData.title"
+            :show.sync="mediationBookData.dialogVisible" :id="mediationBookData.id"
             :requestApi="mediationBookData.requestApi" :total="mediationBookData.total"></mediationBook>
         <message @refresh="clearSelection" :params="messageData.params" :title="messageData.title"
             :show.sync="messageData.dialogVisible" :requestApi="messageData.requestApi" :id="messageData.id"></message>
@@ -208,7 +234,9 @@
                     respondentPhone: "",
                     respondentIdNo: "",
                     orderNo: "",
-                    caseStatuss: [],
+                    preStatus: "",
+                    repayStatus: "",
+                    caseStatuss: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], //默认勾选除已结案外的所有状态
                     orderByColumn: "",
                     isAsc: "",
                 },
@@ -247,11 +275,17 @@
                     params: "",
                     total: ""
                 },
+                protects: [],
+                shortmsgOptions: [],
+                props: {
+                    multiple: true
+                },
             };
         },
         created() {
             this.getList(1);
             this.getUsers();
+            this.getCascaderData();
             //案件状态
             this.getDicts("case_status").then((response) => {
                 this.statusOptions = response.data;
@@ -263,6 +297,10 @@
             //还款状态
             this.getDicts("repay_status").then((response) => {
                 this.repayStatus = response.data;
+            });
+            //财保状态
+            this.getDicts("wealth_protect").then((response) => {
+                this.protects = response.data;
             });
         },
         // 是否显示过滤栏， 扣除页数，每页显示数，总数量参数，3个内的搜索参数，直接显示一行，不显示过滤
@@ -282,13 +320,12 @@
                     this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
                     templateApi.caseList(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
-                        this.caseList = response.rows||[];
+                        this.caseList = response.rows || [];
                         this.total = response.total;
                         this.clearSelection();
                         this.clearTable();
                         this.loading = false;
-                    }
-                    ).catch(() => {
+                    }).catch(() => {
                         this.caseList = [];
                         this.total = 0;
                         this.loading = false;
@@ -297,30 +334,44 @@
                 //切换页
                 else if (type == 2) {
                     templateApi.caseList(this.searchParams).then((response) => {
-                        this.caseList = response.rows||[];
+                        this.caseList = response.rows || [];
                         this.total = response.total;
                         this.loading = false;
-                    }
-                    ).catch(() => {
+                    }).catch(() => {
                         this.caseList = [];
                         this.total = 0;
                         this.loading = false;
                     });
                 }
             },
+            /** 获取级联选择器 */
+            getCascaderData() {
+                let params1 = {
+                    type: 'screen'
+                };
+                let params2 = {
+                    type: 'shortmsg'
+                };
+                divisionApi.getCascaderData(params1).then(response => {
+                    this.screenResultOptions = response.data || [];
+                });
+                divisionApi.getCascaderData(params2).then(response => {
+                    this.shortmsgOptions = response.data || [];
+                });
+            },
             /** 排序触发事件 */
             handleSortChange(column, prop, order) {
-                if(column.order){
+                if (column.order) {
                     this.searchParams.orderByColumn = column.prop;
                     this.searchParams.isAsc = column.order;
                     this.getList(2);
-                }else{
+                } else {
                     this.searchParams.orderByColumn = '';
                     this.searchParams.isAsc = '';
                     this.getList(2);
                 }
             },
-            clearTable(){
+            clearTable() {
                 this.$refs.multiTable.clearSort();
             },
             //委案状态
@@ -340,14 +391,14 @@
                 this.multiple = !selection.length;
             },
             handleUpdate(item) {
-                if (['1','2','3','4','5','6'].includes(item.caseStatus)) {
+                if (['1', '2', '3', '4', '5', '6'].includes(item.caseStatus)) {
                     this.$router.push({
                         name: 'cutBeforeInfo',
                         query: {
                             beforeId: item.id
                         }
                     })
-                } else if (['7','8','9','10','11','12'].includes(item.caseStatus)) {
+                } else if (['7', '8', '9', '10', '11', '12'].includes(item.caseStatus)) {
                     this.$router.push({
                         name: 'cutAfterInfo',
                         query: {
@@ -403,9 +454,9 @@
                     this.msgError("所选数据存在已结案的数据，不能批量发送短信");
                     return;
                 }
-                if(type == 1){
+                if (type == 1) {
                     this.batchexportDialogData.title = "批量短信发送(旧)";
-                }else{
+                } else {
                     this.batchexportDialogData.title = "批量短信发送";
                 }
                 this.batchexportDialogData.dialogVisible = true;
@@ -419,20 +470,6 @@
                 this.batchexportDialogData.total = this.total;
                 this.batchexportDialogData.red = false;
             },
-            // handleMessage(item) {
-            //     this.messageData.title = "生成短信/邮件";
-            //     this.messageData.dialogVisible = true;
-            //     this.messageData.requestApi = "/case/caseInfo/notice";
-            //     this.messageData.id = item.id;
-            //     this.messageData.params = "";
-            // },
-            // batchMessage() {
-            //     this.messageData.title = "批量生成短信/邮件";
-            //     this.messageData.dialogVisible = true;
-            //     this.messageData.requestApi = "/case/caseInfo/notice/batch";
-            //     this.messageData.params = this.ids.join(",");
-            //     this.messageData.id = "";
-            // },
             clearSelection() {
                 if (this.caseList.length > 0) {
                     this.$refs.multiTable.clearSelection(); //清除选中的数据
