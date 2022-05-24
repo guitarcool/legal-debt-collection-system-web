@@ -19,7 +19,8 @@
     import {
         initObj
     } from "@/utils/common";
-    import divisionApi from "@/api/case/division/index";
+    import protectApi from "@/api/case/protect/index";
+
     export default {
         //多元调解成功
         name: "applyAudit",
@@ -93,7 +94,7 @@
                             options: this.form.options,
                             ids: this.form.ids,
                         };
-                        divisionApi.reviewProperty(data).then((res) => {
+                        protectApi.batchReviewRefuse(data).then((res) => {
                             if (res.code === 200) {
                                 this.msgSuccess("操作成功");
                                 this.$emit("refresh");

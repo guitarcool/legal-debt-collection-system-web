@@ -59,7 +59,8 @@
 <script>
 import Dialog from "@/components/Dialog/index";
 import { getToken } from "@/utils/auth";
-import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+import protectApi from "@/api/case/protect/index";
+
 export default {
   name: "importDialog",
   components: { Dialog },
@@ -116,19 +117,7 @@ export default {
   created() {},
   methods: {
     openDialog() {
-      if (this.id === 7) {
-        this.upload.url =
-          process.env.VUE_APP_BASE_API + "/case/postAdjudged/batchFiledCase";
-      } else if (this.id === 8) {
-        this.upload.url =
-          process.env.VUE_APP_BASE_API + "/case/postAdjudged/batchJudgedCase";
-      } else if (this.id === 10) {
-        this.upload.url =
-          process.env.VUE_APP_BASE_API + "/case/postAdjudged/batchExecuted";
-      } else if (this.id === 11) {
-        this.upload.url =
-          process.env.VUE_APP_BASE_API + "/case/postAdjudged/batchEnforced";
-      }
+        this.upload.url = process.env.VUE_APP_BASE_API + "/case/property/batchReviewPass";
     },
     // 提交上传文件
     submit() {
@@ -150,23 +139,9 @@ export default {
     },
     /** 下载模版操作 */
     importTemplate() {
-      if (this.id === 7) {
-        cuttingAfterApi.importFiledCaseTemplate(this.importData).then((response) => {
+        protectApi.downloadReviewPassTemplate(this.importData).then((response) => {
           this.download(response.msg);
         });
-      } else if (this.id === 8) {
-        cuttingAfterApi.importJudgedTemplate(this.importData).then((response) => {
-          this.download(response.msg);
-        });
-      } else if (this.id === 10) {
-        cuttingAfterApi.importExecutedTemplate(this.importData).then((response) => {
-          this.download(response.msg);
-        });
-      } else if (this.id === 11) {
-        cuttingAfterApi.importEnforcedTemplate(this.importData).then((response) => {
-          this.download(response.msg);
-        });
-      }
     },
   },
 };

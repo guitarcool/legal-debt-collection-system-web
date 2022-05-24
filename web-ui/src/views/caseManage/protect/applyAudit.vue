@@ -15,14 +15,14 @@
                 <el-form-item label="审批意见：" v-if="project_operate == 0" prop="options">
                     <el-input v-model="form.options" :rows="8" type="textarea" placeholder="请输入审批意见"></el-input>
                 </el-form-item>
-                <el-form-item label="财保批次号：" v-if="project_operate == 1" prop="options">
-                    <el-input v-model="form.options" :rows="8" type="textarea" placeholder="请输入财保批次号"></el-input>
+                <el-form-item label="财保批次号：" v-if="project_operate == 1" prop="proBatchNo">
+                    <el-input v-model="form.proBatchNo" placeholder="请输入财保批次号"></el-input>
                 </el-form-item>
                 <el-form-item label="财保案号：" v-if="project_operate == 1" prop="propertyProNo">
                     <el-input style="width: 100%" v-model="form.propertyProNo" placeholder="请输入财保案号"></el-input>
                 </el-form-item>
-                <el-form-item label="财保类型：" v-if="project_operate == 1">
-                    <el-select style="width: 100%" v-model="formhouse" filterable placeholder="请选择">
+                <el-form-item label="财保类型：" v-if="project_operate == 1" prop="proType">
+                    <el-select style="width: 100%" v-model="form.proType" filterable placeholder="请选择">
                         <el-option v-for="item in house" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
@@ -48,16 +48,12 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="财保保险单号：" v-if="project_operate == 1">
-                    <el-input style="width: 100%" type="textarea" :rows="2" v-model="form.vehicle"
+                    <el-input style="width: 100%" type="textarea" :rows="2" v-model="form.proInsureNo"
                         placeholder="请输入财保保险单号"></el-input>
                 </el-form-item>
                 <el-form-item label="保险公司名称：" v-if="project_operate == 1">
-                    <el-input style="width: 100%" type="textarea" :rows="2" v-model="form.vehicle"
+                    <el-input style="width: 100%" type="textarea" :rows="2" v-model="form.proInsureCo"
                         placeholder="请输入财保保险公司名称"></el-input>
-                </el-form-item>
-                <el-form-item label="财保申请费：" v-if="project_operate == 1">
-                    <el-input style="width: 100%" v-model="form.vehicle" type="number" placeholder="请输入财保申请费">
-                    </el-input>
                 </el-form-item>
             </el-form>
         </template>
@@ -73,7 +69,7 @@
     import {
         initObj
     } from "@/utils/common";
-    import divisionApi from "@/api/case/division/index";
+    import protectApi from "@/api/case/protect/index";
     export default {
         //多元调解成功
         name: "applyAudit",
@@ -103,6 +99,11 @@
                         message: "请选择审批结果",
                         trigger: "change"
                     }, ],
+                    proBatchNo: [{
+                        required: true,
+                        message: "请输入财保批次号",
+                        trigger: "blur"
+                    }, ],
                     propertyProNo: [{
                         required: true,
                         message: "请输入财保案号",
@@ -122,6 +123,11 @@
                         required: true,
                         message: "请输入审批意见",
                         trigger: "blur"
+                    }, ],
+                    proType: [{
+                        required: true,
+                        message: "请选择财保类型",
+                        trigger: "change"
                     }, ],
                 },
             };
@@ -143,10 +149,6 @@
             cid: {
                 type: String,
                 default: '',
-            },
-            item: {
-                type: String,
-                default: "",
             },
         },
         computed: {
@@ -174,7 +176,7 @@
             openDialog() {
                 initObj(this.form);
                 this.resetAddForm();
-                this.form = JSON.parse(this.item);
+                this.getInfo();
                 this.form.id = this.id;
                 this.formhouse = '0';
                 this.project_operate = 1;
@@ -184,6 +186,11 @@
                 try {
                     this.$refs["form"].resetFields();
                 } catch (e) {}
+            },
+            getInfo() {
+                protectApi.propertyInfo(this.id).then((res) => {
+                    this.form = res.data;
+                });
             },
             submit() {
                 if (this.title == '财保申请审核') {
@@ -197,7 +204,7 @@
                                     cid: this.cid,
                                     id: this.id,
                                 };
-                                divisionApi.reviewProperty(param).then((res) => {
+                                protectApi.reviewProperty(param).then((res) => {
                                     if (res.code === 200) {
                                         this.msgSuccess("操作成功");
                                         this.$emit("refresh");
@@ -215,6 +222,10 @@
                                     cid: this.cid,
                                     id: this.id,
                                     choice: this.form.choice,
+                                    proBatchNo: this.form.proBatchNo,
+                                    proType: this.form.proType,
+                                    proInsureNo: this.form.proInsureNo,
+                                    proInsureCo: this.form.proInsureCo,
                                     propertyProNo: this.form.propertyProNo,
                                     frozenStartTime: this.form.frozenStartTime,
                                     frozenAmount: this.form.frozenAmount,
@@ -222,7 +233,7 @@
                                     house: this.form.house,
                                     vehicle: this.form.vehicle,
                                 };
-                                divisionApi.reviewProperty(param).then((res) => {
+                                protectApi.reviewProperty(param).then((res) => {
                                     if (res.code === 200) {
                                         this.msgSuccess("操作成功");
                                         this.$emit("refresh");
@@ -236,11 +247,20 @@
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
                             let param = {
-                                options: this.form.options,
                                 cid: this.cid,
                                 id: this.id,
+                                proBatchNo: this.form.proBatchNo,
+                                proType: this.form.proType,
+                                proInsureNo: this.form.proInsureNo,
+                                proInsureCo: this.form.proInsureCo,
+                                propertyProNo: this.form.propertyProNo,
+                                frozenStartTime: this.form.frozenStartTime,
+                                frozenAmount: this.form.frozenAmount,
+                                respondentName: this.form.respondentName,
+                                house: this.form.house,
+                                vehicle: this.form.vehicle,
                             };
-                            divisionApi.reviewProperty(param).then((res) => {
+                            protectApi.updateReviewInfo(param).then((res) => {
                                 if (res.code === 200) {
                                     this.msgSuccess("修改成功");
                                     this.$emit("refresh");

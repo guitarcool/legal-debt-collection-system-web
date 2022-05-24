@@ -9,13 +9,6 @@ const divisionApi = {
             data
         })
     },
-    propertylist(data) {
-        return request({
-            url: '/case/property/list',
-            method: 'post',
-            data
-        })
-    },
     export(query) {
         return request({
             url: '/case/assignment/export',
@@ -78,21 +71,6 @@ const divisionApi = {
             data:data
         })
     },
-    reviewProperty(data){
-        return request({
-            url: '/case/property/review',
-            method: 'post',
-            data:data
-        })
-    },
-    //修改
-    property(data){
-        return request({
-            url: '/case/property',
-            method: 'put',
-            params:data
-        })
-    }, 
     //号码筛选
     screening(ids,jump,status,radioStatus){
         return request({
