@@ -104,6 +104,9 @@
                 <el-table-column label="债权转让合同" prop="transferContractNum" width="120" />
                 <el-table-column label="债转发送凭证" prop="transferVoucherNum" width="120" />
                 <el-table-column label="保理协议" prop="factoringProtocolNum" width="120" />
+                <el-table-column label="银行回单" prop="bankReceiptNum" width="120" />
+                <el-table-column label="物流信息" prop="logisticsInfoNum" width="120" />
+                <el-table-column label="订单详情" prop="orderDetailNum" width="120" />
                 <el-table-column label="放款方相关资质" prop="lenderQualificateNum" width="120" />
                 <el-table-column label="转让方相关资质" prop="transferorQualificateNum" width="120" />
                 <el-table-column label="法定代表人身份证复印件" prop="representativeIdcardNum" width="180" />

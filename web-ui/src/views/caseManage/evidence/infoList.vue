@@ -199,7 +199,10 @@
                 <el-table-column label="用户电子签章授权" prop="haveUserSignAuth" width="140" />
                 <el-table-column label="债权转让合同" prop="haveTransferContract" width="120" />
                 <el-table-column label="债转发送凭证" prop="haveTransferVoucher" width="120" />
-                <el-table-column label="保理协议" prop="haveFactoringProtocol" />
+                <el-table-column label="保理协议" prop="haveFactoringProtocol" width="120"/>
+                <el-table-column label="银行回单" prop="haveBankReceipt" width="120" />
+                <el-table-column label="物流信息" prop="haveLogisticsInfo" width="120" />
+                <el-table-column label="订单详情" prop="haveOrderDetail" width="120" />
                 <el-table-column label="放款方相关资质" prop="haveLenderQualificate" width="120" />
                 <el-table-column label="转让方相关资质" prop="haveTransferorQualificate" width="120" />
                 <el-table-column label="法定代表人身份证复印件" prop="haveRepresentativeIdcard" width="180" />
