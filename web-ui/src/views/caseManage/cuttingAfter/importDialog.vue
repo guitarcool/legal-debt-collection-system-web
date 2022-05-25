@@ -118,16 +118,16 @@ export default {
     openDialog() {
       if (this.id === 7) {
         this.upload.url =
-          process.env.VUE_APP_BASE_API + "/case/postAdjudged/filedCaseBatch";
+          process.env.VUE_APP_BASE_API + "/case/postAdjudged/batchFiledCase";
       } else if (this.id === 8) {
         this.upload.url =
-          process.env.VUE_APP_BASE_API + "/case/postAdjudged/judgedBatch";
+          process.env.VUE_APP_BASE_API + "/case/postAdjudged/batchJudgedCase";
       } else if (this.id === 10) {
         this.upload.url =
-          process.env.VUE_APP_BASE_API + "/case/postAdjudged/executedBatch";
+          process.env.VUE_APP_BASE_API + "/case/postAdjudged/batchExecuted";
       } else if (this.id === 11) {
         this.upload.url =
-          process.env.VUE_APP_BASE_API + "/case/postAdjudged/enforcedBatch ";
+          process.env.VUE_APP_BASE_API + "/case/postAdjudged/batchEnforced";
       }
     },
     // 提交上传文件

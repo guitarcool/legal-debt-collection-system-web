@@ -161,7 +161,7 @@
                         if(this.statusId !=0 && this.statusId ){
                             this.form.statusId = this.statusId;
                         }
-                        cuttingBeforeApi.commonTwo(this.requestApi,this.form).then(res => {
+                        cuttingBeforeApi.common(this.requestApi,this.form).then(res => {
                             if (res.code === 200) {
                                 this.msgSuccess("操作成功");
                                 this.dialogVisible = false;

@@ -1492,6 +1492,7 @@
                 // 控制弹窗组件显示
                 this.pendingFilling.dialogVisible = true;
             },
+            //电话调解成功
             telephoneMediation(item) {
                 var that = this;
                 this.$confirm(`是否切换案件状态为${item.cName}?`, "提示", {
@@ -1525,9 +1526,11 @@
                         type: "warning",
                     })
                     .then(() => {
-                        let param = {};
+                        let param = {
+                            caseId:that.id
+                        };
                         cuttingBeforeApi
-                            .common(`/case/postAdjudged/pendingExecute?id=${that.id}`, param)
+                            .common(`/case/postAdjudged/pendingExecute`, param)
                             .then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
@@ -1821,9 +1824,11 @@
                         type: "warning",
                     })
                     .then(() => {
-                        let param = {};
+                        let param = {
+                            caseId:that.id
+                        };
                         cuttingBeforeApi
-                            .common(`/case/pretrial/multipleMediation/${that.id}`, param)
+                            .common(`/case/pretrial/multipleMediation`, param)
                             .then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
@@ -1844,8 +1849,10 @@
                         type: "warning",
                     })
                     .then(() => {
-                        let param = {};
-                        cuttingBeforeApi.common(`/case/pretrial/pending?id=${that.id}`, param).then((res) => {
+                        let param = {
+                            caseId:that.id
+                        };
+                        cuttingBeforeApi.common(`/case/pretrial/pending`, param).then((res) => {
                             if (res.code === 200) {
                                 that.msgSuccess("操作成功");
                                 that.getAdjudgedInfo();
@@ -1865,9 +1872,11 @@
                         type: "warning",
                     })
                     .then(() => {
-                        let param = {};
+                        let param = {
+                            caseId : that.id
+                        };
                         cuttingBeforeApi
-                            .common(`/case/postAdjudged/closed?id=${that.id}`, param)
+                            .common(`/case/postAdjudged/closed`, param)
                             .then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");

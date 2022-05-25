@@ -110,14 +110,6 @@ const cuttingBeforeApi = {
             data:data
         })
     },
-    //通用弹窗接口2
-    commonTwo(url,data){
-        return request({
-            url: url,
-            method: 'post',
-            params:data
-        })
-    },
     //申请案件信修
     applyCaseEdit(data){
         return request({
