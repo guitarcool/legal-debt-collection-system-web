@@ -56,8 +56,8 @@
                     </el-cascader>
                 </el-form-item>
                 <el-form-item label="联系结果：">
-                    <el-select size="small" multiple collapse-tags filterable clearable
-                        v-model="queryParams.medLabels" placeholder="请选择">
+                    <el-select size="small" multiple collapse-tags filterable clearable v-model="queryParams.medLabels"
+                        placeholder="请选择">
                         <el-option v-for="item in contactResultOptions" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
@@ -156,8 +156,8 @@
                         <div style="padding: 10px 0;font-weight:700">高级查询:</div>
                         <el-form-item label="案件状态：" class="custom-radio">
                             <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
-                                <el-checkbox v-for="item in statusOptions" v-show="item.dictValue!=13" :label="item.dictValue"
-                                    :key="item.dictValue">
+                                <el-checkbox v-for="item in statusOptions" v-show="item.dictValue!=13"
+                                    :label="item.dictValue" :key="item.dictValue">
                                     {{ item.dictLabel }}</el-checkbox>
                             </el-checkbox-group>
                         </el-form-item>
@@ -233,7 +233,7 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="primary" icon="el-icon-mobile" size="mini" :disabled="multiple"
-                        @click="handleFiltering">号码筛选
+                        v-hasPermi="['case:assignment:screening']" @click="handleFiltering">号码筛选
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -243,21 +243,24 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="primary" icon="el-icon-video-pause" size="mini" :disabled="multiple"
-                        @click="suspendCase(1)" v-if="queryParams.entrustStatus == 1" v-hasPermi="['case:assignment:suspendCase']">暂停案件
+                        @click="suspendCase(1)" v-if="queryParams.entrustStatus == 1"
+                        v-hasPermi="['case:assignment:suspendCase']">暂停案件
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="success" icon="el-icon-video-pause" size="mini" @click="suspendCase(2)"
-                       v-if="queryParams.entrustStatus == 1" v-hasPermi="['case:assignment:suspendCaseAll']">全选暂停案件
+                        v-if="queryParams.entrustStatus == 1" v-hasPermi="['case:assignment:suspendCaseAll']">全选暂停案件
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="primary" icon="el-icon-video-play" size="mini" :disabled="multiple"
-                        @click="recoveryCase(1)" v-if="queryParams.entrustStatus == 2" v-hasPermi="['case:assignment:recoverCase']">恢复案件
+                        @click="recoveryCase(1)" v-if="queryParams.entrustStatus == 2"
+                        v-hasPermi="['case:assignment:recoverCase']">恢复案件
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-video-play" size="mini" v-if="queryParams.entrustStatus == 2" @click="recoveryCase(2)"
+                    <el-button type="success" icon="el-icon-video-play" size="mini"
+                        v-if="queryParams.entrustStatus == 2" @click="recoveryCase(2)"
                         v-hasPermi="['case:assignment:recoverCaseAll']">全选恢复案件
                     </el-button>
                 </el-col>
@@ -288,24 +291,28 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" icon="el-icon-download" size="mini" :disabled="multiple"
+                        v-hasPermi="['case:adjudged:batchExportMediationRecord']"
                         @click="batchExportMediationRecord('导出调解记录')">
                         导出调解记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-download" size="mini" @click="batchExportMediationRecord('全选导出调解记录')"
+                    <el-button type="success" icon="el-icon-download" size="mini"
+                        @click="batchExportMediationRecord('全选导出调解记录')"
                         v-hasPermi="['case:assignment:batchExportMediationRecordAll']">
                         全选导出调解记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" icon="el-icon-download" size="mini" :disabled="multiple"
+                        v-hasPermi="['case:adjudged:batchExportNetworkAdjustRecord']"
                         @click="batchExportMediationRecord('导出网调记录')">
                         导出网调记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-download" size="mini" @click="batchExportMediationRecord('全选导出网调记录')"
+                    <el-button type="success" icon="el-icon-download" size="mini"
+                        @click="batchExportMediationRecord('全选导出网调记录')"
                         v-hasPermi="['case:assignment:batchExportNetworkAdjustRecordAll']">
                         全选导出网调记录
                     </el-button>
@@ -327,8 +334,8 @@
                 </el-table-column>
                 <el-table-column label="姓名" prop="respondentName" :show-overflow-tooltip="true" fixed="left"
                     width="80" />
-                <el-table-column label="标的金额" prop="subjectAmount" width="110" :show-overflow-tooltip="true" sortable="custom"
-                    :sort-orders="['descending', 'ascending']" />
+                <el-table-column label="标的金额" prop="subjectAmount" width="110" :show-overflow-tooltip="true"
+                    sortable="custom" :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="案件状态" :formatter="statusFormat" prop="caseStatus" width="120">
                 </el-table-column>
                 <el-table-column label="订单号" prop="id" :show-overflow-tooltip="true" width="170" />
@@ -416,7 +423,8 @@
         <el-dialog :title="numberForm.title" :visible.sync="numberDialogVisible" width="50%"
             :before-close="handleClose">
             <el-form style="margin: 0 auto;" ref="numberForm" :model="numberForm" :rules="rules" label-width="100px">
-                <div v-if="numberForm.title=='全选号码筛选'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
+                <div v-if="numberForm.title=='全选号码筛选'" style="padding:10px 0;color:red;font-size:16px;line-height:24px">
+                    注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
                 <el-form-item label="筛选服务：" prop="radioStatus">
                     <el-radio-group v-model="numberForm.radioStatus">
                         <el-radio :label="1">手机号在网状态</el-radio>
@@ -460,7 +468,9 @@
             :ids="exportData.ids" :requestApi="exportData.requestApi" :total="exportData.total"></exportDialog>
         <el-dialog :title="form.title" :visible.sync="exportDialogVisible" width="50%" :before-close="handleClose">
             <el-form style="margin: 0 auto;" ref="form" :model="form" :rules="exportRules" label-width="100px">
-                <div v-if="form.title=='全选导出网调记录'||form.title=='全选导出调解记录'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
+                <div v-if="form.title=='全选导出网调记录'||form.title=='全选导出调解记录'"
+                    style="padding:10px 0;color:red;font-size:16px;line-height:24px">注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!
+                </div>
                 <el-form-item v-if="form.title=='导出调解记录'||form.title=='全选导出调解记录'" label="导出范围：" prop="exportRange">
                     <el-checkbox-group v-model="form.exportRange">
                         <el-checkbox :label="1">最近一次调解记录</el-checkbox>
@@ -562,8 +572,7 @@
                     {
                         value: '1',
                         label: '大于',
-                        children: [
-                            {
+                        children: [{
                                 value: '6',
                                 label: '6天',
                             },
@@ -629,8 +638,7 @@
                     {
                         value: '1',
                         label: '大于',
-                        children: [
-                            {
+                        children: [{
                                 value: '6',
                                 label: '6天',
                             },
@@ -700,19 +708,19 @@
                     orgNo: "",
                     principal: "",
                     caseStatus: "",
-                    total:''
+                    total: ''
                 },
                 bindingData: {
                     title: "",
                     dialogVisible: false,
                     ids: [],
-                    total:''
+                    total: ''
                 },
                 supervisorData: {
                     title: "",
                     dialogVisible: false,
                     ids: '',
-                    total:''
+                    total: ''
                 },
                 recordData: {
                     title: "",
@@ -928,17 +936,17 @@
             },
             /** 排序触发事件 */
             handleSortChange(column, prop, order) {
-                if(column.order){
+                if (column.order) {
                     this.searchParams.orderByColumn = column.prop;
                     this.searchParams.isAsc = column.order;
                     this.getList(2);
-                }else{
+                } else {
                     this.searchParams.orderByColumn = '';
                     this.searchParams.isAsc = '';
                     this.getList(2);
                 }
             },
-            clearTable(){
+            clearTable() {
                 this.$refs.multiTable.clearSort();
             },
             jumpChange(value) {
@@ -1412,7 +1420,7 @@
 
     .queryDiv {
         height: 30px;
-        padding: 5px 20px;
+        padding: 5px 10px;
         background: #FCFFC9;
 
         span {
