@@ -114,11 +114,11 @@ const templateApi = {
         })
     },
     //文书生成记录
-    recordList(query) {
+    recordList(data) {
         return request({
             url: '/case/clericalRecord/list',
-            method: 'get',
-            params: query
+            method: 'post',
+            data
         })
     },
     //生成调解文书
