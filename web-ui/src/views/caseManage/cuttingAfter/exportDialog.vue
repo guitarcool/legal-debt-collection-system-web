@@ -331,7 +331,7 @@
             getList() {
                 let data = {
                     formatType: 1,
-                    templateTypes: [0, 1, 2],
+                    templateTypes: [],
                     status: 1,
                 };
                 templateApi.templateListInfo(data).then((response) => {

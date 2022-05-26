@@ -12,7 +12,7 @@
                             <el-scrollbar style="height: 250px">
                                 <el-input clearable placeholder="请输入查找短信模版" v-model="filterText">
                                 </el-input>
-                                <el-tree :data="data" class="border-style" :props="defaultProps" node-key="id"
+                                <el-tree :data="caseList" class="border-style" :props="defaultProps" node-key="id"
                                     :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
                                     @node-click="handleNodeClick" default-expand-all />
                             </el-scrollbar>
@@ -202,19 +202,6 @@
                 },
                 filterText: "",
                 caseList: [],
-                data: [{
-                        name: "多元调解模版",
-                        children: [],
-                    },
-                    {
-                        name: "诉讼模版",
-                        children: [],
-                    },
-                    {
-                        name: "律师函模版",
-                        children: [],
-                    },
-                ],
                 id: "",
                 templateId: "",
                 applyTime: "",
@@ -262,9 +249,7 @@
                 this.textarea = "";
                 this.signatureDate = null;
                 this.files = null;
-                this.data[0].children = [];
-                this.data[1].children = [];
-                this.data[2].children = [];
+                this.caseList = [];
                 this.providerType = "";
                 this.filterDeliverStatus = [];
                 this.phoneStatus = [6, 0, 8, 3, 12, 13, 14];
@@ -484,33 +469,15 @@
                 if (!value) return true;
                 return data.name.indexOf(value) !== -1;
             },
-            //获取短信模版
             getList() {
-                let param = {
-                    name: "",
-                    templateType: "",
-                    status: "",
+                let data = {
+                    formatType: 1,
+                    templateTypes: [],
+                    status: 1,
                 };
-                templateApi.templateList(param).then(
-                    response => {
-                        //console.log(response)
-                        this.caseList = response.data || [];
-                        this.caseList.forEach(item => {
-                            //短信模版
-                            if (item.formatType == 1 && item.status == 1) {
-                                if (item.templateType == 0) {
-                                    this.data[0].children.push(item)
-                                }
-                                if (item.templateType == 1) {
-                                    this.data[1].children.push(item)
-                                }
-                                if (item.templateType == 2) {
-                                    this.data[2].children.push(item)
-                                }
-                            }
-                        })
-                    }
-                );
+                templateApi.templateListInfo(data).then((response) => {
+                    this.caseList = response.data || [];
+                });
             },
             handleNodeClick(data) {
                 //console.log(data)

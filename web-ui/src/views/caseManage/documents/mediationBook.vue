@@ -11,12 +11,12 @@
                     <el-input clearable placeholder="输入关键字进行过滤" v-model="filterText">
                     </el-input>
                     <el-scrollbar style="height:250px;" v-if="title =='批量生成多人多案文书'||title == '全选生成多人多案文书'">
-                        <el-tree :data="dataTwo" class="border-style" :props="defaultProps" node-key="id"
+                        <el-tree :data="caseListTwo" class="border-style" :props="defaultProps" node-key="id"
                             :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
                             @node-click="handleNodeClick" default-expand-all />
                     </el-scrollbar>
                     <el-scrollbar style="height:250px;" v-else>
-                        <el-tree :data="data" class="border-style" :props="defaultProps" node-key="id"
+                        <el-tree :data="caseList" class="border-style" :props="defaultProps" node-key="id"
                             :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
                             @node-click="handleNodeClick" default-expand-all />
                     </el-scrollbar>
@@ -181,19 +181,7 @@
                 ],
                 filterText: "",
                 caseList: [],
-                data: [{
-                        name: "多元调解模版",
-                        children: [],
-                    },
-                    {
-                        name: "诉讼模版",
-                        children: [],
-                    },
-                ],
-                dataTwo: [{
-                    name: "多人多案文书模版",
-                    children: [],
-                }, ],
+                caseListTwo: [],
                 chooseData: [],
                 selectionData: [],
                 draging: null, //被拖拽的对象
@@ -230,9 +218,8 @@
         methods: {
             openDialog() {
                 this.loading = false;
-                this.data[0].children = [];
-                this.dataTwo[0].children = [];
-                this.data[1].children = [];
+                this.caseList = [];
+                this.caseListTwo = [];
                 this.chooseData = [];
                 this.needSignTemplate = [];
                 this.caseNumOnePaper = "";
@@ -242,6 +229,7 @@
                 this.suffix = 1;
                 this.filterText = "";
                 this.getList();
+                this.getListTwo();
                 this.$nextTick(() => {
                     const drawBodyWrapper = document.querySelector('.el-dialog__body tbody')
                     this.drawBodyWrapper = drawBodyWrapper;
@@ -445,49 +433,26 @@
                 if (!value) return true;
                 return data.name.indexOf(value) !== -1;
             },
-            //多元调解模版 0
-            //诉讼模版    1
-            //律师函模版  2
-            //债转模版   3
-            //多人多案模版  4
+            //多元调解模版 
             getList() {
-                let param = {
-                    name: "",
-                    templateType: "",
-                    status: "",
+                let data = {
+                    formatType: 0,
+                    templateTypes: [],
+                    status: 1,
                 };
-                templateApi.templateList(param).then((response) => {
-                    //console.log(response)
+                templateApi.templateListInfo(data).then((response) => {
                     this.caseList = response.data || [];
-                    this.caseList.forEach((item) => {
-                        if (
-                            item.formatType == 0 &&
-                            item.templateType == 0 &&
-                            item.status == 1
-                        ) {
-                            this.data[0].children.push(item);
-                        }
-                        if (
-                            item.formatType == 0 &&
-                            item.templateType == 1 &&
-                            item.status == 1
-                        ) {
-                            this.data[1].children.push(item);
-                        }
-                        if (
-                            item.formatType == 0 &&
-                            item.templateType == 4 &&
-                            item.status == 1
-                        ) {
-                            this.dataTwo[0].children.push(item);
-                        }
-                        // if(item.formatType == 0&&item.templateType==2&&item.status==1){
-                        //     this.data[2].children.push(item)
-                        // }
-                        // if(item.formatType == 0&&item.templateType==3&&item.status==1){
-                        //     this.data[3].children.push(item)
-                        // }
-                    });
+                });
+            },
+             //多人多案模版  4
+            getListTwo() {
+                let data = {
+                    formatType: 4,
+                    templateTypes: [],
+                    status: 1,
+                };
+                templateApi.templateListInfo(data).then((response) => {
+                    this.caseListTwo = response.data || [];
                 });
             },
             handleNodeClick(data) {

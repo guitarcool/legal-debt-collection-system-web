@@ -282,9 +282,6 @@
                         <el-button size="mini" type="warning" @click="handleMediation(scope.row)"
                             v-hasPermi="['case:clerical:instrument']">生成调解文书
                         </el-button>
-                        <!-- <el-button size="mini" type="success" @click="handleMessage(scope.row)"
-                            v-hasPermi="['case:clerical:notice']">生成短信/邮件
-                        </el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -296,8 +293,6 @@
             :selection="mediationBookData.selection" :title="mediationBookData.title"
             :show.sync="mediationBookData.dialogVisible" :id="mediationBookData.id"
             :requestApi="mediationBookData.requestApi" :total="mediationBookData.total"></mediationBook>
-        <message @refresh="clearSelection" :params="messageData.params" :title="messageData.title"
-            :show.sync="messageData.dialogVisible" :requestApi="messageData.requestApi" :id="messageData.id"></message>
         <batchExportDialog @refresh="clearSelection" :title="batchexportDialogData.title"
             :show.sync="batchexportDialogData.dialogVisible" :red="batchexportDialogData.red"
             :params="batchexportDialogData.params" :total="batchexportDialogData.total"></batchExportDialog>
@@ -310,7 +305,6 @@
     import SearchBar from "@/components/SearchBar/index";
     import templateApi from "@/api/case/document/templateIndex";
     import mediationBook from "./mediationBook";
-    import message from "./caseMessage";
     import batchExportDialog from "./batchExportDialog";
     import divisionApi from "@/api/case/division/index";
 
@@ -319,7 +313,6 @@
         components: {
             SearchBar,
             mediationBook,
-            message,
             batchExportDialog
         },
         data() {
@@ -375,13 +368,6 @@
                     params: "",
                     selection: [],
                     total: ""
-                },
-                messageData: {
-                    title: "",
-                    dialogVisible: false,
-                    id: "",
-                    requestApi: "",
-                    params: "",
                 },
                 userList: [],
                 getRowKeys(row) {

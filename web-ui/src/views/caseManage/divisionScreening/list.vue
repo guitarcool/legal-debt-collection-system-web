@@ -359,9 +359,9 @@
                 <el-table-column label="分配天数" sortable="custom" :sort-orders="['descending', 'ascending']"
                     prop="remainDays" width="100">
                 </el-table-column>
-                <el-table-column label="调解员" prop="principalName" width="140" />
-                <el-table-column label="监督员" prop="supervisors" width="140" />
-                <el-table-column label="催收机构" prop="deptName" width="120">
+                <el-table-column label="调解员" prop="principalName" width="140" :show-overflow-tooltip="true"/>
+                <el-table-column label="监督员" prop="supervisors" width="140" :show-overflow-tooltip="true"/>
+                <el-table-column label="催收机构" prop="deptName" width="140" :show-overflow-tooltip="true">
                     <template slot-scope="scope" v-if="scope.row.deptName">
                         <span>{{ scope.row.deptName }}</span>
                     </template>
