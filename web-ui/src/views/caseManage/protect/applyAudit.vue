@@ -22,7 +22,7 @@
                     <el-input style="width: 100%" v-model="form.propertyProNo" placeholder="请输入财保案号"></el-input>
                 </el-form-item>
                 <el-form-item label="财保类型：" v-if="project_operate == 1" prop="proType">
-                    <el-select style="width: 100%" v-model="form.proType" filterable placeholder="请选择">
+                    <el-select clearable style="width: 100%" v-model="form.proType" filterable placeholder="请选择">
                         <el-option v-for="item in house" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>

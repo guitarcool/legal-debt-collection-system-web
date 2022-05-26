@@ -24,7 +24,7 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="财保类型：">
-                    <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.proType"
+                    <el-select clearable filterable size="small" v-model="queryParams.proType"
                         placeholder="请选择">
                         <el-option v-for="item in proType" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
