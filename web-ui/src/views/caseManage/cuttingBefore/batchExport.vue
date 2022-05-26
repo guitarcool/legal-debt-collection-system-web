@@ -3,7 +3,8 @@
         <Dialog :title="title" :height="600" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
             <template v-slot:default>
                 <!-- 查看字段表 -->
-                <div v-if="title == '全选批量短信发送'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
+                <div v-if="title == '全选批量短信发送'" style="padding:10px 0;color:red;font-size:16px;line-height:24px">
+                    注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
                 <div class="see-field" v-loading="loading">
                     <div v-show="active ==1">
                         <div class="margin-div">
@@ -11,7 +12,7 @@
                             <el-scrollbar style="height: 250px">
                                 <el-input clearable placeholder="请输入查找短信模版" v-model="filterText">
                                 </el-input>
-                                <el-tree :data="data" class="border-style" :props="defaultProps" node-key="id"
+                                <el-tree :data="caseList" class="border-style" :props="defaultProps" node-key="id"
                                     :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
                                     @node-click="handleNodeClick" default-expand-all />
                             </el-scrollbar>
@@ -81,8 +82,9 @@
                                 <span>点击下载：</span>
                                 <el-link type="info" style="font-size: 16px; margin: 10px 0; color: #1890ff"
                                     @click="importTemplate"><i class="el-icon-download"></i>批量生成短信内容</el-link>
-                                <el-upload v-if="title == '批量短信发送(旧)'" class="upload-demo" :limit="1" action="string" :http-request="handleUplod"
-                                    :disabled="isUploading" :on-change="fileOnChange" :on-remove="removeFile">
+                                <el-upload v-if="title == '批量短信发送(旧)'" class="upload-demo" :limit="1" action="string"
+                                    :http-request="handleUplod" :disabled="isUploading" :on-change="fileOnChange"
+                                    :on-remove="removeFile">
                                     <el-button size="mini" type="primary">上传短信内容<i
                                             class="el-icon-upload el-icon--right"></i></el-button>
                                 </el-upload>
@@ -160,9 +162,9 @@
                 type: String,
                 default: ''
             },
-            total:{
+            total: {
                 type: String | Number,
-                default: '--'           
+                default: '--'
             }
         },
         watch: {
@@ -200,19 +202,6 @@
                 },
                 filterText: "",
                 caseList: [],
-                data: [{
-                        name: "多元调解模版",
-                        children: [],
-                    },
-                    {
-                        name: "诉讼模版",
-                        children: [],
-                    },
-                    {
-                        name: "律师函模版",
-                        children: [],
-                    },
-                ],
                 id: "",
                 templateId: "",
                 applyTime: "",
@@ -260,12 +249,10 @@
                 this.textarea = "";
                 this.signatureDate = null;
                 this.files = null;
-                this.data[0].children = [];
-                this.data[1].children = [];
-                this.data[2].children = [];
+                this.caseList = [];
                 this.providerType = "";
-                this.filterDeliverStatus= [];
-                this.phoneStatus = [6,0,8,3,12,13,14];
+                this.filterDeliverStatus = [];
+                this.phoneStatus = [6, 0, 8, 3, 12, 13, 14];
                 this.filterRealtimeStatus = [3, 7, 5, 6, 8, 9, 10, -3];
                 this.filterNetworkStatus = [2, 4003];
                 this.getList();
@@ -285,7 +272,7 @@
                     response => {
                         this.textarea = response.data.content;
                     }
-                );                        
+                );
                 // }else{
                 //     templateApi.info(this.templateId).then(
                 //         response => {
@@ -339,7 +326,7 @@
                     cuttingBeforeApi.downloadSmsTemplate(param).then((response) => {
                         this.download(response.msg);
                     });
-                }else{
+                } else {
                     importApi.downloadSmsTemplate(param).then((response) => {
                         this.download(response.msg);
                     });
@@ -399,8 +386,9 @@
                             withCredentials: true
                         });
                         instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken()
-                        if(this.title == '全选批量短信发送'){
-                            this.upload_url = process.env.VUE_APP_BASE_API + "/shortMsg/pretrialCase/batchSMSFileAll"; //上传URL
+                        if (this.title == '全选批量短信发送') {
+                            this.upload_url = process.env.VUE_APP_BASE_API +
+                                "/shortMsg/pretrialCase/batchSMSFileAll"; //上传URL
                         } else if (this.title == '批量短信发送(旧)') {
                             this.upload_url = process.env.VUE_APP_BASE_API + "/case/pretrial/batchSMSFile"; //上传URL
                         }
@@ -409,13 +397,13 @@
                             method: 'post',
                             url: that.upload_url,
                             data: formData,
-                            timeout:600000,
+                            timeout: 600000,
                             processData: false, // 告诉axios不要去处理发送的数据(重要参数)
                             contentType: false, // 告诉axios不要去设置Content-Type请求头
                             // config: {
                             //     headers: {'Content-Type': 'multipart/form-data'}
                             // }
-                        }).then((res) =>{
+                        }).then((res) => {
                             if (res.data.code == 500) {
                                 that.loading = false;
                                 that.msgError(res.data.msg);
@@ -442,36 +430,36 @@
                             phoneStatus: this.phoneStatus,
                             sendTime: this.signatureDate ? this.signatureDate : '',
                         }
-                        if(this.title == '全选批量短信发送'){
+                        if (this.title == '全选批量短信发送') {
                             cuttingBeforeApi.sendSmsCollectionAll(param).then((res) => {
-                                    if (res.code == 500) {
-                                        this.loading = false;
-                                        this.msgError(res.msg);
-                                    } else {
-                                        this.dialogVisible = false;
-                                        this.loading = false;
-                                        this.msgSuccess(res.msg);
-                                        this.$emit('clearSelection');
-                                        this.$emit('refresh');
-                                    }
-                                }).catch((error) => {
+                                if (res.code == 500) {
                                     this.loading = false;
-                                });
-                        }else{
+                                    this.msgError(res.msg);
+                                } else {
+                                    this.dialogVisible = false;
+                                    this.loading = false;
+                                    this.msgSuccess(res.msg);
+                                    this.$emit('clearSelection');
+                                    this.$emit('refresh');
+                                }
+                            }).catch((error) => {
+                                this.loading = false;
+                            });
+                        } else {
                             cuttingBeforeApi.sendSmsCollection(param).then((res) => {
-                                    if (res.code == 500) {
-                                        this.loading = false;
-                                        this.msgError(res.msg);
-                                    } else {
-                                        this.dialogVisible = false;
-                                        this.loading = false;
-                                        this.msgSuccess(res.msg);
-                                        this.$emit('clearSelection');
-                                        this.$emit('refresh');
-                                    }
-                                }).catch((error) => {
+                                if (res.code == 500) {
                                     this.loading = false;
-                                });
+                                    this.msgError(res.msg);
+                                } else {
+                                    this.dialogVisible = false;
+                                    this.loading = false;
+                                    this.msgSuccess(res.msg);
+                                    this.$emit('clearSelection');
+                                    this.$emit('refresh');
+                                }
+                            }).catch((error) => {
+                                this.loading = false;
+                            });
                         }
                     }
                 }
@@ -480,33 +468,15 @@
                 if (!value) return true;
                 return data.name.indexOf(value) !== -1;
             },
-            //获取短信模版
             getList() {
-                let param = {
-                    name: "",
-                    templateType: "",
-                    status: "",
+                let data = {
+                    formatType: 1,
+                    templateTypes: [0, 1, 2],
+                    status: 1,
                 };
-                templateApi.templateList(param).then(
-                    response => {
-                        //console.log(response)
-                        this.caseList = response.data || [];
-                        this.caseList.forEach(item => {
-                            //短信模版
-                            if (item.formatType == 1 && item.status == 1) {
-                                if (item.templateType == 0) {
-                                    this.data[0].children.push(item)
-                                }
-                                if (item.templateType == 1) {
-                                    this.data[1].children.push(item)
-                                }
-                                if (item.templateType == 2) {
-                                    this.data[2].children.push(item)
-                                }
-                            }
-                        })
-                    }
-                );
+                templateApi.templateListInfo(data).then((response) => {
+                    this.caseList = response.data || [];
+                });
             },
             handleNodeClick(data) {
                 //console.log(data)
@@ -579,9 +549,10 @@
         display: flex;
         align-items: center;
         padding: 5px;
-        p{
+
+        p {
             text-align: left;
-            width:154px;
+            width: 154px;
             white-space: pre;
         }
     }

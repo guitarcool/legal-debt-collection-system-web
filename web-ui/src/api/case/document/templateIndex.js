@@ -213,6 +213,14 @@ const templateApi = {
         method: 'get'
         })
     },
+    //模板中心-查询模板信息列表 不分页
+    templateListInfo(data) {
+        return request({
+            url: '/template/info/templateList',
+            method: 'post',
+            data
+        })
+    },
 }
 
 // 下载用户导入模版

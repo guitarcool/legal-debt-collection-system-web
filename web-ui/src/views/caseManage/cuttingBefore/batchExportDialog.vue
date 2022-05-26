@@ -11,7 +11,7 @@
                     <el-scrollbar style="height: 250px">
                         <el-input clearable placeholder="输入关键字进行过滤" v-model="filterText">
                         </el-input>
-                        <el-tree :data="data" class="border-style" :props="defaultProps" node-key="id"
+                        <el-tree :data="caseList" class="border-style" :props="defaultProps" node-key="id"
                             :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
                             @node-click="handleNodeClick" default-expand-all />
                     </el-scrollbar>
@@ -108,10 +108,6 @@
                 },
                 filterText: "",
                 caseList: [],
-                data: [{
-                    name: "律师函模版",
-                    children: [],
-                }, ],
                 templateId: "",
                 applyDate: "",
                 isShow: 0,
@@ -137,18 +133,12 @@
         methods: {
             openDialog() {
                 this.loading = false;
+                this.caseList = [];
                 this.templateId = "";
                 this.applyDate = "";
                 this.suffix = 1;
                 this.isShow = 0;
                 this.filterText = "";
-                this.data[0].children = [];
-                if (this.title == "批量生成律师函") {
-                    this.data[0].name = "律师函模版";
-                }
-                if (this.title == "全选生成律师函") {
-                    this.data[0].name = "律师函模版";
-                }
                 this.getList();
             },
             timekeeping() {
@@ -173,24 +163,13 @@
             //律师函模版  2
             //债转模版   3
             getList() {
-                let param = {
-                    name: "",
-                    templateType: "",
-                    status: "",
+                let data = {
+                    formatType: 0,
+                    templateType: 2,
+                    status: 1,
                 };
-                templateApi.templateList(param).then((response) => {
+                templateApi.templateListInfo(data).then((response) => {
                     this.caseList = response.data || [];
-                    this.caseList.forEach((item) => {
-                        if (this.title == "批量生成律师函" || this.title == "全选生成律师函") {
-                            if (
-                                item.formatType == 0 &&
-                                item.templateType == 2 &&
-                                item.status == 1
-                            ) {
-                                this.data[0].children.push(item);
-                            }
-                        }
-                    });
                 });
             },
             handleNodeClick(data) {
