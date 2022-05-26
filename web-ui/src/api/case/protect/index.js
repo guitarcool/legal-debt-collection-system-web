@@ -49,7 +49,7 @@ const protectApi = {
     //批量解除冻结
     editUnReview(data) {
         return request({
-            url: '/case/property/unReview',
+            url: '/case/property/batchUnfreeze',
             method: 'post',
             data: data
         })

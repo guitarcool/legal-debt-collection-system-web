@@ -87,7 +87,7 @@
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
                     <el-button type="danger" icon="el-icon-download" size="mini" :disabled="multiple"
-                        @click="handleExport" v-hasPermi="['case:property:batchUnfreeze']">导出
+                        @click="handleExport" v-hasPermi="['case:property:export']">导出
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
