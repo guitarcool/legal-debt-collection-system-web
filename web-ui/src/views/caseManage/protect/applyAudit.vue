@@ -195,6 +195,7 @@
             getInfo() {
                 protectApi.propertyInfo(this.id).then((res) => {
                     this.form = res.data;
+                    this.formhouse = this.form.house;
                 });
             },
             submit() {
