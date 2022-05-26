@@ -23,7 +23,7 @@
                 </el-form-item>
                 <el-form-item label="财保类型：" v-if="project_operate == 1" prop="proType">
                     <el-select clearable style="width: 100%" v-model="form.proType" filterable placeholder="请选择">
-                        <el-option v-for="item in house" :key="item.dictValue" :label="item.dictLabel"
+                        <el-option v-for="item in proType" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
@@ -93,6 +93,7 @@
                 formhouse: '',
                 project_operate: "",
                 house: [],
+                proType: [],
                 rules: {
                     choice: [{
                         required: true,
@@ -170,6 +171,10 @@
             //房类型
             this.getDicts("yes_no").then((response) => {
                 this.house = response.data;
+            });
+            //财保类型
+            this.getDicts("pro_type").then((response) => {
+                this.proType = response.data;
             });
         },
         methods: {
