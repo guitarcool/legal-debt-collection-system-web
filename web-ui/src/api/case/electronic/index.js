@@ -42,20 +42,20 @@ const electronicApi = {
         })
     },
     //审核
-    applyCheck(query) {
+    applyCheck(data) {
         return request({
             url: '/sign/apply/check',
             method: 'post',
-            params: query
+            data
         })
     },
     //审核
-    applyCheckAll(query) {
+    applyCheckAll(data) {
         return request({
             url: '/sign/apply/checkAll',
-            method: 'post',
             timeout:600000,
-            params: query
+            method: 'post',
+            data
         })
     },
     // //查看案件信息
