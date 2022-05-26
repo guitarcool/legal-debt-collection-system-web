@@ -394,7 +394,7 @@
             },
             //财保类型
             proTypeFormat(row, column) {
-                return this.selectDictLabel(this.proType, row.status);
+                return this.selectDictLabel(this.proType, row.proType);
             },
             // 案件状态
             caseStatusFormat(row, column) {
