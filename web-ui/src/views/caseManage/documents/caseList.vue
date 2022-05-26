@@ -3,16 +3,16 @@
         <search-bar v-show="showSearch" :model="queryParams" :has-filter="hasFilter" :flag="true" @submit="getList(1)"
             @resetAll="resetAll">
             <template #default>
-                <el-form-item label="案件批次号：" prop="batchNo">
+                <el-form-item label="案件批次号：">
                     <el-input clearable v-model="queryParams.batchNo" placeholder="请输入案件批次号" size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
-                <el-form-item label="财保批次号：" prop="batchNo">
-                    <el-input clearable v-model="queryParams.batchNo" placeholder="请输入财保批次号" size="small"
+                <el-form-item label="财保批次号：">
+                    <el-input clearable v-model="queryParams.proBatchNo" placeholder="请输入财保批次号" size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
-                <el-form-item label="借款平台名称：" prop="batchNo">
-                    <el-input clearable v-model="queryParams.batchNo" placeholder="请输入借款平台名称" size="small"
+                <el-form-item label="借款平台名称：">
+                    <el-input clearable v-model="queryParams.platform" placeholder="请输入借款平台名称" size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="订单号：">
@@ -47,10 +47,19 @@
                     <el-input v-model="queryParams.remark" placeholder="请输入备注查询内容" clearable size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
-                <el-form-item label="证据材料情况：">
-                    <el-cascader collapse-tags :props="props" clearable filterable size="small"
-                        v-model="queryParams.deliverResult" :options="shortmsgOptions" placeholder="请选择">
-                    </el-cascader>
+                <el-form-item label="证据材料：">
+                    <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.paperInfo"
+                        placeholder="请选择">
+                        <el-option v-for="item in evidenceOptions" :key="item.dictValue" :label="item.dictLabel"
+                            :value="item.dictValue">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="材料情况：">
+                    <el-select filterable size="small" v-model="queryParams.exist" placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
             </template>
             <template #filter>
@@ -134,8 +143,124 @@
                 <el-table-column label="姓名" prop="respondentName" :show-overflow-tooltip="true" fixed="left"
                     width="80" />
                 <el-table-column label="手机号" prop="respondentPhone" width="120" />
-                <el-table-column label="身份证号" width="180" prop="respondentIdNo" />
-                <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="130" sortable="custom"
+                <el-table-column label="身份证号" width="180" prop="respondentIdNo" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" />
+                <el-table-column label="标的金额" width="150" prop="subjectAmount" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" />
+                <el-table-column label="剩余待还本金" prop="overdueCapital" width="150" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" />
+                <el-table-column label="逾期年利率" prop="overYearRate" width="100" />
+                <el-table-column label="户籍地址" prop="respondentAddress" width="150" :show-overflow-tooltip="true" />
+                <el-table-column label="合同地址" prop="contractAddr" width="150" :show-overflow-tooltip="true" />
+                <el-table-column label="还款状态" :formatter="getRepayStatus" prop="repayStatus" />
+                <el-table-column label="剩余待还总额" prop="remainingBalance" width="150" sortable="custom"
+                    :sort-orders="['descending', 'ascending']" />
+                <el-table-column label="资产最终受让方" prop="assetLastAssignee" width="160" :show-overflow-tooltip="true" />
+                <el-table-column label="调解员" prop="principalName" width="100" />
+                <el-table-column label="案件状态" :formatter="statusFormat" prop="caseStatus" width="120" />
+                <el-table-column label="财保状态" :formatter="getProtects" prop="preStatus" width="120" />
+                <el-table-column label="借款合同" prop="loanContract" width="100">
+                    <template slot-scope="scope" v-if="scope.row.loanContract">
+                        <span>{{scope.row.loanContract == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="身份证正面" prop="ocrPhoto" width="120">
+                    <template slot-scope="scope" v-if="scope.row.ocrPhoto">
+                        <span>{{scope.row.ocrPhoto == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="身份证反面" prop="idcardReverse" width="120">
+                    <template slot-scope="scope" v-if="scope.row.idcardReverse">
+                        <span>{{scope.row.idcardReverse == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="放款凭证" prop="loanCertificate">
+                    <template slot-scope="scope" v-if="scope.row.loanCertificate">
+                        <span>{{scope.row.loanCertificate == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="注册协议" prop="registProtocol">
+                    <template slot-scope="scope" v-if="scope.row.registProtocol">
+                        <span>{{scope.row.registProtocol == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="授权协议" prop="authProtocol">
+                    <template slot-scope="scope" v-if="scope.row.authProtocol">
+                        <span>{{scope.row.authProtocol == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="融担合同" prop="financeContract">
+                    <template slot-scope="scope" v-if="scope.row.financeContract">
+                        <span>{{scope.row.financeContract == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="还款详情" prop="repayDetails">
+                    <template slot-scope="scope" v-if="scope.row.repayDetails">
+                        <span>{{scope.row.repayDetails == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="活体照片" prop="livingPhotos">
+                    <template slot-scope="scope" v-if="scope.row.livingPhotos">
+                        <span>{{scope.row.livingPhotos == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="服务申请协议" prop="serviceProtocol" width="150">
+                    <template slot-scope="scope" v-if="scope.row.serviceProtocol">
+                        <span>{{scope.row.serviceProtocol == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="收货确认书" prop="receiptConfirm" width="150">
+                    <template slot-scope="scope" v-if="scope.row.receiptConfirm">
+                        <span>{{scope.row.receiptConfirm == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="还款记录" prop="repayRecord">
+                    <template slot-scope="scope" v-if="scope.row.repayRecord">
+                        <span>{{scope.row.repayRecord == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="担保合同" prop="guaranteeContract">
+                    <template slot-scope="scope" v-if="scope.row.guaranteeContract">
+                        <span>{{scope.row.guaranteeContract == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="催收记录" prop="collectionRecord">
+                    <template slot-scope="scope" v-if="scope.row.collectionRecord">
+                        <span>{{scope.row.collectionRecord == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="代偿证明" prop="transferProve">
+                    <template slot-scope="scope" v-if="scope.row.transferProve">
+                        <span>{{scope.row.transferProve == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="代偿证明" prop="transferProve">
+                    <template slot-scope="scope" v-if="scope.row.transferProve">
+                        <span>{{scope.row.transferProve == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="用户电子签章授权" prop="userSignAuth" width="160">
+                    <template slot-scope="scope" v-if="scope.row.userSignAuth">
+                        <span>{{scope.row.userSignAuth == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="债权转让合同" prop="transferContract" width="150">
+                    <template slot-scope="scope" v-if="scope.row.transferContract">
+                        <span>{{scope.row.transferContract == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="债转发送凭证" prop="transferVoucher" width="150">
+                    <template slot-scope="scope" v-if="scope.row.transferVoucher">
+                        <span>{{scope.row.transferVoucher == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="其他" prop="otherFile">
+                    <template slot-scope="scope" v-if="scope.row.otherFile">
+                        <span>{{scope.row.otherFile == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+
+                <!-- <el-table-column label="案件分配时间" prop="distributionTime" fixed="left" width="130" sortable="custom"
                     :sort-orders="['descending', 'ascending']">
                     <template slot-scope="scope" v-if="scope.row.distributionTime">
                         <span>{{
@@ -148,14 +273,7 @@
                 <el-table-column label="合同金额" sortable="custom" :sort-orders="['descending', 'ascending']"
                     prop="contractAmount" width="120" />
                 <el-table-column label="剩余期数" prop="remainTerms" width="120" />
-                <el-table-column label="剩余待还本金" prop="overdueCapital" width="120" />
-                <el-table-column label="剩余待还总额" prop="remainingBalance" width="160">
-                </el-table-column>
-                <el-table-column label="逾期年利率" prop="overYearRate" width="100" />
-                <el-table-column label="调解员" prop="principalName" width="100">
-                </el-table-column>
-                <el-table-column label="委案状态" :formatter="getEntrustType" prop="entrustStatus">
-                </el-table-column>
+                <el-table-column label="委案状态" :formatter="getEntrustType" prop="entrustStatus"></el-table-column> -->
                 <el-table-column label="操作" width="360" fixed="right" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" type="primary" v-if="scope.row.entrustStatus != 3"
@@ -237,6 +355,7 @@
                     preStatus: "",
                     repayStatus: "",
                     caseStatuss: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], //默认勾选除已结案外的所有状态
+                    exist: 1,
                     orderByColumn: "",
                     isAsc: "",
                 },
@@ -276,23 +395,24 @@
                     total: ""
                 },
                 protects: [],
-                shortmsgOptions: [],
-                props: {
-                    multiple: true
-                },
+                evidenceOptions: [],
+                options: [{
+                        value: 1,
+                        label: "有",
+                    },
+                    {
+                        value: -1,
+                        label: "无",
+                    },
+                ],
             };
         },
         created() {
             this.getList(1);
             this.getUsers();
-            this.getCascaderData();
             //案件状态
             this.getDicts("case_status").then((response) => {
                 this.statusOptions = response.data;
-            });
-            //委案状态
-            this.getDicts("entrust_status").then((response) => {
-                this.entrustType = response.data;
             });
             //还款状态
             this.getDicts("repay_status").then((response) => {
@@ -301,6 +421,10 @@
             //财保状态
             this.getDicts("wealth_protect").then((response) => {
                 this.protects = response.data;
+            });
+            //证据材料
+            this.getDicts("evidence_package_detail").then((response) => {
+                this.evidenceOptions = response.data;
             });
         },
         // 是否显示过滤栏， 扣除页数，每页显示数，总数量参数，3个内的搜索参数，直接显示一行，不显示过滤
@@ -344,20 +468,16 @@
                     });
                 }
             },
-            /** 获取级联选择器 */
-            getCascaderData() {
-                let params1 = {
-                    type: 'screen'
-                };
-                let params2 = {
-                    type: 'shortmsg'
-                };
-                divisionApi.getCascaderData(params1).then(response => {
-                    this.screenResultOptions = response.data || [];
-                });
-                divisionApi.getCascaderData(params2).then(response => {
-                    this.shortmsgOptions = response.data || [];
-                });
+            // 案件状态字典翻译
+            statusFormat(row, column) {
+                return this.selectDictLabel(this.statusOptions, row.caseStatus);
+            },
+            getRepayStatus(row, column) {
+                return this.selectDictLabel(this.repayStatus, row.repayStatus);
+            },
+            //财保状态
+            getProtects(row, column) {
+                return this.selectDictLabel(this.protects, row.preStatus);
             },
             /** 排序触发事件 */
             handleSortChange(column, prop, order) {
@@ -373,10 +493,6 @@
             },
             clearTable() {
                 this.$refs.multiTable.clearSort();
-            },
-            //委案状态
-            getEntrustType(row, column) {
-                return this.selectDictLabel(this.entrustType, row.entrustStatus);
             },
             /** 搜索按钮操作 */
             handleQuery() {
@@ -487,12 +603,15 @@
                     // }
                 });
             },
-            resetAll() {},
-        },
-    };
+            resetAll() {
+                this.queryParams.exist = 1;
+                this.queryParams.caseStatuss = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+            },
+        }
+    }
 
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     .custom-radio {
         padding-top: 10px;
         display: flex !important;
