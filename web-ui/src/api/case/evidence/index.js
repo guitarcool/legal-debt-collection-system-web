@@ -22,11 +22,11 @@ const evidenceApi = {
             method: 'post'
         })
     },
-    infoList(query){
+    infoList(data){
         return request({
             url: '/evidence/package/detail/list',
-            method: 'get',
-            params: query
+            method: 'posy',
+            data
         })
     },
     exportInfo(query){

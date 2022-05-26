@@ -11,58 +11,17 @@
                     <el-input v-model="queryParams.name" placeholder="请输入姓名" clearable size="small" style="width: 240px"
                         @keyup.enter.native="handleQuery" />
                 </el-form-item>
-                <el-form-item label="身份证正面：" prop="haveOcrPhoto">
-                    <el-select clearable size="small" filterable v-model="queryParams.haveOcrPhoto" placeholder="请选择">
-                        <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
-                            :value="item.value">
+                <el-form-item label="证据材料：">
+                    <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.paperInfo"
+                        placeholder="请选择">
+                        <el-option v-for="item in evidenceOptions" :key="item.dictValue" :label="item.dictLabel"
+                            :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="授权协议：" prop="haveAuthProtocol">
-                    <el-select clearable size="small" filterable v-model="queryParams.haveAuthProtocol"
-                        placeholder="请选择">
-                        <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
-                            :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="放款凭证：" prop="haveLoanCertificate">
-                    <el-select clearable size="small" filterable v-model="queryParams.haveLoanCertificate"
-                        placeholder="请选择">
-                        <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
-                            :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="注册协议：" prop="haveRegistProtocol">
-                    <el-select clearable size="small" filterable v-model="queryParams.haveRegistProtocol"
-                        placeholder="请选择">
-                        <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
-                            :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="融担协议：" prop="haveFinanceContract">
-                    <el-select clearable size="small" filterable v-model="queryParams.haveFinanceContract"
-                        placeholder="请选择">
-                        <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
-                            :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="还款详情：" prop="haveRepayDetails">
-                    <el-select clearable size="small" filterable v-model="queryParams.haveRepayDetails"
-                        placeholder="请选择">
-                        <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
-                            :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="还款记录：" prop="haveRepayRecord">
-                    <el-select clearable size="small" filterable v-model="queryParams.haveRepayRecord"
-                        placeholder="请选择">
-                        <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
-                            :value="item.value">
+                <el-form-item label="材料情况：">
+                    <el-select filterable size="small" v-model="queryParams.exist" placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -106,27 +65,6 @@
                         :disabled="multiple" v-hasPermi="['evidence:package:download']">下载证据包
                     </el-button>
                 </el-col>
-                <!-- <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-download" size="mini" @click="handleDownZipAll"
-                        v-hasPermi="['evidence:package:downloadAll']">全选下载证据包
-                    </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button type="warning" icon="el-icon-download" size="mini" @click="handleMessage(1)"
-                        :disabled="multiple" v-hasPermi="['evidence:package:mail']">生成通知邮件
-                    </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-download" size="mini" @click="handleMessageAll(1)"
-                        v-hasPermi="['evidence:package:mailAll']">全选生成通知邮件
-                    </el-button>
-                </el-col> -->
-                <!-- <el-col :span="1.5">
-                    <el-button type="primary" icon="el-icon-download" size="mini"
-                        @click="generateANotificationTextMessage" :disabled="multiple"
-                        v-hasPermi="['evidence:package:mail']">生成通知短信
-                    </el-button>
-                </el-col> -->
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
@@ -199,7 +137,7 @@
                 <el-table-column label="用户电子签章授权" prop="haveUserSignAuth" width="140" />
                 <el-table-column label="债权转让合同" prop="haveTransferContract" width="120" />
                 <el-table-column label="债转发送凭证" prop="haveTransferVoucher" width="120" />
-                <el-table-column label="保理协议" prop="haveFactoringProtocol" width="120"/>
+                <el-table-column label="保理协议" prop="haveFactoringProtocol" width="120" />
                 <el-table-column label="银行回单" prop="haveBankReceipt" width="120" />
                 <el-table-column label="物流信息" prop="haveLogisticsInfo" width="120" />
                 <el-table-column label="订单详情" prop="haveOrderDetail" width="120" />
@@ -234,7 +172,7 @@
             :show.sync="editData.dialogVisible">
         </editEvidence>
         <newEvidenceImport @refresh="getList(1)" :id="evidenceData.id" :title="evidenceData.title"
-            :show.sync="evidenceData.dialogVisible" :accept="evidenceData.accept" >
+            :show.sync="evidenceData.dialogVisible" :accept="evidenceData.accept">
         </newEvidenceImport>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
             :ids="exportData.ids" :total="exportData.total" :requestApi="exportData.requestApi"></exportDialog>
@@ -295,14 +233,15 @@
                     pageSize: 50,
                 },
                 selection: [],
-                typeOptions: [{
-                        value: '无',
-                        label: '无'
+                evidenceOptions: [],
+                options: [{
+                        value: 1,
+                        label: "有",
                     },
                     {
-                        value: '有',
-                        label: '有'
-                    }
+                        value: -1,
+                        label: "无",
+                    },
                 ],
                 pid: '',
                 messageData: {
@@ -328,7 +267,7 @@
                     title: "",
                     dialogVisible: false,
                     id: null,
-                    accept:'',
+                    accept: '',
                 },
                 exportData: {
                     title: "",
@@ -361,6 +300,10 @@
             this.pid = this.$route.query.pid
             this.queryParams.pid = this.$route.query.pid
             this.getList(1);
+            //证据材料
+            this.getDicts("evidence_package_detail").then((response) => {
+                this.evidenceOptions = response.data;
+            });
         },
         // 是否显示过滤栏， 扣除页数，每页显示数，总数量参数，3个内的搜索参数，直接显示一行，不显示过滤
         computed: {
@@ -382,8 +325,7 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
-                    }
-                    ).catch(() => {
+                    }).catch(() => {
                         this.caseList = [];
                         this.total = 0;
                         this.loading = false;
@@ -395,8 +337,7 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
-                    }
-                    ).catch(() => {
+                    }).catch(() => {
                         this.caseList = [];
                         this.total = 0;
                         this.loading = false;
@@ -459,7 +400,7 @@
             handleDownZip() {
                 const h = this.$createElement;
                 let id = this.ids.join(',');
-                if(this.ids.length > 200){
+                if (this.ids.length > 200) {
                     this.msgError('勾选的数据量超出系统下载条数200上限，请重新勾选后再进行下载');
                     return;
                 }
@@ -473,7 +414,7 @@
                         if (action === 'confirm') {
                             instance.confirmButtonLoading = true;
                             instance.confirmButtonText = '下载中...';
-                            let str = "/evidence/package/download?ids=" +id;
+                            let str = "/evidence/package/download?ids=" + id;
                             let filename = "证据包";
                             const baseUrl = process.env.VUE_APP_BASE_API
                             var url = baseUrl + str;
@@ -494,7 +435,7 @@
                             done();
                         }
                     }
-                }).then(action => {}).catch(()=>{});//注意这里，这里是重点！
+                }).then(action => {}).catch(() => {}); //注意这里，这里是重点！
             },
             handleDownZipAll() {
                 const h = this.$createElement;
@@ -529,7 +470,7 @@
                             done();
                         }
                     }
-                }).then(action => {}).catch(()=>{});//注意这里，这里是重点！
+                }).then(action => {}).catch(() => {}); //注意这里，这里是重点！
             },
             clearSelection() {
                 if (this.caseList.length > 0) {
