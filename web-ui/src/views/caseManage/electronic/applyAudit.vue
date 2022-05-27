@@ -1,7 +1,8 @@
 <template>
     <Dialog :title="title" :height="400" :show.sync="dialogVisible" width="40%" @openDialog="openDialog">
         <template v-slot:default>
-            <div v-if="title == '全选文书签章审核'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
+            <div v-if="title == '全选文书签章审核'" style="padding:10px 0;color:red;font-size:16px;line-height:24px">
+                注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
             <el-form class="formcustom-display" ref="form" :model="form" :rules="rules" label-width="120px">
                 <el-form-item label="审批结果：" prop="choice">
                     <el-radio-group v-model="project_operate">
@@ -84,12 +85,14 @@
                 default: -1,
             },
             ids: {
-                type: String,
-                default: "",
+                type: Array,
+                default: () => {
+                    return [];
+                },
             },
-            total:{
+            total: {
                 type: String | Number,
-                default: '--'           
+                default: '--'
             }
         },
         computed: {
