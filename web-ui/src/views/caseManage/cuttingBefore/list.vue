@@ -1057,7 +1057,7 @@
                     })
                     .then(() => {
                         let data = {
-                            ids: that.ids.join(",")||''
+                            ids: that.ids
                         }
                         if (type == 1) {
                             cuttingBeforeApi.caseProperty(data).then((res) => {
