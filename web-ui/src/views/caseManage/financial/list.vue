@@ -262,7 +262,6 @@
                     orderNo: '',
                     repayType: '',
                     repayStatus: '',
-                    postUserId: '',
                     remittanceTime: '',
                     caseType: '',
                     caseStatuss: [],
