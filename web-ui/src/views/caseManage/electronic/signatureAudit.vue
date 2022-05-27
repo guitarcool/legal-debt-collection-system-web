@@ -286,7 +286,7 @@
                 this.applyData.title = "批量文书签章审核";
                 this.applyData.type = 2;
                 this.applyData.dialogVisible = true;
-                this.applyData.ids = this.ids.join(",");
+                this.applyData.ids = this.ids;
             },
             //批量申请审核
             editApplyAll() {
