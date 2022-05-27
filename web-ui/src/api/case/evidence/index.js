@@ -25,7 +25,7 @@ const evidenceApi = {
     infoList(data){
         return request({
             url: '/evidence/package/detail/list',
-            method: 'posy',
+            method: 'post',
             data
         })
     },
