@@ -214,12 +214,12 @@
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.preStatus == 0 || queryParams.preStatus == 4" type="primary"
                         size="mini" :disabled="multiple" @click="handleprojectEdit(1)"
-                        v-hasPermi="['case:pretrial:letterRepair']">批量诉前财保申请
+                        v-hasPermi="['case:property:batchAdd']">批量诉前财保申请
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.preStatus == 0 || queryParams.preStatus == 4" type="success"
-                        size="mini" @click="handleprojectEdit(2)" v-hasPermi="['caseinfo:property:addAll']">全选批量诉前财保申请
+                        size="mini" @click="handleprojectEdit(2)" v-hasPermi="['case:property:addAll']">全选批量诉前财保申请
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">

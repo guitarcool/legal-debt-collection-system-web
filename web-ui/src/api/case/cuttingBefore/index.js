@@ -41,7 +41,7 @@ const cuttingBeforeApi = {
     // 批量诉前财保
     caseProperty(data){
         return request({
-            url: '/case/property/batch',
+            url: '/case/property/batchAdd',
             method: 'post',
             data:data
         })
