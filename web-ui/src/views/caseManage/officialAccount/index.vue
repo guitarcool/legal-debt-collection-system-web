@@ -10,7 +10,7 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="登录身份证：">
-                    <el-input v-model="queryParams.idCard" placeholder="请输入案件批次号" clearable size="small"
+                    <el-input v-model="queryParams.idCard" placeholder="请输入身份证" clearable size="small"
                         style="width: 200px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="登录手机号：">
