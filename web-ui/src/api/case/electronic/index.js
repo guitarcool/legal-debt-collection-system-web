@@ -1,5 +1,7 @@
 import request from '@/utils/request'
-import { praseStrEmpty } from "@/utils/ruoyi";
+import {
+    praseStrEmpty
+} from "@/utils/ruoyi";
 
 const electronicApi = {
     //宜丰签章信息
@@ -26,11 +28,11 @@ const electronicApi = {
         })
     },
     //修改签章审核信息
-    editElectron(query) {
+    editElectron(data) {
         return request({
             url: '/sign/electron',
             method: 'put',
-            params: query
+            data
         })
     },
     //审核列表信息
@@ -53,7 +55,7 @@ const electronicApi = {
     applyCheckAll(data) {
         return request({
             url: '/sign/apply/checkAll',
-            timeout:600000,
+            timeout: 600000,
             method: 'post',
             data
         })

@@ -1,5 +1,7 @@
 import request from '@/utils/request'
-import { praseStrEmpty } from "@/utils/ruoyi";
+import {
+    praseStrEmpty
+} from "@/utils/ruoyi";
 
 const cuttingAfterApi = {
     //列表
@@ -21,14 +23,14 @@ const cuttingAfterApi = {
     //裁后案件概述详情第一部分
     postAdjudgedInfo(id) {
         return request({
-            url: '/case/postAdjudged/getCaseOverview?caseId='+id,
+            url: '/case/postAdjudged/getCaseOverview?caseId=' + id,
             method: 'get'
         })
     },
     //详情
     getCaseInfo(id) {
         return request({
-            url: '/case/caseInfo/getCaseInfo?caseId='+id,
+            url: '/case/caseInfo/getCaseInfo?caseId=' + id,
             method: 'get'
         })
     },
@@ -56,102 +58,102 @@ const cuttingAfterApi = {
     //一键外呼详情
     breatheInfo(id) {
         return request({
-            url: '/breathe/getCallInfo/'+id,
+            url: '/breathe/getCallInfo/' + id,
             method: 'get'
         })
-    },    
+    },
     //调解记录
-    record(id){
+    record(id) {
         return request({
-            url: '/case/postAdjudged/getMediationRecord/'+id,
+            url: '/case/postAdjudged/getMediationRecord/' + id,
             method: 'get'
         })
     },
     //切换有效性
-    toggole(data){
+    toggole(data) {
         return request({
             url: '/case/postAdjudged/switchValidity',
             method: 'post',
-            params:data
+            data
         })
     },
     //获取号码list
-    getLineList(){
+    getLineList() {
         return request({
             url: '/breathe/getLineList',
             method: 'post',
         })
-    },      
+    },
     //新增调解记录
-    addRecord(data){
+    addRecord(data) {
         return request({
             url: '/case/postAdjudged/addMediationRecord',
             method: 'post',
-            data:data
+            data
         })
     },
     //获取list
-    getListByIds(ids,callObject,filterMedLabel,filterNetworkStatus,filterRealtimeStatus,path){
+    getListByIds(ids, callObject, filterMedLabel, filterNetworkStatus, filterRealtimeStatus, path) {
         return request({
             url: `/breathe/getListByIds?id=${ids}&callObject=${callObject}&filterMedLabel=${filterMedLabel}&filterNetworkStatus=${filterNetworkStatus}&filterRealtimeStatus=${filterRealtimeStatus}&path=${path}`,
             method: 'post',
         })
-    },     
+    },
     //新增计划
-    addduyansoft(data){
+    addduyansoft(data) {
         return request({
             url: '/breathe/createPersonal',
             method: 'post',
-            data:data
+            data
         })
-    },     
+    },
     //新增联系人信息
-    addPhone(data){
+    addPhone(data) {
         return request({
             url: '/case/postAdjudged/addRelatedInfo',
             method: 'post',
-            data:data
+            data
         })
     },
     //新增网调信息
-    addNetworkAdjustRecord(data){
+    addNetworkAdjustRecord(data) {
         return request({
             url: '/case/postAdjudged/addNetworkAdjustRecord',
             method: 'post',
-            data:data
+            data
         })
     },
     //通用弹窗接口
-    common(url,data){
+    common(url, data) {
         return request({
             url: url,
             method: 'post',
-            data:data
+            data
         })
     },
     //申请案件信修
-    applyCaseEdit(data){
+    applyCaseEdit(data) {
         return request({
             url: '/case/postAdjudged/applyLetterRepair',
             method: 'post',
-            params:data
+            data
         })
     },
     //申请案件信修
-    applyLetterRepairAll(data){
+    applyLetterRepairAll(data) {
         return request({
             url: '/case/postAdjudged/applyLetterRepairAll',
-            timeout:600000,
+            timeout: 600000,
             method: 'post',
-            params:data
+            data
         })
     },
     //增加已拨次数
-    addPhoneNumber(data){
+    addPhoneNumber(data) {
         return request({
             url: '/case/postAdjudged/addDialedNumber',
             method: 'post',
-            params:data
+            data
         })
     },
     //下载模版
@@ -161,7 +163,7 @@ const cuttingAfterApi = {
             method: 'post',
             data
         })
-    }, 
+    },
     //下载模版
     importJudgedTemplate(data) {
         return request({
@@ -169,24 +171,24 @@ const cuttingAfterApi = {
             method: 'post',
             data
         })
-    },   
+    },
     // 批量待执行立案
-    pendingExecute(data){
+    pendingExecute(data) {
         return request({
             url: '/case/postAdjudged/batchPendingExecute',
             method: 'post',
             data
         })
-    },  
+    },
     // 批量待执行立案
-    pendingExecuteAll(data){
+    pendingExecuteAll(data) {
         return request({
             url: '/case/postAdjudged/pendingExecuteAll',
-            timeout:600000,
+            timeout: 600000,
             method: 'post',
             data
         })
-    },  
+    },
     //下载模版
     importExecutedTemplate(data) {
         return request({
@@ -194,7 +196,7 @@ const cuttingAfterApi = {
             method: 'post',
             data
         })
-    }, 
+    },
     //下载模版
     importEnforcedTemplate(data) {
         return request({
@@ -202,93 +204,93 @@ const cuttingAfterApi = {
             method: 'post',
             data
         })
-    }, 
+    },
     // 发送短信单条
     shortMsg(data) {
         return request({
-        url: '/shortMsg/send',
-        method: 'post',
-        data: data
+            url: '/shortMsg/send',
+            method: 'post',
+            data
         })
-    }, 
+    },
     // 发送短信
     sendSmsCollection(data) {
         return request({
-        url: '/case/postAdjudged/batchSMS',
-        method: 'post',
-        data: data
+            url: '/case/postAdjudged/batchSMS',
+            method: 'post',
+            data
         })
-    },  
+    },
     // 全选发送短信
     sendSmsCollectionAll(data) {
         return request({
-        url: '/case/postAdjudged/batchSMSAll',
-        method: 'post',
-        timeout:600000,
-        data: data
+            url: '/case/postAdjudged/batchSMSAll',
+            method: 'post',
+            timeout: 600000,
+            data
         })
-    }, 
+    },
     // 案例列表全选发送短信
     batchSMSAll(data) {
         return request({
-        url: '/case/clerical/batchSMSAll',
-        method: 'post',
-        timeout:600000,
-        data: data
+            url: '/case/clerical/batchSMSAll',
+            method: 'post',
+            timeout: 600000,
+            data
         })
-    }, 
+    },
     // 案例列表发送短信
     sendSmsbatchSMS(data) {
         return request({
-        url: '/case/clerical/batchSMS',
-        method: 'post',
-        data: data
+            url: '/case/clerical/batchSMS',
+            method: 'post',
+            data
         })
-    },  
+    },
     // 全选发送文书短信
     batchClericalSMSAll(data) {
         return request({
-        url: '/case/clericalRecord/batchClericalSMSAll',
-        method: 'post',
-        timeout:600000,
-        data: data
+            url: '/case/clericalRecord/batchClericalSMSAll',
+            method: 'post',
+            timeout: 600000,
+            data
         })
-    },  
+    },
     // 发送文书短信
     sendSmsWenshu(data) {
         return request({
-        url: '/case/clericalRecord/batchClericalSMS',
-        method: 'post',
-        data: data
+            url: '/case/clericalRecord/batchClericalSMS',
+            method: 'post',
+            data
         })
-    },  
+    },
     // 重新发送短信
     sendSmsBatchResend(data) {
         return request({
-        url: '/report/shortMsgRecord/batchResend',
-        method: 'post',
-        data: data
+            url: '/report/shortMsgRecord/batchResend',
+            method: 'post',
+            data
         })
-    },    
+    },
     // 全选重新发送短信
     batchResendAll(data) {
         return request({
-        url: '/report/shortMsgRecord/batchResendAll',
-        timeout:600000,
-        method: 'post',
-        data: data
+            url: '/report/shortMsgRecord/batchResendAll',
+            timeout: 600000,
+            method: 'post',
+            data
         })
-    },   
+    },
     //获取正确的短信内容
     turnContent(data) {
         return request({
-        url:'/shortMsg/turnContent',
-        method: 'post',
-        data: data
+            url: '/shortMsg/turnContent',
+            method: 'post',
+            data
         })
     },
     //裁后调解记录优化
-    postAdjudgedBatchExport(query){
+    postAdjudgedBatchExport(query) {
         return request({
             url: '/case/postAdjudged/batchExportMediationRecord',
             method: 'get',
@@ -296,72 +298,72 @@ const cuttingAfterApi = {
         })
     },
     //裁后调解记录优化
-    batchExportMediationRecordAll(query){
+    batchExportMediationRecordAll(query) {
         return request({
             url: '/case/postAdjudged/batchExportMediationRecordAll',
             method: 'get',
-            timeout:600000,
+            timeout: 600000,
             params: query
         })
     },
     //分案调解记录优化
-    assignmentMediationRecordAll(query){
+    assignmentMediationRecordAll(query) {
         return request({
             url: '/case/assignment/batchExportMediationRecordAll',
             method: 'get',
-            timeout:600000,
+            timeout: 600000,
             params: query
         })
     },
     //裁后网调记录记录优化
-    batchExportNetworkAdjustRecord(query){
+    batchExportNetworkAdjustRecord(query) {
         return request({
             url: '/case/postAdjudged/batchExportNetworkAdjustRecord',
             method: 'get',
             params: query
         })
-    },   
+    },
     //裁后网调记录记录优化
-    batchExportNetworkAdjustRecordAll(query){
+    batchExportNetworkAdjustRecordAll(query) {
         return request({
             url: '/case/postAdjudged/batchExportNetworkAdjustRecordAll',
             method: 'get',
-            timeout:600000,
+            timeout: 600000,
             params: query
         })
-    },  
+    },
     //分案网调记录记录优化
-    assignmentNetworkAdjustRecordAll(query){
+    assignmentNetworkAdjustRecordAll(query) {
         return request({
             url: '/case/assignment/batchExportNetworkAdjustRecordAll',
             method: 'get',
-            timeout:600000,
+            timeout: 600000,
             params: query
         })
-    },  
+    },
     //裁后案件编辑获取详情
     getCaseEditData(caseId) {
         return request({
-            url: '/case/postAdjudged/getCaseEditData?caseId='+caseId,
+            url: '/case/postAdjudged/getCaseEditData?caseId=' + caseId,
             method: 'get'
         })
-    },  
+    },
     // 裁后案件编辑发送
     updateCaseEditData(data) {
         return request({
-        url: '/case/postAdjudged/updateCaseEditData',
-        method: 'post',
-        data: data
+            url: '/case/postAdjudged/updateCaseEditData',
+            method: 'post',
+            data
         })
-    },  
+    },
     //下载短信模版
-    downloadSmsTemplate(data){
+    downloadSmsTemplate(data) {
         return request({
             url: '/case/postAdjudged/notice/batch',
             method: 'post',
             data
         })
-    },         
+    },
 }
 
 // 下载用户导入模版

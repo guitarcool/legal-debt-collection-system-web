@@ -1,5 +1,7 @@
 import request from '@/utils/request'
-import { praseStrEmpty } from "@/utils/ruoyi";
+import {
+    praseStrEmpty
+} from "@/utils/ruoyi";
 
 const temCenterApi = {
     list(query) {
@@ -9,13 +11,13 @@ const temCenterApi = {
             params: query
         })
     },
-    deleteFile(id){
+    deleteFile(id) {
         return request({
             url: '/template/info/templateFile/delete/' + id,
             method: 'post'
         })
     },
-    findByUsername(id){
+    findByUsername(id) {
         return request({
             url: '/template/info/findByUsername/' + id,
             method: 'post'

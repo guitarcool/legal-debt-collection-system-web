@@ -12,7 +12,7 @@ const protectApi = {
         return request({
             url: '/case/property/review',
             method: 'post',
-            data: data
+            data
         })
     },
     //修改
@@ -20,7 +20,7 @@ const protectApi = {
         return request({
             url: '/case/property',
             method: 'put',
-            params: data
+            data
         })
     },
     //反审
@@ -28,7 +28,7 @@ const protectApi = {
         return request({
             url: '/case/property/unReview',
             method: 'post',
-            data: data
+            data
         })
     },
     //修改审核
@@ -36,13 +36,13 @@ const protectApi = {
         return request({
             url: '/case/property/updateReviewInfo',
             method: 'post',
-            data: data
+            data
         })
     },
     //审核获取详情
     propertyInfo(id) {
         return request({
-            url: 'case/property/'+id,
+            url: 'case/property/' + id,
             method: 'get',
         })
     },
@@ -51,7 +51,7 @@ const protectApi = {
         return request({
             url: '/case/property/batchUnfreeze',
             method: 'post',
-            data: data
+            data
         })
     },
     //财保管理-批量审核通过模版下载
@@ -59,7 +59,7 @@ const protectApi = {
         return request({
             url: '/case/property/downloadReviewPassTemplate',
             method: 'post',
-            data: data
+            data
         })
     },
     //财保管理-批量审核通过
@@ -67,7 +67,7 @@ const protectApi = {
         return request({
             url: '/case/property/batchReviewPass',
             method: 'post',
-            data: data
+            data
         })
     },
     //财保管理-批量审核驳回
@@ -75,7 +75,7 @@ const protectApi = {
         return request({
             url: '/case/property/batchReviewRefuse',
             method: 'post',
-            data: data
+            data
         })
     },
 }

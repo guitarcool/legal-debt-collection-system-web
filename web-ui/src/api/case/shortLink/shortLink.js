@@ -1,5 +1,7 @@
 import request from '@/utils/request'
-import { praseStrEmpty } from "@/utils/ruoyi";
+import {
+    praseStrEmpty
+} from "@/utils/ruoyi";
 
 const shortLinkApi = {
     //列表
@@ -15,7 +17,7 @@ const shortLinkApi = {
         return request({
             url: '/shortLinkVisitLog/export',
             method: 'post',
-            data: data
+            data
         })
     },
     //ip文件列表
@@ -31,7 +33,7 @@ const shortLinkApi = {
         return request({
             url: '/employeeIpBind/bind',
             method: 'post',
-            data: data
+            data
         })
     },
     //ip文件列表修改
@@ -39,13 +41,13 @@ const shortLinkApi = {
         return request({
             url: '/employeeIpBind/edit',
             method: 'post',
-            data: data
+            data
         })
     },
     //ip文件列表删除
     combinateStatus(id) {
         return request({
-            url: '/employeeIpBind/del/'+ id,
+            url: '/employeeIpBind/del/' + id,
             method: 'post',
         })
     },

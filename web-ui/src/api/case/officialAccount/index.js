@@ -8,7 +8,7 @@ const officialApi = {
             method: 'post',
             data
         })
-    },        
+    },
 }
 
 // 下载用户导入模版

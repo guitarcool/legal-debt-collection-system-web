@@ -1,5 +1,7 @@
 import request from '@/utils/request'
-import { praseStrEmpty } from "@/utils/ruoyi";
+import {
+    praseStrEmpty
+} from "@/utils/ruoyi";
 
 const financeApi = {
     //下载模版
@@ -28,7 +30,7 @@ const financeApi = {
         return request({
             url: '/case/financial/review',
             method: 'post',
-            params:data
+            data
         })
     },
     //撤销审核
@@ -40,7 +42,7 @@ const financeApi = {
         })
     },
     //还款提交人
-    submitter(){
+    submitter() {
         return request({
             url: '/case/financial/getPostName',
             method: 'get'

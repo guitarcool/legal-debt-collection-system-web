@@ -1,5 +1,7 @@
 import request from '@/utils/request'
-import { praseStrEmpty } from "@/utils/ruoyi";
+import {
+    praseStrEmpty
+} from "@/utils/ruoyi";
 
 const withDrawalApi = {
     //列表
@@ -11,7 +13,7 @@ const withDrawalApi = {
         })
     },
     //调解记录优化
-    batchExportMediationRecord(query){
+    batchExportMediationRecord(query) {
         return request({
             url: '/case/withdrawal/batchExportMediationRecord',
             method: 'get',
@@ -19,7 +21,7 @@ const withDrawalApi = {
         })
     },
     //调解记录优化
-    batchExportMediationRecordAll(query){
+    batchExportMediationRecordAll(query) {
         return request({
             url: '/case/withdrawal/batchExportMediationRecordAll',
             method: 'get',
@@ -27,21 +29,21 @@ const withDrawalApi = {
         })
     },
     //网调记录优化
-    batchExportNetworkAdjustRecord(query){
+    batchExportNetworkAdjustRecord(query) {
         return request({
             url: '/case/withdrawal/batchExportNetworkAdjustRecord',
             method: 'get',
             params: query
         })
-    },  
+    },
     //网调记录优化
-    batchExportNetworkAdjustRecordAll(query){
+    batchExportNetworkAdjustRecordAll(query) {
         return request({
             url: '/case/withdrawal/batchExportNetworkAdjustRecordAll',
             method: 'get',
             params: query
         })
-    },            
+    },
 }
 
 // 下载用户导入模版

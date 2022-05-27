@@ -45,7 +45,7 @@ const divisionApi = {
         return request({
             url: '/case/assignment/assignmentCase',
             method: 'post',
-            data:data
+            data
         })
     },
     divisionAll(data){
@@ -53,14 +53,14 @@ const divisionApi = {
             url: '/case/assignment/assignmentCaseAll',
             method: 'post',
             timeout:600000,
-            data:data
+            data
         })
     },
     supervisorAssignment(data){
         return request({
             url: '/case/assignment/supervisorAssignment',
             method: 'post',
-            data:data
+            data
         })
     },
     supervisorAssignmentAll(data){
@@ -68,7 +68,7 @@ const divisionApi = {
             url: '/case/assignment/supervisorAssignmentAll',
             method: 'post',
             timeout:600000,
-            data:data
+            data
         })
     },
     //号码筛选
@@ -139,7 +139,7 @@ const divisionApi = {
         return request({
             url: '/admin/wechat/list',
             method: 'post',
-            data:data
+            data
         })
     },
     //公众号绑定
@@ -147,7 +147,7 @@ const divisionApi = {
         return request({
             url: '/admin/wechat/case/bind',
             method: 'post',
-            data:data
+            data
         })
     },
     //公众号绑定
@@ -156,7 +156,7 @@ const divisionApi = {
             url: '/admin/wechat/case/bindAll',
             method: 'post',
             timeout:600000,
-            data:data
+            data
         })
     },
     //级联选择接口

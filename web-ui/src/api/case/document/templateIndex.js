@@ -1,5 +1,7 @@
 import request from '@/utils/request'
-import { praseStrEmpty } from "@/utils/ruoyi";
+import {
+    praseStrEmpty
+} from "@/utils/ruoyi";
 
 const templateApi = {
     //模版列表
@@ -36,7 +38,7 @@ const templateApi = {
         return request({
             url: '/template/info',
             method: 'post',
-            params: data
+            data
         })
     },
     //修改
@@ -44,7 +46,7 @@ const templateApi = {
         return request({
             url: '/template/info',
             method: 'put',
-            data: data
+            data
         })
     },
     //获取签章信息
@@ -70,11 +72,11 @@ const templateApi = {
         })
     },
     //没有分页
-    templateList(data) {
+    templateList(query) {
         return request({
             url: '/template/info/templateList',
             method: 'get',
-            params: data
+            params: query
         })
     },
     //案例列表
@@ -85,12 +87,12 @@ const templateApi = {
             data
         })
     },
-    common(url, data) {
+    common(url, query) {
         return request({
             url: url,
             method: 'get',
             timeout: 500000,
-            params: data
+            params: query
         })
     },
     // common2(url,data){
@@ -122,11 +124,11 @@ const templateApi = {
         })
     },
     //生成调解文书
-    generateBook(query) {
+    generateBook(data) {
         return request({
             url: '/case/caseInfo/instrument',
             method: 'post',
-            data: query
+            data
         })
     },
     //查看下载文件列表
@@ -150,7 +152,7 @@ const templateApi = {
         return request({
             url: '/template/combinate',
             method: 'post',
-            data: data
+            data
         })
     },
     //组合字段修改
@@ -158,7 +160,7 @@ const templateApi = {
         return request({
             url: '/template/combinate',
             method: 'put',
-            data: data
+            data
         })
     },
     //切换状态
@@ -166,28 +168,28 @@ const templateApi = {
         return request({
             url: '/template/combinate',
             method: 'put',
-            data: data
+            data
         })
     },
     // 查询组合字段详细
     getField(id) {
         return request({
-        url: '/template/combinate/' + id,
-        method: 'get'
+            url: '/template/combinate/' + id,
+            method: 'get'
         })
     },
     // 删除模版
     templatedelete(id) {
         return request({
-        url: `/template/info/delete/${id}`,
-        method: 'post'
+            url: `/template/info/delete/${id}`,
+            method: 'post'
         })
     },
     // 查询证据包
     getEvidenceField() {
         return request({
-        url: '/template/info/getEvidenceField',
-        method: 'get'
+            url: '/template/info/getEvidenceField',
+            method: 'get'
         })
     },
     //批量下载文书
@@ -195,7 +197,7 @@ const templateApi = {
         return request({
             url: '/case/clericalRecord/batchDownloadClerical',
             method: 'post',
-            data: data
+            data
         })
     },
     //异步列表
@@ -203,14 +205,14 @@ const templateApi = {
         return request({
             url: '/async/file/list',
             method: 'post',
-            data: data
+            data
         })
     },
     // 重新执行
     getreExec(id) {
         return request({
-        url: `async/file/reExec/${id}`,
-        method: 'get'
+            url: `async/file/reExec/${id}`,
+            method: 'get'
         })
     },
     //模板中心-查询模板信息列表 不分页

@@ -1,5 +1,7 @@
 import request from '@/utils/request'
-import { praseStrEmpty } from "@/utils/ruoyi";
+import {
+    praseStrEmpty
+} from "@/utils/ruoyi";
 
 const modifyApi = {
     //下载模版
@@ -27,15 +29,15 @@ const modifyApi = {
         return request({
             url: '/case/letter/review',
             method: 'post',
-            params:data
+            data
         })
     },
     applyModifyAll(data) {
         return request({
             url: '/case/letter/reviewAll',
             method: 'post',
-            timeout:600000,
-            params:data
+            timeout: 600000,
+            data
         })
     },
 }

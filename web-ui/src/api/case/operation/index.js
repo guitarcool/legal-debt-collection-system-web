@@ -8,7 +8,7 @@ const operationApi = {
             method: 'post',
             data
         })
-    },   
+    },
     //通话记录列表导出 
     callRecordexport(query) {
         return request({
@@ -16,7 +16,7 @@ const operationApi = {
             method: 'get',
             params: query
         })
-    }, 
+    },
     //录音下载
     batchDownloadSoundRecord(query) {
         return request({
@@ -24,7 +24,7 @@ const operationApi = {
             method: 'get',
             params: query
         })
-    },   
+    },
     //获取质检记录报表列表
     callQualitylist(data) {
         return request({
@@ -32,7 +32,7 @@ const operationApi = {
             method: 'post',
             data
         })
-    }, 
+    },
     //质检记录列表导出 
     callQualityexport(query) {
         return request({
@@ -40,7 +40,7 @@ const operationApi = {
             method: 'get',
             params: query
         })
-    },  
+    },
     //获取号码筛选报表列表
     screenRecordlist(data) {
         return request({
@@ -56,7 +56,7 @@ const operationApi = {
             method: 'get',
             params: query
         })
-    }, 
+    },
     //获取电子签章列表
     signRecordlist(data) {
         return request({
@@ -72,7 +72,7 @@ const operationApi = {
             method: 'get',
             params: query
         })
-    }, 
+    },
     //获取短信列表
     shortMsgRecordlist(data) {
         return request({
@@ -89,12 +89,12 @@ const operationApi = {
             params: query
         })
     },
-    userList(){
+    userList() {
         return request({
             url: '/case/assignment/userList',
             method: 'get'
         })
-    },     
+    },
 }
 
 // 下载用户导入模版

@@ -1,5 +1,7 @@
 import request from '@/utils/request'
-import { praseStrEmpty } from "@/utils/ruoyi";
+import {
+    praseStrEmpty
+} from "@/utils/ruoyi";
 
 const evidenceApi = {
     list(query) {
@@ -18,25 +20,25 @@ const evidenceApi = {
     },
     move(id) {
         return request({
-            url: '/evidence/package/'+id,
+            url: '/evidence/package/' + id,
             method: 'post'
         })
     },
-    infoList(data){
+    infoList(data) {
         return request({
             url: '/evidence/package/detail/list',
             method: 'post',
             data
         })
     },
-    exportInfo(query){
+    exportInfo(query) {
         return request({
             url: '/evidence/package/detail/export',
             method: 'get',
             params: query
         })
     },
-    downZip(query){
+    downZip(query) {
         return request({
             url: '/evidence/package/download',
             method: 'get',
@@ -52,7 +54,7 @@ const evidenceApi = {
     delDataAll() {
         return request({
             url: '/evidence/package/removeAll',
-            timeout:600000,
+            timeout: 600000,
             method: 'delete'
         })
     },
@@ -60,7 +62,7 @@ const evidenceApi = {
         return request({
             url: '/evidence/package/deleteEvidenceMaterial',
             method: 'post',
-            params:data
+            data
         })
     },
     getEvidenceMaterialDetail(query) {

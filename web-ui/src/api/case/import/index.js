@@ -1,5 +1,7 @@
 import request from '@/utils/request'
-import { praseStrEmpty } from "@/utils/ruoyi";
+import {
+    praseStrEmpty
+} from "@/utils/ruoyi";
 
 const importApi = {
     //下载模版
@@ -15,7 +17,7 @@ const importApi = {
             url: '/evidence/package/importTemplate',
             method: 'get'
         })
-    },   
+    },
     list(data) {
         return request({
             url: '/case/caseInfo/list',
@@ -31,7 +33,7 @@ const importApi = {
         })
     },
     //通用弹窗接口
-    common(query){
+    common(query) {
         return request({
             url: `${query.url}`,
             method: 'get',
@@ -41,42 +43,42 @@ const importApi = {
     },
     info(id) {
         return request({
-            url: '/case/caseInfo/'+id,
+            url: '/case/caseInfo/' + id,
             method: 'get'
         })
     },
     //下载短信模版
-    downloadSmsTemplate(data){
+    downloadSmsTemplate(data) {
         return request({
             url: '/shortMsg/batchGenerateNotice',
             method: 'post',
             data
         })
-    },  
+    },
     //下载短信模版
-    downloadcaseInfoTemplate(data){
+    downloadcaseInfoTemplate(data) {
         return request({
             url: '/case/caseInfo/clerical/notice/batch',
             method: 'post',
             data
         })
-    },  
+    },
     //下载文书短信模版
-    wenShuBatchTemplate(data){
+    wenShuBatchTemplate(data) {
         return request({
             url: '/shortMsg/batchGenerateClericalNotice',
             method: 'post',
             data
         })
-    },   
+    },
     //下载文书短信模版
-    wenShucaseInfoBatchTemplate(data){
+    wenShucaseInfoBatchTemplate(data) {
         return request({
             url: '/case/caseInfo/wenshu/notice/wenShuBatch',
             method: 'post',
             data
         })
-    },   
+    },
 }
 // 下载用户导入模版
 export default importApi

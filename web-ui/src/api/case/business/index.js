@@ -1,24 +1,26 @@
 import request from '@/utils/request'
-import { praseStrEmpty } from "@/utils/ruoyi";
+import {
+    praseStrEmpty
+} from "@/utils/ruoyi";
 
 const businessApi = {
     //获取list
-    getPersonal(query){
+    getPersonal(query) {
         return request({
             url: '/count/personal',
             method: 'get',
             params: query
         })
-    },  
-    getTeam(query){
+    },
+    getTeam(query) {
         return request({
             url: '/count/team',
             method: 'get',
             params: query
         })
-    }, 
+    },
     //查询当前用户所在的所有部门
-    userDepts(query){
+    userDepts(query) {
         return request({
             url: '/system/dept/userDepts',
             method: 'get',
@@ -26,29 +28,29 @@ const businessApi = {
         })
     },
     //查询当前用户
-    listByDept(deptId){
+    listByDept(deptId) {
         return request({
             url: `/system/user/listByDept/${deptId}`,
             method: 'get',
         })
-    },    
+    },
     //查询产品批次号
-    batchNoList(deptId){
+    batchNoList(deptId) {
         return request({
             url: `/count/target/product/batchNoList/${deptId}`,
             method: 'get',
         })
-    },  
+    },
     //查询成员回款
-    teamUserList(data){
+    teamUserList(data) {
         return request({
             url: '/count/target/teamUser/list',
             method: 'post',
-            data: data
+            data
         })
-    },   
+    },
     //查询成员详情 
-    productDetail(query){
+    productDetail(query) {
         return request({
             url: '/count/target/teamUser/detail',
             method: 'get',
@@ -56,15 +58,15 @@ const businessApi = {
         })
     },
     //查询产品回款
-    productList(data){
+    productList(data) {
         return request({
             url: '/count/target/product/list',
             method: 'post',
-            data: data
+            data
         })
-    }, 
+    },
     //查询产品详情 
-    targetDetail(query){
+    targetDetail(query) {
         return request({
             url: '/count/target/product/detail',
             method: 'get',
@@ -72,21 +74,21 @@ const businessApi = {
         })
     },
     //成员回款目标新增
-    teamUserAddOrUpdate(data){
+    teamUserAddOrUpdate(data) {
         return request({
             url: '/count/target/teamUser/addOrUpdate',
             method: 'post',
-            data: data
+            data
         })
-    }, 
+    },
     //产品回款目标新增
-    productAddOrUpdate(data){
+    productAddOrUpdate(data) {
         return request({
             url: '/count/target/product/addOrUpdate',
             method: 'post',
-            data: data
+            data
         })
-    }, 
+    },
 }
 
 
