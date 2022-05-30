@@ -329,6 +329,8 @@
                 <el-table-column label="剩余待还总额" width="200" prop="remainingBalance" />
                 <el-table-column label="还款状态" :formatter="getRepayStatus" prop="repayStatus">
                 </el-table-column>
+                <el-table-column label="身份证号" width="180" prop="respondentIdNo" :show-overflow-tooltip="true"
+                    sortable="custom" :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="合同号" width="150" prop="orderNo" :show-overflow-tooltip="true" />
                 <el-table-column label="逾期天数" width="150" sortable="custom" :sort-orders="['descending', 'ascending']"
                     prop="overdueDay" />

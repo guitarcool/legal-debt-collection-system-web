@@ -339,6 +339,8 @@
                 <el-table-column label="案件状态" :formatter="statusFormat" prop="caseStatus" width="120">
                 </el-table-column>
                 <el-table-column label="订单号" prop="id" :show-overflow-tooltip="true" width="170" />
+                <el-table-column label="身份证号" width="180" prop="respondentIdNo" :show-overflow-tooltip="true"
+                    sortable="custom" :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="合同号" prop="orderNo" :show-overflow-tooltip="true" width="120" sortable="custom"
                     :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="手机号" prop="respondentPhone" width="120" />
