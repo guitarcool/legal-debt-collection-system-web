@@ -105,7 +105,7 @@
             </template>
         </search-bar>
         <div class="queryDiv">
-            查询结果统计：<span>列表案件量：{{otherParam.caseTotalCount?otherParam.caseTotalCount:''}}件；</span><span>列表已还金额：{{otherParam.subjectTotalAmount?otherParam.subjectTotalAmount:''}}元；</span>
+            查询结果统计：<span>列表案件量：{{otherParam.caseTotalCount?otherParam.caseTotalCount:''}}件；</span><span>列表已还金额：{{otherParam.totalRepayAmount?otherParam.totalRepayAmount:''}}元；</span>
             <!-- <span>列表标的金额：{{otherParam.subjectTotalAmount?otherParam.subjectTotalAmount:''}}元；</span><span>列表剩余待还总额：{{otherParam.totalRemainingBalance?otherParam.totalRemainingBalance:''}}元；</span> -->
         </div>
         <div class="box-contnet-wrap" style="margin-top:0">
@@ -139,7 +139,8 @@
                 <el-table-column label="还款提交时间" sortable="custom" :sort-orders="['descending', 'ascending']"
                     prop="createTime" width="170" :show-overflow-tooltip="true" />
                 <el-table-column label="审核状态" :formatter="reviewStatusFormat" prop="reviewStatus"></el-table-column>
-                <el-table-column label="身份证号" width="80" prop="respondentIdNo" :show-overflow-tooltip="true" />
+                <el-table-column label="身份证号" width="180" prop="respondentIdNo" :show-overflow-tooltip="true"
+                    sortable="custom" :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="还款状态" width="150" :show-overflow-tooltip="true" :formatter="repayStatusFormat"
                     prop="repayStatus" />
                 <el-table-column label="还款类型" width="150" prop="type">
@@ -155,7 +156,8 @@
                 <el-table-column label="汇款账户" width="180" prop="accountNo" />
                 <el-table-column label="收款账户" width="180" :show-overflow-tooltip="true" prop="accountNoShou" />
                 <el-table-column label="收款账户名" width="150" :show-overflow-tooltip="true" prop="accountName" />
-                <el-table-column label="开户行名称" width="150" :show-overflow-tooltip="true" prop="openbankName" />
+                <el-table-column label="开户行名称" width="150" :show-overflow-tooltip="true" prop="openbankName"
+                    sortable="custom" :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="汇款时间" width="150" sortable="custom" :sort-orders="['descending', 'ascending']"
                     prop="remittanceTime">
                     <template slot-scope="scope">
