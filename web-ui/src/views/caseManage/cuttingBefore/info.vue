@@ -1589,7 +1589,7 @@
                     })
                     .then(() => {
                         let param = {
-                            caseId: that.id,
+                            cid: that.id,
                         };
                         cuttingBeforeApi.property(param).then((res) => {
                             if (res.code === 200) {
