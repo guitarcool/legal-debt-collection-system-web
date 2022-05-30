@@ -143,14 +143,6 @@
                 <el-table-column label="调解员" width="80" prop="principalName" />
                 <el-table-column label="订单号" width="180" prop="cid" :show-overflow-tooltip="true" />
                 <el-table-column label="案件状态" width="120" :formatter="caseStatusFormat" prop="caseStatus" />
-                <el-table-column label="案件分配时间" prop="distributionTime" width="130" sortable="custom"
-                    :sort-orders="['descending', 'ascending']">
-                    <template slot-scope="scope" v-if="scope.row.distributionTime">
-                        <span>{{
-                            parseTime(scope.row.distributionTime, "{y}-{m}-{d}")
-                        }}</span>
-                    </template>
-                </el-table-column>
                 <el-table-column label="审批意见" width="200" prop="options" :show-overflow-tooltip="true" />
                 <el-table-column label="操作" width="220" fixed="right" align="center">
                     <template slot-scope="scope">
