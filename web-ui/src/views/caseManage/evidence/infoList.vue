@@ -316,6 +316,7 @@
         methods: {
             /** 查询角色列表 */
             getList(type) {
+                this.queryParams.pid = this.pid;
                 this.loading = true;
                 //查询
                 if (type == 1) {
@@ -545,9 +546,7 @@
                 this.batchexportDialogData.red = false;
                 this.batchexportDialogData.params = this.caseIds.join(",");
             },
-            resetAll() {
-                this.queryParams.pid = this.pid
-            }
+            resetAll() {}
         }
     };
 

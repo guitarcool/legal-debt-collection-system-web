@@ -234,11 +234,6 @@
                         <span>{{scope.row.transferProve == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="代偿证明" prop="transferProve">
-                    <template slot-scope="scope" v-if="scope.row.transferProve">
-                        <span>{{scope.row.transferProve == 0?"无":"有"}}</span>
-                    </template>
-                </el-table-column>
                 <el-table-column label="用户电子签章授权" prop="userSignAuth" width="160">
                     <template slot-scope="scope" v-if="scope.row.userSignAuth">
                         <span>{{scope.row.userSignAuth == 0?"无":"有"}}</span>

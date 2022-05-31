@@ -24,8 +24,7 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="财保类型：">
-                    <el-select clearable filterable size="small" v-model="queryParams.proType"
-                        placeholder="请选择">
+                    <el-select clearable filterable size="small" v-model="queryParams.proType" placeholder="请选择">
                         <el-option v-for="item in proType" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
@@ -130,7 +129,7 @@
                 <el-table-column label="放款日期" width="120" prop="loanDate" />
                 <el-table-column label="财保申请时间" width="180" prop="createTime" sortable="custom"
                     :sort-orders="['descending', 'ascending']" />
-                <el-table-column label="财保案号" width="100" prop="propertyProNo" />
+                <el-table-column label="财保案号" width="150" prop="propertyProNo" :show-overflow-tooltip="true" />
                 <el-table-column label="财保冻结时间" width="150" prop="frozenStartTime" sortable="custom"
                     :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="首次冻结金额" width="120" prop="frozenAmount" />
