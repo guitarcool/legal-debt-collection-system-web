@@ -79,7 +79,7 @@
                     </el-form>
                 </div>
                 <!--上传模版-->
-                <div class="add-template" v-if="form.formatType!=''&&Number(form.formatType)===0">
+                <div class="add-template" v-if="form.formatType!=''&&(Number(form.formatType)===0||Number(form.formatType)===4)">
                     <p>选择/上传需要的加入的内容</p>
                     <el-row v-if="!id||title=='克隆模版'" :gutter="20">
                         <el-col :span="12">
@@ -104,7 +104,7 @@
                                 </el-form-item>
                             </el-form>
                         </el-col>
-                        <el-col :span="12">
+                        <el-col :span="12" v-if="form.formatType!=''&&Number(form.formatType)===0">
                             <!--<p class="book-title">勾选您所需要加入的证据包信息：</p>-->
                             <el-input clearable placeholder="输入关键字进行过滤" v-model="filterText">
                             </el-input>
