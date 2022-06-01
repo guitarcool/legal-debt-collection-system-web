@@ -91,12 +91,12 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="primary" size="mini" :disabled="multiple" @click="handleAdd"
-                        v-hasPermi="['case:property:batchPass']">批量审核通过
+                        v-hasPermi="['case:property:batchReviewPass']">批量审核通过
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" size="mini" :disabled="multiple" @click="applyBatch('批量财保审核驳回')"
-                        v-hasPermi="['case:property:batchReject']">批量审核驳回
+                        v-hasPermi="['case:property:batchReviewRefuse']">批量审核驳回
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -149,7 +149,7 @@
                             @click="apply(scope.row,'财保申请审核')" v-hasPermi="['case:property:review']">审核
                         </el-button>
                         <el-button size="mini" type="success" v-if="scope.row.status == 2"
-                            @click="apply(scope.row,'财保申请修改')" v-hasPermi="['case:property:edit']">修改</el-button>
+                            @click="apply(scope.row,'财保申请修改')" v-hasPermi="['case:property:updateReviewInfo']">修改</el-button>
                         <el-button size="mini" type="danger" v-if="scope.row.status == 2"
                             @click="handleExamine(scope.row)" v-hasPermi="['case:property:unReview']">反审
                         </el-button>
