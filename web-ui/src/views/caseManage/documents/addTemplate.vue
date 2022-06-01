@@ -19,23 +19,18 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="模版类别：" prop="templateType">
-                            <el-select @change="templateTypesChange" filterable v-model="form.templateType"
+                            <el-select filterable v-model="form.templateType"
                                 placeholder="请选择">
                                 <el-option v-for="item in templateTypes" :key="item.dictValue" :label="item.dictLabel"
                                     :value="item.dictValue">
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item v-if="form.templateType&&form.templateType != 4" label="格式类型：" prop="formatType">
+                        <el-form-item v-if="form.templateType" label="格式类型：" prop="formatType">
                             <el-select @change="handleChange" filterable v-model="form.formatType" placeholder="请选择">
                                 <el-option v-for="item in formatTypes" :key="item.dictValue" :label="item.dictLabel"
                                     :value="item.dictValue">
                                 </el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item v-else-if="form.templateType" label="格式类型：" prop="formatType">
-                            <el-select @change="handleChange" filterable v-model="form.formatType" placeholder="请选择">
-                                <el-option label="调解文书" value="0"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-form>
@@ -626,11 +621,6 @@
                 }).catch(error => {
                     that.msgError(error);
                 })
-            },
-            templateTypesChange(value) {
-                if (value == 4) {
-                    this.form.formatType = '';
-                }
             },
             //转变格式类型
             handleChange(value) {
