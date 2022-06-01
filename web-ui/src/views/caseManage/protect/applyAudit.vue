@@ -55,6 +55,10 @@
                     <el-input style="width: 100%" type="textarea" :rows="2" v-model="form.proInsureCo"
                         placeholder="请输入财保保险公司名称"></el-input>
                 </el-form-item>
+                <el-form-item label="财保申请费：" v-if="form.choice == 1">
+                    <el-input style="width: 100%" type="textarea" :rows="2" v-model="form.proApplyFee"
+                        placeholder="请输入财保申请费"></el-input>
+                </el-form-item>
             </el-form>
         </template>
         <div slot="footer" class="dialog-footer">
@@ -87,7 +91,7 @@
                     respondentName: "",
                     options: "",
                     house: "0",
-                    vehicle: null,
+                    vehicle: "",
                 },
                 house: [],
                 proType: [],
@@ -226,6 +230,7 @@
                                     proType: this.form.proType,
                                     proInsureNo: this.form.proInsureNo,
                                     proInsureCo: this.form.proInsureCo,
+                                    proApplyFee: this.form.proApplyFee,
                                     propertyProNo: this.form.propertyProNo,
                                     frozenStartTime: this.form.frozenStartTime,
                                     frozenAmount: this.form.frozenAmount,
@@ -253,6 +258,7 @@
                                 proType: this.form.proType,
                                 proInsureNo: this.form.proInsureNo,
                                 proInsureCo: this.form.proInsureCo,
+                                proApplyFee: this.form.proApplyFee,
                                 propertyProNo: this.form.propertyProNo,
                                 frozenStartTime: this.form.frozenStartTime,
                                 frozenAmount: this.form.frozenAmount,
