@@ -319,6 +319,10 @@
                 let param = {};
                 //单个生成调解文书
                 if (this.id) {
+                    if (this.templateIdArr.length <= 0) {
+                        this.msgError("请选择模版");
+                        return;
+                    }
                     param = {
                         templateIdArr: this.templateIdArr.join(","),
                         needSignTemplate: this.needSignTemplate.join(","),
@@ -444,7 +448,7 @@
                     this.caseList = response.data || [];
                 });
             },
-             //多人多案模版  4
+            //多人多案模版  4
             getListTwo() {
                 let data = {
                     formatType: 4,
