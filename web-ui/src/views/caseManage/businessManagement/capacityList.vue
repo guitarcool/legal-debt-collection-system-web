@@ -19,9 +19,10 @@
             </template>
             <template #buttonArea>
                 <el-button style="margin-left: 16px;" type="danger" icon="el-icon-download" size="mini"
-                    @click="batchDownloadRecording">导出
+                 v-hasPermi="['count:excel:down']" @click="batchDownloadRecording">导出
                 </el-button>
             </template>
+
         </search-bar>
         <div class="box-contnet-wrap">
             <div class="case-info">
