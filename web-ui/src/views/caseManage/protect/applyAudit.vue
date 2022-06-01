@@ -56,7 +56,7 @@
                         placeholder="请输入财保保险公司名称"></el-input>
                 </el-form-item>
                 <el-form-item label="财保申请费：" v-if="form.choice == 1">
-                    <el-input style="width: 100%" type="textarea" :rows="2" v-model="form.proApplyFee"
+                    <el-input style="width: 100%" type="number" v-model="form.proApplyFee"
                         placeholder="请输入财保申请费"></el-input>
                 </el-form-item>
             </el-form>
