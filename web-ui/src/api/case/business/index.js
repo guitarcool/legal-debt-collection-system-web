@@ -12,6 +12,14 @@ const businessApi = {
             params: query
         })
     },
+    //获取excellist
+    getExcelList(query) {
+        return request({
+            url: '/count/excel/list',
+            method: 'get',
+            params: query
+        })
+    },
     getTeam(query) {
         return request({
             url: '/count/team',
