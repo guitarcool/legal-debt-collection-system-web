@@ -592,7 +592,7 @@
     }
 
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
     .custom-radio {
         padding-top: 10px;
         display: flex !important;
