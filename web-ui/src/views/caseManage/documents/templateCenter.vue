@@ -88,7 +88,7 @@
                 </el-table-column>
                 <el-table-column label="操作" width="300" fixed="right" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" v-if="scope.row.formatType === 0" type="primary"
+                        <el-button size="mini" v-if="[0, 4].includes(scope.row.formatType)" type="primary"
                             @click="seeWord(scope.row)" v-hasPermi="['template:info:query']">下载
                         </el-button>
                         <el-button size="mini" type="warning" @click="edit(scope.row.id)"

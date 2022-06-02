@@ -19,8 +19,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="模版类别：" prop="templateType">
-                            <el-select filterable v-model="form.templateType"
-                                placeholder="请选择">
+                            <el-select filterable v-model="form.templateType" placeholder="请选择">
                                 <el-option v-for="item in templateTypes" :key="item.dictValue" :label="item.dictLabel"
                                     :value="item.dictValue">
                                 </el-option>
@@ -74,7 +73,8 @@
                     </el-form>
                 </div>
                 <!--上传模版-->
-                <div class="add-template" v-if="form.formatType!=''&&(Number(form.formatType)===0||Number(form.formatType)===4)">
+                <div class="add-template"
+                    v-if="form.formatType!=''&&(Number(form.formatType)===0||Number(form.formatType)===4)">
                     <p>选择/上传需要的加入的内容</p>
                     <el-row v-if="!id||title=='克隆模版'" :gutter="20">
                         <el-col :span="12">
@@ -88,7 +88,7 @@
                                             将文件拖到此处，或
                                             <em>点击上传</em>
                                         </div>
-                                        <div v-if="form.templateType == 4&&form.formatType == 0" class="el-upload__tip"
+                                        <div v-if="form.formatType == 4||form.formatType == 0" class="el-upload__tip"
                                             style="color:red" slot="tip">
                                             提示：1、可上传多个.docx文档，编辑时用"${字段英文名}”表示需要映射的字段或图片，可点击“查看字段表”查看字段名；2、需要循环的映射多个案件的内容，请在句子开头插入循环标识“$$[”，句子结束插入标识“]$$”，句子内容可以为一般映射设定内容，以“${字段英文名}$”代表需要映射的具体案件内容；3、涉及编号时，以${No1}表示“1”形式，以${No2}表示“一”形式。
                                         </div>
@@ -111,7 +111,7 @@
                     </el-row>
                     <!--电子签章信息-->
                     <div>
-                        <div class="add-template" v-if="form.formatType!=''&&Number(form.formatType)===0">
+                        <div class="add-template" v-if="['0', '4'].includes(form.formatType)">
                             <p
                                 v-if="(title=='新增模版'&&draggableList.length!=0)||(title=='克隆模版'&&draggableList.length!=0)">
                                 电子签章设置</p>
@@ -792,7 +792,11 @@
             addFile() {
                 this.editData.title = '新增选择文件';
                 this.editData.dialogVisible = true;
-                this.editData.type = 3;
+                if (this.form.formatType == 4) {
+                    this.editData.type = 1;
+                } else {
+                    this.editData.type = 3;
+                }
                 this.editData.id = '';
                 this.editData.tid = this.id;
             },

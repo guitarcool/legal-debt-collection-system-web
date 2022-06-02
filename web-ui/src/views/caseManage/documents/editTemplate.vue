@@ -280,7 +280,6 @@
                     closeOnClickModal: false,
                     type: "warning",
                 }).then(() => {
-                    console.log('1213')
                     let formData = new FormData();
                     formData.append('tid', that.tid);
                     //电子签章内容
