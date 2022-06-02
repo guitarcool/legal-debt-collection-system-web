@@ -160,97 +160,97 @@
                 <el-table-column label="案件状态" :formatter="statusFormat" prop="caseStatus" width="120" />
                 <el-table-column label="财保状态" :formatter="getProtects" prop="preStatus" width="120" />
                 <el-table-column label="借款合同" prop="loanContract" width="100">
-                    <template slot-scope="scope" v-if="scope.row.loanContract">
+                    <template slot-scope="scope">
                         <span>{{scope.row.loanContract == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="身份证正面" prop="ocrPhoto" width="120">
-                    <template slot-scope="scope" v-if="scope.row.ocrPhoto">
+                    <template slot-scope="scope">
                         <span>{{scope.row.ocrPhoto == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="身份证反面" prop="idcardReverse" width="120">
-                    <template slot-scope="scope" v-if="scope.row.idcardReverse">
+                    <template slot-scope="scope">
                         <span>{{scope.row.idcardReverse == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="放款凭证" prop="loanCertificate">
-                    <template slot-scope="scope" v-if="scope.row.loanCertificate">
+                    <template slot-scope="scope">
                         <span>{{scope.row.loanCertificate == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="注册协议" prop="registProtocol">
-                    <template slot-scope="scope" v-if="scope.row.registProtocol">
+                    <template slot-scope="scope">
                         <span>{{scope.row.registProtocol == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="授权协议" prop="authProtocol">
-                    <template slot-scope="scope" v-if="scope.row.authProtocol">
+                    <template slot-scope="scope">
                         <span>{{scope.row.authProtocol == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="融担合同" prop="financeContract">
-                    <template slot-scope="scope" v-if="scope.row.financeContract">
+                    <template slot-scope="scope">
                         <span>{{scope.row.financeContract == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="还款详情" prop="repayDetails">
-                    <template slot-scope="scope" v-if="scope.row.repayDetails">
+                    <template slot-scope="scope">
                         <span>{{scope.row.repayDetails == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="活体照片" prop="livingPhotos">
-                    <template slot-scope="scope" v-if="scope.row.livingPhotos">
+                    <template slot-scope="scope">
                         <span>{{scope.row.livingPhotos == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="服务申请协议" prop="serviceProtocol" width="150">
-                    <template slot-scope="scope" v-if="scope.row.serviceProtocol">
+                    <template slot-scope="scope">
                         <span>{{scope.row.serviceProtocol == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="收货确认书" prop="receiptConfirm" width="150">
-                    <template slot-scope="scope" v-if="scope.row.receiptConfirm">
+                    <template slot-scope="scope">
                         <span>{{scope.row.receiptConfirm == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="还款记录" prop="repayRecord">
-                    <template slot-scope="scope" v-if="scope.row.repayRecord">
+                    <template slot-scope="scope">
                         <span>{{scope.row.repayRecord == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="担保合同" prop="guaranteeContract">
-                    <template slot-scope="scope" v-if="scope.row.guaranteeContract">
+                    <template slot-scope="scope">
                         <span>{{scope.row.guaranteeContract == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="催收记录" prop="collectionRecord">
-                    <template slot-scope="scope" v-if="scope.row.collectionRecord">
+                    <template slot-scope="scope">
                         <span>{{scope.row.collectionRecord == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="代偿证明" prop="transferProve">
-                    <template slot-scope="scope" v-if="scope.row.transferProve">
+                    <template slot-scope="scope">
                         <span>{{scope.row.transferProve == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="用户电子签章授权" prop="userSignAuth" width="160">
-                    <template slot-scope="scope" v-if="scope.row.userSignAuth">
+                    <template slot-scope="scope">
                         <span>{{scope.row.userSignAuth == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="债权转让合同" prop="transferContract" width="150">
-                    <template slot-scope="scope" v-if="scope.row.transferContract">
+                    <template slot-scope="scope">
                         <span>{{scope.row.transferContract == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="债转发送凭证" prop="transferVoucher" width="150">
-                    <template slot-scope="scope" v-if="scope.row.transferVoucher">
+                    <template slot-scope="scope">
                         <span>{{scope.row.transferVoucher == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="其他" prop="otherFile">
-                    <template slot-scope="scope" v-if="scope.row.otherFile">
+                    <template slot-scope="scope">
                         <span>{{scope.row.otherFile == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
