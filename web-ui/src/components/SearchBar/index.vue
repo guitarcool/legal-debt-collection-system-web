@@ -5,7 +5,7 @@
                 <!--定义搜索栏的插槽-->
                 <slot></slot>
                 <el-form-item>
-                    <el-button size="mini" type="cyan" icon="el-icon-search" @click="onSubmit">查询</el-button>
+                    <el-button size="mini" type="success" icon="el-icon-search" @click="onSubmit">查询</el-button>
                     <!--按钮区域插槽-->
                     <slot name="buttonArea"></slot>
                 </el-form-item>

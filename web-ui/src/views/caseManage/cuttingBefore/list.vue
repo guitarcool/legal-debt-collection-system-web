@@ -180,7 +180,7 @@
                 </transition>
             </template>
             <template #buttonArea>
-                <el-button size="mini" icon="el-icon-zoom-in" type="success" @click="implicitQuery"
+                <el-button size="mini" icon="el-icon-zoom-in" type="primary" @click="implicitQuery"
                     style="margin-left:16px">高级查询</el-button>
             </template>
         </search-bar>

@@ -4,15 +4,16 @@
             @resetAll="resetAll">
             <template #default>
                 <el-form-item label="统计部门：">
-                    <el-select size="small" filterable v-model="queryParams.teamId" placeholder="请选择" @change="queryUserDepts">
+                    <el-select size="small" filterable v-model="queryParams.teamId" placeholder="请选择"
+                        @change="queryUserDepts">
                         <el-option v-for="item in userDepts" :key="item.deptId" :label="item.deptName"
                             :value="item.deptId">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="统计用户：">
-                    <el-select :disabled="disabled" filterable multiple collapse-tags size="small" @change="handleMediation" v-model="mediation"
-                        placeholder="请选择">
+                    <el-select :disabled="disabled" filterable multiple collapse-tags size="small"
+                        @change="handleMediation" v-model="mediation" placeholder="请选择">
                         <el-option v-for="item in listByDept" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
@@ -45,8 +46,9 @@
                     <div class="box-content">
                         <div class="refundStatisticsTable">
                             <p>部门成员回款统计表</p>
-                            <el-table size="mini" :data="memberList" :header-cell-style="getRowClass" border
-                                :summary-method="getSummaries" show-summary style="width: 100%">
+                            <el-table v-loading="loading" size="mini" :data="memberList"
+                                :header-cell-style="getRowClass" border :summary-method="getSummaries" show-summary
+                                style="width: 100%">
                                 <el-table-column prop="userName" label="人员">
                                 </el-table-column>
                                 <el-table-column prop="dayTotalCount" width="100" sortable label="案件总数">
@@ -71,8 +73,9 @@
                         </div>
                         <div class="refundStatisticsTable">
                             <p>产品回款统计表</p>
-                            <el-table size="mini" :data="productList" :header-cell-style="getRowClass" border
-                                :summary-method="getSummaries" show-summary style="width: 100%">
+                            <el-table v-loading="loading" size="mini" :data="productList"
+                                :header-cell-style="getRowClass" border :summary-method="getSummaries" show-summary
+                                style="width: 100%">
                                 <el-table-column prop="batchNo" label="产品批次号"></el-table-column>
                                 <el-table-column prop="dayTotalCount" width="100" sortable label="案件总数">
                                 </el-table-column>
@@ -96,8 +99,9 @@
                         </div>
                         <div class="refundStatisticsTable">
                             <p>回款渠道统计表</p>
-                            <el-table size="mini" :data="channelList" :header-cell-style="getRowClass" border
-                                :summary-method="getSummaries" show-summary style="width: 100%">
+                            <el-table v-loading="loading" size="mini" :data="channelList"
+                                :header-cell-style="getRowClass" border :summary-method="getSummaries" show-summary
+                                style="width: 100%">
                                 <el-table-column prop="payChannal" label="回款渠道">
                                 </el-table-column>
                                 <el-table-column prop="dayTotalCount" width="100" sortable label="案件总数">
@@ -136,8 +140,8 @@
                     <div class="box-content">
                         <div class="refundStatisticsTable">
                             <p>案件跟进统计表</p>
-                            <el-table size="mini" :data="businessList" border :summary-method="getSummariesTwo"
-                                show-summary style="width: 100%">
+                            <el-table v-loading="loading" size="mini" :data="businessList" border
+                                :summary-method="getSummariesTwo" show-summary style="width: 100%">
                                 <el-table-column prop="userName" label="人员">
                                 </el-table-column>
                                 <el-table-column prop="caseFollowNum" sortable label="日案件跟进数">
@@ -174,6 +178,7 @@
         data() {
             return {
                 // 显示搜索条件
+                loading: false,
                 showSearch: true,
                 queryParams: {
                     date: "",
@@ -223,18 +228,21 @@
                 }
             },
             getList() {
+                this.loading = true;
                 businessApi.getTeam(this.queryParams).then(
                     response => {
                         this.businessList = response.data.businessList;
                         this.channelList = response.data.channelList;
                         this.memberList = response.data.memberList;
                         this.productList = response.data.productList;
+                        this.loading = false;
                     }
                 ).catch(() => {
                     this.businessList = [];
                     this.channelList = [];
                     this.memberList = [];
                     this.productList = [];
+                    this.loading = false;
                 });
             },
             /** 查询当前用户 */
@@ -275,16 +283,16 @@
                         } else if (index === 4 || index === 7) {
                             sums[index] += ' 笔';
                         } else if (index === 9) {
-                            let s = String(sums[index]).indexOf(".") + 1;//获取小数点的位置
-                            if(s > 0) {
-                                sums[index] = sums[index].toFixed(2) +' %';
+                            let s = String(sums[index]).indexOf(".") + 1; //获取小数点的位置
+                            if (s > 0) {
+                                sums[index] = sums[index].toFixed(2) + ' %';
                             } else {
                                 sums[index] += ' %';
                             }
-                        } else if (index === 2 || index === 3|| index === 5|| index === 8) {
-                            let y = String(sums[index]).indexOf(".") + 1;//获取小数点的位置
-                            if(y > 0) {
-                                sums[index] = sums[index].toFixed(2) +' 元';
+                        } else if (index === 2 || index === 3 || index === 5 || index === 8) {
+                            let y = String(sums[index]).indexOf(".") + 1; //获取小数点的位置
+                            if (y > 0) {
+                                sums[index] = sums[index].toFixed(2) + ' 元';
                             } else {
                                 sums[index] += ' 元';
                             }

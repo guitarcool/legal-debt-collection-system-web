@@ -19,7 +19,7 @@
             </template>
             <template #buttonArea>
                 <el-button style="margin-left: 16px;" type="danger" icon="el-icon-download" size="mini"
-                 v-hasPermi="['count:excel:down']" @click="batchDownloadRecording">导出
+                    v-hasPermi="['count:excel:down']" @click="batchDownloadRecording">导出
                 </el-button>
             </template>
 
@@ -38,8 +38,8 @@
                         <span>本月剩余时间：<span style="color:red">{{queryData.daysRemaining||'—'}}天</span></span>
                     </p>
                     <div class="box-content" style="margin-top:20px;">
-                        <el-table max-height="550" :header-cell-style="headStyle" :cell-style="rowStyle"
-                            :data="queryData.reportMediateCount" border style="width: 100%">
+                        <el-table v-loading="loading" max-height="550" :header-cell-style="headStyle"
+                            :cell-style="rowStyle" :data="queryData.reportMediateCount" border style="width: 100%">
                             <el-table-column prop="0" label="部门" width="150"></el-table-column>
                             <el-table-column prop="1" label="用户"></el-table-column>
                             <el-table-column label="案件信息(调解员)">
@@ -73,7 +73,7 @@
                         </el-table>
                     </div>
                     <div class="box-content" style="margin-top:40px;">
-                        <el-table max-height="550" :header-cell-style="headStyle" :cell-style="rowStyle"
+                        <el-table v-loading="loading" max-height="550" :header-cell-style="headStyle" :cell-style="rowStyle"
                             :data="queryData.reportChannelCount" border style="width: 100%">
                             <el-table-column prop="0" label="部门" />
                             <el-table-column prop="1" label="回款渠道" />
@@ -94,7 +94,7 @@
                         <span>数据截止时间：<span style="color:red">{{queryData.date||'—'}}</span></span>
                     </p>
                     <div class="box-content" style="margin-top:20px;">
-                        <el-table max-height="550" :header-cell-style="headStyle" :cell-style="rowStyle"
+                        <el-table v-loading="loading" max-height="550" :header-cell-style="headStyle" :cell-style="rowStyle"
                             :data="queryData.reportBatchCount" border style="width: 100%">
                             <el-table-column prop="0" label="案件批次号" />
                             <el-table-column prop="1" label="案件量" />
@@ -110,7 +110,7 @@
                         </el-table>
                     </div>
                     <div class="box-content" style="margin-top:40px;">
-                        <el-table max-height="550" :header-cell-style="headStyle" :cell-style="rowStyle"
+                        <el-table v-loading="loading" max-height="550" :header-cell-style="headStyle" :cell-style="rowStyle"
                             :data="queryData.reportProducingCount" border style="width: 100%">
                             <el-table-column prop="0" label="部门" width="150" />
                             <el-table-column prop="1" label="用户" />
@@ -152,10 +152,11 @@
         data() {
             return {
                 // 显示搜索条件
+                loading: false,
                 showSearch: true,
                 queryParams: {
                     date: "",
-                    reRun:""
+                    reRun: ""
                 },
                 memberList: [],
                 exportData: {
@@ -183,9 +184,15 @@
         },
         methods: {
             getList() {
+                this.loading = true;
                 businessApi.getExcelList(this.queryParams).then(response => {
                     this.queryData = response.data;
-                }).catch(() => {});
+                    this.loading = false;
+                }).catch(() => {
+                    this.loading = false;
+                    this.queryData = {};
+
+                });
             },
             headStyle() {
                 return "text-align:center"

@@ -29,7 +29,7 @@
                         <div class="box" style="margin-bottom:0px">
                             <el-button size="mini" type="primary" v-hasPermi="['count:teamUser:target:addOrUpdate']"
                                 @click="addTarget()">新增目标</el-button>
-                            <el-table ref="singleTable" :data="teamUserList" style="width: 100%; margin-top: 20px">
+                            <el-table v-loading="loading" ref="singleTable" :data="teamUserList" style="width: 100%; margin-top: 20px">
                                 <el-table-column label="统计月份" prop="targetMonth">
                                 </el-table-column>
                                 <el-table-column label="团队名称" prop="teamName">
@@ -66,7 +66,7 @@
                         <div class="box" style="margin-bottom:0px">
                             <el-button size="mini" type="primary" v-hasPermi="['count:product:target:addOrUpdate']"
                                 @click="addSecondTarget">新增目标</el-button>
-                            <el-table :data="productList" style="width: 100%; margin-top: 20px">
+                            <el-table v-loading="loading" :data="productList" style="width: 100%; margin-top: 20px">
                                 <el-table-column label="统计月份" prop="targetMonth">
                                 </el-table-column>
                                 <el-table-column label="团队名称" prop="teamName">
@@ -129,6 +129,7 @@
                 caseList: [],
                 // 显示搜索条件
                 showSearch: true,
+                loading: false,
                 queryParams: {
                     pageNum: 1,
                     pageSize: 50,
