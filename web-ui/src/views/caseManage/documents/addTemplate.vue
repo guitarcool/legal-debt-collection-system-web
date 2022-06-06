@@ -708,6 +708,7 @@
                     pdfName: '',
                     label: file.name,
                     isSign: '0',
+                    pageIndex: 'All',
                 };
                 this.draggableList.push(param);
                 //this.uploadSectionFile()
