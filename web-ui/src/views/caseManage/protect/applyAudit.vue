@@ -193,8 +193,8 @@
                     protectApi.propertyInfo(this.id).then((res) => {
                         this.form = res.data;
                         this.form.choice = "1";
-                        this.form.proType = `${res.data.proType}`;
-                        this.form.house = `${res.data.house}`
+                        this.form.proType = `${res.data.proType?res.data.proType:''}`;
+                        this.form.house = `${res.data.house?res.data.house:''}`
                     });
                 }
             },
