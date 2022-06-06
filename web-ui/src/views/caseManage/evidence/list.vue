@@ -16,8 +16,12 @@
                         style="width: 200px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="姓名：" prop="respondentName">
-                    <el-input clearable v-model="queryParams.respondentName" placeholder="请输入姓名" size="small"
-                        style="width: 200px" @keyup.enter.native="handleQuery" />
+                    <el-input clearable v-model="queryParams.respondentName" placeholder="请输入姓名，多个姓名用英文逗号连接"
+                        type="textarea" size="small" style="width: 200px" @keyup.enter.native="handleQuery" />
+                </el-form-item>
+                <el-form-item label="身份证号：">
+                    <el-input v-model="queryParams.respondentIdNo" placeholder="请输入身份证号，多个身份证号用英文逗号连接" clearable
+                        type="textarea" size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="合同号：">
                     <el-input clearable v-model="queryParams.orderNo" placeholder="请输入合同号，多个合同号用英文逗号连接" type="textarea"
@@ -55,16 +59,16 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" icon="el-icon-download" size="mini"
-                        @click="handleExportAll" v-hasPermi="['evidence:package:exportAll']">全选导出
+                    <el-button type="success" icon="el-icon-download" size="mini" @click="handleExportAll"
+                        v-hasPermi="['evidence:package:exportAll']">全选导出
                     </el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
-                :row-key="getRowKeys" @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange"
+                ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column label="分案名" prop="divisionName" :show-overflow-tooltip="true" fixed="left"
                     width="100" />
@@ -221,8 +225,7 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
-                    }
-                    ).catch(() => {
+                    }).catch(() => {
                         this.caseList = [];
                         this.total = 0;
                         this.loading = false;
@@ -234,8 +237,7 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
-                    }
-                    ).catch(() => {
+                    }).catch(() => {
                         this.caseList = [];
                         this.total = 0;
                         this.loading = false;
@@ -244,11 +246,11 @@
             },
             /** 排序触发事件 */
             handleSortChange(column, prop, order) {
-                if(column.order){
+                if (column.order) {
                     this.searchParams.orderByColumn = column.prop;
                     this.searchParams.isAsc = column.order;
                     this.getList(2);
-                }else{
+                } else {
                     this.searchParams.orderByColumn = '';
                     this.searchParams.isAsc = '';
                     this.getList(2);
@@ -261,7 +263,7 @@
                     this.selection = [];
                 }
             },
-            clearTable(){
+            clearTable() {
                 this.$refs.multiTable.clearSort();
             },
             /** 导出按钮操作 */
@@ -272,7 +274,7 @@
                 this.exportData.requestApi = "/evidence/package/export";
             },
             /** 全选案件导出按钮操作 */
-            handleExportAll(){
+            handleExportAll() {
                 this.exportData.title = "全选案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.total = this.total;

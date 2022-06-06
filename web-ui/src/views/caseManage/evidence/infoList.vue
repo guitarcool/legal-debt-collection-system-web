@@ -8,8 +8,12 @@
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="姓名：">
-                    <el-input v-model="queryParams.name" placeholder="请输入姓名" clearable size="small" style="width: 240px"
-                        @keyup.enter.native="handleQuery" />
+                    <el-input clearable v-model="queryParams.name" placeholder="请输入姓名，多个姓名用英文逗号连接"
+                        type="textarea" size="small" style="width: 200px" @keyup.enter.native="handleQuery" />
+                </el-form-item>
+                <el-form-item label="身份证号：">
+                    <el-input v-model="queryParams.respondentIdNo" placeholder="请输入身份证号，多个身份证号用英文逗号连接" clearable
+                        type="textarea" size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="证据材料：">
                     <el-select clearable multiple collapse-tags filterable size="small" v-model="queryParams.paperInfo"

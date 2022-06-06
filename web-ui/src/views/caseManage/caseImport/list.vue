@@ -15,13 +15,13 @@
                     <el-input clearable v-model="queryParams.loanId" placeholder="请输入订单号" size="small"
                         style="width: 200px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
-                <el-form-item label="姓名：" prop="respondentName">
-                    <el-input clearable v-model="queryParams.respondentName" placeholder="请输入姓名" size="small"
-                        style="width: 200px" @keyup.enter.native="handleQuery" />
+                <el-form-item label="姓名：">
+                    <el-input clearable v-model="queryParams.respondentName" placeholder="请输入姓名，多个姓名用英文逗号连接"
+                        type="textarea" size="small" style="width: 200px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
-                <el-form-item label="身份证号：" prop="respondentIdNo">
-                    <el-input clearable v-model="queryParams.respondentIdNo" placeholder="请输入身份证号" size="small"
-                        style="width: 200px" @keyup.enter.native="handleQuery" />
+                <el-form-item label="身份证号：">
+                    <el-input v-model="queryParams.respondentIdNo" placeholder="请输入身份证号，多个身份证号用英文逗号连接" clearable
+                        type="textarea" size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="资产受让方：" prop="assetAssignee">
                     <el-input clearable v-model="queryParams.assetAssignee" placeholder="请输入资产受让方" size="small"
