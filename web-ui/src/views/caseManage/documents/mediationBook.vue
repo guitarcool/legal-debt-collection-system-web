@@ -10,12 +10,12 @@
                     <p class="book-title">1、选择文书模版：</p>
                     <el-input clearable placeholder="输入关键字进行过滤" v-model="filterText">
                     </el-input>
-                    <el-scrollbar style="height:250px;" v-if="title =='批量生成多人多案文书'||title == '全选生成多人多案文书'">
+                    <el-scrollbar style="height:250px;" v-if="title =='批量生成多人多案文书'||title == '全选生成多人多案文书'" >
                         <el-tree :data="caseListTwo" class="border-style" :props="defaultProps" node-key="id"
                             :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
                             @node-click="handleNodeClick" default-expand-all />
                     </el-scrollbar>
-                    <el-scrollbar style="height:250px;" v-else>
+                    <el-scrollbar style="height:250px;" v-else >
                         <el-tree :data="caseList" class="border-style" :props="defaultProps" node-key="id"
                             :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
                             @node-click="handleNodeClick" default-expand-all />
@@ -228,8 +228,11 @@
                 this.isShow = 0;
                 this.suffix = 1;
                 this.filterText = "";
-                this.getList();
-                this.getListTwo();
+                if(this.title =='批量生成多人多案文书'||this.title == '全选生成多人多案文书'){
+                    this.getListTwo();
+                }else{
+                    this.getList();
+                }
                 this.$nextTick(() => {
                     const drawBodyWrapper = document.querySelector('.el-dialog__body tbody')
                     this.drawBodyWrapper = drawBodyWrapper;
