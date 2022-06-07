@@ -352,6 +352,7 @@
                     pdfName: '',
                     label: file.name,
                     isSign: '0',
+                    pageIndex: 'All',
                 };
                 this.list.push(param);
                 //this.uploadSectionFile()
