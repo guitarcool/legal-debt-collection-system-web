@@ -218,6 +218,10 @@
                 queryParams: {
                     pageNum: 1,
                     pageSize: 50,
+                    caseId: "",
+                    name: "",
+                    exist: "",
+                    paperInfo: []
                 },
                 selection: [],
                 evidenceOptions: [],
@@ -278,6 +282,14 @@
                 if (!this.queryParams.pid) {
                     return
                 }
+                console.log(111);
+                //清空查询
+                this.queryParams = {
+                    caseId: "",
+                    name: "",
+                    exist: "",
+                    paperInfo: []
+                };
                 //初始化前清空数据
                 this.getList(1);
             },
