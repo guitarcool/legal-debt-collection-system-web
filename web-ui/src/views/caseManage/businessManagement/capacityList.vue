@@ -73,8 +73,8 @@
                         </el-table>
                     </div>
                     <div class="box-content" style="margin-top:40px;">
-                        <el-table v-loading="loading" max-height="550" :header-cell-style="headStyle" :cell-style="rowStyle"
-                            :data="queryData.reportChannelCount" border style="width: 100%">
+                        <el-table v-loading="loading" max-height="550" :header-cell-style="headStyle"
+                            :cell-style="rowStyle" :data="queryData.reportChannelCount" border style="width: 100%">
                             <el-table-column prop="0" label="部门" />
                             <el-table-column prop="1" label="回款渠道" />
                             <el-table-column prop="2" label="当日回款案件量" />
@@ -94,8 +94,8 @@
                         <span>数据截止时间：<span style="color:red">{{queryData.date||'—'}}</span></span>
                     </p>
                     <div class="box-content" style="margin-top:20px;">
-                        <el-table v-loading="loading" max-height="550" :header-cell-style="headStyle" :cell-style="rowStyle"
-                            :data="queryData.reportBatchCount" border style="width: 100%">
+                        <el-table v-loading="loading" max-height="550" :header-cell-style="headStyle"
+                            :cell-style="rowStyle" :data="queryData.reportBatchCount" border style="width: 100%">
                             <el-table-column prop="0" label="案件批次号" />
                             <el-table-column prop="1" label="案件量" />
                             <el-table-column prop="2" label="案件金额" />
@@ -110,8 +110,8 @@
                         </el-table>
                     </div>
                     <div class="box-content" style="margin-top:40px;">
-                        <el-table v-loading="loading" max-height="550" :header-cell-style="headStyle" :cell-style="rowStyle"
-                            :data="queryData.reportProducingCount" border style="width: 100%">
+                        <el-table v-loading="loading" max-height="550" :header-cell-style="headStyle"
+                            :cell-style="rowStyle" :data="queryData.reportProducingCount" border style="width: 100%">
                             <el-table-column prop="0" label="部门" width="150" />
                             <el-table-column prop="1" label="用户" />
                             <el-table-column prop="2" label="日跟进案件量" />
@@ -184,15 +184,37 @@
         },
         methods: {
             getList() {
-                this.loading = true;
-                businessApi.getExcelList(this.queryParams).then(response => {
-                    this.queryData = response.data;
-                    this.loading = false;
-                }).catch(() => {
-                    this.loading = false;
-                    this.queryData = {};
+                if (this.queryParams.reRun == 1) {
+                    var that = this;
+                    this.$confirm(`重跑会覆盖之前的数据，是否继续?`, "提示", {
+                            confirmButtonText: "确定",
+                            cancelButtonText: "取消",
+                            type: "warning",
+                        })
+                        .then(() => {
+                            that.loading = true;
+                            businessApi.getExcelList(that.queryParams).then(response => {
+                                that.queryData = response.data;
+                                that.loading = false;
+                            }).catch(() => {
+                                that.loading = false;
+                                that.queryData = {};
+                            });
+                        })
+                        .catch(() => {
+                            that.msgInfo("已取消操作");
+                        });
+                } else {
+                    this.loading = true;
+                    businessApi.getExcelList(this.queryParams).then(response => {
+                        this.queryData = response.data;
+                        this.loading = false;
+                    }).catch(() => {
+                        this.loading = false;
+                        this.queryData = {};
 
-                });
+                    });
+                }
             },
             headStyle() {
                 return "text-align:center"
