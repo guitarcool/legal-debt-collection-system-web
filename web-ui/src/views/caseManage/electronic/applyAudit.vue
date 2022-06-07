@@ -136,7 +136,7 @@
                                 param = {
                                     rejectReason: this.form.options,
                                     type: this.form.choice,
-                                    ids: this.id,
+                                    ids: [this.id],
                                 };
                             } else if (this.type == 2) {
                                 param = {
@@ -179,7 +179,7 @@
                             if (this.type == 1) {
                                 param = {
                                     type: this.form.choice,
-                                    ids: this.id,
+                                    ids: [this.id],
                                 };
                             } else if (this.type == 2) {
                                 param = {
