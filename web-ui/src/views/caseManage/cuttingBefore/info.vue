@@ -476,6 +476,14 @@
                             <p class="small-unit-conent">{{preStatusFormat(prePropertyInfo.status)}}</p>
                         </div>
                         <div class="small-three">
+                            <p class="small-unit-header">财保批次号：</p>
+                            <p class="small-unit-conent">{{prePropertyInfo.proBatchNo}}</p>
+                        </div>
+                        <div class="small-three">
+                            <p class="small-unit-header">财保类型：</p>
+                            <p class="small-unit-conent">{{proTypeFormat(prePropertyInfo.proType)}}</p>
+                        </div>
+                        <div class="small-three">
                             <p class="small-unit-header">财保案号：</p>
                             <p class="small-unit-conent">{{prePropertyInfo.propertyProNo}}</p>
                         </div>
@@ -1125,6 +1133,7 @@
                 contactResultOptions: [],
                 contactStatusOptions: [],
                 protects: [],
+                proType: [],
                 token: null,
                 isDisable: false,
                 idList: [],
@@ -1215,6 +1224,10 @@
             //财保状态
             this.getDicts("wealth_protect").then((response) => {
                 this.protects = response.data;
+            });
+            //财保类型
+            this.getDicts("pro_type").then((response) => {
+                this.proType = response.data;
             });
             //度言id
             let token = JSON.parse(sessionStorage.getItem("token"));
@@ -1654,6 +1667,10 @@
             // 财保状态字典翻译
             preStatusFormat(preStatus) {
                 return this.selectDictLabel(this.protects, preStatus);
+            },
+            // 财保类型字典翻译
+            proTypeFormat(proType) {
+                return this.selectDictLabel(this.proType, proType);
             },
             // 有效性状态字典翻译
             effectivenessFormat(effectiveness) {
