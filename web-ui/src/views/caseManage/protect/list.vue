@@ -43,20 +43,20 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="姓名：">
-                    <el-input v-model="queryParams.respondentName" placeholder="请输入姓名" clearable size="small"
-                        style="width: 240px" @keyup.enter.native="handleQuery" />
+                    <el-input v-model="queryParams.respondentName" placeholder="请输入姓名，多个姓名用英文逗号连接" clearable
+                        type="textarea" size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="手机号：">
                     <el-input v-model="queryParams.respondentPhone" placeholder="请输入手机号" clearable size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="身份证号：">
-                    <el-input v-model="queryParams.respondentIdNo" placeholder="请输入身份证号" clearable size="small"
-                        style="width: 240px" @keyup.enter.native="handleQuery" />
+                    <el-input v-model="queryParams.respondentIdNo" placeholder="请输入身份证号，多个身份证号用英文逗号连接" clearable
+                        type="textarea" size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="财保案号：">
                     <el-input v-model="queryParams.propertyProNo" placeholder="请输入财保案号，多个财保案号用英文逗号连接" clearable
-                        type="textarea" size="small" style="width: 200px" @keyup.enter.native="handleQuery" />
+                        type="textarea" size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="备注：">
                     <el-input v-model="queryParams.remark" placeholder="请输入备注查询内容" clearable size="small"
