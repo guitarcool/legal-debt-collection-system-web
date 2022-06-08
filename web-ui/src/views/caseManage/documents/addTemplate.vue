@@ -125,7 +125,7 @@
                             <div v-if="draggableList.length==0" style="line-height: 50px;text-align: center">暂无数据</div>
                             <draggable v-model="draggableList" v-else>
                                 <transition-group>
-                                    <li v-for="(item,index) in draggableList" :key="index" class="item"
+                                    <li v-for="(item,index) in draggableList" :key="index+1" class="item"
                                         style="height:auto;display:flex;flex-direction: column;padding: 5px;">
                                         <div style="width:100%;display:flex;align-items: center;margin: 10px 0;">
                                             <p style="width:50%;font-size:16px;font-weight:700;color:#000;">

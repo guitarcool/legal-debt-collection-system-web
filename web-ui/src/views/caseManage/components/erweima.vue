@@ -1,8 +1,10 @@
 <template>
-    <Dialog :title="title" :height="450" :show.sync="dialogVisible" width="40%" @openDialog="openDialog">
+    <Dialog :title="title" @closeDialog="closeDialog" :height="500" :show.sync="dialogVisible" width="40%"
+        @openDialog="openDialog">
         <template v-slot:default>
             <div class="image-style">
-                <img :src="baseUrl+url" />
+                <el-image :src="srcUrl" :preview-src-list="srcList">
+                </el-image>
             </div>
         </template>
         <div slot="footer" class="dialog-footer">
@@ -17,10 +19,13 @@
     export default {
         //已判决
         name: "reimbursement",
-        components: { Dialog },
-        data(){
-            return{
-                baseUrl : process.env.VUE_APP_BASE_API
+        components: {
+            Dialog
+        },
+        data() {
+            return {
+                srcUrl: '',
+                srcList: []
             }
         },
         props: {
@@ -33,42 +38,47 @@
                 type: String,
                 default: ''
             },
-            url:{
+            url: {
                 type: String,
-                default:''
+                default: ''
             }
         },
         computed: {
             dialogVisible: {
-                get () {
+                get() {
                     return this.show
                 },
-                set (val) {
+                set(val) {
                     this.$emit('update:show', val)
                 }
             }
         },
-        created(){
+        created() {
 
         },
         methods: {
-            openDialog(){
-
+            openDialog() {
+                this.srcUrl = process.env.VUE_APP_BASE_API + this.url;
+                this.srcList.push(process.env.VUE_APP_BASE_API + this.url);
             },
+            closeDialog() {
+                this.srcUrl = '';
+                this.srcList = [];
+            }
         }
     }
+
 </script>
 
-<style scoped>
-    .el-dialog__body{
+<style scoped lang="scss">
+    .el-dialog__body {
         height: 20px;
     }
-    .image-style{
-        display: flex;
-        justify-content: center;
-        align-items: center;
+
+    .image-style {
+        margin: 0 auto;
+        width: 60%;
+        height: 60%;
     }
-    img{
-        height: 300px;
-    }
+
 </style>
