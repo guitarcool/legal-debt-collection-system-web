@@ -896,7 +896,6 @@
     import enforced from "../components/enforced";
     import putOnRecord from "../components/putOnRecord";
     import addPhone from "../components/addPhone";
-    import statusAlteration from "./statusAlteration";
     import reimbursement from "../components/reimbursement";
     import erweima from "../components/erweima";
     import {
@@ -918,7 +917,6 @@
             addPhone,
             reimbursement,
             erweima,
-            statusAlteration,
             exportDialog,
             editInformation
         },
