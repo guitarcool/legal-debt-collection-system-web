@@ -896,9 +896,9 @@
     import executedFiling from "../components/executedFiling"; //已执行立案
     import enforced from "../components/enforced";
     import putOnRecord from "../components/putOnRecord";
-    import addPhone from "./addPhone";
+    import addPhone from "../components/addPhone";
     import statusAlteration from "./statusAlteration";
-    import reimbursement from "./reimbursement";
+    import reimbursement from "../components/reimbursement";
     import erweima from "../components/erweima";
     import {
         initObj
@@ -1765,7 +1765,7 @@
             },
             //新增手机号
             addPhone(value) {
-                this.phoneData.title = "新增手机号";
+                this.phoneData.title = "裁前新增手机号";
                 // 控制弹窗组件显示
                 this.phoneData.dialogVisible = true;
                 this.phoneData.name = value;
@@ -1811,7 +1811,7 @@
             //部分还款
             handleReimbursement(type) {
                 this.reimbursementData.repayList = this.repayAccountList;
-                this.reimbursementData.title = type == 0 ? "部分还款" : "结清";
+                this.reimbursementData.title = type == 0 ? "裁前部分还款" : "裁前结清";
                 this.reimbursementData.dialogVisible = true;
                 this.reimbursementData.type = type;
                 this.reimbursementData.remainingBalance =

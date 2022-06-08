@@ -11,7 +11,7 @@
                 <!-- 有账户 -->
                 <div v-if="account">
                     <el-form-item label="收款账户：" prop="accountNoShou">
-                        <el-select  filterable v-model="form.accountNoShou" placeholder="请选择" style="width: 210px"
+                        <el-select v-model="form.accountNoShou" filterable placeholder="请选择" style="width: 210px"
                             @change="selectaccountNoShou">
                             <el-option v-for="item in repayList" :key="item.accountNumber" :label="item.accountNumber"
                                 :value="item.accountNumber">
@@ -51,7 +51,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="回款渠道：" prop="payChannal">
-                    <el-select v-model="form.payChannal" filterable placeholder="请选择">
+                    <el-select v-model="form.payChannal" placeholder="请选择" filterable>
                         <el-option v-for="item in payChannalOptions" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
@@ -63,9 +63,19 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item required label="汇款凭证：">
+                    <!--<el-upload-->
+                    <!--class="upload-demo"-->
+                    <!--:action="upload_url"-->
+                    <!--:limit="1"-->
+                    <!--accept=".png, .jpg"-->
+                    <!--:disabled="isUploading"-->
+                    <!--:on-change="fileOnChange"-->
+                    <!--:on-remove="removeFile">-->
+                    <!--<el-button size="mini" type="primary">上传图片</el-button>-->
+                    <!--</el-upload>-->
                     <el-upload class="upload-demo" action="string" :http-request="handleUplod" :limit="1"
                         accept=".png, .jpg" :disabled="isUploading" :on-change="fileOnChange" :on-remove="removeFile"
-                        :file-list="fileList" drag>
+                        drag :file-list="fileList">
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
                             将文件拖到此处，或
@@ -122,7 +132,6 @@
                     accountNoShou: "",
                     payChannal: "",
                 },
-                accountNoShou: "1506213009022200623",
                 upload_url: process.env.VUE_APP_BASE_API + "/case/pretrial/repayment", //上传URL
                 files: "",
                 // 是否禁用上传
@@ -153,17 +162,6 @@
                         message: "请选择汇款账户",
                         trigger: "change"
                     }, ],
-                    remittanceTime: [{
-                        type: "string",
-                        required: true,
-                        message: "请选择日期",
-                        trigger: "change",
-                    }, ],
-                    file: [{
-                        required: true,
-                        message: "请上传图片",
-                        trigger: "change"
-                    }],
                     accountNoShou: [{
                         required: true,
                         message: "请选择收款账户",
@@ -174,19 +172,20 @@
                         message: "请选择回款渠道",
                         trigger: "change"
                     }, ],
+                    remittanceTime: [{
+                        type: "string",
+                        required: true,
+                        message: "请选择日期",
+                        trigger: "change",
+                    }, ],
+                    file: [{
+                        required: true,
+                        message: "请上传图片"
+                    }],
                 },
                 remittanceTypes: [],
-                fileList: [],
                 payChannalOptions: [],
-                accountNoShouOptions: [{
-                        label: "130997110000080479",
-                        value: "130997110000080479",
-                    },
-                    {
-                        label: "1506213009022200623",
-                        value: "1506213009022200623",
-                    },
-                ],
+                fileList: [],
             };
         },
         props: {
@@ -248,7 +247,7 @@
                 this.form.payChannal = '1';
                 this.removeFile();
                 this.fileList = [];
-                if (this.repayList.length>0&&this.repayList[0].accountNumber) {
+                if (this.repayList.length > 0 && this.repayList[0].accountNumber) {
                     this.account = true;
                     this.selectaccountNoShou(this.repayList[0].accountNumber);
                 } else {
@@ -265,9 +264,9 @@
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
                         if (this.files == null) {
-                          this.msgError("请上传汇款凭证");
-                          return;
-                        }  
+                            this.msgError("请上传汇款凭证");
+                            return;
+                        }
                         let formData = new FormData();
                         formData.append("caseId", this.id);
                         formData.append("file", this.files);
@@ -286,11 +285,17 @@
                         instance.defaults.headers.common["Authorization"] =
                             "Bearer " + getToken();
                         var that = this;
+                        let url;
+                        if(this.title== '裁前部分还款' || '裁前结清'){
+                            url = process.env.VUE_APP_BASE_API + "/case/pretrial/repayment";
+                        }else if(this.title== '裁后部分还款' || '裁后结清'){
+                            url = process.env.VUE_APP_BASE_API + "/case/postAdjudged/repayment";
+                        }
                         instance({
                                 method: "post",
-                                url: process.env.VUE_APP_BASE_API + "/case/pretrial/repayment",
+                                url: url,
                                 data: formData,
-                                timeout:600000,
+                                timeout: 600000,
                                 processData: false, // 告诉axios不要去处理发送的数据(重要参数)
                                 contentType: false, // 告诉axios不要去设置Content-Type请求头
                                 // config: {
