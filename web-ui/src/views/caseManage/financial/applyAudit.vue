@@ -1,5 +1,5 @@
 <template>
-    <Dialog :title="title" :height="600" :show.sync="dialogVisible" width="60%" @openDialog="openDialog">
+    <Dialog :title="title" :height="600" :show.sync="dialogVisible" width="45%" @openDialog="openDialog">
         <template v-slot:default>
             <el-form class="custom-display" ref="form" :model="form" :rules="rules" label-width="120px">
                 <el-form-item label="申请还款类型：">
@@ -13,22 +13,14 @@
                 </el-form-item>
                 <el-form-item label="汇款类型：">
                     <el-select disabled v-model="form.repayType" filterable placeholder="请选择">
-                        <el-option
-                                v-for="item in remittanceTypes"
-                                :key="item.dictValue"
-                                :label="item.dictLabel"
-                                :value="item.dictValue">
+                        <el-option v-for="item in remittanceTypes" :key="item.dictValue" :label="item.dictLabel"
+                            :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="汇款时间：">
-                    <el-date-picker
-                            disabled
-                            v-model="form.remittanceTime"
-                            type="date"
-                            placeholder="选择日期"
-                            format="yyyy-MM-dd"
-                            value-format="yyyy-MM-dd">
+                    <el-date-picker disabled v-model="form.remittanceTime" type="date" placeholder="选择日期"
+                        format="yyyy-MM-dd" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="汇款凭证：">
@@ -38,6 +30,24 @@
             </el-form>
 
             <el-form ref="submitForm" :model="submitForm" :rules="rules" label-width="110px">
+                <div v-for="(domain, index) in submitForm.domains" :key="domain.key">
+                    <el-form-item :label="'还款案件' + (index+1)" :prop="'domains.' + index + '.payChannal'"
+                        :rules="{ required: true, message: '请选择还款案件', trigger: 'change'}">
+                        <el-select v-model="domain.payChannal" placeholder="请选择" filterable>
+                            <el-option v-for="item in remittanceTypes" :key="item.dictValue" :label="item.dictLabel"
+                                :value="item.dictValue">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item :label="'汇款金额' + (index+1)" :prop="'domains.' + index + '.amount'"
+                        :rules="[{ required: true, message: '请输入汇款金额', trigger: 'blur'}, { type: 'number', message: '汇款金额必须为大于0的数字'}]">
+                        <el-input style="width:200px;" v-model.number="domain.amount"></el-input>
+                        <el-button size="mini" style="margin-left:10px;" icon="el-icon-circle-plus-outline"
+                            @click="addDomain" circle />
+                        <el-button size="mini" icon="el-icon-remove-outline" @click.prevent="removeDomain(domain)"
+                            circle />
+                    </el-form-item>
+                </div>
                 <el-form-item label="审批结果：" prop="operate">
                     <el-radio-group v-model="submitForm.operate">
                         <el-radio :label="1">通过</el-radio>
@@ -51,9 +61,7 @@
                     <el-input v-model="submitForm.serialNo" placeholder="请输入交易流水号"></el-input>
                 </el-form-item>
             </el-form>
-            <erweima :title="erweimaData.title"
-                     :url="erweimaData.url"
-                     :show.sync="erweimaData.dialogVisible">
+            <erweima :title="erweimaData.title" :url="erweimaData.url" :show.sync="erweimaData.dialogVisible">
             </erweima>
         </template>
 
@@ -66,40 +74,57 @@
 
 <script>
     import Dialog from '@/components/Dialog/index'
-    import { getToken } from "@/utils/auth";
-    import { initObj } from '@/utils/common'
+    import {
+        getToken
+    } from "@/utils/auth";
+    import {
+        initObj
+    } from '@/utils/common'
     import financeApi from "@/api/case/finance/index";
     import erweima from '../components/erweima'
     export default {
         //多元调解成功
         name: "applyAudit",
-        components: { Dialog,erweima },
-        data(){
-            return{
-                submitForm:{
-                    operate:'',
-                    id:'',
-                    serialNo:'',
-                    option:''
+        components: {
+            Dialog,
+            erweima
+        },
+        data() {
+            return {
+                submitForm: {
+                    operate: '',
+                    id: '',
+                    serialNo: '',
+                    option: '',
+                    domains: [{
+                        amount: '',
+                        payChannal: ''
+                    }],
                 },
-                form:{},
+                form: {},
                 rules: {
-                    operate: [
-                        { required: true, message: '请选择审批结果', trigger: 'change' }
-                    ],
-                    serialNo:[
-                        { required: true, message: '请输入交易流水号', trigger: 'blur' }
-                    ],
-                    option:[
-                        { required: true, message: '请输入审批意见', trigger: 'blur' }
-                    ],
+                    operate: [{
+                        required: true,
+                        message: '请选择审批结果',
+                        trigger: 'change'
+                    }],
+                    serialNo: [{
+                        required: true,
+                        message: '请输入交易流水号',
+                        trigger: 'blur'
+                    }],
+                    option: [{
+                        required: true,
+                        message: '请输入审批意见',
+                        trigger: 'blur'
+                    }],
                 },
-                paymentStatus:[],     //还款状态
-                remittanceTypes:[],   //汇款类型
-                erweimaData:{
+                paymentStatus: [], //还款状态
+                remittanceTypes: [], //汇款类型
+                erweimaData: {
                     dialogVisible: false,
                     title: '',
-                    url:''
+                    url: ''
                 },
             }
         },
@@ -113,26 +138,26 @@
                 type: String,
                 default: ''
             },
-            id:{
+            id: {
                 type: Number,
                 default: -999
             },
-            item:{
+            item: {
                 type: String,
                 default: ''
             }
         },
         computed: {
             dialogVisible: {
-                get () {
+                get() {
                     return this.show
                 },
-                set (val) {
+                set(val) {
                     this.$emit('update:show', val)
                 }
             }
         },
-        created(){
+        created() {
             //还款状态
             this.getDicts("repay_status").then((response) => {
                 this.paymentStatus = response.data;
@@ -143,41 +168,42 @@
             });
         },
         methods: {
-            openDialog(){
+            openDialog() {
                 initObj(this.form);
                 initObj(this.submitForm);
                 this.resetAddForm();
-                this.form = JSON.parse(this.item)
+                this.form = JSON.parse(this.item);
                 this.submitForm.id = this.id;
-                this.form.repayType = this.form.repayType.toString()
-                this.submitForm.operate = 1
+                this.form.repayType = this.form.repayType.toString();
+                this.submitForm.operate = 1;
+                this.addDomain();
             },
             //重置表单清除验证
-            resetAddForm(){
+            resetAddForm() {
                 try {
                     this.$refs['submitForm'].resetFields()
                 } catch (e) {
 
                 }
             },
-            submit () {
-                if(this.submitForm.operate==0 && this.submitForm.option == ''){
+            submit() {
+                if (this.submitForm.operate == 0 && this.submitForm.option == '') {
                     this.msgError("请填写拒绝理由");
                     return
                 }
-                if(this.submitForm.operate==1 && this.submitForm.serialNo == ''){
+                if (this.submitForm.operate == 1 && this.submitForm.serialNo == '') {
                     this.msgError("请填写交易流水号");
                     return
                 }
                 this.$refs["submitForm"].validate((valid) => {
                     if (valid) {
                         let param = {
-                            caseId:this.form.caseId,
-                            respondentName:this.form.respondentName,
-                            id:this.id,
-                            serialNo:this.submitForm.serialNo,
-                            options:this.submitForm.option,
-                            operate:this.submitForm.operate
+                            caseId: this.form.caseId,
+                            respondentName: this.form.respondentName,
+                            id: this.id,
+                            serialNo: this.submitForm.serialNo,
+                            options: this.submitForm.option,
+                            operate: this.submitForm.operate
                         }
                         financeApi.applyModify(param).then(res => {
                             if (res.code === 200) {
@@ -190,28 +216,47 @@
                 });
             },
             //查看凭证
-            seeErweima(item){
+            seeErweima(item) {
                 this.erweimaData.title = '汇款凭证';
                 this.erweimaData.url = item.remitEvidencePath;
                 // 控制弹窗组件显示
                 this.erweimaData.dialogVisible = true
-            }
+            },
+            //删除
+            removeDomain(item) {
+                var index = this.submitForm.domains.indexOf(item)
+                if (index !== 0) {
+                    this.submitForm.domains.splice(index, 1)
+                }
+            },
+            //初始化新增
+            addDomain() {
+                this.submitForm.domains.push({
+                    amount: '',
+                    payChannal: '',
+                    key: Date.now()
+                });
+            },
         }
     }
+
 </script>
 
 <style scoped>
-    .el-dialog__body{
+    .el-dialog__body {
         height: 20px;
     }
+
 </style>
 <style lang="scss">
-    .custom-display{
+    .custom-display {
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
-        .el-form-item{
+
+        .el-form-item {
             width: 50%;
         }
     }
+
 </style>
