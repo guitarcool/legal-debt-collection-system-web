@@ -1,11 +1,14 @@
 <template>
-    <Dialog :title="title" :height="480" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
+    <Dialog :title="title" :height="500" :show.sync="dialogVisible" width="35%" @openDialog="openDialog">
         <template v-slot:default>
-            <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+            <el-form ref="form" :model="form" :rules="rules" label-width="140px" style="margin:0 auto; width:90%">
                 <el-form-item label="剩余待还总额：">
                     <el-input v-model="remainingBalance" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="调解待还金额：" v-if="outstandingAmount">
+                <el-form-item label="调解待还金额：">
+                    <el-input v-model="outstandingAmount" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="共债剩余待还总额：">
                     <el-input v-model="outstandingAmount" disabled></el-input>
                 </el-form-item>
                 <!-- 有账户 -->
@@ -40,9 +43,29 @@
                 <el-form-item label="汇款账户：" prop="accountNo">
                     <el-input v-model="form.accountNo"></el-input>
                 </el-form-item>
-                <el-form-item label="汇款金额：" prop="amount">
-                    <el-input v-model="form.amount"></el-input>
+                <el-form-item label="共债还款：" prop="accountNo">
+                    <el-switch v-model="form.switch" @change="switchChange" active-color="#13ce66"
+                        inactive-color="#ff4949">
+                    </el-switch>
                 </el-form-item>
+                <div v-for="(domain, index) in form.domains" :key="domain.key">
+                    <el-form-item :label="'还款案件' + (index+1)" :prop="'domains.' + index + '.payChannal'"
+                        :rules="{ required: true, message: '请选择还款案件', trigger: 'change'}">
+                        <el-select v-model="domain.payChannal" placeholder="请选择" filterable>
+                            <el-option v-for="item in payChannalOptions" :key="item.dictValue" :label="item.dictLabel"
+                                :value="item.dictValue">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item :label="'汇款金额' + (index+1)" :prop="'domains.' + index + '.amount'"
+                        :rules="[{ required: true, message: '请输入汇款金额', trigger: 'blur'}, { type: 'number', message: '汇款金额必须为大于0的数字'}]">
+                        <el-input style="width:200px;" v-model.number="domain.amount"></el-input>
+                        <el-button size="mini" style="margin-left:10px;" icon="el-icon-circle-plus-outline"
+                            @click="addDomain" circle />
+                        <el-button size="mini" icon="el-icon-remove-outline" @click.prevent="removeDomain(domain)"
+                            circle />
+                    </el-form-item>
+                </div>
                 <el-form-item label="汇款类型：" prop="repayType">
                     <el-select v-model="form.repayType" placeholder="请选择" filterable>
                         <el-option v-for="item in remittanceTypes" :key="item.dictValue" :label="item.dictLabel"
@@ -125,12 +148,15 @@
                 form: {
                     repayType: "",
                     accountNo: "",
-                    amount: "",
                     remittanceTime: "",
                     openbankName: "",
                     accountName: "",
                     accountNoShou: "",
                     payChannal: "",
+                    domains: [{
+                        amount: '',
+                        payChannal: ''
+                    }],
                 },
                 upload_url: process.env.VUE_APP_BASE_API + "/case/pretrial/repayment", //上传URL
                 files: "",
@@ -140,11 +166,6 @@
                     accountNo: [{
                         required: true,
                         message: "请输入汇款账户",
-                        trigger: "blur"
-                    }, ],
-                    amount: [{
-                        required: true,
-                        message: "请输入汇款金额",
                         trigger: "blur"
                     }, ],
                     accountName: [{
@@ -253,6 +274,7 @@
                 } else {
                     this.account = false;
                 }
+                this.addOneDomain();
             },
             //重置表单清除验证
             resetAddForm() {
@@ -272,7 +294,6 @@
                         formData.append("file", this.files);
                         formData.append("type", this.type);
                         formData.append("accountNo", this.form.accountNo);
-                        formData.append("amount", this.form.amount);
                         formData.append("repayType", this.form.repayType);
                         formData.append("openbankName", this.form.openbankName);
                         formData.append("accountName", this.form.accountName);
@@ -286,9 +307,9 @@
                             "Bearer " + getToken();
                         var that = this;
                         let url;
-                        if(this.title== '裁前部分还款' || '裁前结清'){
+                        if (this.title == '裁前部分还款' || '裁前结清') {
                             url = process.env.VUE_APP_BASE_API + "/case/pretrial/repayment";
-                        }else if(this.title== '裁后部分还款' || '裁后结清'){
+                        } else if (this.title == '裁后部分还款' || '裁后结清') {
                             url = process.env.VUE_APP_BASE_API + "/case/postAdjudged/repayment";
                         }
                         instance({
@@ -339,6 +360,44 @@
                         this.form.accountName = element.accountName;
                     }
                 });
+            },
+            //删除
+            removeDomain(item) {
+                var index = this.form.domains.indexOf(item)
+                if (index !== 0) {
+                    this.form.domains.splice(index, 1)
+                }
+            },
+            //初始化新增
+            addOneDomain() {
+                this.form.domains.push({
+                    amount: '',
+                    payChannal: '',
+                    key: Date.now()
+                });
+            },
+            //新增
+            addDomain() {
+                if (this.form.switch) {
+                    this.form.domains.push({
+                        amount: '',
+                        payChannal: '',
+                        key: Date.now()
+                    });
+                } else {
+                    this.msgInfo('请开启共债还款后再新增还款案件！');
+                }
+            },
+            //共债情况
+            switchChange(value) {
+                switch (true) {
+                    case value == true:
+                        this.addDomain();
+                        break;
+                    case value == false:
+                        this.form.domains.splice(1)
+                        break;
+                }
             },
         },
     };

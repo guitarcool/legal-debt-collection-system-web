@@ -164,7 +164,7 @@
             submit() {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
-                        switch (this.title) {
+                        switch (true) {
                             case this.title == '裁前新增手机号':
                                 cuttingBeforeApi.addPhone(this.form).then(res => {
                                     if (res.code === 200) {
