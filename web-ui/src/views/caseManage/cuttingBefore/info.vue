@@ -501,7 +501,7 @@
                         </div>
                         <div class="small-three">
                             <p class="small-unit-header">房屋情况：</p>
-                            <p class="small-unit-conent">{{prePropertyInfo.house}}</p>
+                            <p class="small-unit-conent">{{prePropertyInfo.house == 1?'有':'无'}}</p>
                         </div>
                         <div class="small-three">
                             <p class="small-unit-header">审批意见：</p>
