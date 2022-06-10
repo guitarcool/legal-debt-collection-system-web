@@ -186,7 +186,7 @@
             getList() {
                 if (this.queryParams.reRun == 1) {
                     var that = this;
-                    this.$confirm(`重跑会覆盖之前的数据，是否继续?`, "提示", {
+                    this.$confirm(`重跑会覆盖当天的数据，是否继续?`, "提示", {
                             confirmButtonText: "确定",
                             cancelButtonText: "取消",
                             type: "warning",
