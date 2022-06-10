@@ -475,6 +475,14 @@
                             <p class="small-unit-conent">{{preStatusFormat(prePropertyInfo.status)}}</p>
                         </div>
                         <div class="small-three">
+                            <p class="small-unit-header">财保批次号：</p>
+                            <p class="small-unit-conent">{{prePropertyInfo.proBatchNo}}</p>
+                        </div>
+                        <div class="small-three">
+                            <p class="small-unit-header">财保类型：</p>
+                            <p class="small-unit-conent">{{proTypeFormat(prePropertyInfo.proType)}}</p>
+                        </div>
+                        <div class="small-three">
                             <p class="small-unit-header">财保案号：</p>
                             <p class="small-unit-conent">{{prePropertyInfo.propertyProNo}}</p>
                         </div>
@@ -492,7 +500,7 @@
                         </div>
                         <div class="small-three">
                             <p class="small-unit-header">房屋情况：</p>
-                            <p class="small-unit-conent">{{prePropertyInfo.house}}</p>
+                            <p class="small-unit-conent">{{prePropertyInfo.house == 1?'有':'无'}}</p>
                         </div>
                         <div class="small-three">
                             <p class="small-unit-header">审批意见：</p>
@@ -1054,6 +1062,7 @@
                 },
                 statusOptions: [],
                 protects: [],
+                proType: [],
                 effectiveness: [],
                 house: [],
                 medNameOption: [],
@@ -1176,6 +1185,10 @@
             //财保状态
             this.getDicts("wealth_protect").then((response) => {
                 this.protects = response.data;
+            });
+            //财保类型
+            this.getDicts("pro_type").then((response) => {
+                this.proType = response.data;
             });
             //有效性状态
             this.getDicts("effectiveness").then((response) => {
@@ -1610,6 +1623,10 @@
             // 财保状态字典翻译
             preStatusFormat(preStatus) {
                 return this.selectDictLabel(this.protects, preStatus);
+            },
+            // 财保类型字典翻译
+            proTypeFormat(proType) {
+                return this.selectDictLabel(this.proType, proType);
             },
             // 有效性状态字典翻译
             effectivenessFormat(effectiveness) {

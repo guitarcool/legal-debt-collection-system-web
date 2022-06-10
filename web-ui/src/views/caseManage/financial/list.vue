@@ -25,21 +25,20 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="姓名：">
-                    <el-input v-model="queryParams.respondentName" placeholder="请输入姓名" clearable size="small"
-                        style="width: 240px" @keyup.enter.native="handleQuery" />
+                    <el-input v-model="queryParams.respondentName" placeholder="请输入姓名，多个姓名用英文逗号连接" clearable
+                        type="textarea" size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="手机号：">
                     <el-input v-model="queryParams.respondentPhone" placeholder="请输入手机号" clearable size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="身份证号：">
-                    <el-input v-model="queryParams.respondentIdNo" placeholder="请输入身份证号" clearable size="small"
-                        style="width: 240px" @keyup.enter.native="handleQuery" />
+                    <el-input v-model="queryParams.respondentIdNo" placeholder="请输入身份证号，多个身份证号用英文逗号连接" clearable
+                        type="textarea" size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
-
                 <el-form-item label="合同号：">
                     <el-input v-model="queryParams.orderNo" placeholder="请输入合同号，多个合同号用英文逗号连接" clearable type="textarea"
-                        size="small" style="width: 200px" @keyup.enter.native="handleQuery" />
+                        size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
                 <el-form-item label="账龄（M）：">
                     <el-input size="small" clearable style="width:100px" v-model="queryParams.overdueStartAge" />~

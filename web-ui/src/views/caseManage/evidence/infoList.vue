@@ -110,27 +110,14 @@
                         <span>{{scope.row.haveLoanCertificate}}</span>
                     </template>
                 </el-table-column>
-
                 <el-table-column label="借款合同" prop="haveLoanCertificate" width="80" :show-overflow-tooltip="true">
                     <template slot-scope="scope">
                         <span>{{scope.row.haveLoanContract}}</span>
                     </template>
                 </el-table-column>
-
                 <el-table-column label="还款详情" prop="haveRepayDetails" />
                 <el-table-column label="其他" prop="haveOtherFile" />
                 <el-table-column label="资产受让方" prop="assetAssignee" width="140" :show-overflow-tooltip="true">
-
-                </el-table-column>
-                <el-table-column label="通知邮件" prop="noticeMail" width="100">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.noticeMail}}次</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="通知短信" prop="noticeSms">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.noticeSms}}次</span>
-                    </template>
                 </el-table-column>
                 <el-table-column label="活体照片" prop="haveLivingPhotos" />
                 <el-table-column label="服务申请协议" prop="haveServiceProtocol" width="120" />
@@ -235,6 +222,10 @@
                 queryParams: {
                     pageNum: 1,
                     pageSize: 50,
+                    caseId: "",
+                    name: "",
+                    exist: "",
+                    paperInfo: []
                 },
                 selection: [],
                 evidenceOptions: [],
@@ -295,6 +286,14 @@
                 if (!this.queryParams.pid) {
                     return
                 }
+                console.log(111);
+                //清空查询
+                this.queryParams = {
+                    caseId: "",
+                    name: "",
+                    exist: "",
+                    paperInfo: []
+                };
                 //初始化前清空数据
                 this.getList(1);
             },

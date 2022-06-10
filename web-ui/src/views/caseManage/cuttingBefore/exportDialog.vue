@@ -29,19 +29,13 @@
                     </ul>
                 </div>
                 <div class="margin-div" v-if="title == '生成律师函'">
-                    <p class="book-title">4、是否显示页码：</p>
-                    <el-switch v-model="isShow" active-color="#13ce66" inactive-color="#ff4949" :active-value="1"
-                        :inactive-value="0">
-                    </el-switch>
-                </div>
-                <div class="margin-div" v-if="title == '生成律师函'">
-                    <p class="book-title">5、申请日期：</p>
+                    <p class="book-title">4、申请日期：</p>
                     <el-date-picker v-model="applyDate" type="date" placeholder="选择日期" format="yyyy-MM-dd"
                         value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </div>
                 <div class="margin-div" v-if="title == '生成律师函'">
-                    <p class="book-title">6、导出文档格式：</p>
+                    <p class="book-title">5、导出文档格式：</p>
                     <el-radio-group v-model="suffix">
                         <el-radio :label="1">.docx</el-radio>
                         <el-radio :label="2">.pdf</el-radio>
@@ -111,7 +105,6 @@
                 caseList: [],
                 templateId: "",
                 applyDate: "",
-                isShow: 0,
                 suffix: 1,
                 loading: false,
                 formlist: [],
@@ -137,7 +130,6 @@
                 this.applyDate = "";
                 this.filterText = "";
                 this.suffix = 1;
-                this.isShow = 0;
                 this.caseList = [];
                 this.getList();
             },
@@ -152,13 +144,11 @@
                 url = `${this.requestApi}${this.id}/${this.templateId}`;
                 if (this.title == "生成律师函") {
                     url = `${this.requestApi}${this.id}/${this.templateId}/${this.needSignTemplate}/${this.applyDate}/${
-          this.isShow
-        }/${
-          this.suffix == 1
-            ? ".docx"
-            : this.suffix == 2
-            ? ".pdf"
-            : ".xlsx"
+                    this.suffix == 1
+                        ? ".docx"
+                        : this.suffix == 2
+                        ? ".pdf"
+                        : ".xlsx"
         }`;
                 }
                 const baseUrl = process.env.VUE_APP_BASE_API;

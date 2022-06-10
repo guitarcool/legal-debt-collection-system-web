@@ -125,10 +125,11 @@
                             <div v-if="draggableList.length==0" style="line-height: 50px;text-align: center">暂无数据</div>
                             <draggable v-model="draggableList" v-else>
                                 <transition-group>
-                                    <li v-for="(item,index) in draggableList" :key="index" class="item"
+                                    <li v-for="(item,index) in draggableList" :key="index+1" class="item"
                                         style="height:auto;display:flex;flex-direction: column;padding: 5px;">
-                                        <div style="width:100%;display:flex;align-items: center;margin-top:10px;">
-                                            <p style="width:50%">{{item.label}}</p>
+                                        <div style="width:100%;display:flex;align-items: center;margin: 10px 0;">
+                                            <p style="width:50%;font-size:16px;font-weight:700;color:#000;">
+                                                {{item.label}}</p>
                                             <div style="width:50%;display:flex;justify-content: flex-end;">
                                                 <div>
                                                     <i v-if="!id||title=='克隆模版'" class="el-icon-s-operation"
@@ -138,7 +139,7 @@
                                             </div>
                                         </div>
                                         <el-form class="model_form" ref="isSignform" :model="isSignform">
-                                            <el-form-item style="width:30%" label="有无签章:">
+                                            <el-form-item style="width:33%" label="有无签章:">
                                                 <el-select v-model="item.isSign" filterable @change="isSignchange(item)"
                                                     placeholder="请选择">
                                                     <el-option v-for="item in isSignOptions" :key="item.dictValue"
@@ -146,7 +147,7 @@
                                                     </el-option>
                                                 </el-select>
                                             </el-form-item>
-                                            <el-form-item style="width:30%" label="签章名称:" prop="signName"
+                                            <el-form-item style="width:33%" label="签章名称:" prop="signName"
                                                 v-if="item.isSign!=0">
                                                 <el-select clearable v-model="item.signName" filterable
                                                     placeholder="请选择">
@@ -155,9 +156,7 @@
                                                     </el-option>
                                                 </el-select>
                                             </el-form-item>
-                                        </el-form>
-                                        <el-form class="model_form" ref="isSignform" :model="isSignform">
-                                            <el-form-item style="width:30%" label="签章设定:" prop="signSetUp"
+                                            <el-form-item style="width:33%" label="签章设定:" prop="signSetUp"
                                                 v-if="item.isSign!=0&&item.type==1">
                                                 <el-select clearable v-model="item.signSetUp" filterable
                                                     placeholder="请选择">
@@ -167,7 +166,7 @@
                                                 </el-select>
                                             </el-form-item>
                                             <!-- 如果是证据包 -->
-                                            <el-form-item style="width:30%" label="签章设定:" prop="signSetUp"
+                                            <el-form-item style="width:33%" label="签章设定:" prop="signSetUp"
                                                 v-if="item.isSign!=0&&item.type==2">
                                                 <el-select clearable v-model="item.signSetUp" filterable
                                                     placeholder="请选择">
@@ -176,7 +175,9 @@
                                                     </el-option>
                                                 </el-select>
                                             </el-form-item>
-                                            <el-form-item style="width:30%" label="指定位置:" prop="pagePlace"
+                                        </el-form>
+                                        <el-form class="model_form" ref="isSignform" :model="isSignform">
+                                            <el-form-item style="width:33%" label="指定位置:" prop="pagePlace"
                                                 v-if="item.isSign!=0&&item.signSetUp==2">
                                                 <el-select clearable filterable v-model="item.pagePlace"
                                                     placeholder="请选择">
@@ -185,21 +186,21 @@
                                                     </el-option>
                                                 </el-select>
                                             </el-form-item>
-                                            <el-form-item style="width:30%" label="指定页面:" prop="pageIndex"
+                                            <el-form-item style="width:33%" label="指定页面:" prop="pageIndex"
                                                 v-if="item.isSign!=0&&item.signSetUp==2">
                                                 <el-select clearable filterable v-model="item.pageIndex"
-                                                    placeholder="请选择">
+                                                     placeholder="请选择">
                                                     <el-option v-for="item in pageIndexOptions" :key="item.value"
                                                         :label="item.label" :value="item.value">
                                                     </el-option>
                                                 </el-select>
                                             </el-form-item>
-                                            <el-form-item style="width:40%" label="" prop="placeContent"
+                                            <el-form-item style="width:26%" label="" prop="placeContent"
                                                 v-if="item.isSign!=0&&item.signSetUp ==1">
                                                 <el-input clearable v-model="item.placeContent"
                                                     placeholder="请输入关键字，用逗号分隔多个关键字。"></el-input>
                                             </el-form-item>
-                                            <el-form-item style="width:25%" label="" prop="pageRange"
+                                            <el-form-item style="width:26%" label="" prop="pageRange"
                                                 v-if="item.isSign!=0&&item.signSetUp ==2&&item.pageIndex==''">
                                                 <el-input clearable v-model="item.pageRange"
                                                     placeholder="请输入页码或用逗号分隔的页面范围。"></el-input>
@@ -708,6 +709,7 @@
                     pdfName: '',
                     label: file.name,
                     isSign: '0',
+                    pageIndex: 'All',
                 };
                 this.draggableList.push(param);
                 //this.uploadSectionFile()
@@ -803,7 +805,14 @@
             getVal(value) {
                 //console.log(value.length)
                 this.fontNumber = value.length
-            }
+            },
+            // //切换指定页面
+            // changePageIndex(item) {
+            //     if (item.pageIndex == 'All') {
+            //         item.pageRange = 'All';
+            //         return item
+            //     }
+            // }
         }
     }
 

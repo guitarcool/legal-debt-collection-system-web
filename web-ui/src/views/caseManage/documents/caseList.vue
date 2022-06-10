@@ -249,6 +249,21 @@
                         <span>{{scope.row.transferVoucher == 0?"无":"有"}}</span>
                     </template>
                 </el-table-column>
+                <el-table-column label="银行回单" prop="bankReceipt">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.bankReceipt == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="物流信息" prop="logisticsInfo">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.logisticsInfo == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="订单详情" prop="orderDetail">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.orderDetail == 0?"无":"有"}}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column label="其他" prop="otherFile">
                     <template slot-scope="scope">
                         <span>{{scope.row.otherFile == 0?"无":"有"}}</span>

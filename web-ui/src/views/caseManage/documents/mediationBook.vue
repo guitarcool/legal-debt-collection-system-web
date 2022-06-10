@@ -10,12 +10,12 @@
                     <p class="book-title">1、选择文书模版：</p>
                     <el-input clearable placeholder="输入关键字进行过滤" v-model="filterText">
                     </el-input>
-                    <el-scrollbar style="height:250px;" v-if="title =='批量生成多人多案文书'||title == '全选生成多人多案文书'">
+                    <el-scrollbar style="height:250px;" v-if="title =='批量生成多人多案文书'||title == '全选生成多人多案文书'" >
                         <el-tree :data="caseListTwo" class="border-style" :props="defaultProps" node-key="id"
                             :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
                             @node-click="handleNodeClick" default-expand-all />
                     </el-scrollbar>
-                    <el-scrollbar style="height:250px;" v-else>
+                    <el-scrollbar style="height:250px;" v-else >
                         <el-tree :data="caseList" class="border-style" :props="defaultProps" node-key="id"
                             :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
                             @node-click="handleNodeClick" default-expand-all />
@@ -52,14 +52,9 @@
                     <p class="book-title">4、每份文书的合并案件数量：</p>
                     <el-input v-model="caseNumOnePaper" style="width:220px" placeholder="请输入数量,不超过100个"></el-input>
                 </div>
-                <div class="margin-div" v-else>
-                    <p class="book-title">4、是否显示页码：</p>
-                    <el-switch v-model="isShow" active-color="#13ce66" inactive-color="#ff4949" :active-value="1"
-                        :inactive-value="0">
-                    </el-switch>
-                </div>
                 <div class="margin-div">
-                    <p class="book-title">5、导出文档格式：</p>
+                    <p class="book-title" v-if="title =='批量生成调解文书'||title == '全选生成调解文书'">4、导出文档格式：</p>
+                    <p class="book-title" v-else>5、导出文档格式：</p>
                     <el-radio-group v-model="suffix">
                         <el-radio :label="1">.docx</el-radio>
                         <el-radio :label="2">.pdf</el-radio>
@@ -187,7 +182,6 @@
                 draging: null, //被拖拽的对象
                 target: null, //目标对象
                 applyDate: "",
-                isShow: 0,
                 suffix: 1,
                 ids: [],
                 caseNumOnePaper: "",
@@ -225,11 +219,13 @@
                 this.caseNumOnePaper = "";
                 this.templateIdArr = [];
                 this.applyDate = "";
-                this.isShow = 0;
                 this.suffix = 1;
                 this.filterText = "";
-                this.getList();
-                this.getListTwo();
+                if(this.title =='批量生成多人多案文书'||this.title == '全选生成多人多案文书'){
+                    this.getListTwo();
+                }else{
+                    this.getList();
+                }
                 this.$nextTick(() => {
                     const drawBodyWrapper = document.querySelector('.el-dialog__body tbody')
                     this.drawBodyWrapper = drawBodyWrapper;
@@ -265,7 +261,6 @@
                 param.templateIdArr = this.templateIdArr.join(",");
                 param.needSignTemplate = this.needSignTemplate.join(","),
                     param.applyDate = this.applyDate;
-                param.isShow = this.isShow;
                 param.suffix =
                     this.suffix == 1 ?
                     ".docx" :
@@ -328,7 +323,6 @@
                         needSignTemplate: this.needSignTemplate.join(","),
                         id: this.id,
                         applyDate: this.applyDate,
-                        isShow: this.isShow,
                         suffix: this.suffix == 1 ?
                             ".docx" : this.suffix == 2 ?
                             ".pdf" : ".xlsx",
@@ -366,8 +360,7 @@
                     param.caseNumOnePaper = this.caseNumOnePaper;
                     param.templateIdArr = this.templateIdArr.join(",");
                     param.needSignTemplate = this.needSignTemplate.join(","),
-                        param.applyDate = this.applyDate;
-                    param.isShow = this.isShow;
+                    param.applyDate = this.applyDate;
                     param.suffix =
                         this.suffix == 1 ?
                         ".docx" :

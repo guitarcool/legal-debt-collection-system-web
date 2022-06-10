@@ -71,7 +71,7 @@
                 <el-table-column label="文书id" prop="clericalId" width="110" />
                 <el-table-column label="最终受让人" width="200" :show-overflow-tooltip="true" prop="assignee" />
                 <el-table-column label="模版名称" prop="clericalName" width="150" :show-overflow-tooltip="true" />
-                <el-table-column label="签章内容" prop="signContent" width="100" />
+                <el-table-column label="签章内容" prop="signContent" width="160" />
                 <el-table-column label="案件状态" width="120" :formatter="caseStatusFormat" prop="caseStatus" />
                 <el-table-column label="提交人" prop="submitterName" />
                 <el-table-column label="审核提交时间" width="140" prop="submitTime" sortable="custom"
