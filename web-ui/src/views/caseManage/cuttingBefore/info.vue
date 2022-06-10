@@ -6,13 +6,18 @@
                 <div>
                     <span style="color:#000;font-size:18px;margin-right:10px">姓名: {{firstInfo.name}}</span>
                     <span>【案件状态：{{statusFormat(firstInfo.caseStatus)}}】</span>
+                    <span>
+                        <el-tag type="danger" effect="plain">共债</el-tag>
+                    </span>
                 </div>
                 <div>
-                    <el-button circle size="mini" icon="el-icon-edit" v-hasPermi="['case:pretrial:getCaseEditData']" @click="editInformation"></el-button>
+                    <el-button circle size="mini" icon="el-icon-edit" v-hasPermi="['case:pretrial:getCaseEditData']"
+                        @click="editInformation"></el-button>
                     <el-button v-if="firstInfo.isDesensitization" :disabled="isDisable" circle size="mini"
                         icon="el-icon-view" style="margin-right:10px" @click="viewData"></el-button>
                     <el-button size="mini" type="primary" v-if="buttonChange" @click="nextCase(1)">上一案</el-button>
-                    <el-button size="mini" style="margin-right:10px" type="primary" v-if="buttonChange" @click="nextCase(2)">下一案</el-button>
+                    <el-button size="mini" style="margin-right:10px" type="primary" v-if="buttonChange"
+                        @click="nextCase(2)">下一案</el-button>
                     <el-dropdown style="margin-right:10px" v-if="firstInfo.caseStatus != 13" @command="changeButton">
                         <el-button type="primary" size="mini">
                             变更案件状态<i class="el-icon-arrow-down el-icon--right"></i>
@@ -100,6 +105,14 @@
                     <p v-if="firstInfo.providerType == 3">
                         {{xuanwuStatusFormat(firstInfo.deliverStatus) !=""?xuanwuStatusFormat(firstInfo.deliverStatus):firstInfo.deliverStatus}}
                     </p>
+                </div>
+                <div class="small-three">
+                    <p class="small-unit-header">共债案件数量：</p>
+                    <p class="small-unit-conent">{{ firstInfo.subjectAmount }}</p>
+                </div>
+                <div class="small-three">
+                    <p class="small-unit-header">共债案件标的总额：</p>
+                    <p class="small-unit-conent">{{ firstInfo.remainingBalance }}</p>
                 </div>
             </div>
         </div>
@@ -527,6 +540,26 @@
                 </el-tab-pane>
             </el-tabs>
         </div>
+        <div class="box">
+            <el-tabs v-model="debtActiveName" type="card" @tab-click="debtHandleClick" v-for="(item,index) in debtList" :key="index" >
+                <el-tab-pane :label="item.label" :name="item.name">
+                    <div class="box-content">
+                        <div class="small-three">
+                            <p class="small-unit-header">订单号：</p>
+                            <p class="small-unit-conent">{{item.caseId}}</p>
+                        </div>
+                        <div class="small-three">
+                            <p class="small-unit-header">催收机构：</p>
+                            <p class="small-unit-conent">{{item.deptName}}</p>
+                        </div>
+                        <div class="small-three">
+                            <p class="small-unit-header"></p>
+                            <p class="small-unit-conent"></p>
+                        </div>
+                    </div>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
         <!--第三部分-->
         <div class="box">
             <el-tabs v-model="activeNameTwo" type="card" @tab-click="handleClickTwo">
@@ -790,7 +823,7 @@
                                     <span
                                         v-if="scope.row.providerType == 2">{{wodongStatusFormat(scope.row.deliverStatus) !=""?wodongStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
                                     <span
-                                        v-if="scope.row.providerType == 3">{{xuanwuStatusFormat(scope.row.deliverStatus) !=""?xuanwuStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>                          
+                                        v-if="scope.row.providerType == 3">{{xuanwuStatusFormat(scope.row.deliverStatus) !=""?xuanwuStatusFormat(scope.row.deliverStatus):scope.row.deliverStatus}}</span>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="deliverTime" label="送达时间" :show-overflow-tooltip="true" width="210">
@@ -838,8 +871,9 @@
                             </el-table-column>
                             <el-table-column label="操作" align="center">
                                 <template slot-scope="scope">
-                                    <el-button v-if="combination[scope.row.beforeStatus]&& combination[scope.row.beforeStatus] == scope.row.status" size="mini"
-                                        type="warning" @click="addStatus(scope.row)">修改</el-button>
+                                    <el-button
+                                        v-if="combination[scope.row.beforeStatus]&& combination[scope.row.beforeStatus] == scope.row.status"
+                                        size="mini" type="warning" @click="addStatus(scope.row)">修改</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -886,8 +920,8 @@
         </reimbursement>
         <erweima :title="erweimaData.title" :url="erweimaData.url" :show.sync="erweimaData.dialogVisible">
         </erweima>
-        <editInformation :title="information.title" :id="id" @refresh="getAdjudgedInfo"
-            :type="information.type" :show.sync="information.dialogVisible">
+        <editInformation :title="information.title" :id="id" @refresh="getAdjudgedInfo" :type="information.type"
+            :show.sync="information.dialogVisible">
         </editInformation>
     </div>
 </template>
@@ -962,6 +996,7 @@
                 activeName: 'subject',
                 activeNameTwo: 'first',
                 activeNameThree: 'medRecord',
+                debtActiveName: 'first',
                 remittanceTypes: [], //汇款类型
                 auditStatus: [], //审核状态
                 paymentStatus: [], //还款状态
@@ -1036,7 +1071,7 @@
                     dialogVisible: false,
                     title: "",
                     id: "",
-                    type:""
+                    type: ""
                 },
                 phoneData: {
                     dialogVisible: false,
@@ -1142,16 +1177,30 @@
                     10: 11,
                     11: 12,
                     5: 10
-                }
+                },
+                debtList: [
+                    {
+                        label:'共债案件1',
+                        caseId:1,
+                        deptName:'111',
+                        name:'first'
+                    },
+                    {
+                        label:'共债案件2',
+                        caseId:2,
+                        deptName:'222',
+                        name:'list2'
+                    }
+                ]
             };
         },
         created() {
             //案件id
             this.id = this.$route.query.beforeId;
-            if(this.$route.query.beforeList&&this.$route.query.beforeList.length>0){
+            if (this.$route.query.beforeList && this.$route.query.beforeList.length > 0) {
                 this.idList = this.$route.query.beforeList;
                 this.buttonChange = true;
-            }else{
+            } else {
                 this.idList = [];
                 this.buttonChange = false;
             }
@@ -1242,10 +1291,10 @@
             //监控路由参数，实现自己跳自己刷新数据
             $route() {
                 this.id = this.$route.query.beforeId;
-                if(this.$route.query.beforeList&&this.$route.query.beforeList.length>0){
+                if (this.$route.query.beforeList && this.$route.query.beforeList.length > 0) {
                     this.idList = this.$route.query.beforeList;
                     this.buttonChange = true;
-                }else{
+                } else {
                     this.idList = [];
                     this.buttonChange = false;
                 }
@@ -1389,6 +1438,7 @@
                     this.getCaseBaseInfo('contact')
                 }
             },
+            debtHandleClick(tab, event) {},
             getMediationObject() {
                 let mediationParams = {
                     caseId: this.id,
@@ -1489,9 +1539,9 @@
             },
             //电话调解失败，多元调解失败
             fail(item) {
-                if(item.cName == '多元调解失败'){
+                if (item.cName == '多元调解失败') {
                     this.normal.requestApi = "/case/pretrial/multiMediateFail";
-                }else{
+                } else {
                     this.normal.requestApi = "/case/pretrial/mediationFailed";
                 }
                 this.normal.title = item.cName;
@@ -1517,7 +1567,7 @@
                     })
                     .then(() => {
                         let param = {
-                            caseId:that.id
+                            caseId: that.id
                         };
                         cuttingBeforeApi
                             .common(`/case/pretrial/mediationSuccess`, param)
@@ -1542,7 +1592,7 @@
                     })
                     .then(() => {
                         let param = {
-                            caseId:that.id
+                            caseId: that.id
                         };
                         cuttingBeforeApi
                             .common(`/case/postAdjudged/pendingExecute`, param)
@@ -1844,7 +1894,7 @@
                     })
                     .then(() => {
                         let param = {
-                            caseId:that.id
+                            caseId: that.id
                         };
                         cuttingBeforeApi
                             .common(`/case/pretrial/multipleMediation`, param)
@@ -1869,7 +1919,7 @@
                     })
                     .then(() => {
                         let param = {
-                            caseId:that.id
+                            caseId: that.id
                         };
                         cuttingBeforeApi.common(`/case/pretrial/pending`, param).then((res) => {
                             if (res.code === 200) {
@@ -1892,7 +1942,7 @@
                     })
                     .then(() => {
                         let param = {
-                            caseId : that.id
+                            caseId: that.id
                         };
                         cuttingBeforeApi
                             .common(`/case/postAdjudged/closed`, param)
@@ -2055,7 +2105,9 @@
                 this.id = this.idList[idx];
                 //新增或修改单个参数
                 this.$router.replace({
-                    query: merge(this.$route.query,{beforeId: this.id})
+                    query: merge(this.$route.query, {
+                        beforeId: this.id
+                    })
                 })
             },
         },
