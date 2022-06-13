@@ -541,8 +541,12 @@
             </el-tabs>
         </div>
         <div class="box">
-            <el-tabs v-model="debtActiveName" type="card" @tab-click="debtHandleClick" v-for="(item,index) in debtList" :key="index" >
-                <el-tab-pane :label="item.label" :name="item.name">
+            <el-tooltip style="float: right;position: relative;z-index: 11;" class="item" effect="dark" content="刷新"
+                placement="top">
+                <el-button circle icon="el-icon-refresh" @click="getCaseBaseInfo(infoType)" />
+            </el-tooltip>
+            <el-tabs v-model="debtActiveName" type="card" @tab-click="debtHandleClick">
+                <el-tab-pane v-for="(item,index) in debtList" :key="index" :label="item.label" :name="item.name">
                     <div class="box-content">
                         <div class="small-three">
                             <p class="small-unit-header">订单号：</p>
@@ -551,6 +555,9 @@
                         <div class="small-three">
                             <p class="small-unit-header">催收机构：</p>
                             <p class="small-unit-conent">{{item.deptName}}</p>
+                        </div>
+                        <div class="small-three">
+                            <el-button type="primary" size="mini" @click="goInfo(item)">案件详情</el-button>
                         </div>
                         <div class="small-three">
                             <p class="small-unit-header"></p>
@@ -589,6 +596,10 @@
                             </el-radio-group>
                         </el-form-item>
                         <el-form-item label="意向还款" prop="intention">
+                            <el-switch v-model="ruleForm.intention" :active-value="1" :inactive-value="0">
+                            </el-switch>
+                        </el-form-item>
+                        <el-form-item label-width="180px" label="同步调解记录到共债案件" prop="intention">
                             <el-switch v-model="ruleForm.intention" :active-value="1" :inactive-value="0">
                             </el-switch>
                         </el-form-item>
@@ -646,6 +657,10 @@
                             <el-input style="width:400px;" maxlength="100" show-word-limit
                                 v-model="adjustmentForm.content" type="textarea" :rows="2" placeholder="请输入内容">
                             </el-input>
+                        </el-form-item>
+                        <el-form-item label-width="180px" label="同步调解记录到共债案件" prop="intention">
+                            <el-switch v-model="adjustmentForm.intention" :active-value="1" :inactive-value="0">
+                            </el-switch>
                         </el-form-item>
                         <el-form-item label="网调参考地址：">
                             <a class="inter-a" v-for="item in interWeb" :key="item.dictValue" target="_blank"
@@ -719,6 +734,7 @@
                                 prop="reviewStatus">
                             </el-table-column>
                             <el-table-column prop="createName" width="150" label="提交人"></el-table-column>
+                            <el-table-column prop="amount" label="共债还款"> </el-table-column>
                             <el-table-column label="操作" width="180" fixed="right" align="center">
                                 <template slot-scope="scope">
                                     <el-button size="mini" type="success" @click="seeErweima2(scope.row)">汇款凭证
@@ -996,7 +1012,6 @@
                 activeName: 'subject',
                 activeNameTwo: 'first',
                 activeNameThree: 'medRecord',
-                debtActiveName: 'first',
                 remittanceTypes: [], //汇款类型
                 auditStatus: [], //审核状态
                 paymentStatus: [], //还款状态
@@ -1178,18 +1193,18 @@
                     11: 12,
                     5: 10
                 },
-                debtList: [
-                    {
-                        label:'共债案件1',
-                        caseId:1,
-                        deptName:'111',
-                        name:'first'
+                debtActiveName: 'first',
+                debtList: [{
+                        label: '共债案件1',
+                        caseId: 1,
+                        deptName: '111',
+                        name: 'first'
                     },
                     {
-                        label:'共债案件2',
-                        caseId:2,
-                        deptName:'222',
-                        name:'list2'
+                        label: '共债案件2',
+                        caseId: 2,
+                        deptName: '222',
+                        name: 'list2'
                     }
                 ]
             };
@@ -2110,6 +2125,8 @@
                     })
                 })
             },
+            //案件详情跳转
+            goInfo(value) {}
         },
     };
 
