@@ -481,11 +481,6 @@
                 isShow: false,
                 statusOptions: [],
                 repayStatus: [],
-                divisionData: {
-                    title: "",
-                    dialogVisible: false,
-                    id: "",
-                },
                 recordData: {
                     title: "",
                     dialogVisible: false,
@@ -1061,12 +1056,6 @@
             //         })
             //         .catch(function () {});
             // },
-            /** 案件分发 */
-            handleDivision(item) {
-                this.divisionData.title = "案件分发";
-                this.divisionData.dialogVisible = true;
-                this.divisionData.id = item.id ? item.id : this.ids.join(",");
-            },
             handleUpdate(item) {
                 this.$router.push({
                     name: "cutAfterInfo",
