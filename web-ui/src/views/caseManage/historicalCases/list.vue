@@ -191,6 +191,11 @@
             <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange" ref="multiTable"
                 :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
+                <el-table-column prop="tag" label="标签" width="100" align="center" fixed="left">
+                    <template>
+                        <el-tag type="danger">共债</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
                 <el-table-column label="手机号" width="120" prop="respondentPhone" fixed="left" />
                 <el-table-column label="姓名" width="100" prop="respondentName" :show-overflow-tooltip="true"

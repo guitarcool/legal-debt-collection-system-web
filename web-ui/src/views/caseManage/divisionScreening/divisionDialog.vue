@@ -24,6 +24,12 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="共债分配：">
+                    <el-radio-group v-model="form.resource">
+                        <el-radio label="同身份证号分配同调解员" value="1"></el-radio>
+                        <el-radio label="同身份证号不需分配同调解员" value="2"></el-radio>
+                    </el-radio-group>
+                </el-form-item>
                 <el-form-item label="分案类型：">
                     <el-radio-group v-model="form.resource">
                         <el-radio label="按数量" value="1"></el-radio>
@@ -47,12 +53,6 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                </el-form-item>
-                <el-form-item label="共债分配：">
-                    <el-radio-group v-model="form.resource">
-                        <el-radio label="同身份证号分配同调解员" value="1"></el-radio>
-                        <el-radio label="同身份证号不需分配同调解员" value="2"></el-radio>
-                    </el-radio-group>
                 </el-form-item>
                 <el-form-item label="分配结果：">
                     <el-button style="margin-bottom:20px;" size="mini" @click="watchTable" type="danger">预览</el-button>

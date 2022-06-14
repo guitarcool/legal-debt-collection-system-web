@@ -421,9 +421,9 @@
                         <el-button size="mini" type="primary" @click="handleUpdate(scope.row)"
                             v-hasPermi="['case:assignment:query']">查看
                         </el-button>
-                        <el-button size="mini" type="success" v-if="scope.row.caseStatus != 13"
+                        <!-- <el-button size="mini" type="success" v-if="scope.row.caseStatus != 13"
                             @click="handleDivision(scope.row)" v-hasPermi="['case:caseinfo:query']">分发
-                        </el-button>
+                        </el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
