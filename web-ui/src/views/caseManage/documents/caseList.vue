@@ -63,6 +63,10 @@
                 </el-form-item>
             </template>
             <template #filter>
+                <el-form-item label="共债案件仅展示一条：" class="custom-radio">
+                    <el-switch v-model="queryParams.value" active-color="#13ce66" inactive-color="#ff4949">
+                    </el-switch>
+                </el-form-item>
                 <el-form-item label="案件状态：" class="custom-radio">
                     <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
                         <el-checkbox v-for="item in statusOptions" v-show="item.dictValue!=0" :label="item.dictValue"
@@ -139,6 +143,11 @@
             <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange"
                 ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
+                <el-table-column prop="tag" label="标签" width="100" align="center" fixed="left">
+                    <template>
+                        <el-tag type="danger">共债</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column label="案件批次号" prop="batchNo" width="110" :show-overflow-tooltip="true" fixed="left" />
                 <el-table-column label="姓名" prop="respondentName" :show-overflow-tooltip="true" fixed="left"
                     width="80" />
