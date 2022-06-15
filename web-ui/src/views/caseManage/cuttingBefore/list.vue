@@ -418,7 +418,7 @@
     import SearchBar from "@/components/SearchBar/index";
     import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
     import exportDialog from "./exportDialog";
-    import recordDialog from "./recordDialog";
+    import recordDialog from "../components/recordDialog";
     import batchExportDialog from "./batchExportDialog";
     import publicBatchDialog from "./publicBatchDialog";
     import divisionApi from "@/api/case/division/index";
@@ -903,7 +903,7 @@
                 });
             },
             handleRecord(item) {
-                this.recordData.title = "调解记录";
+                this.recordData.title = "裁前调解记录";
                 this.recordData.dialogVisible = true;
                 this.recordData.id = item.id;
             },

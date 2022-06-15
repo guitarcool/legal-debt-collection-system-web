@@ -516,7 +516,7 @@
     import divisionDialog from "./divisionDialog";
     import cuttingAfterApi from "@/api/case/cuttingAfter/index";
     import supervisorDialog from "./supervisorDialog";
-    import recordDialog from "./recordDialog";
+    import recordDialog from "../components/recordDialog";
     import bindingCase from "./bindingCase";
     import exportDialog from "../components/exportDialog";
 
@@ -1290,7 +1290,7 @@
                 });
             },
             handleRecord(item) {
-                this.recordData.title = "调解记录";
+                this.recordData.title = "分案调解记录";
                 this.recordData.dialogVisible = true;
                 this.recordData.id = item.id;
             },

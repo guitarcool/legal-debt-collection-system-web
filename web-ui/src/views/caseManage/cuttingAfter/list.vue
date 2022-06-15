@@ -441,7 +441,7 @@
 <script>
     import SearchBar from "@/components/SearchBar/index";
     import cuttingAfterApi from "@/api/case/cuttingAfter/index";
-    import recordDialog from "./recordDialog";
+    import recordDialog from "../components/recordDialog";
     import divisionApi from "@/api/case/division/index";
     import importDialog from "./importDialog";
     import testCall from "../components/testCall";
@@ -1075,7 +1075,7 @@
                 });
             },
             handleRecord(item) {
-                this.recordData.title = "调解记录";
+                this.recordData.title = "裁后调解记录";
                 this.recordData.dialogVisible = true;
                 this.recordData.id = item.id;
             },
