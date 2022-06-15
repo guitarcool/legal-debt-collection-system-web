@@ -3,7 +3,9 @@
         <Dialog :title="title" :height="600" :show.sync="dialogVisible" width="50%" @openDialog="openDialog">
             <template v-slot:default>
                 <!-- 查看字段表 -->
-                <div v-if="title == '全选短信发送'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
+                <div v-if="title == '裁前全选短信发送'||title == '裁后全选短信发送'"
+                    style="padding:10px 0;color:red;font-size:16px;line-height:24px">
+                    注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
                 <div class="see-field" v-loading="loading">
                     <div v-show="active ==1">
                         <div class="margin-div">
@@ -81,8 +83,9 @@
                                 <span>点击下载：</span>
                                 <el-link type="info" style="font-size: 16px; margin: 10px 0; color: #1890ff"
                                     @click="importTemplate"><i class="el-icon-download"></i>批量生成短信内容</el-link>
-                                <el-upload v-if="title == '批量短信发送(旧)'" class="upload-demo" :limit="1" action="string" :http-request="handleUplod"
-                                    :disabled="isUploading" :on-change="fileOnChange" :on-remove="removeFile">
+                                <el-upload v-if="title == '批量短信发送(旧)'" class="upload-demo" :limit="1" action="string"
+                                    :http-request="handleUplod" :disabled="isUploading" :on-change="fileOnChange"
+                                    :on-remove="removeFile">
                                     <el-button size="mini" type="primary">上传短信内容<i
                                             class="el-icon-upload el-icon--right"></i></el-button>
                                 </el-upload>
@@ -136,6 +139,7 @@
     import axios from "axios";
     import importApi from "@/api/case/import/index";
     import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
     import templateApi from "@/api/case/document/templateIndex";
     export default {
         name: "exportDialog",
@@ -160,9 +164,9 @@
                 type: String,
                 default: ''
             },
-            total:{
+            total: {
                 type: String | Number,
-                default: '--'           
+                default: '--'
             }
         },
         watch: {
@@ -260,24 +264,12 @@
                     this.msgError("请选择模版");
                     return;
                 }
-                // if (this.phoneStatus.length == 0) {
-                //     this.msgError("请至少选择一个跳过内容");
-                //     return;
-                // }
                 this.active = 2;
-                // if(this.title == '全选短信发送'){
                 templateApi.wituoutPermiInfo(this.templateId).then(
                     response => {
                         this.textarea = response.data.content;
                     }
-                );                        
-                // }else{
-                //     templateApi.info(this.templateId).then(
-                //         response => {
-                //             this.textarea = response.data.content;
-                //         }
-                //     );       
-                // }
+                );
             },
             upperActive() {
                 this.active = 1;
@@ -320,25 +312,31 @@
                     providerType: this.providerType,
                     sendTime: this.signatureDate ? this.signatureDate : '',
                 }
-                if (this.title == '全选短信发送') {
-                    cuttingAfterApi.downloadSmsTemplate(param).then((response) => {
-                        this.download(response.msg);
-                    });
-                }else{
-                    importApi.downloadSmsTemplate(param).then((response) => {
-                        this.download(response.msg);
-                    });
+                switch (key) {
+                    case value:
+
+                        break;
+
+                    default:
+                        break;
                 }
-            },
-            //获取当前时间
-            timestampToTime() {
-                let yy = new Date().getFullYear();
-                let mm = new Date().getMonth() + 1;
-                let dd = new Date().getDate();
-                let hh = new Date().getHours();
-                let mf = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes();
-                let ss = new Date().getSeconds() < 10 ? '0' + new Date().getSeconds() : new Date().getSeconds();
-                return yy + '-' + mm + '-' + dd + ' ' + hh + ':' + mf + ':' + ss;
+                switch (true) {
+                    case this.title == "裁前全选短信发送":
+                        cuttingBeforeApi.downloadSmsTemplate(param).then((response) => {
+                            this.download(response.msg);
+                        });
+                        break;
+                    case this.title == "裁后全选短信发送":
+                        cuttingAfterApi.downloadSmsTemplate(param).then((response) => {
+                            this.download(response.msg);
+                        });
+                        break;
+                    default:
+                        importApi.downloadSmsTemplate(param).then((response) => {
+                            this.download(response.msg);
+                        });
+                        break;
+                }
             },
             //确定提交
             visibleSubmit() {
@@ -384,23 +382,35 @@
                             withCredentials: true
                         });
                         instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken();
-                        if (this.title == '全选短信发送') {
-                            this.upload_url = process.env.VUE_APP_BASE_API + "/case/postAdjudged/batchSMSFileAll"; //上传URL
-                        } else if (this.title == '批量短信发送(旧)') {
-                            this.upload_url = process.env.VUE_APP_BASE_API + "/case/postAdjudged/batchSMSFile"; //上传URL
+                        switch (true) {
+                            case this.title == "裁前全选短信发送":
+                                this.upload_url = process.env.VUE_APP_BASE_API +
+                                    "/case/postAdjudged/batchSMSFileAll"; //上传URL
+                                break;
+                            case this.title == "裁后全选短信发送":
+                                this.upload_url = process.env.VUE_APP_BASE_API +
+                                    "/shortMsg/pretrialCase/batchSMSFileAll"; //上传URL
+                                break;
+                            case this.title == "裁前批量短信发送(旧)":
+                                this.upload_url = process.env.VUE_APP_BASE_API +
+                                    "/case/postAdjudged/batchSMSFile"; //上传URL
+                                break;
+                            case this.title == "裁后批量短信发送(旧)":
+                                this.upload_url = process.env.VUE_APP_BASE_API + "/case/pretrial/batchSMSFile"; //上传URL
+                                break;
                         }
                         var that = this
                         instance({
                             method: 'post',
                             url: that.upload_url,
                             data: formData,
-                            timeout:600000,
+                            timeout: 600000,
                             processData: false, // 告诉axios不要去处理发送的数据(重要参数)
                             contentType: false, // 告诉axios不要去设置Content-Type请求头
                             // config: {
                             //     headers: {'Content-Type': 'multipart/form-data'}
                             // }
-                        }).then((res) =>{
+                        }).then((res) => {
                             if (res.data.code == 500) {
                                 that.loading = false;
                                 that.msgError(res.data.msg);
@@ -427,8 +437,41 @@
                             providerType: this.providerType,
                             sendTime: this.signatureDate ? this.signatureDate : '',
                         }
-                        if (this.title == '全选短信发送') {
-                            cuttingAfterApi.sendSmsCollectionAll(param).then((res) => {
+                        switch (true) {
+                            case this.title == '裁后全选短信发送':
+                                cuttingAfterApi.sendSmsCollectionAll(param).then((res) => {
+                                        if (res.code == 500) {
+                                            this.loading = false;
+                                            this.msgError(res.msg);
+                                        } else {
+                                            this.dialogVisible = false;
+                                            this.loading = false;
+                                            this.msgSuccess(res.msg);
+                                            this.$emit('refresh');
+                                        }
+                                    })
+                                    .catch((error) => {
+                                        this.loading = false;
+                                    });
+                                break;
+                            case this.title == '裁后批量短信发送':
+                                cuttingAfterApi.sendSmsCollection(param).then((res) => {
+                                        if (res.code == 500) {
+                                            this.loading = false;
+                                            this.msgError(res.msg);
+                                        } else {
+                                            this.dialogVisible = false;
+                                            this.loading = false;
+                                            this.msgSuccess(res.msg);
+                                            this.$emit('refresh');
+                                        }
+                                    })
+                                    .catch((error) => {
+                                        this.loading = false;
+                                    });
+                                break;
+                            case this.title == '裁前全选短信发送':
+                                cuttingBeforeApi.sendSmsCollectionAll(param).then((res) => {
                                     if (res.code == 500) {
                                         this.loading = false;
                                         this.msgError(res.msg);
@@ -436,14 +479,15 @@
                                         this.dialogVisible = false;
                                         this.loading = false;
                                         this.msgSuccess(res.msg);
+                                        this.$emit('clearSelection');
                                         this.$emit('refresh');
                                     }
-                                })
-                                .catch((error) => {
+                                }).catch((error) => {
                                     this.loading = false;
                                 });
-                        } else {
-                            cuttingAfterApi.sendSmsCollection(param).then((res) => {
+                                break;
+                            case this.title == '裁前批量短信发送':
+                                cuttingBeforeApi.sendSmsCollection(param).then((res) => {
                                     if (res.code == 500) {
                                         this.loading = false;
                                         this.msgError(res.msg);
@@ -451,13 +495,15 @@
                                         this.dialogVisible = false;
                                         this.loading = false;
                                         this.msgSuccess(res.msg);
+                                        this.$emit('clearSelection');
                                         this.$emit('refresh');
                                     }
-                                })
-                                .catch((error) => {
+                                }).catch((error) => {
                                     this.loading = false;
                                 });
+                                break;
                         }
+
 
                     }
                 }

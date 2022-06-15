@@ -445,7 +445,7 @@
     import divisionApi from "@/api/case/division/index";
     import importDialog from "./importDialog";
     import testCall from "../components/testCall";
-    import batchExportDialog from "./batchExportDialog";
+    import batchExportDialog from "../components/batchExportDialog";
     export default {
         name: "list",
         components: {
@@ -1282,9 +1282,9 @@
                     return;
                 }
                 if(type == 1){
-                    this.batchexportDialogData.title = "批量短信发送(旧)";
+                    this.batchexportDialogData.title = "裁后批量短信发送(旧)";
                 }else{
-                    this.batchexportDialogData.title = "批量短信发送";
+                    this.batchexportDialogData.title = "裁后批量短信发送";
                 }
                 this.batchexportDialogData.dialogVisible = true;
                 this.batchexportDialogData.red = false;
@@ -1292,7 +1292,7 @@
             },
             //打开发送短信的弹窗
             handleMessageAll() {
-                this.batchexportDialogData.title = "全选短信发送";
+                this.batchexportDialogData.title = "裁后全选短信发送";
                 this.batchexportDialogData.dialogVisible = true;
                 this.batchexportDialogData.red = false;
                 this.batchexportDialogData.total = this.total;
