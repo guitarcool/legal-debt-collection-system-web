@@ -466,8 +466,7 @@
             </span>
         </el-dialog>
         <divisionDialog @refresh="clearSelection" :title="divisionData.title" :show.sync="divisionData.dialogVisible"
-            :id="divisionData.id" :principal="divisionData.principal" :orgNo="divisionData.orgNo"
-            :caseStatus="divisionData.caseStatus" :total="divisionData.total"></divisionDialog>
+            :caseIds="divisionData.caseIds" :total="divisionData.total"></divisionDialog>
         <supervisorDialog @refresh="clearSelection" :title="supervisorData.title" :ids="supervisorData.ids"
             :show.sync="supervisorData.dialogVisible" :total="supervisorData.total"></supervisorDialog>
         <recordDialog :title="recordData.title" :show.sync="recordData.dialogVisible" :id="recordData.id">
@@ -715,10 +714,7 @@
                 divisionData: {
                     title: "",
                     dialogVisible: false,
-                    id: "",
-                    orgNo: "",
-                    principal: "",
-                    caseStatus: "",
+                    caseIds: [],
                     total: ''
                 },
                 bindingData: {
@@ -1199,19 +1195,24 @@
                         return;
                     }
                 }
-                this.divisionData.total = item.id ? '1' : this.ids.length;
-                this.divisionData.title = "案件分发";
+                this.divisionData.total = this.ids.length;
+                this.divisionData.title = "批量案件分发";
                 this.divisionData.dialogVisible = true;
-                this.divisionData.id = item.id ? item.id : this.ids.join(",");
-                this.divisionData.orgNo = item.id ?
-                    item.orgNo :
-                    this.selection.map((i) => i.orgNo).join(",");
-                this.divisionData.principal = item.id ?
-                    item.principal :
-                    this.selection.map((i) => i.principal).join(",");
-                this.divisionData.caseStatus = item.id ?
-                    item.caseStatus :
-                    this.selection.map((i) => i.caseStatus);
+                this.divisionData.caseIds = this.ids;
+
+                // this.divisionData.total = item.id ? '1' : this.ids.length;
+                // this.divisionData.title = "案件分发";
+                // this.divisionData.dialogVisible = true;
+                // this.divisionData.id = item.id ? item.id : this.ids.join(",");
+                // this.divisionData.orgNo = item.id ?
+                //     item.orgNo :
+                //     this.selection.map((i) => i.orgNo).join(",");
+                // this.divisionData.principal = item.id ?
+                //     item.principal :
+                //     this.selection.map((i) => i.principal).join(",");
+                // this.divisionData.caseStatus = item.id ?
+                //     item.caseStatus :
+                //     this.selection.map((i) => i.caseStatus);
             },
             //全选案件分发
             handleDivisionAll(item) {
@@ -1224,16 +1225,16 @@
                 this.divisionData.title = "全选案件分发";
                 this.divisionData.total = this.total;
                 this.divisionData.dialogVisible = true;
-                this.divisionData.id = item.id ? item.id : this.ids.join(",");
-                this.divisionData.orgNo = item.id ?
-                    item.orgNo :
-                    this.selection.map((i) => i.orgNo).join(",");
-                this.divisionData.principal = item.id ?
-                    item.principal :
-                    this.selection.map((i) => i.principal).join(",");
-                this.divisionData.caseStatus = item.id ?
-                    item.caseStatus :
-                    this.selection.map((i) => i.caseStatus);
+                // this.divisionData.id = item.id ? item.id : this.ids.join(",");
+                // this.divisionData.orgNo = item.id ?
+                //     item.orgNo :
+                //     this.selection.map((i) => i.orgNo).join(",");
+                // this.divisionData.principal = item.id ?
+                //     item.principal :
+                //     this.selection.map((i) => i.principal).join(",");
+                // this.divisionData.caseStatus = item.id ?
+                //     item.caseStatus :
+                //     this.selection.map((i) => i.caseStatus);
             },
             handleFiltering() {
                 if (this.selection.filter((item) => item.caseStatus == 13).length > 0) {

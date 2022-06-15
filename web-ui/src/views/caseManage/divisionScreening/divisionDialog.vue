@@ -1,14 +1,14 @@
 <template>
     <Dialog :title="title" :height="600" :show.sync="dialogVisible" width="40%" @openDialog="openDialog">
         <template v-slot:default>
-            <el-form ref="form" :model="form" label-width="100px">
+            <el-form ref="form" :model="form" label-width="100px" :rules="rules">
                 <el-form-item label="已选案件数：">
                     <span style="color:red">{{total}}件</span>
                 </el-form-item>
                 <el-form-item label="分案至：">
-                    <el-radio-group v-model="form.resource">
-                        <el-radio label="调解员" value="1"></el-radio>
-                        <el-radio label="部门" value="2"></el-radio>
+                    <el-radio-group v-model="form.assignObject">
+                        <el-radio label="0">调解员</el-radio>
+                        <el-radio label="1">部门</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="部门：" prop="deptId">
@@ -16,51 +16,56 @@
                     <treeselect style="width:194px;" v-model="form.deptId" :options="deptOptions" :show-count="true"
                         placeholder="请选择部门" size="small" @input="treeChangeSelect" />
                 </el-form-item>
-                <el-form-item label="调解员：" prop="principals">
-                    <el-select :disabled="disabled" clearable multiple collapse-tags filterable size="small"
-                        v-model="form.principals" placeholder="请选择">
+                <el-form-item label="调解员：" prop="mediateIds" v-if="form.assignObject == 0">
+                    <el-select @change="selectMediateIds" :disabled="disabled" clearable multiple collapse-tags
+                        filterable size="small" v-model="form.mediateIds" placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
                             :value="item.userId">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="共债分配：">
-                    <el-radio-group v-model="form.resource">
-                        <el-radio label="同身份证号分配同调解员" value="1"></el-radio>
-                        <el-radio label="同身份证号不需分配同调解员" value="2"></el-radio>
+                <el-form-item label="共债分配：" v-if="form.assignObject == 0">
+                    <el-radio-group v-model="form.jointDebtAssign">
+                        <el-radio label="0">同身份证号分配同调解员</el-radio>
+                        <el-radio label="1">同身份证号不需分配同调解员</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="分案类型：">
-                    <el-radio-group v-model="form.resource">
-                        <el-radio label="按数量" value="1"></el-radio>
-                        <el-radio label="按标的金额" value="2"></el-radio>
+                <el-form-item label="分案类型：" v-if="form.assignObject == 0">
+                    <el-radio-group v-model="form.assignType">
+                        <el-radio label="0">按数量</el-radio>
+                        <el-radio label="1">按标的金额</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="分案比例：">
-                    <el-radio-group v-model="form.resource">
-                        <el-radio label="平均分案" value="1"></el-radio>
-                        <el-radio label="自定义" value="2"></el-radio>
+                <el-form-item label="分案比例：" v-if="form.assignObject == 0">
+                    <el-radio-group @change="pushMediateIds" v-model="form.assignScale">
+                        <el-radio label="0">平均分案</el-radio>
+                        <el-radio label="1">自定义</el-radio>
                     </el-radio-group>
-                    <el-table :data="userList" show-summary>
-                        <el-table-column prop="userId" label="调解员">
+                    <el-table size="small" :data="form.caseAssignScales" show-summary
+                        v-if="form.assignObject == 0&&form.assignScale == 1">
+                        <el-table-column prop="mediateId" label="调解员">
                             <template slot-scope="scope">
-                                <el-input disabled v-model="scope.row.userTarget"></el-input>
+                                <el-select disabled v-model="scope.row.mediateId" placeholder="请选择">
+                                    <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
+                                        :value="item.userId">
+                                    </el-option>
+                                </el-select>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="userTarget" label="分发比例（总和为100%）">
+                        <el-table-column prop="scale" label="分发比例（总和为100%）">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.userTarget"></el-input>
+                                <el-input v-model="scope.row.scale"></el-input>
                             </template>
                         </el-table-column>
                     </el-table>
                 </el-form-item>
                 <el-form-item label="分配结果：">
-                    <el-button style="margin-bottom:20px;" size="mini" @click="watchTable" type="danger">预览</el-button>
-                    <el-table :data="data" border>
-                        <el-table-column prop="prop" label="调解员"></el-table-column>
-                        <el-table-column prop="prop" label="身份证量"></el-table-column>
-                        <el-table-column prop="prop" label="分配案件数"></el-table-column>
-                        <el-table-column prop="prop" label="标的金额"></el-table-column>
+                    <el-button style="margin-bottom:20px;" size="mini" @click="watchTable" v-hasPermi="['case:assignment:getAssignCaseInfo']" type="danger">预览</el-button>
+                    <el-table :loading="tableLoading" :data="tableData" border v-if="tableShow">
+                        <el-table-column prop="assignObjectName" label="调解员"></el-table-column>
+                        <el-table-column prop="idCardNum" label="身份证量"></el-table-column>
+                        <el-table-column prop="caseNum" label="分配案件数"></el-table-column>
+                        <el-table-column prop="subjectAmount" label="标的金额"></el-table-column>
                     </el-table>
                 </el-form-item>
             </el-form>
@@ -99,21 +104,9 @@
                 type: String,
                 default: ''
             },
-            id: {
-                type: String,
-                default: ''
-            },
-            principal: {
-                type: String | Number,
-                default: ''
-            },
-            orgNo: {
-                type: String | Number,
-                default: ''
-            },
-            caseStatus: {
-                type: Array | Number,
-                default: -1
+            caseIds: {
+                type: Array,
+                default: []
             },
             total: {
                 type: String | Number,
@@ -127,7 +120,7 @@
                     label: "userName",
                 },
                 // 部门树选项
-                deptOptions: [],
+                deptOptions: undefined,
                 userList: [],
                 deptList: [],
                 // 表单校验
@@ -137,16 +130,22 @@
                         message: "部门不能为空",
                         trigger: "change"
                     }],
-                    principals: [{
+                    mediateIds: [{
                         required: true,
                         message: "调解员不能为空",
                         trigger: "change"
                     }]
                 },
                 loading: false,
-                form: {},
+                form: {
+                    assignObject: "",
+                    caseAssignScales: [],
+                    mediateIds: []
+                },
                 disabled: true,
-                data: []
+                tableData: [],
+                tableShow: false,
+                tableLoading: false
             }
         },
         computed: {
@@ -176,12 +175,21 @@
             },
             openDialog() {
                 initObj(this.form);
+                this.tableShow = false;
+                this.form.assignObject = "0";
             },
             // 提交上传文件
             submit() {
                 this.loading = true;
+                let data;
+                data = {
+                    ...this.form
+                };
+                if (this.title == "批量案件分发") {
+                    data.caseIds = this.caseIds;
+                }
                 if (this.title == '全选案件分发') {
-                    divisionApi.divisionAll(param).then(res => {
+                    divisionApi.divisionAll(data).then(res => {
                         if (res.code == 200) {
                             this.loading = false;
                             this.dialogVisible = false;
@@ -192,7 +200,7 @@
                         this.loading = false;
                     });
                 } else {
-                    divisionApi.division(param).then(res => {
+                    divisionApi.division(data).then(res => {
                         if (res.code == 200) {
                             this.loading = false;
                             this.dialogVisible = false;
@@ -214,13 +222,49 @@
             treeChangeSelect(id) {
                 if (id) {
                     this.disabled = false;
+                    divisionApi.getMediatorList(id).then(response => {
+                        this.userList = response.data;
+                    }).catch(() => {
+                        this.caseList = [];
+                    });
                 } else {
                     this.disabled = true;
-                    this.form.principal = [];
+                    this.form.mediateIds = [];
+                    this.form.caseAssignScales = [];
                 }
             },
+            pushMediateIds(value) {
+                this.form.caseAssignScales = [];
+                if (value == 1 && this.form.mediateIds.length > 0) {
+                    this.form.mediateIds.forEach(element => {
+                        this.form.caseAssignScales.push({
+                            mediateId: element,
+                            scale: ""
+                        })
+                    });
+                }
+            },
+            //切换调解员修改自定义列表
+            selectMediateIds(arr) {
+                this.pushMediateIds(1);
+            },
             watchTable() {
-
+                this.tableShow = true;
+                this.tableLoading = true;
+                let data;
+                data = {
+                    ...this.form
+                };
+                if (this.title == "批量案件分发") {
+                    data.caseIds = this.caseIds;
+                }
+                divisionApi.getAssignCaseInfo(data).then(res => {
+                    this.tableData = res.data;
+                    this.tableLoading = false;
+                }).catch(() => {
+                    this.tableData = [];
+                    this.tableLoading = false;
+                });
             },
         }
     }

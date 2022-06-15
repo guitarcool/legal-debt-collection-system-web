@@ -183,6 +183,21 @@ const divisionApi = {
             data
         })
     },
+    //根据部门id获取对应的调解员
+    getMediatorList(id) {
+        return request({
+            url: '/case/assignment/getMediatorList?deptId='+id,
+            method: 'get'
+        })
+    },
+    //分案筛选-分案预览
+    getAssignCaseInfo(data) {
+        return request({
+            url: '/case/assignment/getAssignCaseInfo',
+            method: 'post',
+            data
+        })
+    },
 }
 
 // 下载用户导入模版
