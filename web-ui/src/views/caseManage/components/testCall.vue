@@ -91,7 +91,8 @@
 
 <script>
     import Dialog from '@/components/Dialog/index'
-    import cuttingBeforeApi from "@/api/case/cuttingAfter/index";
+    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
     import {
         initObj
     } from '@/utils/common'
@@ -186,7 +187,7 @@
         methods: {
             //获取线路
             getLineList() {
-                cuttingBeforeApi.getLineList().then(res => {
+                cuttingAfterApi.getLineList().then(res => {
                     this.callphone = res;
                 })
             },
@@ -202,8 +203,13 @@
                 initObj(this.form)
                 this.resetAddForm();
                 this.getLineList();
+                if (this.title == "裁前个人预测试外呼计划") {
+                    this.form.path = 'cutBeforeInfo';
+
+                } else if (this.title == "裁后个人预测试外呼计划") {
+                    this.form.path = 'cutAfterInfo';
+                }
                 this.form = {
-                    path: 'cutBeforeInfo',
                     priority: 'HIGH',
                     is_early: false,
                     call_rate: 3,
@@ -222,23 +228,43 @@
                         let filterMedLabel = this.form.filterMedLabel.toString();
                         let filterNetworkStatus = this.form.filterNetworkStatus.toString();
                         let filterRealtimeStatus = this.form.filterRealtimeStatus.toString();
-                        cuttingBeforeApi.getListByIds(this.ids, this.form.callObject, filterMedLabel,
-                            filterNetworkStatus, filterRealtimeStatus, this.form.path).then(res => {
-                            if (res.code === 200) {
-                                this.form.list = res.data;
-                                let accountId = JSON.parse(sessionStorage.getItem("accountId"));
-                                this.form.accountId = accountId;
-                                cuttingBeforeApi.addduyansoft(this.form).then(res => {
-                                    if (res.code === 200) {
-                                        this.msgSuccess("创建计划成功");
-                                        this.dialogVisible = false;
-                                        this.$emit('refresh');
-                                    } else {
-                                        this.msgError(res.msg);
-                                    }
-                                })
-                            }
-                        })
+                        if (this.title == "裁前个人预测试外呼计划") {
+                            cuttingBeforeApi.getListByIds(this.ids, this.form.callObject, filterMedLabel,
+                                filterNetworkStatus, filterRealtimeStatus, this.form.path).then(res => {
+                                if (res.code === 200) {
+                                    this.form.list = res.data;
+                                    let accountId = JSON.parse(sessionStorage.getItem("accountId"));
+                                    this.form.accountId = accountId;
+                                    cuttingBeforeApi.addduyansoft(this.form).then(res => {
+                                        if (res.code === 200) {
+                                            this.msgSuccess("创建计划成功");
+                                            this.dialogVisible = false;
+                                            this.$emit('refresh');
+                                        } else {
+                                            this.msgError(res.msg);
+                                        }
+                                    })
+                                }
+                            })
+                        } else if (this.title == "裁后个人预测试外呼计划") {
+                            cuttingAfterApi.getListByIds(this.ids, this.form.callObject, filterMedLabel,
+                                filterNetworkStatus, filterRealtimeStatus, this.form.path).then(res => {
+                                if (res.code === 200) {
+                                    this.form.list = res.data;
+                                    let accountId = JSON.parse(sessionStorage.getItem("accountId"));
+                                    this.form.accountId = accountId;
+                                    cuttingAfterApi.addduyansoft(this.form).then(res => {
+                                        if (res.code === 200) {
+                                            this.msgSuccess("创建计划成功");
+                                            this.dialogVisible = false;
+                                            this.$emit('refresh');
+                                        } else {
+                                            this.msgError(res.msg);
+                                        }
+                                    })
+                                }
+                            })
+                        }
                     }
                 });
             },

@@ -422,7 +422,7 @@
     import batchExportDialog from "./batchExportDialog";
     import publicBatchDialog from "./publicBatchDialog";
     import divisionApi from "@/api/case/division/index";
-    import testCall from "./testCall";
+    import testCall from "../components/testCall";
     import batchExport from "./batchExport";
 
 
@@ -849,7 +849,7 @@
                     return;
                 }
                 this.callData.ids = this.ids.join(",");
-                this.callData.title = "个人预测试外呼计划";
+                this.callData.title = "裁前个人预测试外呼计划";
                 this.callData.dialogVisible = true;
             },
             /** 搜索按钮操作 */

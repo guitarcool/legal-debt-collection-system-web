@@ -129,13 +129,6 @@ const cuttingBeforeApi = {
             data
         })
     },
-    //获取号码list
-    getLineList() {
-        return request({
-            url: '/breathe/getLineList',
-            method: 'post',
-        })
-    },
     //获取list
     getListByIds(ids, callObject, filterMedLabel, filterNetworkStatus, filterRealtimeStatus, path) {
         return request({

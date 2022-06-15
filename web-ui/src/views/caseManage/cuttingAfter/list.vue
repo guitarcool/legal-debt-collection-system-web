@@ -444,7 +444,7 @@
     import recordDialog from "./recordDialog";
     import divisionApi from "@/api/case/division/index";
     import importDialog from "./importDialog";
-    import testCall from "./testCall";
+    import testCall from "../components/testCall";
     import batchExportDialog from "./batchExportDialog";
     export default {
         name: "list",
@@ -877,7 +877,7 @@
                     return;
                 }
                 this.callData.ids = this.ids.join(",");
-                this.callData.title = "个人预测试外呼计划";
+                this.callData.title = "裁后个人预测试外呼计划";
                 this.callData.dialogVisible = true;
             },
             clearSelection() {

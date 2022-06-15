@@ -8,9 +8,6 @@
                 <el-form-item label="调解待还金额：">
                     <el-input v-model="outstandingAmount" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="共债剩余待还总额：">
-                    <el-input v-model="outstandingAmount" disabled></el-input>
-                </el-form-item>
                 <!-- 有账户 -->
                 <div v-if="account">
                     <el-form-item label="收款账户：" prop="accountNoShou">
