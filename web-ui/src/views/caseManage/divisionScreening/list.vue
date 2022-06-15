@@ -474,39 +474,10 @@
         <bindingCase @refresh="clearSelection" :title="bindingData.title" :show.sync="bindingData.dialogVisible"
             :ids="bindingData.ids" :total="bindingData.total">
         </bindingCase>
+        <mediationRecord @refresh="clearSelection" :title="mediationData.title" :show.sync="mediationData.dialogVisible"
+            :ids="mediationData.ids"  :type="mediationData.type" :total="mediationData.total"></mediationRecord>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
             :ids="exportData.ids" :requestApi="exportData.requestApi" :total="exportData.total"></exportDialog>
-        <el-dialog :title="form.title" :visible.sync="exportDialogVisible" width="50%" :before-close="handleClose">
-            <el-form style="margin: 0 auto;" ref="form" :model="form" :rules="exportRules" label-width="100px">
-                <div v-if="form.title=='全选导出网调记录'||form.title=='全选导出调解记录'"
-                    style="padding:10px 0;color:red;font-size:16px;line-height:24px">注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!
-                </div>
-                <el-form-item v-if="form.title=='导出调解记录'||form.title=='全选导出调解记录'" label="导出范围：" prop="exportRange">
-                    <el-checkbox-group v-model="form.exportRange">
-                        <el-checkbox :label="1">最近一次调解记录</el-checkbox>
-                        <el-checkbox :label="2">全部调解记录</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item v-if="form.title=='导出网调记录'||form.title=='全选导出网调记录'" label="导出范围：" prop="exportRange">
-                    <el-checkbox-group v-model="form.exportRange">
-                        <el-checkbox :label="1">最近一次网调记录</el-checkbox>
-                        <el-checkbox :label="2">全部网调记录</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item v-if="form.title=='导出调解记录'||form.title=='全选导出调解记录'" label="是否脱敏："
-                    prop="isDesensitization">
-                    <el-radio-group v-model="form.isDesensitization">
-                        <el-radio :label="1">是</el-radio>
-                        <el-radio :label="0">否</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="exportDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="phoneSubmit(form.title)" :loading="formLoading">
-                    {{formLoading?'导出中':'确定'}}</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
@@ -514,11 +485,11 @@
     import SearchBar from "@/components/SearchBar/index";
     import divisionApi from "@/api/case/division/index";
     import divisionDialog from "./divisionDialog";
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
     import supervisorDialog from "./supervisorDialog";
     import recordDialog from "../components/recordDialog";
     import bindingCase from "./bindingCase";
     import exportDialog from "../components/exportDialog";
+    import mediationRecord from "../components/mediationRecord";
 
     export default {
         name: "list",
@@ -528,13 +499,13 @@
             supervisorDialog,
             recordDialog,
             exportDialog,
-            bindingCase
+            bindingCase,
+            mediationRecord
         },
         data() {
             return {
                 // 遮罩层
                 loading: false,
-                formLoading: false,
                 numberFormLoading: false,
                 // 选中数组
                 ids: [],
@@ -762,23 +733,6 @@
                     requestApi: "",
                     total: "",
                 },
-                form: {
-                    exportRange: [],
-                    isDesensitization: '1',
-                },
-                exportRules: {
-                    exportRange: [{
-                        required: true,
-                        message: '请选择导出范围',
-                        trigger: 'change'
-                    }],
-                    isDesensitization: [{
-                        required: true,
-                        message: '请选择是否脱敏',
-                        trigger: 'change'
-                    }]
-                },
-                exportDialogVisible: false,
                 getRowKeys(row) {
                     return row.id;
                 },
@@ -794,6 +748,13 @@
                 props: {
                     multiple: true
                 },
+                mediationData:{
+                    title: "",
+                    dialogVisible: false,
+                    ids: "",
+                    total: "", 
+                    type:"",                   
+                }
             };
         },
         created() {
@@ -1092,100 +1053,11 @@
             },
             //导出调解记录网调记录
             batchExportMediationRecord(title) {
-                this.formLoading = false;
-                this.form.title = title;
-                this.form.exportRange = [];
-                this.form.isDesensitization = 1;
-                this.exportDialogVisible = true;
-            },
-            phoneSubmit(title) {
-                if (title == '导出调解记录') {
-                    this.$refs["form"].validate((valid) => {
-                        if (valid) {
-                            this.formLoading = true;
-                            let queryParams = {
-                                caseIds: this.ids.join(","),
-                                exportRange: this.form.exportRange.toString(),
-                                isDesensitization: this.form.isDesensitization,
-                            };
-                            cuttingAfterApi.postAdjudgedBatchExport(queryParams).then(res => {
-                                if (res.code === 200) {
-                                    this.msgSuccess("操作成功");
-                                    this.formLoading = false;
-                                    this.exportDialogVisible = false;
-                                    this.download(res.msg);
-                                    this.clearSelection();
-                                }
-                            }).catch(error => {
-                                this.formLoading = false;
-                            })
-                        }
-                    });
-                } else if (title == '导出网调记录') {
-                    this.$refs["form"].validate((valid) => {
-                        if (valid) {
-                            this.formLoading = true;
-                            let queryParams = {
-                                caseIds: this.ids.join(","),
-                                exportRange: this.form.exportRange.toString(),
-                            };
-                            cuttingAfterApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
-                                if (res.code === 200) {
-                                    this.msgSuccess("操作成功");
-                                    this.formLoading = false;
-                                    this.exportDialogVisible = false;
-                                    this.download(res.msg);
-                                    this.clearSelection();
-                                }
-                            }).catch(error => {
-                                this.formLoading = false;
-                            })
-                        }
-                    });
-                } else if (title == '全选导出调解记录') {
-                    this.$refs["form"].validate((valid) => {
-                        if (valid) {
-                            this.formLoading = true;
-                            let queryParams = {
-                                caseIds: this.ids.join(","),
-                                exportRange: this.form.exportRange.toString(),
-                                isDesensitization: this.form.isDesensitization,
-                            };
-                            cuttingAfterApi.assignmentMediationRecordAll(queryParams).then(res => {
-                                if (res.code === 200) {
-                                    this.msgSuccess("操作成功");
-                                    this.formLoading = false;
-                                    this.exportDialogVisible = false;
-                                    this.download(res.msg);
-                                    this.clearSelection();
-                                }
-                            }).catch(error => {
-                                this.formLoading = false;
-                            })
-                        }
-                    });
-                } else if (title == '全选导出网调记录') {
-                    this.$refs["form"].validate((valid) => {
-                        if (valid) {
-                            this.formLoading = true;
-                            let queryParams = {
-                                caseIds: this.ids.join(","),
-                                exportRange: this.form.exportRange.toString(),
-                            };
-                            cuttingAfterApi.assignmentNetworkAdjustRecordAll(queryParams).then(res => {
-                                if (res.code === 200) {
-                                    this.msgSuccess("操作成功");
-                                    this.formLoading = false;
-                                    this.exportDialogVisible = false;
-                                    this.download(res.msg);
-                                    this.clearSelection();
-                                }
-                            }).catch(error => {
-                                this.formLoading = false;
-                            })
-                        }
-                    });
-                }
+                this.mediationData.ids = this.ids.join(",");
+                this.mediationData.total = this.total;
+                this.mediationData.type = "1";
+                this.mediationData.title = title;
+                this.mediationData.dialogVisible = true;  
             },
             /** 案件分发 */
             handleDivision(item) {

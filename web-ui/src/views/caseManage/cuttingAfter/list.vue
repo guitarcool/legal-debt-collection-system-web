@@ -396,35 +396,6 @@
             <pagination v-show="total > 0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
-        <el-dialog :title="form.title" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
-            <el-form style="margin: 0 auto;" ref="form" :model="form" :rules="rules" label-width="100px">
-                <div v-if="form.title=='全选导出网调记录'||form.title=='全选导出调解记录'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
-                <el-form-item v-if="form.title=='导出调解记录'||form.title=='全选导出调解记录'" label="导出范围：" prop="exportRange">
-                    <el-checkbox-group v-model="form.exportRange">
-                        <el-checkbox :label="1">最近一次调解记录</el-checkbox>
-                        <el-checkbox :label="2">全部调解记录</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item v-if="form.title=='导出网调记录'||form.title=='全选导出网调记录'" label="导出范围：" prop="exportRange">
-                    <el-checkbox-group v-model="form.exportRange">
-                        <el-checkbox :label="1">最近一次网调记录</el-checkbox>
-                        <el-checkbox :label="2">全部网调记录</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item v-if="form.title=='导出调解记录'||form.title=='全选导出调解记录'" label="是否脱敏："
-                    prop="isDesensitization">
-                    <el-radio-group v-model="form.isDesensitization">
-                        <el-radio :label="1">是</el-radio>
-                        <el-radio :label="0">否</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="phoneSubmit(form.title)" :loading="formLoading">
-                    {{formLoading?'导出中':'确定'}}</el-button>
-            </span>
-        </el-dialog>
         <recordDialog :title="recordData.title" :show.sync="recordData.dialogVisible" :id="recordData.id">
         </recordDialog>
         <importDialog @refresh="clearSelection" :title="addData.title" :headline="addData.headline"
@@ -435,6 +406,8 @@
         <batchExportDialog @refresh="clearSelection" :title="batchexportDialogData.title"
             :show.sync="batchexportDialogData.dialogVisible" :red="batchexportDialogData.red"
             :params="batchexportDialogData.params" :total="batchexportDialogData.total"></batchExportDialog>
+        <mediationRecord @refresh="clearSelection" :title="mediationData.title" :show.sync="mediationData.dialogVisible"
+            :ids="mediationData.ids"  :type="mediationData.type" :total="mediationData.total"></mediationRecord>
     </div>
 </template>
 
@@ -446,6 +419,7 @@
     import importDialog from "./importDialog";
     import testCall from "../components/testCall";
     import batchExportDialog from "../components/batchExportDialog";
+    import mediationRecord from "../components/mediationRecord";
     export default {
         name: "list",
         components: {
@@ -453,7 +427,8 @@
             recordDialog,
             importDialog,
             testCall,
-            batchExportDialog
+            batchExportDialog,
+            mediationRecord
         },
         data() {
             return {
@@ -698,6 +673,13 @@
                 props: {
                     multiple: true
                 },
+                mediationData:{
+                    title: "",
+                    dialogVisible: false,
+                    ids: "",
+                    total: "", 
+                    type:"",                   
+                }
             };
         },
         created() {
@@ -926,110 +908,13 @@
                         that.msgInfo("已取消操作");
                     });
             },
-            //导出调解记录
+            //导出调解记录网调记录
             batchExportMediationRecord(title) {
-                this.form.title = title;
-                this.formLoading = false;
-                this.form.exportRange = [];
-                this.form.isDesensitization = 1;
-                this.dialogVisible = true;
-            },
-            handleClose(done) {
-                this.$confirm('确认关闭？')
-                    .then(_ => {
-                        done();
-                    })
-                    .catch(_ => {});
-            },
-            phoneSubmit(title) {
-                if (title == '导出调解记录') {
-                    this.$refs["form"].validate((valid) => {
-                        if (valid) {
-                            this.formLoading = true;
-                            let queryParams = {
-                                caseIds: this.ids.join(","),
-                                exportRange: this.form.exportRange.toString(),
-                                isDesensitization: this.form.isDesensitization,
-                            };
-                            cuttingAfterApi.postAdjudgedBatchExport(queryParams).then(res => {
-                                if (res.code === 200) {
-                                    this.msgSuccess("操作成功");
-                                    this.dialogVisible = false;
-                                    this.formLoading = false;
-                                    this.clearSelection();
-                                    this.download(res.msg);
-                                }
-                            }).catch(() => {
-                                this.formLoading = false;
-                            });
-                        }
-                    });
-                } else if (title == '导出网调记录') {
-                    this.$refs["form"].validate((valid) => {
-                        if (valid) {
-                            this.formLoading = true;
-                            let queryParams = {
-                                caseIds: this.ids.join(","),
-                                exportRange: this.form.exportRange.toString(),
-                            };
-                            cuttingAfterApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
-                                if (res.code === 200) {
-                                    this.msgSuccess("操作成功");
-                                    this.dialogVisible = false;
-                                    this.formLoading = false;
-                                    this.clearSelection();
-                                    this.download(res.msg);
-                                }
-                            }).catch(() => {
-                                this.formLoading = false;
-                            });
-                        }
-                    });
-                } else if (title == '全选导出调解记录') {
-                    this.$refs["form"].validate((valid) => {
-                        if (valid) {
-                            this.formLoading = true;
-                            let queryParams = {
-                                caseIds: this.ids.join(","),
-                                exportRange: this.form.exportRange.toString(),
-                                isDesensitization: this.form.isDesensitization,
-                            };
-                            cuttingAfterApi.batchExportMediationRecordAll(queryParams).then(res => {
-                                if (res.code === 200) {
-                                    this.msgSuccess("操作成功");
-                                    this.formLoading = false;
-                                    this.dialogVisible = false;
-                                    this.clearSelection();
-                                    this.download(res.msg);
-                                }
-                            }).catch(() => {
-                                this.formLoading = false;
-                            });
-                        }
-                    });
-                } else if (title == '全选导出网调记录') {
-                    this.$refs["form"].validate((valid) => {
-                        if (valid) {
-                            this.formLoading = true;
-                            let queryParams = {
-                                caseIds: this.ids.join(","),
-                                exportRange: this.form.exportRange.toString(),
-                            };
-                            cuttingAfterApi.batchExportNetworkAdjustRecordAll(queryParams).then(res => {
-                                if (res.code === 200) {
-                                    this.msgSuccess("操作成功");
-                                    this.formLoading = false;
-                                    this.dialogVisible = false;
-                                    this.clearSelection();
-                                    this.download(res.msg);
-                                }
-                            }).catch(() => {
-                                this.formLoading = false;
-                            });
-                        }
-                    });
-                }
-
+                this.mediationData.ids = this.ids.join(",");
+                this.mediationData.total = this.total;
+                this.mediationData.type = "2";
+                this.mediationData.title = title;
+                this.mediationData.dialogVisible = true;  
             },
             /** 搜索按钮操作 */
             handleQuery() {

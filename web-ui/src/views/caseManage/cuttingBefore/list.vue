@@ -409,8 +409,8 @@
         </testCall>
         <batchExport @refresh="clearSelection" :title="batchexportData.title" :show.sync="batchexportData.dialogVisible"
             :red="batchexportData.red" :params="batchexportData.params" :total="batchexportData.total"></batchExport>
-        <publicBatchDialog @refresh="clearSelection" :title="publicBatchData.title"
-            :show.sync="publicBatchData.dialogVisible" :params="publicBatchData.params" :total="publicBatchData.total"></publicBatchDialog>
+        <mediationRecord @refresh="clearSelection" :title="mediationData.title" :show.sync="mediationData.dialogVisible"
+            :ids="mediationData.ids"  :type="mediationData.type" :total="mediationData.total"></mediationRecord>
     </div>
 </template>
 
@@ -420,10 +420,11 @@
     import exportDialog from "./exportDialog";
     import recordDialog from "../components/recordDialog";
     import batchExportDialog from "./batchExportDialog";
-    import publicBatchDialog from "./publicBatchDialog";
     import divisionApi from "@/api/case/division/index";
     import testCall from "../components/testCall";
     import batchExport from "../components/batchExportDialog";
+    import mediationRecord from "../components/mediationRecord";
+
     export default {
         name: "list",
         components: {
@@ -433,7 +434,7 @@
             batchExportDialog,
             testCall,
             batchExport,
-            publicBatchDialog
+            mediationRecord
         },
         data() {
             return {
@@ -480,11 +481,12 @@
                     dialogVisible: false,
                     id: "",
                 },
-                publicBatchData: {
+                mediationData:{
                     title: "",
                     dialogVisible: false,
-                    params: "",
-                    total: ""
+                    ids: "",
+                    total: "", 
+                    type:"",                   
                 },
                 contactResultOptions: [],
                 letterRepairStatusOptions: [],
@@ -1044,10 +1046,11 @@
             },
             //导出调解记录,网调记录,电调记录。
             batchExportMediationRecord(title) {
-                this.publicBatchData.title = title;
-                this.publicBatchData.params = this.ids.join(",");
-                this.publicBatchData.total = this.total;
-                this.publicBatchData.dialogVisible = true;
+                this.mediationData.ids = this.ids.join(",");
+                this.mediationData.total = this.total;
+                this.mediationData.type = "4";
+                this.mediationData.title = title;
+                this.mediationData.dialogVisible = true;  
             },
             //申请财保
             handleprojectEdit(type) {

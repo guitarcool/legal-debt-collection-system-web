@@ -175,6 +175,7 @@
             },
             openDialog() {
                 initObj(this.form);
+                this.resetAddForm();
                 this.tableShow = false;
                 this.form.assignObject = "0";
             },
