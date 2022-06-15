@@ -922,10 +922,10 @@
             :statusId="putOnRecord.statusId" @refresh="getAdjudgedInfo" :requestApi="putOnRecord.requestApi"
             :show.sync="putOnRecord.dialogVisible">
         </putOnRecord>
-        <exportsms @refresh="getCaseRecordInfo('msgRecord')" :id="exportDialogData.id" :caseId="exportDialogData.caseId"
-            :name="exportDialogData.name" :phone="exportDialogData.phone" :title="exportDialogData.title"
-            :show.sync="exportDialogData.dialogVisible" :red="exportDialogData.red">
-        </exportsms>
+        <exportSms @refresh="getCaseRecordInfo('msgRecord')" :id="exportSmsData.id" :caseId="exportSmsData.caseId"
+            :name="exportSmsData.name" :phone="exportSmsData.phone" :title="exportSmsData.title"
+            :show.sync="exportSmsData.dialogVisible" :red="exportSmsData.red">
+        </exportSms>
         <addPhone :title="phoneData.title" :show.sync="phoneData.dialogVisible" :id="id" :name="phoneData.name"
             @refresh="getCaseBaseInfo('contact')">
         </addPhone>
@@ -960,7 +960,7 @@
     import {
         initObj
     } from "@/utils/common";
-    import exportsms from "./exportsms";
+    import exportSms from "../components/exportSms";
     import merge from 'webpack-merge';
     export default {
         name: "info",
@@ -976,7 +976,7 @@
             addPhone,
             reimbursement,
             erweima,
-            exportsms,
+            exportSms,
             editInformation
         },
         data() {
@@ -1026,7 +1026,7 @@
                     confirmTip: "",
                     id: "",
                 },
-                exportDialogData: {
+                exportSmsData: {
                     title: "",
                     dialogVisible: false,
                     red: "",
@@ -1544,13 +1544,13 @@
             },
             //打开发送短信的弹窗
             handleExport(item) {
-                this.exportDialogData.title = "短信发送";
-                this.exportDialogData.dialogVisible = true;
-                this.exportDialogData.red = item.red;
-                this.exportDialogData.id = item.id;
-                this.exportDialogData.caseId = item.caseId;
-                this.exportDialogData.name = item.respondentName;
-                this.exportDialogData.phone = item.validPhone;
+                this.exportSmsData.title = "裁前短信发送";
+                this.exportSmsData.dialogVisible = true;
+                this.exportSmsData.red = item.red;
+                this.exportSmsData.id = item.id;
+                this.exportSmsData.caseId = item.caseId;
+                this.exportSmsData.name = item.respondentName;
+                this.exportSmsData.phone = item.validPhone;
             },
             //电话调解失败，多元调解失败
             fail(item) {

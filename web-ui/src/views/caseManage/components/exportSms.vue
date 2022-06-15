@@ -73,6 +73,7 @@
     import Dialog from "@/components/Dialog/index";
     import templateApi from "@/api/case/document/templateIndex";
     import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
     export default {
         name: "exportDialog",
         components: {
@@ -194,11 +195,19 @@
                             applyTime: this.applyTime,
                             cid: this.caseId,
                         }
-                        cuttingAfterApi.turnContent(param).then(
-                            response => {
-                                this.textarea = response.data;
-                                this.active = 2;
-                            });
+                        if (this.title == "裁前短信发送") {
+                            cuttingBeforeApi.turnContent(param).then(
+                                response => {
+                                    this.textarea = response.data;
+                                    this.active = 2;
+                                });
+                        } else if (this.title == "裁后短信发送") {
+                            cuttingAfterApi.turnContent(param).then(
+                                response => {
+                                    this.textarea = response.data;
+                                    this.active = 2;
+                                });
+                        }
                     }
                 );
             },
@@ -253,20 +262,37 @@
                     cid: this.caseId,
                     sendTime: this.signatureDate ? this.signatureDate : '',
                 }
-                cuttingAfterApi.shortMsg(param).then((res) => {
-                        if (res.code == 500) {
+                if (this.title == "裁前短信发送") {
+                    cuttingBeforeApi.shortMsg(param).then((res) => {
+                            if (res.code == 500) {
+                                this.loading = false;
+                                this.msgError(res.msg);
+                            } else {
+                                this.dialogVisible = false;
+                                this.loading = false;
+                                this.msgSuccess(res.msg);
+                                this.$emit('refresh');
+                            }
+                        })
+                        .catch((error) => {
                             this.loading = false;
-                            this.msgError(res.msg);
-                        } else {
-                            this.dialogVisible = false;
+                        });
+                } else if (this.title == "裁后短信发送") {
+                    cuttingAfterApi.shortMsg(param).then((res) => {
+                            if (res.code == 500) {
+                                this.loading = false;
+                                this.msgError(res.msg);
+                            } else {
+                                this.dialogVisible = false;
+                                this.loading = false;
+                                this.msgSuccess(res.msg);
+                                this.$emit('refresh');
+                            }
+                        })
+                        .catch((error) => {
                             this.loading = false;
-                            this.msgSuccess(res.msg);
-                            this.$emit('refresh');
-                        }
-                    })
-                    .catch((error) => {
-                        this.loading = false;
-                    });
+                        });
+                }
             },
             // 提交
             submit() {
@@ -301,20 +327,37 @@
                         cid: this.caseId,
                         sendTime: this.signatureDate ? this.signatureDate : '',
                     }
-                    cuttingAfterApi.shortMsg(param).then((res) => {
-                            if (res.code == 500) {
+                    if (this.title == "裁前短信发送") {
+                        cuttingBeforeApi.shortMsg(param).then((res) => {
+                                if (res.code == 500) {
+                                    this.loading = false;
+                                    this.msgError(res.msg);
+                                } else {
+                                    this.dialogVisible = false;
+                                    this.loading = false;
+                                    this.msgSuccess(res.msg);
+                                    this.$emit('refresh');
+                                }
+                            })
+                            .catch((error) => {
                                 this.loading = false;
-                                this.msgError(res.msg);
-                            } else {
-                                this.dialogVisible = false;
+                            });
+                    } else if (this.title == "裁后短信发送") {
+                        cuttingAfterApi.shortMsg(param).then((res) => {
+                                if (res.code == 500) {
+                                    this.loading = false;
+                                    this.msgError(res.msg);
+                                } else {
+                                    this.dialogVisible = false;
+                                    this.loading = false;
+                                    this.msgSuccess(res.msg);
+                                    this.$emit('refresh');
+                                }
+                            })
+                            .catch((error) => {
                                 this.loading = false;
-                                this.msgSuccess(res.msg);
-                                this.$emit('refresh');
-                            }
-                        })
-                        .catch((error) => {
-                            this.loading = false;
-                        });
+                            });
+                    }
                 }
             },
             getTime(time) {

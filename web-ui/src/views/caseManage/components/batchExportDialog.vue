@@ -83,9 +83,9 @@
                                 <span>点击下载：</span>
                                 <el-link type="info" style="font-size: 16px; margin: 10px 0; color: #1890ff"
                                     @click="importTemplate"><i class="el-icon-download"></i>批量生成短信内容</el-link>
-                                <el-upload v-if="title == '批量短信发送(旧)'" class="upload-demo" :limit="1" action="string"
-                                    :http-request="handleUplod" :disabled="isUploading" :on-change="fileOnChange"
-                                    :on-remove="removeFile">
+                                <el-upload v-if="title == '裁前批量短信发送(旧)'||title == '裁后批量短信发送(旧)'" class="upload-demo"
+                                    :limit="1" action="string" :http-request="handleUplod" :disabled="isUploading"
+                                    :on-change="fileOnChange" :on-remove="removeFile">
                                     <el-button size="mini" type="primary">上传短信内容<i
                                             class="el-icon-upload el-icon--right"></i></el-button>
                                 </el-upload>
@@ -620,8 +620,6 @@
             border-radius: 10px;
             background-color: red;
         }
-
-        .el-upload__tip {}
 
         .import-div {
             display: flex;
