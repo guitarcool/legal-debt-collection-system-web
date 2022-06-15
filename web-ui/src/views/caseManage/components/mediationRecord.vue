@@ -144,9 +144,9 @@
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.loading = false;
-                                            this.exportDialogVisible = false;
+                                            this.dialogVisible = false;
                                             this.download(res.msg);
-                                            this.clearSelection();
+                                            this.$emit('refresh');
                                         }
                                     }).catch(error => {
                                         this.loading = false;
@@ -165,9 +165,9 @@
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.loading = false;
-                                            this.exportDialogVisible = false;
+                                            this.dialogVisible = false;
                                             this.download(res.msg);
-                                            this.clearSelection();
+                                            this.$emit('refresh');
                                         }
                                     }).catch(error => {
                                         this.loading = false;
@@ -187,9 +187,9 @@
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.loading = false;
-                                            this.exportDialogVisible = false;
+                                            this.dialogVisible = false;
                                             this.download(res.msg);
-                                            this.clearSelection();
+                                            this.$emit('refresh');
                                         }
                                     }).catch(error => {
                                         this.loading = false;
@@ -208,9 +208,9 @@
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.loading = false;
-                                            this.exportDialogVisible = false;
+                                            this.dialogVisible = false;
                                             this.download(res.msg);
-                                            this.clearSelection();
+                                            this.$emit('refresh');
                                         }
                                     }).catch(error => {
                                         this.loading = false;
@@ -223,7 +223,7 @@
                         if (this.title == '导出调解记录') {
                             this.$refs["form"].validate((valid) => {
                                 if (valid) {
-                                    this.formLoading = true;
+                                    this.loading = true;
                                     let queryParams = {
                                         caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
@@ -233,19 +233,19 @@
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.dialogVisible = false;
-                                            this.formLoading = false;
-                                            this.clearSelection();
+                                            this.loading = false;
+                                            this.$emit('refresh');
                                             this.download(res.msg);
                                         }
                                     }).catch(() => {
-                                        this.formLoading = false;
+                                        this.loading = false;
                                     });
                                 }
                             });
                         } else if (this.title == '导出网调记录') {
                             this.$refs["form"].validate((valid) => {
                                 if (valid) {
-                                    this.formLoading = true;
+                                    this.loading = true;
                                     let queryParams = {
                                         caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
@@ -254,19 +254,19 @@
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.dialogVisible = false;
-                                            this.formLoading = false;
-                                            this.clearSelection();
+                                            this.loading = false;
+                                            this.$emit('refresh');
                                             this.download(res.msg);
                                         }
                                     }).catch(() => {
-                                        this.formLoading = false;
+                                        this.loading = false;
                                     });
                                 }
                             });
                         } else if (this.title == '全选导出调解记录') {
                             this.$refs["form"].validate((valid) => {
                                 if (valid) {
-                                    this.formLoading = true;
+                                    this.loading = true;
                                     let queryParams = {
                                         caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
@@ -275,20 +275,20 @@
                                     cuttingAfterApi.batchExportMediationRecordAll(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
-                                            this.formLoading = false;
+                                            this.loading = false;
                                             this.dialogVisible = false;
-                                            this.clearSelection();
+                                            this.$emit('refresh');
                                             this.download(res.msg);
                                         }
                                     }).catch(() => {
-                                        this.formLoading = false;
+                                        this.loading = false;
                                     });
                                 }
                             });
                         } else if (this.title == '全选导出网调记录') {
                             this.$refs["form"].validate((valid) => {
                                 if (valid) {
-                                    this.formLoading = true;
+                                    this.loading = true;
                                     let queryParams = {
                                         caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
@@ -296,13 +296,13 @@
                                     cuttingAfterApi.batchExportNetworkAdjustRecordAll(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
-                                            this.formLoading = false;
+                                            this.loading = false;
                                             this.dialogVisible = false;
-                                            this.clearSelection();
+                                            this.$emit('refresh');
                                             this.download(res.msg);
                                         }
                                     }).catch(() => {
-                                        this.formLoading = false;
+                                        this.loading = false;
                                     });
                                 }
                             });
@@ -312,7 +312,7 @@
                         if (this.title == '导出调解记录') {
                             this.$refs["form"].validate((valid) => {
                                 if (valid) {
-                                    this.formLoading = true;
+                                    this.loading = true;
                                     let queryParams = {
                                         caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
@@ -321,20 +321,20 @@
                                     withDrawalApi.batchExportMediationRecord(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
-                                            this.formLoading = false;
+                                            this.loading = false;
                                             this.dialogVisible = false;
-                                            this.clearSelection();
+                                            this.$emit('refresh');
                                             this.download(res.msg);
                                         }
                                     }).catch(() => {
-                                        this.formLoading = false;
+                                        this.loading = false;
                                     });
                                 }
                             });
                         } else if (this.title == '导出网调记录') {
                             this.$refs["form"].validate((valid) => {
                                 if (valid) {
-                                    this.formLoading = true;
+                                    this.loading = true;
                                     let queryParams = {
                                         caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
@@ -342,20 +342,20 @@
                                     withDrawalApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
-                                            this.formLoading = false;
+                                            this.loading = false;
                                             this.dialogVisible = false;
-                                            this.clearSelection();
+                                            this.$emit('refresh');
                                             this.download(res.msg);
                                         }
                                     }).catch(() => {
-                                        this.formLoading = false;
+                                        this.loading = false;
                                     });
                                 }
                             });
                         } else if (this.title == '全选导出调解记录') {
                             this.$refs["form"].validate((valid) => {
                                 if (valid) {
-                                    this.formLoading = true;
+                                    this.loading = true;
                                     let queryParams = {
                                         caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
@@ -364,20 +364,20 @@
                                     withDrawalApi.batchExportMediationRecordAll(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
-                                            this.formLoading = false;
+                                            this.loading = false;
                                             this.dialogVisible = false;
-                                            this.clearSelection();
+                                            this.$emit('refresh');
                                             this.download(res.msg);
                                         }
                                     }).catch(() => {
-                                        this.formLoading = false;
+                                        this.loading = false;
                                     });
                                 }
                             });
                         } else if (this.title == '全选导出网调记录') {
                             this.$refs["form"].validate((valid) => {
                                 if (valid) {
-                                    this.formLoading = true;
+                                    this.loading = true;
                                     let queryParams = {
                                         caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
@@ -385,13 +385,13 @@
                                     withDrawalApi.batchExportNetworkAdjustRecordAll(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
-                                            this.formLoading = false;
+                                            this.loading = false;
                                             this.dialogVisible = false;
-                                            this.clearSelection();
+                                            this.$emit('refresh');
                                             this.download(res.msg);
                                         }
                                     }).catch(() => {
-                                        this.formLoading = false;
+                                        this.loading = false;
                                     });
                                 }
                             });
