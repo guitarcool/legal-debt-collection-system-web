@@ -6,7 +6,7 @@
                 <div>
                     <span style="color:#000;font-size:18px;margin-right:10px">姓名: {{firstInfo.name}}</span>
                     <span>【案件状态：{{statusFormat(firstInfo.caseStatus)}}】</span>
-                    <span>
+                    <span v-if="firstInfo.commonCaseNum>1">
                         <el-tag type="danger" effect="plain">共债</el-tag>
                     </span>
                 </div>
@@ -106,13 +106,17 @@
                         {{xuanwuStatusFormat(firstInfo.deliverStatus) !=""?xuanwuStatusFormat(firstInfo.deliverStatus):firstInfo.deliverStatus}}
                     </p>
                 </div>
-                <div class="small-three">
+                <div class="small-three" v-if="firstInfo.commonCaseNum>1">
                     <p class="small-unit-header">共债案件数量：</p>
-                    <p class="small-unit-conent">{{ firstInfo.subjectAmount }}</p>
+                    <p class="small-unit-conent">{{ firstInfo.commonCaseNum }}</p>
                 </div>
-                <div class="small-three">
+                <div class="small-three" v-if="firstInfo.commonCaseNum>1">
                     <p class="small-unit-header">共债案件标的总额：</p>
-                    <p class="small-unit-conent">{{ firstInfo.remainingBalance }}</p>
+                    <p class="small-unit-conent">{{ firstInfo.commonSubjectAmount }}</p>
+                </div>
+                <div class="small-three" v-if="firstInfo.commonCaseNum>1">
+                    <p class="small-unit-header">共债案件剩余待还总额：</p>
+                    <p class="small-unit-conent">{{ firstInfo.commonRemainingBalanceAmount }}</p>
                 </div>
             </div>
         </div>
@@ -538,31 +542,38 @@
                         </div>
                     </div>
                 </el-tab-pane>
-            </el-tabs>
-        </div>
-        <div class="box">
-            <el-tooltip style="float: right;position: relative;z-index: 11;" class="item" effect="dark" content="刷新"
-                placement="top">
-                <el-button circle icon="el-icon-refresh" @click="getCaseBaseInfo(infoType)" />
-            </el-tooltip>
-            <el-tabs v-model="debtActiveName" type="card" @tab-click="debtHandleClick">
-                <el-tab-pane v-for="(item,index) in debtList" :key="index" :label="item.label" :name="item.name">
-                    <div class="box-content">
-                        <div class="small-three">
-                            <p class="small-unit-header">订单号：</p>
-                            <p class="small-unit-conent">{{item.caseId}}</p>
-                        </div>
-                        <div class="small-three">
-                            <p class="small-unit-header">催收机构：</p>
-                            <p class="small-unit-conent">{{item.deptName}}</p>
-                        </div>
-                        <div class="small-three">
-                            <el-button type="primary" size="mini" @click="goInfo(item)">案件详情</el-button>
-                        </div>
-                        <div class="small-three">
-                            <p class="small-unit-header"></p>
-                            <p class="small-unit-conent"></p>
-                        </div>
+                <el-tab-pane label="共债案件" name="commonCase">
+                    <!--被申请人联系号码列表-->
+                    <div class="box" style="margin-bottom:0px">
+                        <el-table ref="Table" :data="commonCaseList" style="width: 100%; margin-top: 20px">
+                            <el-table-column label="案件批次号" prop="respondentName">
+                            </el-table-column>
+                            <el-table-column prop="assetLastAssignee" width="130" :show-overflow-tooltip="true" label="资产最终受让方"></el-table-column>
+                            <el-table-column prop="productName" label="产品名称"></el-table-column>
+                            <el-table-column prop="subjectAmount" label="标的金额"></el-table-column>
+                            <el-table-column prop="capital" label="借款本金"></el-table-column>
+                            <el-table-column prop="terms" label="分期期数"></el-table-column>
+                            <el-table-column prop="loanDate" label="放款日期"></el-table-column>
+                            <el-table-column prop="overdueStartTime" label="逾期时间">
+                                <template slot-scope="scope">
+                                    <span>{{
+                                        parseTime(scope.row.overdueStartTime, "{y}-{m}-{d}")
+                                    }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="remainingBalance" label="剩余待还总额"></el-table-column>
+                            <el-table-column prop="mediationLabel"  width="130" :formatter="getContactResultOptions" label="最近一次调解标签"></el-table-column>
+                            <el-table-column prop="lastCallTime" width="130" label="最近一次外呼时间"></el-table-column>
+                            <el-table-column prop="principalName" label="调解员"></el-table-column>
+                            <el-table-column prop="id" width="130" label="订单号" :show-overflow-tooltip="true"></el-table-column>
+                            <el-table-column prop="caseStatus" label="案件状态" :formatter="getstatusFormat"></el-table-column>
+                            <el-table-column label="操作" width="150" fixed="right" align="center">
+                                <template slot-scope="scope">
+                                    <el-button size="mini" type="primary" @click="goInfo(scope.row)">案件详情
+                                    </el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
                     </div>
                 </el-tab-pane>
             </el-tabs>
@@ -653,10 +664,6 @@
                             <el-input style="width:400px;" maxlength="100" show-word-limit
                                 v-model="adjustmentForm.content" type="textarea" :rows="2" placeholder="请输入内容">
                             </el-input>
-                        </el-form-item>
-                        <el-form-item label-width="180px" label="同步调解记录到共债案件" prop="intention">
-                            <el-switch v-model="adjustmentForm.intention" :active-value="1" :inactive-value="0">
-                            </el-switch>
                         </el-form-item>
                         <el-form-item label="网调参考地址：">
                             <a class="inter-a" v-for="item in interWeb" :key="item.dictValue" target="_blank"
@@ -998,6 +1005,7 @@
                 orderInfo: {},
                 medRecordList: [],
                 contactInfosList: [],
+                commonCaseList: [],
                 relationalContactList: [],
                 netRecordList: [],
                 repRecordList: [],
@@ -1189,20 +1197,6 @@
                     11: 12,
                     5: 10
                 },
-                debtActiveName: 'first',
-                debtList: [{
-                        label: '共债案件1',
-                        caseId: 1,
-                        deptName: '111',
-                        name: 'first'
-                    },
-                    {
-                        label: '共债案件2',
-                        caseId: 2,
-                        deptName: '222',
-                        name: 'list2'
-                    }
-                ]
             };
         },
         created() {
@@ -1333,6 +1327,7 @@
                 this.orderInfo = {};
                 this.medRecordList = [];
                 this.contactInfosList = [];
+                this.commonCaseList = [];
                 this.relationalContactList = [];
                 this.netRecordList = [];
                 this.repRecordList = [];
@@ -1385,13 +1380,13 @@
                     type: infoType,
                 }
                 cuttingBeforeApi.getCaseBaseInfo(this.baseInfoParams).then((response) => {
-                    if (infoType === "subject") {
+                    if (infoType == "subject") {
                         this.subjectInfo = response.data;
                         if (this.firstInfo.isDesensitization && !this.isDesensitization) {
                             this.subjectInfo.dueBankAccount = this.subjectInfo.dueBankAccount?.replace(
                                 /^(.{4})(?:\d+)(.{4})$/, "$1 **** **** $2");
                         }
-                    } else if (infoType === "contact") {
+                    } else if (infoType == "contact") {
                         this.contactInfo = response.data;
                         this.contactInfosList = response.data.contactInfo || [];
                         this.relationalContactList = response.data.relatedInfo || [];
@@ -1405,47 +1400,49 @@
                                     /(\d{3})\d*(\d{4})/, "$1****$2")
                             });
                         }
-                    } else if (infoType === "borrower") {
+                    } else if (infoType == "borrower") {
                         this.borrowerInfo = response.data;
                         if (this.firstInfo.isDesensitization && !this.isDesensitization) {
                             this.borrowerInfo.respondentIdNo = this.borrowerInfo.respondentIdNo?.replace(
                                 /(?<=\d{3})\d{12}(?=\d{2})/, "************");
                         }
-                    } else if (infoType === "repayAccount") {
+                    } else if (infoType == "repayAccount") {
                         this.repayAccountList = response.data;
-                    } else if (infoType === "remark") {
+                    } else if (infoType == "remark") {
                         this.remarkInfo = response.data;
-                    } else if (infoType === "preProperty") {
+                    }else if (infoType == "preProperty") {
                         this.prePropertyInfo = response.data;
-                    } else if (infoType === "preProperty") {
-                        this.prePropertyInfo = response.data;
-                    } else if (infoType === "orderInfo") {
+                    } else if (infoType == "orderInfo") {
                         this.orderInfo = response.data;
+                    } else if (infoType == "commonCase") {
+                        this.commonCaseList = response.data.caseInfo;
                     }
                 });
             },
             handleClick(tab) {
                 this.infoType = tab.name;
-                if (tab.name === "subject" && Object.keys(this.subjectInfo).length === 0) {
+                if (tab.name == "subject" && Object.keys(this.subjectInfo).length == 0) {
                     this.getCaseBaseInfo(tab.name)
-                } else if (tab.name === "contact" && Object.keys(this.contactInfo).length === 0) {
+                } else if (tab.name == "contact" && Object.keys(this.contactInfo).length == 0) {
                     this.getCaseBaseInfo(tab.name)
-                } else if (tab.name === "borrower" && Object.keys(this.borrowerInfo).length === 0) {
+                } else if (tab.name == "borrower" && Object.keys(this.borrowerInfo).length == 0) {
                     this.getCaseBaseInfo(tab.name)
-                } else if (tab.name === "repayAccount" && this.repayAccountList.length === 0) {
+                } else if (tab.name == "repayAccount" && this.repayAccountList.length == 0) {
                     this.getCaseBaseInfo(tab.name)
-                } else if (tab.name === "remark" && Object.keys(this.remarkInfo).length === 0) {
+                } else if (tab.name == "remark" && Object.keys(this.remarkInfo).length == 0) {
                     this.getCaseBaseInfo(tab.name)
-                } else if (tab.name === "preProperty" && Object.keys(this.prePropertyInfo).length === 0) {
+                } else if (tab.name == "preProperty" && Object.keys(this.prePropertyInfo).length == 0) {
                     this.getCaseBaseInfo(tab.name)
-                } else if (tab.name === "orderInfo" && Object.keys(this.orderInfo).length === 0) {
+                } else if (tab.name == "orderInfo" && Object.keys(this.orderInfo).length == 0) {
+                    this.getCaseBaseInfo(tab.name)
+                } else if (tab.name == "commonCase" && this.commonCaseList.length == 0) {
                     this.getCaseBaseInfo(tab.name)
                 }
             },
             handleClickTwo(tab, event) {
-                if (tab.name === "first" && Object.keys(this.contactInfo).length === 0) {
+                if (tab.name == "first" && Object.keys(this.contactInfo).length == 0) {
                     this.getCaseBaseInfo('contact')
-                } else if (tab.name === "second" && Object.keys(this.contactInfo).length === 0) {
+                } else if (tab.name == "second" && Object.keys(this.contactInfo).length == 0) {
                     this.getCaseBaseInfo('contact')
                 }
             },
@@ -1465,7 +1462,7 @@
                     type: caseType,
                 }
                 cuttingBeforeApi.getCaseRecordInfo(this.caseInfoParams).then((response) => {
-                    if (caseType === "medRecord") {
+                    if (caseType == "medRecord") {
                         this.medRecordList = response.data;
                         if (this.firstInfo.isDesensitization && !this.isDesensitization) {
                             this.medRecordList.forEach(element => {
@@ -1473,11 +1470,11 @@
                                     "$1****$2")
                             });
                         }
-                    } else if (caseType === "netRecord") {
+                    } else if (caseType == "netRecord") {
                         this.netRecordList = response.data;
-                    } else if (caseType === "repRecord") {
+                    } else if (caseType == "repRecord") {
                         this.repRecordList = response.data;
-                    } else if (caseType === "callRecord") {
+                    } else if (caseType == "callRecord") {
                         this.callRecordList = response.data;
                         if (this.firstInfo.isDesensitization && !this.isDesensitization) {
                             this.callRecordList.forEach(element => {
@@ -1485,7 +1482,7 @@
                                     "$1****$2")
                             });
                         }
-                    } else if (caseType === "msgRecord") {
+                    } else if (caseType == "msgRecord") {
                         this.msgRecordList = response.data;
                         if (this.firstInfo.isDesensitization && !this.isDesensitization) {
                             this.msgRecordList.forEach(element => {
@@ -1493,24 +1490,24 @@
                                     "$1****$2")
                             });
                         }
-                    } else if (caseType === "statusRecord") {
+                    } else if (caseType == "statusRecord") {
                         this.statusRecordList = response.data;
                     }
                 });
             },
             handleClickThree(tab, event) {
                 this.caseType = tab.name;
-                if (tab.name === "medRecord" && this.medRecordList.length === 0) {
+                if (tab.name == "medRecord" && this.medRecordList.length == 0) {
                     this.getCaseRecordInfo(tab.name)
-                } else if (tab.name === "netRecord" && this.netRecordList.length === 0) {
+                } else if (tab.name == "netRecord" && this.netRecordList.length == 0) {
                     this.getCaseRecordInfo(tab.name)
-                } else if (tab.name === "repRecord" && this.repRecordList.length === 0) {
+                } else if (tab.name == "repRecord" && this.repRecordList.length == 0) {
                     this.getCaseRecordInfo(tab.name)
-                } else if (tab.name === "callRecord" && this.callRecordList.length === 0) {
+                } else if (tab.name == "callRecord" && this.callRecordList.length == 0) {
                     this.getCaseRecordInfo(tab.name)
-                } else if (tab.name === "msgRecord" && this.msgRecordList.length === 0) {
+                } else if (tab.name == "msgRecord" && this.msgRecordList.length == 0) {
                     this.getCaseRecordInfo(tab.name)
-                } else if (tab.name === "statusRecord" && this.statusRecordList.length === 0) {
+                } else if (tab.name == "statusRecord" && this.statusRecordList.length == 0) {
                     this.getCaseRecordInfo(tab.name)
                 }
             },
@@ -1523,7 +1520,7 @@
                 this.$refs["adjustmentForm"].validate((valid) => {
                     if (valid) {
                         cuttingBeforeApi.addNetworkAdjustRecord(this.adjustmentForm).then(res => {
-                            if (res.code === 200) {
+                            if (res.code == 200) {
                                 this.msgSuccess("新增成功");
                                 this.getCaseRecordInfo('netRecord');
                                 this.resetForm("adjustmentForm");
@@ -1583,7 +1580,7 @@
                         cuttingBeforeApi
                             .common(`/case/pretrial/mediationSuccess`, param)
                             .then((res) => {
-                                if (res.code === 200) {
+                                if (res.code == 200) {
                                     that.msgSuccess("操作成功");
                                     that.getAdjudgedInfo();
                                 }
@@ -1608,7 +1605,7 @@
                         cuttingBeforeApi
                             .common(`/case/postAdjudged/pendingExecute`, param)
                             .then((res) => {
-                                if (res.code === 200) {
+                                if (res.code == 200) {
                                     that.msgSuccess("操作成功");
                                     that.getAdjudgedInfo();
                                 }
@@ -1632,7 +1629,7 @@
                 columnIndex
             }) {
                 // 状态列字体颜色
-                if (row.red && columnIndex === 2) {
+                if (row.red && columnIndex == 2) {
                     return "color: red";
                 } else {
                     return "color: black";
@@ -1645,7 +1642,7 @@
                 columnIndex
             }) {
                 // 状态列字体颜色
-                if (row.red && columnIndex === 2) {
+                if (row.red && columnIndex == 2) {
                     return "color: red";
                 } else {
                     return "color: black";
@@ -1664,7 +1661,7 @@
                             cid: that.id,
                         };
                         cuttingBeforeApi.property(param).then((res) => {
-                            if (res.code === 200) {
+                            if (res.code == 200) {
                                 that.msgSuccess("操作成功");
                                 that.getAdjudgedInfo();
                             }
@@ -1719,6 +1716,10 @@
             statusFormat(caseStatus) {
                 return this.selectDictLabel(this.statusOptions, caseStatus);
             },
+            // 案件状态字典翻译
+            getstatusFormat(row, column) {
+                return this.selectDictLabel(this.statusOptions, row.caseStatus);
+            },
             // 房屋状态
             houseFormat(house) {
                 return this.selectDictLabel(this.house, house);
@@ -1767,9 +1768,9 @@
             contactResultFormat(medLable) {
                 return this.selectDictLabel(this.contactResultOptions, medLable);
             },
-            //联系标签
-            contactResultFormat(medLable) {
-                return this.selectDictLabel(this.contactResultOptions, medLable);
+            //调解标签
+            getContactResultOptions(row, column) {
+                return this.selectDictLabel(this.contactResultOptions, row.mediationLabel);
             },
             //联系状态
             contactStatusFormat(contactStatus) {
@@ -1910,7 +1911,7 @@
                         cuttingBeforeApi
                             .common(`/case/pretrial/multipleMediation`, param)
                             .then((res) => {
-                                if (res.code === 200) {
+                                if (res.code == 200) {
                                     that.msgSuccess("操作成功");
                                     that.getAdjudgedInfo();
                                 }
@@ -1933,7 +1934,7 @@
                             caseId: that.id
                         };
                         cuttingBeforeApi.common(`/case/pretrial/pending`, param).then((res) => {
-                            if (res.code === 200) {
+                            if (res.code == 200) {
                                 that.msgSuccess("操作成功");
                                 that.getAdjudgedInfo();
                             }
@@ -1958,7 +1959,7 @@
                         cuttingBeforeApi
                             .common(`/case/postAdjudged/closed`, param)
                             .then((res) => {
-                                if (res.code === 200) {
+                                if (res.code == 200) {
                                     that.msgSuccess("操作成功");
                                     that.getAdjudgedInfo();
                                 }
@@ -2035,9 +2036,9 @@
                             ids: that.id,
                         };
                         cuttingBeforeApi.applyCaseEdit(param).then((res) => {
-                            if (res.code === 200) {
+                            if (res.code == 200) {
                                 that.msgSuccess(res.msg);
-                            } else if (res.code === 500) {
+                            } else if (res.code == 500) {
                                 that.msgError(res.msg);
                             }
                         });
@@ -2100,16 +2101,16 @@
             nextCase(type) {
                 let targetIndex = this.idList.findIndex(item => item == this.id);
                 let idx
-                if (type === 2) {
+                if (type == 2) {
                     idx = targetIndex + 1;
                 } else {
                     idx = targetIndex - 1;
                 }
-                if (idx === this.idList.length) {
+                if (idx == this.idList.length) {
                     this.msgError('本案件已是当前列表最后一个案件，如需查看下一页案件，请到列表中选择下一页！');
                     return
                 }
-                if (idx === -1) {
+                if (idx == -1) {
                     this.msgError('本案件已是当前列表第一个案件！');
                     return
                 }
