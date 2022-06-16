@@ -596,10 +596,6 @@
                             <el-switch v-model="ruleForm.intention" :active-value="1" :inactive-value="0">
                             </el-switch>
                         </el-form-item>
-                        <el-form-item label-width="180px" label="同步调解记录到共债案件" prop="intention">
-                            <el-switch v-model="ruleForm.intention" :active-value="1" :inactive-value="0">
-                            </el-switch>
-                        </el-form-item>
                         <el-form-item label="承诺还款日" prop="promiseRepayDate" v-if="ruleForm.intention == 1">
                             <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.promiseRepayDate"
                                 style="width:400px;" format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>

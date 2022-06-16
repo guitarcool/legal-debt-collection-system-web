@@ -138,7 +138,7 @@
             </template>
             <template #filter>
                 <el-form-item label="共债案件仅展示一条：" class="custom-radio">
-                    <el-switch v-model="queryParams.value" active-color="#13ce66" inactive-color="#ff4949">
+                    <el-switch @change="changeStatus" v-model="commonFlag" active-color="#13ce66" inactive-color="#ff4949">
                     </el-switch>
                 </el-form-item>
                 <el-form-item label="联系状态：" class="custom-radio">
@@ -327,8 +327,8 @@
             <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange"
                 ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
-                <el-table-column prop="tag" label="标签" width="100" align="center" fixed="left">
-                    <template>
+                <el-table-column prop="commonFlag" label="标签" width="100" align="center" fixed="left">
+                    <template slot-scope="scope" v-if="scope.row.commonFlag == 1">
                         <el-tag type="danger">共债</el-tag>
                     </template>
                 </el-table-column>
@@ -531,9 +531,11 @@
                     contactStatus: "",
                     repayStatus: "",
                     caseStatuss: [],
+                    commonFlag: -1,
                     orderByColumn: "",
                     isAsc: "",
                 },
+                commonFlag:false,
                 rules: {
                     status: [{
                         required: true,
@@ -838,6 +840,7 @@
         },
         methods: {
             resetAll() {
+                this.commonFlag = false;
                 this.chooseDaterange = [];
                 this.chooseDaterange1 = [];
                 this.chooseDaterange2 = [];
@@ -870,6 +873,7 @@
             },
             /** 查询角色列表 */
             getList(type) {
+                this.queryParams.commonFlag = this.commonFlag == false? -1:1;
                 this.loading = true;
                 //查询
                 if (type == 1) {
