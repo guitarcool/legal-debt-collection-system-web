@@ -64,7 +64,7 @@
             </template>
             <template #filter>
                 <el-form-item label="共债案件仅展示一条：" class="custom-radio">
-                    <el-switch @change="changeStatus" v-model="commonFlag" active-color="#13ce66" inactive-color="#ff4949">
+                    <el-switch @change="changeStatus" v-model="queryParams.commonFlag" :active-value="1" :inactive-value="-1" active-color="#13ce66" inactive-color="#ff4949">
                     </el-switch>
                 </el-form-item>
                 <el-form-item label="案件状态：" class="custom-radio">
@@ -372,7 +372,6 @@
                     orderByColumn: "",
                     isAsc: "",
                 },
-                commonFlag:false,
                 entrustType: [],
                 statusOptions: [],
                 recordData: {
@@ -445,7 +444,7 @@
         methods: {
             /** 查询角色列表 */
             getList(type) {
-                this.queryParams.commonFlag = this.commonFlag == false? -1:1;
+                this.queryParams.commonFlag = this.queryParams.commonFlag?this.queryParams.commonFlag:-1;
                 this.loading = true;
                 //查询
                 if (type == 1) {
@@ -612,7 +611,7 @@
                 });
             },
             resetAll() {
-                this.commonFlag = false;
+                this.queryParams.commonFlag = -1;
                 this.queryParams.exist = 1;
                 this.queryParams.caseStatuss = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
             },

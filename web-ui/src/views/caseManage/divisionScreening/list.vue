@@ -138,7 +138,7 @@
             </template>
             <template #filter>
                 <el-form-item label="共债案件仅展示一条：" class="custom-radio">
-                    <el-switch @change="changeStatus" v-model="commonFlag" active-color="#13ce66" inactive-color="#ff4949">
+                    <el-switch @change="changeStatus" v-model="queryParams.commonFlag" :active-value="1" :inactive-value="-1" active-color="#13ce66" inactive-color="#ff4949">
                     </el-switch>
                 </el-form-item>
                 <el-form-item label="联系状态：" class="custom-radio">
@@ -535,7 +535,6 @@
                     orderByColumn: "",
                     isAsc: "",
                 },
-                commonFlag:false,
                 rules: {
                     status: [{
                         required: true,
@@ -840,7 +839,7 @@
         },
         methods: {
             resetAll() {
-                this.commonFlag = false;
+                this.queryParams.commonFlag = -1;
                 this.chooseDaterange = [];
                 this.chooseDaterange1 = [];
                 this.chooseDaterange2 = [];
@@ -873,7 +872,7 @@
             },
             /** 查询角色列表 */
             getList(type) {
-                this.queryParams.commonFlag = this.commonFlag == false? -1:1;
+                this.queryParams.commonFlag = this.queryParams.commonFlag?this.queryParams.commonFlag:-1;
                 this.loading = true;
                 //查询
                 if (type == 1) {
