@@ -110,8 +110,8 @@
             <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange"
                 ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
-                <el-table-column prop="tag" label="标签" width="100" align="center" fixed="left">
-                    <template>
+                <el-table-column prop="commonFlag" label="标签" width="100" align="center" fixed="left">
+                    <template slot-scope="scope" v-if="scope.row.commonFlag == 1">
                         <el-tag type="danger">共债</el-tag>
                     </template>
                 </el-table-column>
