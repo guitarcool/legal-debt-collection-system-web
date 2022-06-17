@@ -178,6 +178,8 @@
                 this.resetAddForm();
                 this.tableShow = false;
                 this.form.assignObject = "0";
+                this.form.jointDebtAssign = "0";
+                this.form.assignScale = "0";
             },
             // 提交上传文件
             submit() {
