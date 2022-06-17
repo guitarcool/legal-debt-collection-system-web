@@ -138,7 +138,9 @@
                 },
                 loading: false,
                 form: {
+                    jointDebtAssign:"",
                     assignObject: "",
+                    assignScale: "",
                     caseAssignScales: [],
                     mediateIds: []
                 },
@@ -176,10 +178,10 @@
             openDialog() {
                 initObj(this.form);
                 this.resetAddForm();
-                this.tableShow = false;
                 this.form.assignObject = "0";
                 this.form.jointDebtAssign = "0";
                 this.form.assignScale = "0";
+                this.tableShow = false;
             },
             // 提交上传文件
             submit() {
