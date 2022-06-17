@@ -131,9 +131,9 @@
             <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange"
                 ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
-                <el-table-column prop="commonFlag" label="标签" width="100" align="center" fixed="left">
-                    <template slot-scope="scope" v-if="scope.row.commonFlag == 1">
-                        <el-tag type="danger">共债</el-tag>
+                <el-table-column prop="jointdebtId" label="标签" width="100" align="center" fixed="left">
+                    <template slot-scope="scope" v-if="scope.row.jointdebtId">
+                        <el-tag type="danger">共债还款</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="还款ID" prop="id" width="60" :show-overflow-tooltip="true" fixed="left" />
@@ -213,7 +213,7 @@
         <erweima :title="erweimaData.title" :url="erweimaData.url" :show.sync="erweimaData.dialogVisible">
         </erweima>
         <applyAudit @refresh="clearSelection" :title="applyData.title" :show.sync="applyData.dialogVisible"
-            :id="applyData.id" :item="applyData.item"></applyAudit>
+            :id="applyData.id" :jointdebtId="applyData.jointdebtId" :item="applyData.item"></applyAudit>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
             :ids="exportData.ids" :requestApi="exportData.requestApi" :total="exportData.total"></exportDialog>
     </div>
@@ -291,7 +291,8 @@
                     title: '',
                     dialogVisible: false,
                     id: -999,
-                    item: ''
+                    item: '',
+                    jointdebtId: '',
                 },
                 selection: [],
                 erweimaData: {
@@ -475,6 +476,7 @@
                 this.applyData.title = '审核申请';
                 this.applyData.dialogVisible = true;
                 this.applyData.id = item.id;
+                this.applyData.jointdebtId = item.jointdebtId;
                 this.applyData.item = JSON.stringify(item)
             },
             //撤销审核

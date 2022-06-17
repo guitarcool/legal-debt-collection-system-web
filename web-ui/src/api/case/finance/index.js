@@ -47,6 +47,13 @@ const financeApi = {
             url: '/case/financial/getPostName',
             method: 'get'
         })
+    },
+    //获取共债明细
+    getJointdebtDetail(jointdebtId) {
+        return request({
+            url: '/case/financial/getJointdebtDetail?jointdebtId='+jointdebtId,
+            method: 'get'
+        })
     }
 }
 

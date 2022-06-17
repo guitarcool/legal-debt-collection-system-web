@@ -30,23 +30,21 @@
             </el-form>
 
             <el-form ref="submitForm" :model="submitForm" :rules="rules" label-width="110px">
-                <div v-for="(domain, index) in submitForm.domains" :key="domain.key">
-                    <el-form-item :label="'还款案件' + (index+1)" :prop="'domains.' + index + '.payChannal'"
-                        :rules="{ required: true, message: '请选择还款案件', trigger: 'change'}">
-                        <el-select v-model="domain.payChannal" placeholder="请选择" filterable>
-                            <el-option v-for="item in remittanceTypes" :key="item.dictValue" :label="item.dictLabel"
-                                :value="item.dictValue">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item :label="'汇款金额' + (index+1)" :prop="'domains.' + index + '.amount'"
-                        :rules="[{ required: true, message: '请输入汇款金额', trigger: 'blur'}, { type: 'number', message: '汇款金额必须为大于0的数字'}]">
-                        <el-input style="width:200px;" v-model.number="domain.amount"></el-input>
-                        <el-button size="mini" style="margin-left:10px;" icon="el-icon-circle-plus-outline"
-                            @click="addDomain" circle />
-                        <el-button size="mini" icon="el-icon-remove-outline" @click.prevent="removeDomain(domain)"
-                            circle />
-                    </el-form-item>
+                <div v-if="jointdebtId">
+                    <div v-for="(domain, index) in submitForm.domains" :key="domain.key">
+                        <el-form-item :label="'还款案件' + (index+1)" :prop="'domains.' + index + '.caseId'"
+                            :rules="{ required: true, message: '请选择还款案件', trigger: 'change'}">
+                            <el-select style="width:50%" disabled v-model="domain.caseId" placeholder="请选择" filterable>
+                                <el-option :label="domain.caseId +'-'+ domain.productName +'-'+ domain.subjectAmount"
+                                    :value="domain.caseId">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="'汇款金额' + (index+1)" :prop="'domains.' + index + '.subjectAmount'"
+                            :rules="[{ required: true, message: '请输入汇款金额', trigger: 'blur'}, { type: 'number', message: '汇款金额必须为大于0的数字'}]">
+                            <el-input style="width:50%" disabled v-model.number="domain.subjectAmount"></el-input>
+                        </el-form-item>
+                    </div>
                 </div>
                 <el-form-item label="审批结果：" prop="operate">
                     <el-radio-group v-model="submitForm.operate">
@@ -97,8 +95,9 @@
                     serialNo: '',
                     option: '',
                     domains: [{
-                        amount: '',
-                        payChannal: ''
+                        caseId: '',
+                        productName: '',
+                        subjectAmount: ''
                     }],
                 },
                 form: {},
@@ -142,6 +141,10 @@
                 type: Number,
                 default: -999
             },
+            jointdebtId: {
+                type: String,
+                default: ''
+            },
             item: {
                 type: String,
                 default: ''
@@ -176,7 +179,17 @@
                 this.submitForm.id = this.id;
                 this.form.repayType = this.form.repayType.toString();
                 this.submitForm.operate = 1;
-                this.addDomain();
+                if (this.jointdebtId) {
+                    this.getList();
+                }
+            },
+            getList() {
+                //查询
+                financeApi.getJointdebtDetail(this.jointdebtId).then((response) => {
+                    this.submitForm.domains = response.data;
+                }).catch(() => {
+                    this.caseList = [];
+                });
             },
             //重置表单清除验证
             resetAddForm() {
@@ -203,7 +216,8 @@
                             id: this.id,
                             serialNo: this.submitForm.serialNo,
                             options: this.submitForm.option,
-                            operate: this.submitForm.operate
+                            operate: this.submitForm.operate,
+                            jointdebtId: this.jointdebtId,
                         }
                         financeApi.applyModify(param).then(res => {
                             if (res.code === 200) {
@@ -221,21 +235,6 @@
                 this.erweimaData.url = item.remitEvidencePath;
                 // 控制弹窗组件显示
                 this.erweimaData.dialogVisible = true
-            },
-            //删除
-            removeDomain(item) {
-                var index = this.submitForm.domains.indexOf(item)
-                if (index !== 0) {
-                    this.submitForm.domains.splice(index, 1)
-                }
-            },
-            //初始化新增
-            addDomain() {
-                this.submitForm.domains.push({
-                    amount: '',
-                    payChannal: '',
-                    key: Date.now()
-                });
             },
         }
     }
