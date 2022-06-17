@@ -217,7 +217,6 @@
                             serialNo: this.submitForm.serialNo,
                             options: this.submitForm.option,
                             operate: this.submitForm.operate,
-                            jointdebtId: this.jointdebtId,
                         }
                         financeApi.applyModify(param).then(res => {
                             if (res.code === 200) {
