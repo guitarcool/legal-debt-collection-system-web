@@ -306,7 +306,7 @@
                         formData.append("accountNoShou", this.form.accountNoShou);
                         formData.append("remittanceTime", this.form.remittanceTime);
                         formData.append("payChannal", this.form.payChannal);
-                        formData.append("repayCaseAmounts", JSON.stringify(this.form.repayCaseAmounts));
+                        formData.append("repayCaseAmountJson", JSON.stringify(this.form.repayCaseAmounts));
                         const instance = axios.create({
                             withCredentials: true,
                         });
