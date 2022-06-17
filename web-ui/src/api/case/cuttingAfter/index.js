@@ -364,6 +364,13 @@ const cuttingAfterApi = {
             data
         })
     },
+    //共债案件获取
+    getJointdebtCaseInfo(caseId) {
+        return request({
+            url: '/case/financial/getJointdebtCaseInfo?caseId=' + caseId,
+            method: 'get'
+        })
+    },
 }
 
 // 下载用户导入模版

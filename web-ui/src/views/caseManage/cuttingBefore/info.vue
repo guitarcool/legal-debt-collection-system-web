@@ -933,7 +933,7 @@
             @refresh="getCaseBaseInfo('contact')">
         </addPhone>
         <reimbursement :title="reimbursementData.title" :id="id" @refresh="getAdjudgedInfo"
-            :type="reimbursementData.type" :repayList="reimbursementData.repayList"
+            :type="reimbursementData.type" :commonCaseNum="reimbursementData.commonCaseNum" :subjectAmount="reimbursementData.subjectAmount" :repayList="reimbursementData.repayList"
             :remainingBalance="reimbursementData.remainingBalance"
             :outstandingAmount="reimbursementData.outstandingAmount" :show.sync="reimbursementData.dialogVisible">
         </reimbursement>
@@ -1114,7 +1114,9 @@
                     type: 0,
                     remainingBalance: 0,
                     outstandingAmount: 0,
-                    repayList: []
+                    repayList: [],
+                    subjectAmount:0,
+                    commonCaseNum: 0
                 },
                 statusOptions: [],
                 effectiveness: [],
@@ -1892,9 +1894,13 @@
                 this.reimbursementData.dialogVisible = true;
                 this.reimbursementData.type = type;
                 this.reimbursementData.remainingBalance =
-                    this.subjectInfo.remainingBalance;
+                    this.firstInfo.remainingBalance;
                 this.reimbursementData.outstandingAmount =
-                    this.subjectInfo.outstandingAmount;
+                    this.firstInfo.outstandingAmount;
+                this.reimbursementData.subjectAmount =
+                    this.firstInfo.subjectAmount;
+                this.reimbursementData.commonCaseNum =
+                    this.firstInfo.commonCaseNum;
             },
             //多元调解中
             handleFailureing(item) {

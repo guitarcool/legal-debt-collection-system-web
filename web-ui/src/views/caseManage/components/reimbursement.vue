@@ -40,27 +40,29 @@
                 <el-form-item label="汇款账户：" prop="accountNo">
                     <el-input v-model="form.accountNo"></el-input>
                 </el-form-item>
-                <el-form-item label="共债还款：" prop="accountNo">
+                <el-form-item label="共债还款：" prop="accountNo" v-if="commonCaseNum>1">
                     <el-switch v-model="form.switch" @change="switchChange" active-color="#13ce66"
                         inactive-color="#ff4949">
                     </el-switch>
                 </el-form-item>
-                <div v-for="(domain, index) in form.domains" :key="domain.key">
-                    <el-form-item :label="'还款案件' + (index+1)" :prop="'domains.' + index + '.payChannal'"
+                <div v-for="(repay, index) in form.repayCaseAmounts" :key="repay.key">
+                    <el-form-item :label="'还款案件' + (index+1)" :prop="'repayCaseAmounts.' + index + '.caseId'"
                         :rules="{ required: true, message: '请选择还款案件', trigger: 'change'}">
-                        <el-select v-model="domain.payChannal" placeholder="请选择" filterable>
-                            <el-option v-for="item in payChannalOptions" :key="item.dictValue" :label="item.dictLabel"
-                                :value="item.dictValue">
+                        <el-select :disabled="index == 0" style="width:100%" v-model="repay.caseId" placeholder="请选择"
+                            filterable>
+                            <el-option v-for="item in productList" :key="item.caseId"
+                                :label="item.caseId +'-'+ item.productName +'-'+ item.subjectAmount"
+                                :value="item.caseId">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item :label="'汇款金额' + (index+1)" :prop="'domains.' + index + '.amount'"
+                    <el-form-item :label="'汇款金额' + (index+1)" :prop="'repayCaseAmounts.' + index + '.repayAmount'"
                         :rules="[{ required: true, message: '请输入汇款金额', trigger: 'blur'}, { type: 'number', message: '汇款金额必须为大于0的数字'}]">
-                        <el-input style="width:200px;" v-model.number="domain.amount"></el-input>
-                        <el-button size="mini" style="margin-left:10px;" icon="el-icon-circle-plus-outline"
-                            @click="addDomain" circle />
-                        <el-button size="mini" icon="el-icon-remove-outline" @click.prevent="removeDomain(domain)"
-                            circle />
+                        <el-input style="width:80%" v-model.number="repay.repayAmount"></el-input>
+                        <el-button v-if="commonCaseNum>1" size="mini" style="margin-left:10px;"
+                            icon="el-icon-circle-plus-outline" @click="addRepayCaseAmounts" circle />
+                        <el-button v-if="commonCaseNum>1" size="mini" icon="el-icon-remove-outline"
+                            @click.prevent="removeRepayCaseAmounts(repay)" circle />
                     </el-form-item>
                 </div>
                 <el-form-item label="汇款类型：" prop="repayType">
@@ -83,16 +85,6 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item required label="汇款凭证：">
-                    <!--<el-upload-->
-                    <!--class="upload-demo"-->
-                    <!--:action="upload_url"-->
-                    <!--:limit="1"-->
-                    <!--accept=".png, .jpg"-->
-                    <!--:disabled="isUploading"-->
-                    <!--:on-change="fileOnChange"-->
-                    <!--:on-remove="removeFile">-->
-                    <!--<el-button size="mini" type="primary">上传图片</el-button>-->
-                    <!--</el-upload>-->
                     <el-upload class="upload-demo" action="string" :http-request="handleUplod" :limit="1"
                         accept=".png, .jpg" :disabled="isUploading" :on-change="fileOnChange" :on-remove="removeFile"
                         drag :file-list="fileList">
@@ -127,6 +119,8 @@
     import {
         initObj
     } from "@/utils/common";
+    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+
     export default {
         //已判决
         name: "reimbursement",
@@ -150,9 +144,9 @@
                     accountName: "",
                     accountNoShou: "",
                     payChannal: "",
-                    domains: [{
-                        amount: '',
-                        payChannal: ''
+                    repayCaseAmounts: [{
+                        repayAmount: '',
+                        caseId: ''
                     }],
                 },
                 upload_url: process.env.VUE_APP_BASE_API + "/case/pretrial/repayment", //上传URL
@@ -204,6 +198,7 @@
                 remittanceTypes: [],
                 payChannalOptions: [],
                 fileList: [],
+                productList: []
             };
         },
         props: {
@@ -229,6 +224,14 @@
                 default: 0,
             },
             outstandingAmount: {
+                type: Number,
+                default: 0,
+            },
+            subjectAmount: {
+                type: Number,
+                default: 0,
+            },
+            commonCaseNum: {
                 type: Number,
                 default: 0,
             },
@@ -261,6 +264,7 @@
             openDialog() {
                 initObj(this.form);
                 this.resetAddForm();
+                this.getList();
                 this.form.id = this.id;
                 this.form.payChannal = '1';
                 this.removeFile();
@@ -271,7 +275,12 @@
                 } else {
                     this.account = false;
                 }
-                this.addOneDomain();
+                this.addOneRepayCaseAmounts();
+            },
+            getList() {
+                cuttingAfterApi.getJointdebtCaseInfo(this.id).then((response) => {
+                    this.productList = response.data;
+                });
             },
             //重置表单清除验证
             resetAddForm() {
@@ -297,6 +306,7 @@
                         formData.append("accountNoShou", this.form.accountNoShou);
                         formData.append("remittanceTime", this.form.remittanceTime);
                         formData.append("payChannal", this.form.payChannal);
+                        formData.append("repayCaseAmounts", JSON.stringify(this.form.repayCaseAmounts));
                         const instance = axios.create({
                             withCredentials: true,
                         });
@@ -337,7 +347,6 @@
             },
             // 文件上传中处理
             handleFileUploadProgress(event, file, fileList) {
-                //console.log(file)
                 this.isUploading = true;
             },
             fileOnChange(file) {
@@ -359,27 +368,25 @@
                 });
             },
             //删除
-            removeDomain(item) {
-                var index = this.form.domains.indexOf(item)
+            removeRepayCaseAmounts(item) {
+                var index = this.form.repayCaseAmounts.indexOf(item)
                 if (index !== 0) {
-                    this.form.domains.splice(index, 1)
+                    this.form.repayCaseAmounts.splice(index, 1)
                 }
             },
             //初始化新增
-            addOneDomain() {
-                this.form.domains.push({
-                    amount: '',
-                    payChannal: '',
-                    key: Date.now()
+            addOneRepayCaseAmounts() {
+                this.form.repayCaseAmounts.push({
+                    repayAmount: this.subjectAmount,
+                    caseId: this.id,
                 });
             },
             //新增
-            addDomain() {
+            addRepayCaseAmounts() {
                 if (this.form.switch) {
-                    this.form.domains.push({
-                        amount: '',
-                        payChannal: '',
-                        key: Date.now()
+                    this.form.repayCaseAmounts.push({
+                        repayAmount: '',
+                        caseId: '',
                     });
                 } else {
                     this.msgInfo('请开启共债还款后再新增还款案件！');
@@ -389,10 +396,10 @@
             switchChange(value) {
                 switch (true) {
                     case value == true:
-                        this.addDomain();
+                        this.addRepayCaseAmounts();
                         break;
                     case value == false:
-                        this.form.domains.splice(1)
+                        this.form.repayCaseAmounts.splice(1)
                         break;
                 }
             },
