@@ -546,7 +546,7 @@
                     <!--被申请人联系号码列表-->
                     <div class="box" style="margin-bottom:0px">
                         <el-table ref="Table" :data="commonCaseList" style="width: 100%; margin-top: 20px">
-                            <el-table-column label="案件批次号" prop="respondentName">
+                            <el-table-column label="案件批次号" prop="batchNo">
                             </el-table-column>
                             <el-table-column prop="assetLastAssignee" width="130" :show-overflow-tooltip="true" label="资产最终受让方"></el-table-column>
                             <el-table-column prop="productName" label="产品名称"></el-table-column>
@@ -569,7 +569,7 @@
                             <el-table-column prop="caseStatus" label="案件状态" :formatter="getstatusFormat"></el-table-column>
                             <el-table-column label="操作" width="150" fixed="right" align="center">
                                 <template slot-scope="scope">
-                                    <el-button size="mini" type="primary" @click="goInfo(scope.row)">案件详情
+                                    <el-button size="mini" type="primary" @click="goInfo(scope.row.id)">案件详情
                                     </el-button>
                                 </template>
                             </el-table-column>
@@ -2123,7 +2123,14 @@
                 })
             },
             //案件详情跳转
-            goInfo(value) {}
+            goInfo(id) {
+                this.$router.push({
+                    path: `/division/cutBeforeDetails/${id}`,
+                    query: {
+                        beforeId: id
+                    }
+                });
+            }
         },
     };
 
