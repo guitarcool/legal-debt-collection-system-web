@@ -164,7 +164,7 @@ export const constantRoutes = [{
                 component: (resolve) => require(['@/views/caseManage/cuttingBefore/info'], resolve),
                 name: 'cutBeforeDetails',
                 meta: {
-                    title: '裁前详情(外呼)'
+                    title: '裁前详情'
                 }
             },
             {
@@ -188,7 +188,7 @@ export const constantRoutes = [{
                 component: (resolve) => require(['@/views/caseManage/cuttingAfter/info'], resolve),
                 name: 'cutAfterDetails',
                 meta: {
-                    title: '裁后详情(外呼)'
+                    title: '裁后详情'
                 }
             },
             {

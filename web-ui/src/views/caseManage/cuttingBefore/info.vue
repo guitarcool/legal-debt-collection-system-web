@@ -542,7 +542,7 @@
                         </div>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="共债案件" name="commonCase">
+                <el-tab-pane v-if="firstInfo.commonCaseNum>1" label="共债案件" name="commonCase">
                     <!--被申请人联系号码列表-->
                     <div class="box" style="margin-bottom:0px">
                         <el-table ref="Table" :data="commonCaseList" style="width: 100%; margin-top: 20px">
