@@ -217,6 +217,7 @@
                             serialNo: this.submitForm.serialNo,
                             options: this.submitForm.option,
                             operate: this.submitForm.operate,
+                            type: this.form.type
                         }
                         financeApi.applyModify(param).then(res => {
                             if (res.code === 200) {
