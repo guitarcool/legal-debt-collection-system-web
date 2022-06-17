@@ -32,17 +32,15 @@
             <el-form ref="submitForm" :model="submitForm" :rules="rules" label-width="110px">
                 <div v-if="jointdebtId">
                     <div v-for="(domain, index) in submitForm.domains" :key="domain.key">
-                        <el-form-item :label="'还款案件' + (index+1)" :prop="'domains.' + index + '.caseId'"
-                            :rules="{ required: true, message: '请选择还款案件', trigger: 'change'}">
+                        <el-form-item :label="'还款案件' + (index+1)">
                             <el-select style="width:50%" disabled v-model="domain.caseId" placeholder="请选择" filterable>
                                 <el-option :label="domain.caseId +'-'+ domain.productName +'-'+ domain.subjectAmount"
                                     :value="domain.caseId">
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item :label="'汇款金额' + (index+1)" :prop="'domains.' + index + '.subjectAmount'"
-                            :rules="[{ required: true, message: '请输入汇款金额', trigger: 'blur'}, { type: 'number', message: '汇款金额必须为大于0的数字'}]">
-                            <el-input style="width:50%" disabled v-model.number="domain.subjectAmount"></el-input>
+                        <el-form-item :label="'汇款金额' + (index+1)">
+                            <el-input style="width:50%" disabled v-model.number="domain.repayAmount"></el-input>
                         </el-form-item>
                     </div>
                 </div>
@@ -97,7 +95,8 @@
                     domains: [{
                         caseId: '',
                         productName: '',
-                        subjectAmount: ''
+                        subjectAmount: '',
+                        repayAmount:''
                     }],
                 },
                 form: {},
