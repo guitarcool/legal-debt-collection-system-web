@@ -737,7 +737,7 @@
                                 prop="reviewStatus">
                             </el-table-column>
                             <el-table-column prop="createName" width="150" label="提交人"></el-table-column>
-                            <el-table-column prop="amount" label="共债还款"> </el-table-column>
+                            <el-table-column prop="jointdebtAmount" label="共债金额"> </el-table-column>
                             <el-table-column label="操作" width="180" fixed="right" align="center">
                                 <template slot-scope="scope">
                                     <el-button size="mini" type="success" @click="seeErweima2(scope.row)">汇款凭证
