@@ -289,6 +289,8 @@
                 console.log(111);
                 //清空查询
                 this.queryParams = {
+                    pageNum: 1,
+                    pageSize: 50,
                     caseId: "",
                     name: "",
                     exist: "",
