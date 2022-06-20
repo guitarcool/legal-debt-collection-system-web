@@ -493,6 +493,7 @@
                     .then(() => {
                         let data = {
                             id: val.id,
+                            type:val.type,
                         };
                         protectApi.unReviewProperty(data).then((res) => {
                             if (res.code === 200) {
