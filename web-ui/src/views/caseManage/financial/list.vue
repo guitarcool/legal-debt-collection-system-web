@@ -142,7 +142,7 @@
                     fixed="left" />
                 <el-table-column label="还款提交时间" sortable="custom" :sort-orders="['descending', 'ascending']"
                     prop="createTime" width="170" :show-overflow-tooltip="true" />
-                <el-table-column label="审核状态" :formatter="reviewStatusFormat" prop="reviewStatus"></el-table-column>
+                <el-table-column label="审核状态" width="120" :show-overflow-tooltip="true" :formatter="reviewStatusFormat" prop="reviewStatus"></el-table-column>
                 <el-table-column label="身份证号" width="180" prop="respondentIdNo" :show-overflow-tooltip="true"
                     sortable="custom" :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="还款状态" width="150" :show-overflow-tooltip="true" :formatter="repayStatusFormat"

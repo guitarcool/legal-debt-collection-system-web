@@ -3,53 +3,53 @@
         <template v-slot:default>
             <el-form ref="form" :model="form" :rules="rules" label-width="120px">
                 <el-form-item label="汇款凭证：">
-                    <el-button type="text" @click="seeErweima(form)">{{form.remitEvidenceName}}</el-button>
+                    <el-button type="text" @click="seeErweima(form.material)">{{form.material}}</el-button>
                 </el-form-item>
-                <el-form-item label="审批结果：" prop="operate">
-                    <el-radio-group v-model="form.operate">
-                        <el-radio :label="1">通过</el-radio>
-                        <el-radio :label="0">拒绝</el-radio>
+                <el-form-item label="审批结果：" prop="audit">
+                    <el-radio-group v-model="form.audit">
+                        <el-radio label="2">通过</el-radio>
+                        <el-radio label="3">拒绝</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="申请还款类型：" prop="type">
+                <el-form-item label="申请还款类型：" prop="type" v-if="form.audit == 2">
                     <el-select v-model="form.type" filterable placeholder="请选择">
-                        <el-option :value="1">结清</el-option>
-                        <el-option :value="2">部分还款</el-option>
+                        <el-option label="结清" value="1"></el-option>
+                        <el-option label="部分还款" value="2"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="剩余待还总额：">
+                <el-form-item label="剩余待还总额：" v-if="form.audit == 2">
                     <el-input v-model="form.remainingBalance" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="收款账户：" prop="accountNoShou">
+                <el-form-item label="收款账户：" prop="accountNoShou" v-if="form.audit == 2">
                     <el-input v-model="form.accountNoShou"></el-input>
                 </el-form-item>
-                <el-form-item label="收款账户名：" prop="accountName">
+                <el-form-item label="收款账户名：" prop="accountName" v-if="form.audit == 2">
                     <el-input v-model="form.accountName"></el-input>
                 </el-form-item>
-                <el-form-item label="开户行名称：" prop="openbankName">
+                <el-form-item label="开户行名称：" prop="openbankName" v-if="form.audit == 2">
                     <el-input v-model="form.openbankName"></el-input>
                 </el-form-item>
-                <el-form-item label="汇款账号：" prop="accountNo">
+                <el-form-item label="汇款账号：" prop="accountNo" v-if="form.audit == 2">
                     <el-input v-model="form.accountNo" placeholder="请输入汇款账号"></el-input>
                 </el-form-item>
-                <el-form-item label="汇款金额：" prop="amount">
-                    <el-input v-model="form.amount" placeholder="请输入汇款金额"></el-input>
+                <el-form-item label="汇款金额：" prop="repayAmount" v-if="form.audit == 2">
+                    <el-input v-model="form.repayAmount" placeholder="请输入汇款金额"></el-input>
                 </el-form-item>
-                <el-form-item label="汇款类型：" prop="repayType">
+                <el-form-item label="汇款类型：" prop="repayType" v-if="form.audit == 2">
                     <el-select v-model="form.repayType" filterable placeholder="请选择">
                         <el-option v-for="item in remittanceTypes" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="回款渠道：" prop="payChannal">
+                <el-form-item label="回款渠道：" prop="payChannal" v-if="form.audit == 2">
                     <el-select v-model="form.payChannal" placeholder="请选择" filterable>
                         <el-option v-for="item in payChannalOptions" :key="item.dictValue" :label="item.dictLabel"
                             :value="item.dictValue">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="汇款时间：" prop="remittanceTime">
+                <el-form-item label="汇款时间：" prop="remittanceTime" v-if="form.audit == 2">
                     <el-date-picker v-model="form.remittanceTime" type="date" placeholder="选择日期" format="yyyy-MM-dd"
                         value-format="yyyy-MM-dd">
                     </el-date-picker>
@@ -69,12 +69,9 @@
 <script>
     import Dialog from '@/components/Dialog/index'
     import {
-        getToken
-    } from "@/utils/auth";
-    import {
         initObj
     } from '@/utils/common'
-    import financeApi from "@/api/case/finance/index";
+    import officialApi from "@/api/case/officialAccount/index";
     import erweima from '../components/erweima'
     export default {
         //多元调解成功
@@ -86,10 +83,8 @@
         data() {
             return {
                 form: {
-                    operate: '',
+                    audit: '2',
                     id: '',
-                    serialNo: '',
-                    option: '',
                 },
                 rules: {
                     accountNoShou: [{
@@ -122,7 +117,7 @@
                         message: '请选择还款类型',
                         trigger: 'change'
                     }],
-                    operate: [{
+                    audit: [{
                         required: true,
                         message: '请选择审批结果',
                         trigger: 'change'
@@ -200,10 +195,7 @@
             openDialog() {
                 initObj(this.form);
                 this.resetAddForm();
-                this.form = JSON.parse(this.item);
-                this.form.id = this.id;
-                this.form.repayType = this.form.repayType.toString();
-                this.form.operate = 1;
+                this.getRepayDetail();
             },
             //重置表单清除验证
             resetAddForm() {
@@ -213,18 +205,33 @@
 
                 }
             },
+            //获取详情
+            getRepayDetail() {
+                officialApi.repayDetail(this.id).then(
+                    (response) => {
+                        this.form.material = response.data.material;
+                        this.form.caseId = response.data.caseId;
+                        this.form.remainingBalance = response.data.remainingBalance;
+                        this.form.id = this.id;
+                        this.form.audit = '2';
+                    }
+                );
+            },
             submit() {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
-                        let param = {
-                            caseId: this.form.caseId,
-                            respondentName: this.form.respondentName,
-                            id: this.id,
-                            serialNo: this.form.serialNo,
-                            options: this.form.option,
-                            operate: this.form.operate
+                        let params;
+                        if (this.form.audit == 3) {
+                            params = {
+                                audit: 3,
+                                id: this.form.id
+                            }
+                        } else {
+                            params = {
+                                ...this.form
+                            };
                         }
-                        financeApi.applyModify(param).then(res => {
+                        officialApi.repayAudit(params).then(res => {
                             if (res.code === 200) {
                                 this.msgSuccess("操作成功");
                                 this.$emit('refresh')
@@ -236,10 +243,10 @@
             },
             //查看凭证
             seeErweima(item) {
-                this.erweimaData.title = '汇款凭证';
-                this.erweimaData.url = item.remitEvidencePath;
+                this.erweimaData.title = '查看凭证';
+                this.erweimaData.url = item;
                 // 控制弹窗组件显示
-                this.erweimaData.dialogVisible = true
+                this.erweimaData.dialogVisible = true;
             },
         }
     }

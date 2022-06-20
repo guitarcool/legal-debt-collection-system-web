@@ -58,8 +58,13 @@
         },
         methods: {
             openDialog() {
-                this.srcUrl = process.env.VUE_APP_BASE_API + this.url;
-                this.srcList.push(process.env.VUE_APP_BASE_API + this.url);
+                if (this.url.includes("https")) {
+                    this.srcUrl = this.url;
+                    this.srcList.push(this.url);
+                } else {
+                    this.srcUrl = process.env.VUE_APP_BASE_API + this.url;
+                    this.srcList.push(process.env.VUE_APP_BASE_API + this.url);
+                }
             },
             closeDialog() {
                 this.srcUrl = '';
