@@ -131,10 +131,12 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="danger" size="mini" :disabled="multiple" @click="handleMessage" v-hasPermi="['report:shortmsgrecord:batchResend']">重新发送短信</el-button>
+                    <el-button type="danger" size="mini" :disabled="multiple" @click="handleMessage"
+                        v-hasPermi="['report:shortmsgrecord:batchResend']">重新发送短信</el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" size="mini" v-hasPermi="['report:shortmsgrecord:batchResendAll']" @click="handleMessageAll">
+                    <el-button type="success" size="mini" v-hasPermi="['report:shortmsgrecord:batchResendAll']"
+                        @click="handleMessageAll">
                         全选重新发送短信</el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
@@ -220,7 +222,7 @@
     import batchExport from "./batchExport";
 
     export default {
-        name: "callLogList",
+        name: "SmsRecord",
         components: {
             SearchBar,
             exportDialog,
@@ -253,7 +255,7 @@
                     replyContent: "",
                     isAsc: "",
                     caseStatuss: [],
-                    deliverStatuss:[],
+                    deliverStatuss: [],
                 },
                 wodongStatus: [],
                 shisuyunStatus: [],
@@ -282,8 +284,22 @@
                 },
             };
         },
+        watch: {
+            //监控路由参数，实现自己跳自己刷新数据
+            $route() {
+                if (this.$route.params.shortMsgId) {
+                    this.queryParams.id = this.$route.params.shortMsgId;
+                    this.getList(1);
+                }
+            },
+        },
         created() {
-            this.getList(1);
+            if (this.$route.params.shortMsgId) {
+                this.queryParams.id = this.$route.params.shortMsgId;
+                this.getList(1);
+            } else {
+                this.getList(1);
+            }
             this.getUsers();
             //案件状态
             this.getDicts("case_status").then((response) => {
@@ -330,8 +346,7 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
-                    }
-                    ).catch(() => {
+                    }).catch(() => {
                         this.caseList = [];
                         this.total = 0;
                         this.loading = false;
@@ -343,8 +358,7 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
-                    }
-                    ).catch(() => {
+                    }).catch(() => {
                         this.caseList = [];
                         this.total = 0;
                         this.loading = false;

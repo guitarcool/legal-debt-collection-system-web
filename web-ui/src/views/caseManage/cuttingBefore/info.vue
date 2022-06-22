@@ -548,7 +548,8 @@
                         <el-table ref="Table" :data="commonCaseList" style="width: 100%; margin-top: 20px">
                             <el-table-column label="案件批次号" prop="batchNo">
                             </el-table-column>
-                            <el-table-column prop="assetLastAssignee" width="130" :show-overflow-tooltip="true" label="资产最终受让方"></el-table-column>
+                            <el-table-column prop="assetLastAssignee" width="130" :show-overflow-tooltip="true"
+                                label="资产最终受让方"></el-table-column>
                             <el-table-column prop="productName" label="产品名称"></el-table-column>
                             <el-table-column prop="subjectAmount" label="标的金额"></el-table-column>
                             <el-table-column prop="capital" label="借款本金"></el-table-column>
@@ -562,14 +563,17 @@
                                 </template>
                             </el-table-column>
                             <el-table-column prop="remainingBalance" label="剩余待还总额"></el-table-column>
-                            <el-table-column prop="mediationLabel"  width="130" :formatter="getContactResultOptions" label="最近一次调解标签"></el-table-column>
+                            <el-table-column prop="mediationLabel" width="130" :formatter="getContactResultOptions"
+                                label="最近一次调解标签"></el-table-column>
                             <el-table-column prop="lastCallTime" width="130" label="最近一次外呼时间"></el-table-column>
                             <el-table-column prop="principalName" label="调解员"></el-table-column>
-                            <el-table-column prop="id" width="130" label="订单号" :show-overflow-tooltip="true"></el-table-column>
-                            <el-table-column prop="caseStatus" label="案件状态" :formatter="getstatusFormat"></el-table-column>
+                            <el-table-column prop="id" width="130" label="订单号" :show-overflow-tooltip="true">
+                            </el-table-column>
+                            <el-table-column prop="caseStatus" label="案件状态" :formatter="getstatusFormat">
+                            </el-table-column>
                             <el-table-column label="操作" width="150" fixed="right" align="center">
                                 <template slot-scope="scope">
-                                    <el-button size="mini" type="primary" @click="goInfo(scope.row.id)">案件详情
+                                    <el-button size="mini" type="primary" @click="handleItemUpdate(scope.row)">案件详情
                                     </el-button>
                                 </template>
                             </el-table-column>
@@ -933,7 +937,8 @@
             @refresh="getCaseBaseInfo('contact')">
         </addPhone>
         <reimbursement :title="reimbursementData.title" :id="id" @refresh="getAdjudgedInfo"
-            :type="reimbursementData.type" :commonCaseNum="reimbursementData.commonCaseNum" :subjectAmount="reimbursementData.subjectAmount" :repayList="reimbursementData.repayList"
+            :type="reimbursementData.type" :commonCaseNum="reimbursementData.commonCaseNum"
+            :subjectAmount="reimbursementData.subjectAmount" :repayList="reimbursementData.repayList"
             :remainingBalance="reimbursementData.remainingBalance"
             :outstandingAmount="reimbursementData.outstandingAmount" :show.sync="reimbursementData.dialogVisible">
         </reimbursement>
@@ -1115,7 +1120,7 @@
                     remainingBalance: 0,
                     outstandingAmount: 0,
                     repayList: [],
-                    subjectAmount:0,
+                    subjectAmount: 0,
                     commonCaseNum: 0
                 },
                 statusOptions: [],
@@ -1412,7 +1417,7 @@
                         this.repayAccountList = response.data;
                     } else if (infoType == "remark") {
                         this.remarkInfo = response.data;
-                    }else if (infoType == "preProperty") {
+                    } else if (infoType == "preProperty") {
                         this.prePropertyInfo = response.data;
                     } else if (infoType == "orderInfo") {
                         this.orderInfo = response.data;
@@ -2129,14 +2134,23 @@
                 })
             },
             //案件详情跳转
-            goInfo(id) {
-                this.$router.push({
-                    path: `/division/cutBeforeDetails/${id}`,
-                    query: {
-                        beforeId: id
-                    }
-                });
-            }
+            handleItemUpdate(item) {
+                if (item.caseStatus < 7) {
+                    this.$router.push({
+                        path: `/division/cutBeforeDetails/${item.id}`,
+                        query: {
+                            beforeId: item.id
+                        }
+                    });
+                } else if (item.caseStatus >= 7) {
+                    this.$router.push({
+                        path: `/division/cutAfterDetails/${item.id}`,
+                        query: {
+                            afterId: item.id
+                        }
+                    });
+                }
+            },
         },
     };
 

@@ -267,6 +267,7 @@
                 this.getList();
                 this.form.id = this.id;
                 this.form.payChannal = '1';
+                this.form.switch = false;
                 this.removeFile();
                 this.fileList = [];
                 if (this.repayList.length > 0 && this.repayList[0].accountNumber) {

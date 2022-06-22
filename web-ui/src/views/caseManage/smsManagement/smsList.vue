@@ -403,7 +403,10 @@
             },
             goSms(item) {
                 this.$router.push({
-                    path: '/operation/smsRecord'
+                    name: 'SmsRecord',
+                    params: {
+                        shortMsgId: item.id
+                    }
                 });
             },
         },
