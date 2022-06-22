@@ -735,8 +735,11 @@
                                     }}</span>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="还款状态" width="150" :show-overflow-tooltip="true"
-                                :formatter="repayStatusFormat" prop="repayStatus"></el-table-column>
+                            <el-table-column label="还款类型" width="120" prop="type">
+                                <template slot-scope="scope">
+                                    <span>{{scope.row.type== 1?'结清':(scope.row.type== 0?'部分还款':'')}}</span>
+                                </template>
+                            </el-table-column>
                             <el-table-column label="审核状态" width="150" :formatter="reviewStatusFormat"
                                 prop="reviewStatus">
                             </el-table-column>
