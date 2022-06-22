@@ -138,7 +138,8 @@
             </template>
             <template #filter>
                 <el-form-item label="共债案件仅展示一条：" class="custom-radio">
-                    <el-switch @change="changeStatus" v-model="queryParams.commonFlag" :active-value="1" :inactive-value="-1" active-color="#13ce66" inactive-color="#ff4949">
+                    <el-switch @change="changeStatus" v-model="queryParams.commonFlag" :active-value="1"
+                        :inactive-value="-1" active-color="#13ce66" inactive-color="#ff4949">
                     </el-switch>
                 </el-form-item>
                 <el-form-item label="联系状态：" class="custom-radio">
@@ -436,8 +437,8 @@
             <el-form style="margin: 0 auto;" ref="numberForm" :model="numberForm" :rules="rules" label-width="100px">
                 <div v-if="numberForm.title=='全选号码筛选'" style="padding:10px 0;color:red;font-size:16px;line-height:24px">
                     注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
-                <el-form-item label="筛选服务：" prop="radioStatus">
-                    <el-radio-group v-model="numberForm.radioStatus">
+                <el-form-item label="筛选服务：" prop="screenType">
+                    <el-radio-group v-model="numberForm.screenType">
                         <el-radio :label="1">手机号在网状态</el-radio>
                         <el-radio :label="2">手机号实时在网状态</el-radio>
                     </el-radio-group>
@@ -445,15 +446,15 @@
                         注：手机号在网状态结果为正常或停用，手机号号码实时在网状态服务结果包括正常，空号，短时间关机，欠费停机且无短信能力，欠费但能接收短信，长时间关机等细化的结果。
                     </p>
                 </el-form-item>
-                <el-form-item label="筛选对象：" prop="status">
-                    <el-radio-group v-model="numberForm.status">
+                <el-form-item label="筛选对象：" prop="screenTarget">
+                    <el-radio-group v-model="numberForm.screenTarget">
                         <el-radio :label="1">本人</el-radio>
                         <el-radio :label="2">非本人</el-radio>
                         <el-radio :label="3">全部</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="跳过号码：">
-                    <el-checkbox-group v-model="numberForm.jump" @change="jumpChange">
+                    <el-checkbox-group v-model="numberForm.jumpType" @change="jumpTypeChange">
                         <el-checkbox :label="1">号码已筛选</el-checkbox>
                         <el-checkbox :label="2">号码已联系(指已有关联的调解记录)</el-checkbox>
                     </el-checkbox-group>
@@ -475,7 +476,7 @@
             :ids="bindingData.ids" :total="bindingData.total">
         </bindingCase>
         <mediationRecord @refresh="clearSelection" :title="mediationData.title" :show.sync="mediationData.dialogVisible"
-            :ids="mediationData.ids"  :type="mediationData.type" :total="mediationData.total"></mediationRecord>
+            :ids="mediationData.ids" :type="mediationData.type" :total="mediationData.total"></mediationRecord>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
             :ids="exportData.ids" :requestApi="exportData.requestApi" :total="exportData.total"></exportDialog>
     </div>
@@ -541,7 +542,7 @@
                         message: '请选择筛选对象',
                         trigger: 'change'
                     }],
-                    radioStatus: [{
+                    screenType: [{
                         required: true,
                         message: '请选择筛选服务',
                         trigger: 'change'
@@ -708,9 +709,9 @@
                 },
                 numberForm: {
                     title: "",
-                    status: "",
-                    jump: [],
-                    radioStatus: "",
+                    screenTarget: "",
+                    jumpType: [],
+                    screenType: "",
                 },
                 numberDialogVisible: false,
                 dialogVisible: false,
@@ -749,12 +750,12 @@
                 props: {
                     multiple: true
                 },
-                mediationData:{
+                mediationData: {
                     title: "",
                     dialogVisible: false,
                     ids: "",
-                    total: "", 
-                    type:"",                   
+                    total: "",
+                    type: "",
                 }
             };
         },
@@ -872,7 +873,7 @@
             },
             /** 查询角色列表 */
             getList(type) {
-                this.queryParams.commonFlag = this.queryParams.commonFlag?this.queryParams.commonFlag:-1;
+                this.queryParams.commonFlag = this.queryParams.commonFlag ? this.queryParams.commonFlag : -1;
                 this.loading = true;
                 //查询
                 if (type == 1) {
@@ -920,8 +921,8 @@
             clearTable() {
                 this.$refs.multiTable.clearSort();
             },
-            jumpChange(value) {
-                this.numberForm.jump = value;
+            jumpTypeChange(value) {
+                this.numberForm.jumpType = value;
             },
             /** 搜索按钮操作 */
             handleQuery() {
@@ -1060,7 +1061,7 @@
                 this.mediationData.total = this.total;
                 this.mediationData.type = "1";
                 this.mediationData.title = title;
-                this.mediationData.dialogVisible = true;  
+                this.mediationData.dialogVisible = true;
             },
             /** 案件分发 */
             handleDivision(item) {
@@ -1117,16 +1118,16 @@
                     return;
                 }
                 this.numberForm.title = '号码筛选';
-                this.numberForm.status = 1;
-                this.numberForm.jump = [1, 2];
-                this.numberForm.radioStatus = 1;
+                this.numberForm.screenTarget = 1;
+                this.numberForm.jumpType = [1, 2];
+                this.numberForm.screenType = 1;
                 this.numberDialogVisible = true;
             },
             handleFilteringAll() {
                 this.numberForm.title = '全选号码筛选';
-                this.numberForm.status = 1;
-                this.numberForm.jump = [1, 2];
-                this.numberForm.radioStatus = 1;
+                this.numberForm.screenTarget = 1;
+                this.numberForm.jumpType = [1, 2];
+                this.numberForm.screenType = 1;
                 this.numberDialogVisible = true;
             },
             handleSupervisor() {
@@ -1247,34 +1248,35 @@
             phoneNumberFormSubmit() {
                 this.$refs["numberForm"].validate((valid) => {
                     if (valid) {
+                        let data = {
+                            caseIds: this.ids,
+                            jumpType: this.numberForm.jumpType,
+                            screenTarget: this.numberForm.screenTarget,
+                            screenType: this.numberForm.screenType,
+                        };
                         this.numberFormLoading = true;
                         if (this.numberForm.title == '全选号码筛选') {
-                            divisionApi.screeningAll(this.ids, this.numberForm.jump, this.numberForm.status,
-                                    this
-                                    .numberForm.radioStatus)
-                                .then(res => {
-                                    if (res.code === 200) {
-                                        this.msgSuccess("操作成功");
-                                        this.numberDialogVisible = false;
-                                        this.numberFormLoading = false;
-                                        this.clearSelection();
-                                    }
-                                }).catch(error => {
+                            divisionApi.screeningAll(data).then(res => {
+                                if (res.code === 200) {
+                                    this.msgSuccess("操作成功");
+                                    this.numberDialogVisible = false;
                                     this.numberFormLoading = false;
-                                })
+                                    this.clearSelection();
+                                }
+                            }).catch(error => {
+                                this.numberFormLoading = false;
+                            })
                         } else {
-                            divisionApi.screening(this.ids, this.numberForm.jump, this.numberForm.status, this
-                                    .numberForm.radioStatus)
-                                .then(res => {
-                                    if (res.code === 200) {
-                                        this.msgSuccess("操作成功");
-                                        this.numberDialogVisible = false;
-                                        this.numberFormLoading = false;
-                                        this.clearSelection();
-                                    }
-                                }).catch(error => {
+                            divisionApi.screening(data).then(res => {
+                                if (res.code === 200) {
+                                    this.msgSuccess("操作成功");
+                                    this.numberDialogVisible = false;
                                     this.numberFormLoading = false;
-                                })
+                                    this.clearSelection();
+                                }
+                            }).catch(error => {
+                                this.numberFormLoading = false;
+                            })
                         }
                     }
                 });

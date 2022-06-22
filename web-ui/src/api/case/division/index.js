@@ -72,19 +72,20 @@ const divisionApi = {
         })
     },
     //号码筛选
-    screening(ids,jump,status,radioStatus){
+    screening(data){
         return request({
-            url: `/case/assignment/screening?ids=${ids}&jump=${jump}&status=${status}&type=${radioStatus}`,
+            url: '/case/assignment/screening',
             method: 'post',
-
+            data
         })
     },
     //号码筛选
-    screeningAll(ids,jump,status,radioStatus){
+    screeningAll(data){
         return request({
-            url: `/case/assignment/screeningAll?ids=${ids}&jump=${jump}&status=${status}&type=${radioStatus}`,
+            url: '/case/assignment/screeningAll',
             method: 'post',
             timeout:600000,
+            data
         })
     },
     //暂停
