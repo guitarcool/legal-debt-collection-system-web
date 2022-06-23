@@ -215,7 +215,7 @@
             </template>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="submit">确 定</el-button>
+                <el-button type="primary" :loading="submitLoading" @click="submit">确 定</el-button>
             </div>
         </Dialog>
         <editTemplate :title="editData.title" :show.sync="editData.dialogVisible" :id="editData.id"
@@ -360,7 +360,8 @@
                     tid: '',
                     singleData: ''
                 },
-                fontNumber: 0
+                fontNumber: 0,
+                submitLoading: false
             }
         },
         props: {
@@ -544,6 +545,7 @@
                     this.msgError('请填写模版名称')
                     return
                 }
+                this.submitLoading = true;
                 // if(!this.form.manager){
                 //     this.msgError('请选择管理员')
                 //     return
@@ -614,12 +616,15 @@
                 }).then(function (response) {
                     if (response.data.code == 200) {
                         that.msgSuccess(response.data.msg);
+                        that.submitLoading = false;
                         that.dialogVisible = false;
                         that.$emit('refresh');
                     } else {
+                        that.submitLoading = false;
                         that.msgError(response.data.msg);
                     }
                 }).catch(error => {
+                    that.submitLoading = false;
                     that.msgError(error);
                 })
             },
