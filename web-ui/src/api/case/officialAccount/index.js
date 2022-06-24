@@ -32,6 +32,13 @@ const officialApi = {
             method: 'get',
         })
     },
+    //详情列表
+    wechatCaseList(idCard) {
+        return request({
+            url: '/admin/wechat/case/list?idCard=' + idCard,
+            method: 'get',
+        })
+    },
 }
 
 // 下载用户导入模版

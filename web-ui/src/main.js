@@ -23,6 +23,9 @@ import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, 
 import Pagination from "@/components/Pagination";
 //自定义表格工具扩展
 import RightToolbar from "@/components/RightToolbar"
+//复制到粘贴板插件
+import VueClipboard from 'vue-clipboard2' //引入插件
+Vue.use(VueClipboard) //安装插件
 
 import num from './utils/num'
 

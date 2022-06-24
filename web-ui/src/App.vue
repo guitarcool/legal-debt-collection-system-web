@@ -222,7 +222,7 @@
                         }
                     })
                     DYSDK.ctiLogout((data) => {
-                        this.$message.success('“外呼平台已退出，请按需重新登陆');
+                        this.$message.success('外呼平台已退出，请按需重新登陆');
                     })
                     DYSDK.init()
                 }

@@ -77,6 +77,25 @@
             <pagination v-show="total>0" :total="total" :page.sync="searchParams.pageNum"
                 :limit.sync="searchParams.pageSize" @pagination="getList(2)" />
         </div>
+        <el-dialog title="案件列表" :height="300" :visible.sync="dialogVisible" width="45%" :before-close="handleClose">
+            <el-table v-loading="modalLoading" max-height="550" border :data="modallist" ref="multiTable">
+                <el-table-column label="订单号" prop="caseId" :show-overflow-tooltip="true" />
+                <el-table-column label="案件批次号" prop="batchNo" :show-overflow-tooltip="true" />
+                <el-table-column label="姓名" prop="respondentName" :show-overflow-tooltip="true" />
+                <el-table-column label="标的金额" prop="subjectAmount" :show-overflow-tooltip="true" />
+                <el-table-column label="操作" width="120" fixed="right" align="center">
+                    <template slot-scope="scope">
+                        <el-button v-clipboard:copy="scope.row.respondentPhone" v-clipboard:success="onCopy" size="mini"
+                            type="success" v-if="scope.row.caseStatus != 13" @click="handleItemUpdate(scope.row)">案件详情
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">关 闭</el-button>
+                <!-- <el-button type="primary" @click="dialogVisible = false">确 定</el-button> -->
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -92,6 +111,7 @@
             return {
                 // 遮罩层
                 loading: false,
+                modalLoading: false,
                 // 选中数组
                 ids: [],
                 // 非单个禁用
@@ -124,7 +144,9 @@
                 ],
                 isDesensitization: false,
                 isDisable: false,
-                title: '去除数据脱敏'
+                title: '去除数据脱敏',
+                dialogVisible: false,
+                modallist: []
             }
         },
         created() {
@@ -149,6 +171,7 @@
                         this.caseList = response.rows;
                         if (!this.isDesensitization) {
                             this.caseList.forEach(element => {
+                                element.idCardNo = element.idCard;
                                 element.idCard = element.idCard.replace(/^(.{4})(?:\d+)(.{4})$/,
                                     "$1 **** **** $2");
                                 element.phone = element.phone.replace(/(\d{3})\d*(\d{4})/, "$1****$2");
@@ -168,6 +191,7 @@
                         this.caseList = response.rows;
                         if (!this.isDesensitization) {
                             this.caseList.forEach(element => {
+                                element.idCardNo = element.idCard;
                                 element.idCard = element.idCard.replace(/^(.{4})(?:\d+)(.{4})$/,
                                     "$1 **** **** $2");
                                 element.phone = element.phone.replace(/(\d{3})\d*(\d{4})/, "$1****$2");
@@ -225,9 +249,46 @@
                     this.isDisable = false
                 }, 3000)
             },
-            handleUpdate() {
-
+            handleUpdate(item) {
+                let idCard = item.idCardNo;
+                this.dialogVisible = true;
+                officialApi.wechatCaseList(idCard).then((response) => {
+                    this.modallist = response.data;
+                    this.modalLoading = false;
+                }).catch(() => {
+                    this.modallist = [];
+                    this.modalLoading = false;
+                });
             },
+            handleItemUpdate(item) {
+                if (item.caseStatus < 7) {
+                    this.$router.push({
+                        name: "cutBeforeInfo",
+                        query: {
+                            beforeId: item.caseId
+                        }
+                    });
+                } else if (item.caseStatus >= 7) {
+                    this.$router.push({
+                        name: "cutAfterInfo",
+                        query: {
+                            afterId: item.caseId
+                        }
+                    });
+                }
+            },
+            handleClose(done) {
+                this.$confirm('确认关闭？')
+                    .then(_ => {
+                        done();
+                    })
+                    .catch(_ => {});
+            },
+            //复制成功的回调
+            onCopy() {
+                this.dialogVisible = false;
+                this.$message.success('提示：号码已复制，点击度言悬浮框中“拨打”即可以粘贴号码并外呼，通话后请及时“新增”联系人号码”');
+            }
         }
     };
 
