@@ -489,7 +489,8 @@
                     })
                     .then(() => {
                         let data = {
-                            id: item.id
+                            id: item.id,
+                            type:item.type
                         }
                         financeApi.applyunReview(data).then((res) => {
                             if (res.code === 200) {
