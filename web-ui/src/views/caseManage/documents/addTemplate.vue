@@ -70,6 +70,12 @@
                                 :active-value="1" :inactive-value="0">
                             </el-switch>
                         </el-form-item>
+                        <el-form-item label="子模版循环：">
+                            <el-switch v-model="form.isSubLoop" active-color="#13ce66" inactive-color="#ff4949"
+                                :active-value="1" :inactive-value="0">
+                            </el-switch>
+                            <p style="font-size:12px;">提示：子模版循环开启后本母模版内所有的证据材料将进行循环</p>
+                        </el-form-item>
                     </el-form>
                 </div>
                 <!--上传模版-->
