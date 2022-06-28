@@ -165,7 +165,7 @@
                 <el-table-column label="剩余待还总额" prop="remainingBalance" width="150" sortable="custom"
                     :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="资产最终受让方" prop="assetLastAssignee" width="160" :show-overflow-tooltip="true" />
-                <el-table-column label="调解员" prop="principalName" width="100" />
+                <el-table-column label="调解员" prop="principalName" width="120" />
                 <el-table-column label="案件状态" :formatter="statusFormat" prop="caseStatus" width="120" />
                 <el-table-column label="财保状态" :formatter="getProtects" prop="preStatus" width="120" />
                 <el-table-column label="借款合同" prop="loanContract" width="100">

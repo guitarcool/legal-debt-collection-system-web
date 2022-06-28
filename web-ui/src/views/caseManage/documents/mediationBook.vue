@@ -10,15 +10,10 @@
                     <p class="book-title">1、选择文书模版：</p>
                     <el-input clearable placeholder="输入关键字进行过滤" v-model="filterText">
                     </el-input>
-                    <el-scrollbar style="height:250px;" v-if="title =='批量生成多人多案文书'||title == '全选生成多人多案文书'" >
-                        <el-tree :data="caseListTwo" class="border-style" :props="defaultProps" node-key="id"
-                            :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
-                            @node-click="handleNodeClick" default-expand-all />
-                    </el-scrollbar>
-                    <el-scrollbar style="height:250px;" v-else >
-                        <el-tree :data="caseList" class="border-style" :props="defaultProps" node-key="id"
-                            :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
-                            @node-click="handleNodeClick" default-expand-all />
+                    <el-scrollbar style="height:250px;">
+                        <el-tree :data="caseList" :props="defaultProps" node-key="id" :expand-on-click-node="true"
+                            :check-strictly="true" ref="tree" @check="handleCheckClick" show-checkbox
+                            default-expand-all />
                     </el-scrollbar>
                 </div>
                 <div class="margin-div">
@@ -30,12 +25,11 @@
                         </p>
                         <draggable v-model="chooseData" v-else>
                             <transition-group>
-                                <li v-for="(item, index) in chooseData" :key="item.id" class="item">
+                                <li v-for="item in chooseData" :key="item.id" class="item">
                                     <p>{{ item.name }}</p>
                                     <div>
-                                        <el-switch v-model="item.switch" active-color="#13ce66" inactive-color="#ff4949"
-                                            style="margin-right: 20px"></el-switch>
-                                        <i class="el-icon-delete" @click="deleteData(index)"></i>
+                                        <el-switch v-model="item.switch" active-color="#13ce66"
+                                            inactive-color="#ff4949"></el-switch>
                                     </div>
                                 </li>
                             </transition-group>
@@ -64,13 +58,22 @@
                 <div class="margin-div" v-show="title =='批量生成多人多案文书'||title == '全选生成多人多案文书'">
                     <p class="book-title">6、自定义案件顺序：</p>
                     <div class="demo">
-                        <el-table :data="selection" border row-key="id" align="left">
+                        <el-table max-height="550" :data="selection" border row-key="id" align="left">
                             <el-table-column ref="tableColumn" v-for="(item, index) in col" :key="`col_${index}`"
                                 :prop="dropCol[index].prop" :label="item.label">
                             </el-table-column>
                         </el-table>
                     </div>
-
+                </div>
+                <div class="margin-div">
+                    <p class="book-title" v-if="title =='批量生成调解文书'||title == '全选生成调解文书'">5、异常值提示：</p>
+                    <p class="book-title" v-else>7、异常值提示：</p>
+                    <el-button type="primary">异常值查询</el-button>
+                    <div class="demo" style="margin-top:10px">
+                        <el-table max-height="550" :data="abnormalList" border align="left">
+                            <el-table-column label="异常值提示" prop="abnormal" :show-overflow-tooltip="true" />
+                        </el-table>
+                    </div>
                 </div>
             </div>
         </template>
@@ -176,7 +179,6 @@
                 ],
                 filterText: "",
                 caseList: [],
-                caseListTwo: [],
                 chooseData: [],
                 selectionData: [],
                 draging: null, //被拖拽的对象
@@ -189,6 +191,13 @@
                 loading: false,
                 needSignTemplate: [],
                 drawBodyWrapper: '',
+                abnormalList: [{
+                    abnormal: '1.订单号124，姓名：XXX，字段空值“姓名”、“合同号”；证据材料空值“借款合同”、“汇款凭证”；'
+                }, {
+                    abnormal: '2.订单号124，姓名：XXX，字段空值“姓名”、“合同号”；证据材料空值“借款合同”、“汇款凭证”；'
+                }, {
+                    abnormal: '3.订单号124，姓名：XXX，字段空值“姓名”、“合同号”；证据材料空值“借款合同”、“汇款凭证”；'
+                }]
             };
         },
         computed: {
@@ -213,7 +222,6 @@
             openDialog() {
                 this.loading = false;
                 this.caseList = [];
-                this.caseListTwo = [];
                 this.chooseData = [];
                 this.needSignTemplate = [];
                 this.caseNumOnePaper = "";
@@ -221,11 +229,7 @@
                 this.applyDate = "";
                 this.suffix = 1;
                 this.filterText = "";
-                if(this.title =='批量生成多人多案文书'||this.title == '全选生成多人多案文书'){
-                    this.getListTwo();
-                }else{
-                    this.getList();
-                }
+                this.getList();
                 this.$nextTick(() => {
                     const drawBodyWrapper = document.querySelector('.el-dialog__body tbody')
                     this.drawBodyWrapper = drawBodyWrapper;
@@ -360,7 +364,7 @@
                     param.caseNumOnePaper = this.caseNumOnePaper;
                     param.templateIdArr = this.templateIdArr.join(",");
                     param.needSignTemplate = this.needSignTemplate.join(","),
-                    param.applyDate = this.applyDate;
+                        param.applyDate = this.applyDate;
                     param.suffix =
                         this.suffix == 1 ?
                         ".docx" :
@@ -426,43 +430,30 @@
                 this.loading = false;
                 this.$emit('refresh')
             },
-            filterNode(value, data) {
-                if (!value) return true;
-                return data.name.indexOf(value) !== -1;
-            },
             //多元调解模版 
             getList() {
-                let data = {
-                    formatType: 0,
-                    templateTypes: [],
-                    status: 1,
-                };
+                let data;
+                if (this.title == '批量生成多人多案文书' || this.title == '全选生成多人多案文书') {
+                    //多人多案模版  4
+                    data = {
+                        formatType: 4,
+                        templateTypes: [],
+                        status: 1,
+                    };
+                } else {
+                    //多元调解模版 
+                    data = {
+                        formatType: 0,
+                        templateTypes: [],
+                        status: 1,
+                    };
+                }
                 templateApi.templateListInfo(data).then((response) => {
                     this.caseList = response.data || [];
                 });
             },
-            //多人多案模版  4
-            getListTwo() {
-                let data = {
-                    formatType: 4,
-                    templateTypes: [],
-                    status: 1,
-                };
-                templateApi.templateListInfo(data).then((response) => {
-                    this.caseListTwo = response.data || [];
-                });
-            },
-            handleNodeClick(data) {
-                //console.log(data)
-                if (!data.id) {
-                    this.$refs.tree.setCurrentKey(null);
-                } else {
-                    this.chooseData.push(data);
-                    this.chooseData = Array.from(new Set(this.chooseData));
-                }
-            },
-            deleteData(index) {
-                this.chooseData.splice(index, 1);
+            handleCheckClick() {
+                this.chooseData = this.$refs.tree.getCheckedNodes();
             },
         },
     };
@@ -472,6 +463,22 @@
 <style scoped lang="scss">
     .el-dialog__body {
         height: 20px;
+    }
+
+    // 父级不可选样式
+
+    ::v-deep .el-tree {
+
+        // 不可全选样式
+        .el-tree-node {
+            .is-leaf+.el-checkbox .el-checkbox__inner {
+                display: inline-block;
+            }
+
+            .el-checkbox .el-checkbox__inner {
+                display: none;
+            }
+        }
     }
 
 </style>
@@ -518,35 +525,6 @@
 
         li:last-of-type {
             border-bottom: none;
-        }
-    }
-
-    .border-style {
-        border: 1px solid #e6ebf5;
-        padding: 10px;
-        min-height: 250px;
-        border-top: none;
-        border-radius: 4px;
-
-        .el-tree-node.is-current>.el-tree-node__content {
-            color: #409eff;
-            background-color: transparent;
-            border-radius: 4px;
-        }
-
-        .el-tree-node>.el-tree-node__content:hover {
-            background-color: transparent;
-        }
-
-        .el-tree-node.is-current>.el-tree-node__content:after {
-            content: "\e6da";
-            font-family: element-icons !important;
-            padding-left: 10px;
-            font-weight: bolder;
-        }
-
-        .el-tree-node>.el-tree-node__children {
-            overflow: unset;
         }
     }
 
