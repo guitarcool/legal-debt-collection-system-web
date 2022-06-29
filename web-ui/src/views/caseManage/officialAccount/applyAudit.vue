@@ -11,49 +11,51 @@
                         <el-radio label="3">拒绝</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="申请还款类型：" prop="type" v-if="form.audit == 2">
-                    <el-select v-model="form.type" filterable placeholder="请选择">
-                        <el-option label="结清" value="1"></el-option>
-                        <el-option label="部分还款" value="2"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="剩余待还总额：" v-if="form.audit == 2">
-                    <el-input v-model="form.remainingBalance" disabled></el-input>
-                </el-form-item>
-                <el-form-item label="收款账户：" prop="accountNoShou" v-if="form.audit == 2">
-                    <el-input v-model="form.accountNoShou"></el-input>
-                </el-form-item>
-                <el-form-item label="收款账户名：" prop="accountName" v-if="form.audit == 2">
-                    <el-input v-model="form.accountName"></el-input>
-                </el-form-item>
-                <el-form-item label="开户行名称：" prop="openbankName" v-if="form.audit == 2">
-                    <el-input v-model="form.openbankName"></el-input>
-                </el-form-item>
-                <el-form-item label="汇款账号：" prop="accountNo" v-if="form.audit == 2">
-                    <el-input v-model="form.accountNo" placeholder="请输入汇款账号"></el-input>
-                </el-form-item>
-                <el-form-item label="汇款金额：" prop="repayAmount" v-if="form.audit == 2">
-                    <el-input v-model="form.repayAmount" placeholder="请输入汇款金额"></el-input>
-                </el-form-item>
-                <el-form-item label="汇款类型：" prop="repayType" v-if="form.audit == 2">
-                    <el-select v-model="form.repayType" filterable placeholder="请选择">
-                        <el-option v-for="item in remittanceTypes" :key="item.dictValue" :label="item.dictLabel"
-                            :value="item.dictValue">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="回款渠道：" prop="payChannal" v-if="form.audit == 2">
-                    <el-select v-model="form.payChannal" placeholder="请选择" filterable>
-                        <el-option v-for="item in payChannalOptions" :key="item.dictValue" :label="item.dictLabel"
-                            :value="item.dictValue">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="汇款时间：" prop="remittanceTime" v-if="form.audit == 2">
-                    <el-date-picker v-model="form.remittanceTime" type="date" placeholder="选择日期" format="yyyy-MM-dd"
-                        value-format="yyyy-MM-dd">
-                    </el-date-picker>
-                </el-form-item>
+                <div v-if="form.audit == 2">
+                    <el-form-item label="申请还款类型：" prop="type">
+                        <el-select v-model="form.type" filterable placeholder="请选择">
+                            <el-option label="结清" value="1"></el-option>
+                            <el-option label="部分还款" value="2"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="剩余待还总额：">
+                        <el-input v-model="form.remainingBalance" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="收款账户：" prop="accountNoShou">
+                        <el-input v-model="form.accountNoShou"></el-input>
+                    </el-form-item>
+                    <el-form-item label="收款账户名：" prop="accountName">
+                        <el-input v-model="form.accountName"></el-input>
+                    </el-form-item>
+                    <el-form-item label="开户行名称：" prop="openbankName">
+                        <el-input v-model="form.openbankName"></el-input>
+                    </el-form-item>
+                    <el-form-item label="汇款账号：" prop="accountNo">
+                        <el-input v-model="form.accountNo" placeholder="请输入汇款账号"></el-input>
+                    </el-form-item>
+                    <el-form-item label="汇款金额：" prop="repayAmount">
+                        <el-input v-model="form.repayAmount" placeholder="请输入汇款金额"></el-input>
+                    </el-form-item>
+                    <el-form-item label="汇款类型：" prop="repayType">
+                        <el-select v-model="form.repayType" filterable placeholder="请选择">
+                            <el-option v-for="item in remittanceTypes" :key="item.dictValue" :label="item.dictLabel"
+                                :value="item.dictValue">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="回款渠道：" prop="payChannal">
+                        <el-select v-model="form.payChannal" placeholder="请选择" filterable>
+                            <el-option v-for="item in payChannalOptions" :key="item.dictValue" :label="item.dictLabel"
+                                :value="item.dictValue">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="汇款时间：" prop="remittanceTime">
+                        <el-date-picker v-model="form.remittanceTime" type="date" placeholder="选择日期" format="yyyy-MM-dd"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
+                    </el-form-item>
+                </div>
             </el-form>
             <erweima :title="erweimaData.title" :url="erweimaData.url" :show.sync="erweimaData.dialogVisible">
             </erweima>
@@ -85,6 +87,16 @@
                 form: {
                     audit: '2',
                     id: '',
+                    type: '',
+                    remainingBalance: '',
+                    accountNoShou: '',
+                    accountName: '',
+                    openbankName: '',
+                    accountNo: '',
+                    repayAmount: '',
+                    repayType: '',
+                    payChannal: '',
+                    remittanceTime: ''
                 },
                 rules: {
                     accountNoShou: [{

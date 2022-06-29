@@ -72,7 +72,7 @@
                 <el-table-column label="操作" width="300" fixed="right" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" type="primary" v-if="scope.row.state.indexOf('1')>-1 == true" @click="apply(scope.row)"
-                            v-hasPermi="['case:financial:review']">审核
+                            v-hasPermi="['wechat:repay:audit']">审核
                         </el-button>
                         <el-button size="mini" type="warning" v-if="scope.row.entrustStatus != 3"
                             @click="handleUpdate(scope.row)">案件详情
