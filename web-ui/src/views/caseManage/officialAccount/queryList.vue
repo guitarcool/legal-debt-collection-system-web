@@ -56,12 +56,12 @@
                     fixed="left" />
                 <el-table-column label="身份证号" width="180" prop="respondentIdNo" :show-overflow-tooltip="true"
                     sortable="custom" :sort-orders="['descending', 'ascending']" />
-                <el-table-column label="手机号" width="150" prop="respondentPhone" />
+                <el-table-column label="手机号" width="120" prop="respondentPhone" />
                 <el-table-column label="审核状态" width="150" :show-overflow-tooltip="true" :formatter="stateStatusFormat" prop="state">
                 </el-table-column>
                 <el-table-column label="还款ID" prop="id" width="60" :show-overflow-tooltip="true" fixed="left" />
                 <el-table-column label="汇款金额" width="150" prop="amount" />
-                <el-table-column label="备注" width="150" prop="remarks" />
+                <el-table-column label="备注" width="150" prop="remarks" :show-overflow-tooltip="true"/>
                 <el-table-column label="借款平台" width="150" prop="platform" />
                 <el-table-column label="订单号" prop="caseId" width="170" :show-overflow-tooltip="true" />
                 <el-table-column label="案件状态" width="150" :show-overflow-tooltip="true" :formatter="statusFormat"
@@ -74,7 +74,7 @@
                         <el-button size="mini" type="primary" v-if="scope.row.state.indexOf('1')>-1 == true" @click="apply(scope.row)"
                             v-hasPermi="['case:financial:review']">审核
                         </el-button>
-                        <el-button size="mini" type="warning" v-if="scope.row.caseStatus != 13"
+                        <el-button size="mini" type="warning" v-if="scope.row.entrustStatus != 3"
                             @click="handleUpdate(scope.row)">案件详情
                         </el-button>
                     </template>
