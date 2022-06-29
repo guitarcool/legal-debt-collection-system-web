@@ -67,7 +67,7 @@
                 <el-table-column label="查询时间" prop="createTime" :show-overflow-tooltip="true" />
                 <el-table-column label="操作" width="300" fixed="right" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="warning" v-if="scope.row.caseStatus != 13"
+                        <el-button size="mini" type="warning" v-hasPermi="['wechat:case:list']" v-if="scope.row.caseStatus != 13"
                             @click="handleUpdate(scope.row)">案件详情
                         </el-button>
                     </template>

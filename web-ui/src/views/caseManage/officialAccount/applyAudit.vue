@@ -107,7 +107,7 @@
                         message: '请输入汇款账户',
                         trigger: 'blur'
                     }],
-                    amount: [{
+                    repayAmount: [{
                         required: true,
                         message: '请输入汇款金额',
                         trigger: 'blur'
