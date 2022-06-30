@@ -86,7 +86,7 @@
                 <el-table-column label="操作" width="120" fixed="right" align="center">
                     <template slot-scope="scope">
                         <el-button v-clipboard:copy="scope.row.respondentPhone" v-clipboard:success="onCopy" size="mini"
-                            type="success" v-if="scope.row.caseStatus != 13" @click="handleItemUpdate(scope.row)">案件详情
+                            type="success" @click="handleItemUpdate(scope.row)">案件详情
                         </el-button>
                     </template>
                 </el-table-column>
