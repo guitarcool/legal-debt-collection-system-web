@@ -23,9 +23,6 @@
                         <el-radio :label="0">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="title=='批量转电话调解失败'||title=='全选转电话调解失败'" label="失败原因：" prop="content">
-                    <el-input v-model="form.content" :rows="6" type="textarea" placeholder="请输入电话调解失败原因"></el-input>
-                </el-form-item>
             </el-form>
         </template>
         <div slot="footer" class="dialog-footer">
@@ -131,7 +128,7 @@
             //（裁前，裁后，退案，分案）批量，全选调解网调弹窗确认按钮
             phoneSubmit() {
                 switch (true) {
-                    //分案调解，网调
+                        //分案调解，网调
                     case this.type == 1:
                         if (this.title == '导出调解记录') {
                             this.$refs["form"].validate((valid) => {
@@ -446,26 +443,6 @@
                                     });
                                 }
                             });
-                        } else if (this.title == '批量转电话调解失败') {
-                            this.$refs["form"].validate((valid) => {
-                                if (valid) {
-                                    this.loading = true;
-                                    let queryParams = {
-                                        caseId: this.ids,
-                                        content: this.form.content,
-                                    };
-                                    cuttingBeforeApi.batchMediationFailed(queryParams).then(res => {
-                                        if (res.code === 200) {
-                                            this.msgSuccess("操作成功");
-                                            this.loading = false;
-                                            this.dialogVisible = false;
-                                            this.$emit('refresh');
-                                        }
-                                    }).catch(() => {
-                                        this.loading = false;
-                                    });
-                                }
-                            });
                         } else if (this.title == '全选导出网调记录') {
                             this.$refs["form"].validate((valid) => {
                                 if (valid) {
@@ -504,26 +481,6 @@
                                             this.dialogVisible = false;
                                             this.$emit('refresh');
                                             this.download(res.msg);
-                                        }
-                                    }).catch(() => {
-                                        this.loading = false;
-                                    });
-                                }
-                            });
-                        } else if (this.title == '全选转电话调解失败') {
-                            this.$refs["form"].validate((valid) => {
-                                if (valid) {
-                                    this.loading = true;
-                                    let queryParams = {
-                                        caseIds: this.ids,
-                                        content: this.form.content,
-                                    };
-                                    cuttingBeforeApi.batchMediationFailedAll(queryParams).then(res => {
-                                        if (res.code === 200) {
-                                            this.msgSuccess("操作成功");
-                                            this.loading = false;
-                                            this.dialogVisible = false;
-                                            this.$emit('refresh');
                                         }
                                     }).catch(() => {
                                         this.loading = false;

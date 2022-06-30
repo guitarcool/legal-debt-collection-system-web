@@ -97,7 +97,7 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="success" size="mini" @click="applyAll"
-                        v-hasPermi="['case:letter:reviewAll']">全选批量审核申请
+                        v-hasPermi="['case:letter:reviewAll']">全选审核申请
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
