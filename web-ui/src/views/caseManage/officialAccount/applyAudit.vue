@@ -236,7 +236,8 @@
                         if (this.form.audit == 3) {
                             params = {
                                 audit: 3,
-                                id: this.form.id
+                                id: this.form.id,
+                                caseId: this.form.caseId
                             }
                         } else {
                             params = {
