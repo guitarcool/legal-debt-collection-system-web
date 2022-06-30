@@ -198,29 +198,16 @@
                 <el-col :span="1.5">
                     <el-button
                         v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('6')>-1 == true"
+                        type="primary" size="mini" @click="handleprojectEdit(2)" v-hasPermi="['case:property:addAll']">
+                        全选诉前财保申请
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button
+                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('6')>-1 == true"
                         type="primary" size="mini" :disabled="multiple" @click="batchPendingExecute(1)"
                         v-hasPermi="['case:adjudged:batchPendingExecute']">
                         批量仲裁立案申请
-                    </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button
-                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('5')>-1 == true"
-                        type="danger" size="mini" :disabled="multiple" @click="batchPendingExecute(1)"
-                        v-hasPermi="['case:adjudged:batchPendingExecute']">
-                        批量执行立案申请
-                    </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button v-hasPermi="['case:pretrial:batchPending']"
-                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('6')>-1 == true"
-                        type="success" size="mini" @click="handleOnRecord(1)" :disabled="multiple">批量民事立案申请</el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button
-                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('6')>-1 == true"
-                        type="primary" size="mini" @click="handleprojectEdit(2)" v-hasPermi="['case:property:addAll']">
-                        全选诉前财保申请
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -234,10 +221,23 @@
                 <el-col :span="1.5">
                     <el-button
                         v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('5')>-1 == true"
+                        type="danger" size="mini" :disabled="multiple" @click="batchPendingExecute(1)"
+                        v-hasPermi="['case:adjudged:batchPendingExecute']">
+                        批量执行立案申请
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button
+                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('5')>-1 == true"
                         type="danger" size="mini" @click="batchPendingExecute(2)"
                         v-hasPermi="['case:adjudged:pendingExecuteAll']">
                         全选执行立案申请
                     </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-hasPermi="['case:pretrial:batchPending']"
+                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('6')>-1 == true"
+                        type="success" size="mini" @click="handleOnRecord(1)" :disabled="multiple">批量民事立案申请</el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-hasPermi="['case:pretrial:batchPendingAll']"
@@ -247,7 +247,7 @@
             </el-row>
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
-                    <div style="font-size:14px;height:28px;line-height:28px;">案件操作：</div>
+                    <div style="font-size:14px;height:28px;line-height:28px;">公用操作：</div>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" size="mini" :disabled="multiple"
@@ -275,7 +275,7 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="danger" size="mini" @click="batchLawyer" :disabled="multiple">批量生成律师函
+                    <el-button type="primary" size="mini" @click="batchLawyer" :disabled="multiple">批量生成律师函
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -284,14 +284,14 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="danger" size="mini" @click="batchLawyerAll"
-                        v-hasPermi="['case:pretrial:instrumentBatchAll']">全选生成律师函
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false && token" type="primary"
+                        size="mini" :disabled="multiple" @click="handleAppleCall">批量预测式外呼
                     </el-button>
                 </el-col>
+            </el-row>
+            <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
-                    <el-button type="success" size="mini" @click="handleAppleEdit(2)"
-                        v-hasPermi="['case:pretrial:letterRepairAll']">全选申请案件信修
-                    </el-button>
+                    <div style="font-size:14px;height:28px;line-height:28px;">公用全选操作：</div>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" size="mini" v-hasPermi="['case:pretrial:batchExportMediationRecordAll']"
@@ -312,15 +312,20 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false && token" type="primary"
-                        size="mini" :disabled="multiple" @click="handleAppleCall">批量预测式外呼
+                    <el-button type="primary" size="mini" @click="batchLawyerAll"
+                        v-hasPermi="['case:pretrial:instrumentBatchAll']">全选生成律师函
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" size="mini" @click="handleAppleEdit(2)"
+                        v-hasPermi="['case:pretrial:letterRepairAll']">全选申请案件信修
                     </el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange"
+            <el-table size="mini" v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange"
                 ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
                 <el-table-column prop="commonFlag" label="标签" width="100" align="center" fixed="left">
