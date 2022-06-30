@@ -153,10 +153,10 @@
                         <div style="padding: 10px 0;font-weight:700">高级查询:</div>
                         <el-form-item label="案件状态：" class="custom-radio">
                             <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
-                                <el-checkbox :label="'1'">电话调解中</el-checkbox>
-                                <el-checkbox :label="'4'">多元调解中</el-checkbox>
-                                <el-checkbox :label="'5'">多元调解成功</el-checkbox>
-                                <el-checkbox :label="'6'">多元调解失败</el-checkbox>
+                                <el-checkbox :label="'1'">待财保立案</el-checkbox>
+                                <el-checkbox :label="'4'">执保冻结中</el-checkbox>
+                                <el-checkbox :label="'5'">执保结案</el-checkbox>
+                                <el-checkbox :label="'6'">解除冻结状态</el-checkbox>
                             </el-checkbox-group>
                         </el-form-item>
                         <el-form-item label="委案状态：" class="custom-radio">
@@ -189,65 +189,18 @@
                     <div style="font-size:14px;height:28px;line-height:28px;">案件操作：</div>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button
-                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('6')>-1 == true"
-                        type="primary" size="mini" :disabled="multiple" @click="handleprojectEdit(1)"
-                        v-hasPermi="['case:property:batchAdd']">批量诉前财保申请
+                    <el-button type="danger" size="mini" @click="batchLawyer" :disabled="multiple">批量生成律师函
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button
-                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('6')>-1 == true"
-                        type="primary" size="mini" :disabled="multiple" @click="batchPendingExecute(1)"
-                        v-hasPermi="['case:adjudged:batchPendingExecute']">
-                        批量仲裁立案申请
+                    <el-button type="success" size="mini" :disabled="multiple" @click="handleAppleEdit(1)"
+                        v-hasPermi="['case:pretrial:letterRepair']">批量申请案件信修
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button
-                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('5')>-1 == true"
-                        type="danger" size="mini" :disabled="multiple" @click="batchPendingExecute(1)"
-                        v-hasPermi="['case:adjudged:batchPendingExecute']">
-                        批量执行立案申请
+                    <el-button size="mini" type="warning" @click="handleThawing()"
+                        v-hasPermi="['case:property:unfreeze']">批量解冻
                     </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button v-hasPermi="['case:pretrial:batchPending']"
-                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('6')>-1 == true"
-                        type="success" size="mini" @click="handleOnRecord(1)" :disabled="multiple">批量民事立案申请</el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button
-                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('6')>-1 == true"
-                        type="primary" size="mini" @click="handleprojectEdit(2)" v-hasPermi="['case:property:addAll']">
-                        全选诉前财保申请
-                    </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button
-                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('6')>-1 == true"
-                        type="primary" size="mini" @click="batchPendingExecute(2)"
-                        v-hasPermi="['case:adjudged:pendingExecuteAll']">
-                        全选仲裁立案申请
-                    </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button
-                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('5')>-1 == true"
-                        type="danger" size="mini" @click="batchPendingExecute(2)"
-                        v-hasPermi="['case:adjudged:pendingExecuteAll']">
-                        全选执行立案申请
-                    </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button v-hasPermi="['case:pretrial:batchPendingAll']"
-                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('6')>-1 == true"
-                        type="success" size="mini" @click="handleOnRecord(2)">全选民事立案申请</el-button>
-                </el-col>
-            </el-row>
-            <el-row :gutter="10" class="mb8">
-                <el-col :span="1.5">
-                    <div style="font-size:14px;height:28px;line-height:28px;">案件操作：</div>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" size="mini" :disabled="multiple"
@@ -275,13 +228,19 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="danger" size="mini" @click="batchLawyer" :disabled="multiple">批量生成律师函
-                    </el-button>
+                    <el-button v-hasPermi="['case:pretrial:batchPending']"
+                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('6')>-1 == true"
+                        type="success" size="mini" @click="handleOnRecord(1)" :disabled="multiple">批量民事立案申请</el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" size="mini" :disabled="multiple" @click="handleAppleEdit(1)"
-                        v-hasPermi="['case:pretrial:letterRepair']">批量申请案件信修
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false && token" type="primary"
+                        size="mini" :disabled="multiple" @click="handleAppleCall">批量预测式外呼
                     </el-button>
+                </el-col>
+            </el-row>
+            <el-row :gutter="10" class="mb8">
+                <el-col :span="1.5">
+                    <div style="font-size:14px;height:28px;line-height:28px;">案件操作：</div>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="danger" size="mini" @click="batchLawyerAll"
@@ -312,9 +271,9 @@
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false && token" type="primary"
-                        size="mini" :disabled="multiple" @click="handleAppleCall">批量预测式外呼
-                    </el-button>
+                    <el-button v-hasPermi="['case:pretrial:batchPendingAll']"
+                        v-if="queryParams.caseStatuss.indexOf('1')>-1 == true || queryParams.caseStatuss.indexOf('6')>-1 == true"
+                        type="success" size="mini" @click="handleOnRecord(2)">全选民事立案申请</el-button>
                 </el-col>
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
@@ -424,6 +383,10 @@
             :red="batchexportData.red" :params="batchexportData.params" :total="batchexportData.total"></batchExport>
         <mediationRecord @refresh="clearSelection" :title="mediationData.title" :show.sync="mediationData.dialogVisible"
             :ids="mediationData.ids" :type="mediationData.type" :total="mediationData.total"></mediationRecord>
+        <multipleSuccess :confirmTip="multipleSuccessfully.confirmTip" :title="multipleSuccessfully.title"
+            :id="multipleSuccessfully.id" @refresh="clearSelection" :requestApi="multipleSuccessfully.requestApi"
+            :show.sync="multipleSuccessfully.dialogVisible">
+        </multipleSuccess>
     </div>
 </template>
 
@@ -437,6 +400,8 @@
     import testCall from "../components/testCall";
     import batchExport from "../components/batchExportDialog";
     import mediationRecord from "../components/mediationRecord";
+    import multipleSuccess from "../components/multipleSuccessfully"; //多元调解成功
+
 
     export default {
         name: "list",
@@ -447,7 +412,8 @@
             batchExportDialog,
             testCall,
             batchExport,
-            mediationRecord
+            mediationRecord,
+            multipleSuccess
         },
         data() {
             return {
@@ -687,6 +653,13 @@
                 props: {
                     multiple: true
                 },
+                multipleSuccessfully: {
+                    dialogVisible: false,
+                    title: "",
+                    requestApi: "",
+                    confirmTip: "",
+                    id: "",
+                },
             };
         },
         created() {
@@ -914,44 +887,14 @@
                 this.recordData.dialogVisible = true;
                 this.recordData.id = item.id;
             },
-            //批量操作
-            batchPendingExecute(type) {
-                let cannotChoose = [];
-                this.selection.forEach((item) => {
-                    if (item.caseStatus == 9) {
-                        cannotChoose.push(item.id);
-                    }
-                });
-                var that = this;
-                this.$confirm(`是否执行立案申请?`, "提示", {
-                        confirmButtonText: "确定",
-                        cancelButtonText: "取消",
-                        type: "warning",
-                    })
-                    .then(() => {
-                        if (cannotChoose.length > 0 && type == 1) {
-                            let data = {
-                                caseId: that.ids.join(",")
-                            }
-                            cuttingAfterApi.pendingExecute(data).then((res) => {
-                                if (res.code === 200) {
-                                    that.msgSuccess("操作成功");
-                                    that.clearSelection();
-                                }
-                            });
-                        } else {
-                            let data = {};
-                            cuttingAfterApi.pendingExecuteAll(data).then((res) => {
-                                if (res.code === 200) {
-                                    that.msgSuccess("操作成功");
-                                    that.clearSelection();
-                                }
-                            });
-                        }
-                    })
-                    .catch(() => {
-                        that.msgInfo("已取消操作");
-                    });
+            //多元调解成功
+            multipleSuccess(item) {
+                this.multipleSuccessfully.title = item.cName;
+                this.multipleSuccessfully.requestApi =
+                    "/case/adjudged/multiMediateSuccess";
+                this.multipleSuccessfully.confirmTip = item.cName;
+                // 控制弹窗组件显示
+                this.multipleSuccessfully.dialogVisible = true;
             },
             // 案件状态字典翻译
             statusFormat(row, column) {
@@ -1048,6 +991,41 @@
                         });
                 }
             },
+            //申请冻结结束,批量申请冻结结束
+            handleThawing(val) {
+                var that = this;
+                this.$confirm(`是否申请解除冻结?`, "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        type: "warning",
+                    })
+                    .then(() => {
+                        if (val == '批量解冻') {
+                            let data = {
+                                ids: this.ids,
+                            };
+                            protectApi.editUnReview(data).then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess("操作成功");
+                                    that.clearSelection();
+                                }
+                            });
+                        } else {
+                            let param = {
+                                id: val.id,
+                            };
+                            protectApi.property(param).then((res) => {
+                                if (res.code === 200) {
+                                    that.msgSuccess("操作成功");
+                                    that.clearSelection();
+                                }
+                            });
+                        }
+                    })
+                    .catch(() => {
+                        that.msgInfo("已取消操作");
+                    });
+            },
             //批量待立案
             handleOnRecord(type) {
                 var that = this;
@@ -1093,45 +1071,6 @@
                 this.mediationData.type = "4";
                 this.mediationData.title = title;
                 this.mediationData.dialogVisible = true;
-            },
-            //申请财保
-            handleprojectEdit(type) {
-                let cannotChoose = [];
-                this.selection.forEach((item) => {
-
-                    if (item.preStatus == 0 || item.preStatus == 4) {
-                        cannotChoose.push(item.id);
-                    }
-                });
-                var that = this;
-                this.$confirm(`是否申请诉前财保?`, "提示", {
-                        confirmButtonText: "确定",
-                        cancelButtonText: "取消",
-                        type: "warning",
-                    })
-                    .then(() => {
-                        let data = {
-                            caseIds: that.ids.join(",") || ''
-                        }
-                        if (type == 1) {
-                            cuttingBeforeApi.caseProperty(data).then((res) => {
-                                if (res.code === 200) {
-                                    that.msgSuccess("操作成功");
-                                    that.clearSelection();
-                                }
-                            });
-                        } else {
-                            cuttingBeforeApi.casePropertyAll(data).then((res) => {
-                                if (res.code === 200) {
-                                    that.msgSuccess("操作成功");
-                                    that.clearSelection();
-                                }
-                            });
-                        }
-                    })
-                    .catch(() => {
-                        that.msgInfo("已取消操作");
-                    });
             },
             //获取调解员
             getUsers() {

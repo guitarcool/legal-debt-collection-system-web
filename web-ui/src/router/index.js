@@ -142,19 +142,6 @@ export const constantRoutes = [{
             }
         ]
     },
-    // {
-    //   path: '/division',
-    //   component: Layout,
-    //   hidden: true,
-    //   children: [
-    //     {
-    //       path: 'info',
-    //       component: (resolve) => require(['@/views/caseManage/divisionScreening/info'], resolve),
-    //       name:'divisionInfo',
-    //       meta: { title: '分案详情' }
-    //     }
-    //   ]
-    // },
     {
         path: '/division',
         component: Layout,
