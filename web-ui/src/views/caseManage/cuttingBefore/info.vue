@@ -2069,7 +2069,7 @@
                     item.annexAddress;
             },
             editInformation() {
-                this.information.title = '裁后详情案件信息编辑';
+                this.information.title = '裁前详情案件信息编辑';
                 this.information.type = 'before';
                 this.information.requestApi = "/case/adjudged/mediationFailed";
                 // 控制弹窗组件显示
