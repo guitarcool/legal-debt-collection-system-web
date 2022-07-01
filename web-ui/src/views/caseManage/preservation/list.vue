@@ -88,6 +88,20 @@
                         <el-option label="有" value="1"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="执保案号：">
+                    <el-input clearable v-model="queryParams.proBatchNo" placeholder="请输入执保案号" size="small"
+                        style="width: 240px" @keyup.enter.native="handleQuery" />
+                </el-form-item>
+                <el-form-item label="财保批次号：">
+                    <el-input clearable v-model="queryParams.proBatchNo" placeholder="请输入财保批次号" size="small"
+                        style="width: 240px" @keyup.enter.native="handleQuery" />
+                </el-form-item>
+                <el-form-item label="财保冻结时间：">
+                    <el-date-picker size="small" v-model="frozenDate" type="daterange" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" @change="handleFrozenChange"
+                        value-format="yyyy-MM-dd">
+                    </el-date-picker>
+                </el-form-item>
                 <transition name="fade">
                     <div v-show="isShow" transiton="fade">
                         <div style="padding: 10px 0;font-weight:700">高级查询:</div>

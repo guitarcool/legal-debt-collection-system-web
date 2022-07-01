@@ -77,13 +77,6 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <!-- <el-form-item label="短信送达状态：">
-                    <el-select clearable filterable size="small" v-model="queryParams.lastDeliverStatus" placeholder="请选择">
-                        <el-option label="已送达" value="0"></el-option>
-                        <el-option label="接收中" value="1"></el-option>
-                        <el-option label="其他" value="2"></el-option>
-                    </el-select>
-                </el-form-item> -->
                 <el-form-item label="短信送达结果：">
                     <el-cascader collapse-tags :props="props" clearable filterable size="small"
                         v-model="queryParams.deliverResult" :options="shortmsgOptions" placeholder="请选择">
@@ -94,6 +87,16 @@
                         <el-option label="无" value="0"></el-option>
                         <el-option label="有" value="1"></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="民事诉讼批次号：">
+                    <el-input clearable v-model="queryParams.proBatchNo" placeholder="请输入民事诉讼批次号" size="small"
+                        style="width: 240px" @keyup.enter.native="handleQuery" />
+                </el-form-item>
+                <el-form-item label="民事立案时间：">
+                    <el-date-picker size="small" v-model="frozenDate" type="daterange" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" @change="handleFrozenChange"
+                        value-format="yyyy-MM-dd">
+                    </el-date-picker>
                 </el-form-item>
                 <transition name="fade">
                     <div v-show="isShow" transiton="fade">
@@ -160,23 +163,10 @@
                         <div style="padding: 10px 0;font-weight:700">高级查询:</div>
                         <el-form-item label="案件状态：" class="custom-radio">
                             <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
-                                <!-- <el-checkbox v-for="item in statusOptions" :label="item.dictValue"
-                                    :key="item.dictValue">
-                                    {{ item.dictLabel }}</el-checkbox> -->
                                 <el-checkbox :label="'7'">待立案</el-checkbox>
-                                <el-checkbox :label="'8'">已立案</el-checkbox>
                                 <el-checkbox :label="'9'">已判决</el-checkbox>
-                                <el-checkbox :label="'10'">待执行立案</el-checkbox>
-                                <el-checkbox :label="'11'">已执行立案</el-checkbox>
-                                <el-checkbox :label="'12'">已强制执行</el-checkbox>
+                                <el-checkbox :label="'13'">民事结案状态</el-checkbox>
                             </el-checkbox-group>
-                        </el-form-item>
-                        <el-form-item label="财保状态：" class="custom-radio">
-                            <el-radio-group v-model="queryParams.preStatus" @change="changeStatus">
-                                <el-radio label="">全部</el-radio>
-                                <el-radio v-for="item in protects" :key="item.dictValue" :label="item.dictValue">
-                                    {{ item.dictLabel }}</el-radio>
-                            </el-radio-group>
                         </el-form-item>
                         <el-form-item label="委案状态：" class="custom-radio">
                             <el-radio-group v-model="queryParams.entrustStatus" @change="changeStatus">
@@ -205,60 +195,82 @@
         <div class="box-contnet-wrap" style="margin-top:0">
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('7')>-1 == true" type="primary" size="mini"
-                        :disabled="multiple" @click="handleAdd(7)" v-hasPermi="['case:adjudged:batchFiledCase']">
-                        批量变更为已立案
+                    <div style="font-size:14px;height:28px;line-height:28px;">案件操作：</div>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatuss.indexOf('8')>-1 == true" type="primary" size="mini"
+                        :disabled="multiple" @click="handleAdd(8)" v-hasPermi="['case:adjudged:batchJudgedCase']">
+                        批量已判决
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('8')>-1 == true" type="primary" size="mini"
                         :disabled="multiple" @click="handleAdd(8)" v-hasPermi="['case:adjudged:batchJudgedCase']">
-                        批量变更为已判决
-                    </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('9')>-1 == true" type="primary" size="mini"
-                        :disabled="multiple" @click="handleprojectEdit(1)"
-                        v-hasPermi="['case:adjudged:batchPendingExecute']">
-                        批量变更为待执行立案
-                    </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('9')>-1 == true" type="success" size="mini"
-                        @click="handleprojectEdit(2)" v-hasPermi="['case:adjudged:pendingExecuteAll']">
-                        全选变更为待执行立案
-                    </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('10')>-1 == true" type="primary" size="mini"
-                        :disabled="multiple" @click="handleAdd(10)" v-hasPermi="['case:adjudged:batchExecuted']">
-                        批量变更为已执行立案
-                    </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('11')>-1 == true" type="primary" size="mini"
-                        :disabled="multiple" @click="handleAdd(11)" v-hasPermi="['case:adjudged:batchEnforced']">
-                        批量变更为强制执行
-                    </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('12')>-1 == true" type="primary" size="mini"
-                        :disabled="multiple" @click="handleEnforce(1)" v-hasPermi="['case:adjudged:closed']">批量变更为强制结案
+                        全选已判决
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('12')>-1 == true" type="success" size="mini"
-                        @click="handleEnforce(2)" v-hasPermi="['case:adjudged:closedAll']">全选变更为强制结案
+                        :disabled="multiple" @click="handleEnforce(1)" v-hasPermi="['case:adjudged:closed']">批量转民事结案
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="warning" size="mini" :disabled="multiple" @click="handleAppleEdit(1)"
+                    <el-button v-if="queryParams.caseStatuss.indexOf('12')>-1 == true" type="success" size="mini"
+                        @click="handleEnforce(2)" v-hasPermi="['case:adjudged:closedAll']">全选转民事结案
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatuss.indexOf('9')>-1 == true" type="warning" size="mini"
+                        :disabled="multiple" @click="handleprojectEdit(1)"
+                        v-hasPermi="['case:adjudged:batchPendingExecute']">
+                        批量执行立案申请
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatuss.indexOf('9')>-1 == true" type="warning" size="mini"
+                        @click="handleprojectEdit(2)" v-hasPermi="['case:adjudged:pendingExecuteAll']">
+                        全选执行立案申请
+                    </el-button>
+                </el-col>
+            </el-row>
+            <el-row :gutter="10" class="mb8">
+                <el-col :span="1.5">
+                    <div style="font-size:14px;height:28px;line-height:28px;">公用操作：</div>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatuss.indexOf('11')>-1 == true" type="success" size="mini"
+                        :disabled="multiple" @click="handleAdd(11)" v-hasPermi="['case:adjudged:batchEnforced']">
+                        批量强制执行
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="primary" size="mini" :disabled="multiple" @click="handleAppleEdit(1)"
                         v-hasPermi="['case:adjudged:letterRepair']">批量申请案件信修
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="success" size="mini" @click="handleAppleEdit(2)"
-                        v-hasPermi="['case:adjudged:letterRepairAll']">全选申请案件信修
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="danger" size="mini"
+                        :disabled="multiple" v-hasPermi="['case:adjudged:batchSMSFile']" @click="handleMessage(1)">
+                        批量短信发送(旧)
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="danger" size="mini"
+                        :disabled="multiple" v-hasPermi="['case:adjudged:batchSMS']" @click="handleMessage(2)">批量短信发送
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="warning" size="mini" :disabled="multiple"
+                        v-hasPermi="['case:adjudged:batchExportMediationRecord']"
+                        @click="batchExportMediationRecord('导出调解记录')">
+                        批量调解记录
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button type="success" size="mini" :disabled="multiple"
+                        v-hasPermi="['case:adjudged:batchExportNetworkAdjustRecord']"
+                        @click="batchExportMediationRecord('导出网调记录')">
+                        导出网调记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -266,40 +278,31 @@
                         size="mini" :disabled="multiple" @click="handleAppleCall">批量预测式外呼
                     </el-button>
                 </el-col>
+            </el-row>
+            <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="primary" size="mini"
-                        :disabled="multiple" v-hasPermi="['case:adjudged:batchSMSFile']" @click="handleMessage(1)">
-                        批量短信发送(旧)
+                    <div style="font-size:14px;height:28px;line-height:28px;">全选公用操作：</div>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatuss.indexOf('11')>-1 == true" type="success" size="mini"
+                        :disabled="multiple" @click="handleAdd(11)" v-hasPermi="['case:adjudged:batchEnforced']">
+                        全选强制执行
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="primary" size="mini"
-                        :disabled="multiple" v-hasPermi="['case:adjudged:batchSMS']" @click="handleMessage(2)">批量短信发送
+                    <el-button type="primary" size="mini" @click="handleAppleEdit(2)"
+                        v-hasPermi="['case:adjudged:letterRepairAll']">全选申请案件信修
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="success" size="mini"
+                    <el-button v-if="queryParams.caseStatuss.indexOf('13')>-1 == false" type="danger" size="mini"
                         v-hasPermi="['case:adjudged:batchSMSAll']" @click="handleMessageAll">全选短信发送
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button type="primary" size="mini" :disabled="multiple"
-                        v-hasPermi="['case:adjudged:batchExportMediationRecord']"
-                        @click="batchExportMediationRecord('导出调解记录')">
-                        批量调解记录
-                    </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button type="success" size="mini" v-hasPermi="['case:adjudged:batchExportMediationRecordAll']"
+                    <el-button type="warning" size="mini" v-hasPermi="['case:adjudged:batchExportMediationRecordAll']"
                         @click="batchExportMediationRecord('全选导出调解记录')">
                         全选导出调解记录
-                    </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button type="danger" size="mini" :disabled="multiple"
-                        v-hasPermi="['case:adjudged:batchExportNetworkAdjustRecord']"
-                        @click="batchExportMediationRecord('导出网调记录')">
-                        导出网调记录
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
@@ -312,7 +315,6 @@
                 <right-toolbar :showSearch.sync="showSearch" @queryTable="getList(2)" @clearTick="clearSelection">
                 </right-toolbar>
             </el-row>
-
             <el-table v-loading="loading" max-height="550" :data="caseList" @sort-change="handleSortChange"
                 ref="multiTable" :row-key="getRowKeys" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" :reserve-selection="true" width="55" align="center" fixed="left" />
@@ -363,8 +365,6 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="信修状态" :formatter="getLetterRepairStatus" prop="letterRepairStatus">
-                </el-table-column>
-                <el-table-column label="财保状态" :formatter="getProtects" prop="preStatus">
                 </el-table-column>
                 <el-table-column label="最近一次网调标签" width="150" :formatter="getAdjustType" prop="networkAdjustLabel">
                 </el-table-column>
@@ -460,7 +460,6 @@
                     pageNum: 1,
                     pageSize: 50,
                     entrustStatus: "1",
-                    preStatus: "",
                     letterRepairStatus: "",
                     contactStatus: "",
                     repayStatus: "",
@@ -482,7 +481,6 @@
                 checkFailure: false,
                 selection: [],
                 userList: [],
-                protects: [],
                 chooseDaterange: [],
                 chooseDaterange1: [],
                 chooseDaterange2: [],
@@ -674,7 +672,6 @@
                 contactResultOptions: [],
                 screenResultOptions: [],
                 shortmsgOptions: [],
-                protects: [],
                 props: {
                     multiple: true
                 },
@@ -692,10 +689,6 @@
             this.getUsers();
             this.getwechatList();
             this.getCascaderData();
-            //财保申请类型
-            this.getDicts("wealth_protect").then((response) => {
-                this.protects = response.data;
-            });
             //案件状态
             this.getDicts("case_status").then((response) => {
                 this.statusOptions = response.data;
@@ -984,10 +977,6 @@
             //信修状态
             getLetterRepairStatus(row, column) {
                 return this.selectDictLabel(this.letterRepairStatusOptions, row.letterRepairStatus);
-            },
-            //财保状态
-            getProtects(row, column) {
-                return this.selectDictLabel(this.protects, row.preStatus);
             },
             //网调标签
             getAdjustType(row, column) {
