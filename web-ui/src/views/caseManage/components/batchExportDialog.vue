@@ -312,14 +312,6 @@
                     providerType: this.providerType,
                     sendTime: this.signatureDate ? this.signatureDate : '',
                 }
-                switch (key) {
-                    case value:
-
-                        break;
-
-                    default:
-                        break;
-                }
                 switch (true) {
                     case this.title == "裁前全选短信发送":
                         cuttingBeforeApi.downloadSmsTemplate(param).then((response) => {
