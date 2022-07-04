@@ -293,14 +293,14 @@
                     prop="contractAmount" width="120" />
                 <el-table-column label="剩余期数" prop="remainTerms" width="120" />
                 <el-table-column label="委案状态" :formatter="getEntrustType" prop="entrustStatus"></el-table-column> -->
-                <el-table-column label="操作" width="360" fixed="right" align="center">
+                <el-table-column label="操作" width="160" fixed="right" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" type="primary" v-if="scope.row.entrustStatus != 3"
                             @click="handleUpdate(scope.row)" v-hasPermi="['case:clerical:query']">查看
                         </el-button>
-                        <el-button size="mini" type="warning" @click="handleMediation(scope.row)"
+                        <!-- <el-button size="mini" type="warning" @click="handleMediation(scope.row)"
                             v-hasPermi="['case:clerical:instrument']">生成调解文书
-                        </el-button>
+                        </el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -530,13 +530,13 @@
                     })
                 }
             },
-            handleMediation(item) {
-                this.mediationBookData.title = "生成调解文书";
-                this.mediationBookData.dialogVisible = true;
-                this.mediationBookData.id = item.id;
-                this.mediationBookData.requestApi = "/case/caseInfo/instrument";
-                this.mediationBookData.params = "";
-            },
+            // handleMediation(item) {
+            //     this.mediationBookData.title = "生成调解文书";
+            //     this.mediationBookData.dialogVisible = true;
+            //     this.mediationBookData.id = item.id;
+            //     this.mediationBookData.requestApi = "/case/caseInfo/instrument";
+            //     this.mediationBookData.params = "";
+            // },
             batchBook() {
                 this.mediationBookData.title = "批量生成调解文书";
                 this.mediationBookData.dialogVisible = true;

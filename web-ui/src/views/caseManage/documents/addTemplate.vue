@@ -473,6 +473,7 @@
                     deptId: null,
                     list: [],
                     managerId: null,
+                    isSubLoop:0
                 }
                 this.filterText = "";
                 this.draggableList = [];
@@ -577,6 +578,7 @@
                 formData.append("deptId", this.form.deptId ? this.form.deptId : null);
                 formData.append("status", this.form.status);
                 formData.append("content", this.form.content);
+                formData.append("isSubLoop", this.form.isSubLoop);
                 //formData.append("list", this.draggableList);
                 this.draggableList.forEach((item, i) => {
                     formData.append(`list[${i}].type`, item.type);

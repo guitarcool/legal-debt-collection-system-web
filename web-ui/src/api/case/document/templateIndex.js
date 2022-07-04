@@ -223,6 +223,22 @@ const templateApi = {
             data
         })
     },
+    //获取异常值
+    getOutliersTips(data) {
+        return request({
+            url: '/case/caseInfo/getOutliersTips',
+            method: 'post',
+            data
+        })
+    },
+    //全选获取异常值
+    getOutliersTipsAll(data) {
+        return request({
+            url: '/case/caseInfo/getOutliersTipsAll',
+            method: 'post',
+            data
+        })
+    },
 }
 
 // 下载用户导入模版

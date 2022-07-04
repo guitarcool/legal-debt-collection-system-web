@@ -68,10 +68,14 @@
                 <div class="margin-div">
                     <p class="book-title" v-if="title =='批量生成调解文书'||title == '全选生成调解文书'">5、异常值提示：</p>
                     <p class="book-title" v-else>7、异常值提示：</p>
-                    <el-button type="primary">异常值查询</el-button>
+                    <el-button type="primary" :loading="tipsLoading" @click="getOutliersTips">异常值查询</el-button>
                     <div class="demo" style="margin-top:10px">
-                        <el-table max-height="550" :data="abnormalList" border align="left">
-                            <el-table-column label="异常值提示" prop="abnormal" :show-overflow-tooltip="true" />
+                        <el-table max-height="550" :data="tipsList" border align="left">
+                            <el-table-column label="异常值提示" :show-overflow-tooltip="true">
+                                <template slot-scope="scope">
+                                    {{scope.row}}
+                                </template>
+                            </el-table-column>
                         </el-table>
                     </div>
                 </div>
@@ -190,14 +194,9 @@
                 templateIdArr: [],
                 loading: false,
                 needSignTemplate: [],
+                tipsList: [],
                 drawBodyWrapper: '',
-                abnormalList: [{
-                    abnormal: '1.订单号124，姓名：XXX，字段空值“姓名”、“合同号”；证据材料空值“借款合同”、“汇款凭证”；'
-                }, {
-                    abnormal: '2.订单号124，姓名：XXX，字段空值“姓名”、“合同号”；证据材料空值“借款合同”、“汇款凭证”；'
-                }, {
-                    abnormal: '3.订单号124，姓名：XXX，字段空值“姓名”、“合同号”；证据材料空值“借款合同”、“汇款凭证”；'
-                }]
+                tipsLoading: false,
             };
         },
         computed: {
@@ -224,10 +223,12 @@
                 this.caseList = [];
                 this.chooseData = [];
                 this.needSignTemplate = [];
+                this.tipsList = [];
                 this.caseNumOnePaper = "";
                 this.templateIdArr = [];
                 this.applyDate = "";
                 this.suffix = 1;
+                this.tipsLoading = false;
                 this.filterText = "";
                 this.getList();
                 this.$nextTick(() => {
@@ -317,61 +318,61 @@
                 this.needSignTemplate = this.chooseData.map((item) => item.switch ? item.switch : false);
                 let param = {};
                 //单个生成调解文书
-                if (this.id) {
+                // if (this.id) {
+                //     if (this.templateIdArr.length <= 0) {
+                //         this.msgError("请选择模版");
+                //         return;
+                //     }
+                //     param = {
+                //         templateIdArr: this.templateIdArr.join(","),
+                //         needSignTemplate: this.needSignTemplate.join(","),
+                //         id: this.id,
+                //         applyDate: this.applyDate,
+                //         suffix: this.suffix == 1 ?
+                //             ".docx" : this.suffix == 2 ?
+                //             ".pdf" : ".xlsx",
+                //     };
+                //     //批量
+                // } else {
+                if (this.title == '批量生成多人多案文书') {
+                    param.ids = this.ids;
+                    if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
+                        this.msgError('请填写正确的合并数量')
+                        return
+                    }
                     if (this.templateIdArr.length <= 0) {
                         this.msgError("请选择模版");
                         return;
                     }
-                    param = {
-                        templateIdArr: this.templateIdArr.join(","),
-                        needSignTemplate: this.needSignTemplate.join(","),
-                        id: this.id,
-                        applyDate: this.applyDate,
-                        suffix: this.suffix == 1 ?
-                            ".docx" : this.suffix == 2 ?
-                            ".pdf" : ".xlsx",
-                    };
-                    //批量
-                } else {
-                    if (this.title == '批量生成多人多案文书') {
-                        param.ids = this.ids;
-                        if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
-                            this.msgError('请填写正确的合并数量')
-                            return
-                        }
-                        if (this.templateIdArr.length <= 0) {
-                            this.msgError("请选择模版");
-                            return;
-                        }
-                    } else if (this.title == '全选生成多人多案文书') {
-                        param.ids = [];
-                        if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
-                            this.msgError('请填写正确的合并数量')
-                            return
-                        }
-                        if (this.templateIdArr.length <= 0) {
-                            this.msgError("请选择模版");
-                            return;
-                        }
-                    } else {
-                        //批量生成调解文书
-                        param.ids = this.params;
-                        if (this.templateIdArr.length <= 0) {
-                            this.msgError("请选择模版");
-                            return;
-                        }
+                } else if (this.title == '全选生成多人多案文书') {
+                    param.ids = [];
+                    if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
+                        this.msgError('请填写正确的合并数量')
+                        return
                     }
-                    param.caseNumOnePaper = this.caseNumOnePaper;
-                    param.templateIdArr = this.templateIdArr.join(",");
-                    param.needSignTemplate = this.needSignTemplate.join(","),
-                        param.applyDate = this.applyDate;
-                    param.suffix =
-                        this.suffix == 1 ?
-                        ".docx" :
-                        this.suffix == 2 ?
-                        ".pdf" :
-                        ".xlsx";
+                    if (this.templateIdArr.length <= 0) {
+                        this.msgError("请选择模版");
+                        return;
+                    }
+                } else {
+                    //批量生成调解文书
+                    param.ids = this.params;
+                    if (this.templateIdArr.length <= 0) {
+                        this.msgError("请选择模版");
+                        return;
+                    }
                 }
+                param.caseNumOnePaper = this.caseNumOnePaper;
+                param.templateIdArr = this.templateIdArr.join(",");
+                param.needSignTemplate = this.needSignTemplate.join(","),
+                    param.applyDate = this.applyDate;
+                param.suffix =
+                    this.suffix == 1 ?
+                    ".docx" :
+                    this.suffix == 2 ?
+                    ".pdf" :
+                    ".xlsx";
+                // }
                 this.loading = true;
                 const baseUrl = process.env.VUE_APP_BASE_API;
                 var url = baseUrl + this.requestApi;
@@ -451,6 +452,68 @@
                 templateApi.templateListInfo(data).then((response) => {
                     this.caseList = response.data || [];
                 });
+            },
+            getOutliersTips() {
+                this.templateIdArr = this.chooseData.map((item) => item.id);
+                this.needSignTemplate = this.chooseData.map((item) => item.switch ? item.switch : false);
+                let param = {};
+                if (this.title == '批量生成多人多案文书') {
+                    param.ids = this.ids;
+                    if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
+                        this.msgError('请填写正确的合并数量')
+                        return
+                    }
+                    if (this.templateIdArr.length <= 0) {
+                        this.msgError("请选择模版");
+                        return;
+                    }
+                } else if (this.title == '全选生成多人多案文书') {
+                    param.ids = [];
+                    if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
+                        this.msgError('请填写正确的合并数量')
+                        return
+                    }
+                    if (this.templateIdArr.length <= 0) {
+                        this.msgError("请选择模版");
+                        return;
+                    }
+                } else if (this.title == '批量生成调解文书') {
+                    //批量生成调解文书
+                    param.ids = this.params;
+                    if (this.templateIdArr.length <= 0) {
+                        this.msgError("请选择模版");
+                        return;
+                    }
+                } else if (this.title == '全选生成调解文书') {
+                    //批量生成调解文书
+                    param.ids = [];
+                    if (this.templateIdArr.length <= 0) {
+                        this.msgError("请选择模版");
+                        return;
+                    }
+                }
+                this.tipsLoading = true;
+                param.caseNumOnePaper = this.caseNumOnePaper;
+                param.templateIdArr = this.templateIdArr.join(",");
+                param.needSignTemplate = this.needSignTemplate.join(","),
+                    param.applyDate = this.applyDate;
+                param.suffix =
+                    this.suffix == 1 ?
+                    ".docx" :
+                    this.suffix == 2 ?
+                    ".pdf" :
+                    ".xlsx";
+                if (this.title == '全选生成多人多案文书' || this.title == '全选生成调解文书') {
+                    templateApi.getOutliersTipsAll(param).then((response) => {
+                        this.tipsLoading = false;
+                        this.tipsList = response.data || [];
+                    });
+                } else {
+                    templateApi.getOutliersTips(param).then((response) => {
+                        this.tipsLoading = false;
+                        this.tipsList = response.data || [];
+                    });
+                }
             },
             handleCheckClick() {
                 this.chooseData = this.$refs.tree.getCheckedNodes();
