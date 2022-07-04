@@ -70,7 +70,7 @@
                                 :active-value="1" :inactive-value="0">
                             </el-switch>
                         </el-form-item>
-                        <el-form-item label="子模版循环：">
+                        <el-form-item label="子模版循环：" v-if="form.formatType!=''&&Number(form.formatType)===4">
                             <el-switch v-model="form.isSubLoop" active-color="#13ce66" inactive-color="#ff4949"
                                 :active-value="1" :inactive-value="0">
                             </el-switch>
@@ -105,7 +105,8 @@
                                 </el-form-item>
                             </el-form>
                         </el-col>
-                        <el-col :span="12" v-if="form.formatType!=''&&Number(form.formatType)===0">
+                        <el-col :span="12"
+                            v-if="(form.formatType!=''&&Number(form.formatType)===0)||(form.formatType!=''&&Number(form.formatType)==4&&form.isSubLoop == 1)">
                             <!--<p class="book-title">勾选您所需要加入的证据包信息：</p>-->
                             <el-input clearable placeholder="输入关键字进行过滤" v-model="filterText">
                             </el-input>
@@ -195,7 +196,7 @@
                                             <el-form-item style="width:33%" label="指定页面:" prop="pageIndex"
                                                 v-if="item.isSign!=0&&item.signSetUp==2">
                                                 <el-select clearable filterable v-model="item.pageIndex"
-                                                     placeholder="请选择">
+                                                    placeholder="请选择">
                                                     <el-option v-for="item in pageIndexOptions" :key="item.value"
                                                         :label="item.label" :value="item.value">
                                                     </el-option>
@@ -473,7 +474,7 @@
                     deptId: null,
                     list: [],
                     managerId: null,
-                    isSubLoop:0
+                    isSubLoop: 0
                 }
                 this.filterText = "";
                 this.draggableList = [];
@@ -807,7 +808,8 @@
             addFile() {
                 this.editData.title = '新增选择文件';
                 this.editData.dialogVisible = true;
-                if (this.form.formatType == 4) {
+                //type == 1 上传文件，type == 2 证据包， type == 3 自定义type 代表二者都可选。
+                if (this.form.formatType == 4 && this.form.isSubLoop == 0) {
                     this.editData.type = 1;
                 } else {
                     this.editData.type = 3;

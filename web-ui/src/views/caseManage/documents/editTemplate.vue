@@ -255,6 +255,7 @@
                 }
             },
             isSignchange(item) {
+                //证据链包 type== 2
                 if (item.isSign == 0 && item.type == 2) {
                     item.signName = '';
                     item.signSetUp = '';
@@ -263,6 +264,7 @@
                     item.pageRange = '';
                     return item
                 } else if (item.isSign == 0 && item.type == 1) {
+                    //文件上传 type== 1
                     item.signName = '';
                     item.signSetUp = '';
                     item.pagePlace = '';

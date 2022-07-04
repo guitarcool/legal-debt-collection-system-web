@@ -507,12 +507,18 @@
                     templateApi.getOutliersTipsAll(param).then((response) => {
                         this.tipsLoading = false;
                         this.tipsList = response.data || [];
-                    });
+                    }).catch(() => {
+                        this.tipsLoading = false;
+                        this.tipsList = [];
+                    })
                 } else {
                     templateApi.getOutliersTips(param).then((response) => {
                         this.tipsLoading = false;
                         this.tipsList = response.data || [];
-                    });
+                    }).catch(() => {
+                        this.tipsLoading = false;
+                        this.tipsList = [];
+                    })
                 }
             },
             handleCheckClick() {
