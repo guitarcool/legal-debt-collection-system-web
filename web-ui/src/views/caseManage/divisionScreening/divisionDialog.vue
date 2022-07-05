@@ -24,6 +24,14 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="变更案件状态" prop="isStatusChange" v-if="form.assignObject == 0">
+                    <div style="display:flex;align-items: center;">
+                        <el-switch v-model="form.isStatusChange" active-color="#13ce66" inactive-color="#ff4949"
+                            :active-value="1" :inactive-value="0">
+                        </el-switch>
+                        <p style="color: #1c84c6">（未分发案件必须开启变更案件状态）</p>
+                    </div>
+                </el-form-item>
                 <el-form-item label="共债分配：" v-if="form.assignObject == 0">
                     <el-radio-group v-model="form.jointDebtAssign">
                         <el-radio label="0">同身份证号分配同调解员</el-radio>
