@@ -264,6 +264,7 @@
             selectMediateIds(arr) {
                 this.pushMediateIds(1);
             },
+            //预览
             watchTable() {
                 this.tableShow = true;
                 this.tableLoading = true;
@@ -273,14 +274,22 @@
                 };
                 if (this.title == "批量案件分发") {
                     data.caseIds = this.caseIds;
+                    divisionApi.getAssignCaseInfo(data).then(res => {
+                        this.tableData = res.data;
+                        this.tableLoading = false;
+                    }).catch(() => {
+                        this.tableData = [];
+                        this.tableLoading = false;
+                    });
+                } else {
+                    divisionApi.getAssignCaseInfoAll(data).then(res => {
+                        this.tableData = res.data;
+                        this.tableLoading = false;
+                    }).catch(() => {
+                        this.tableData = [];
+                        this.tableLoading = false;
+                    });
                 }
-                divisionApi.getAssignCaseInfo(data).then(res => {
-                    this.tableData = res.data;
-                    this.tableLoading = false;
-                }).catch(() => {
-                    this.tableData = [];
-                    this.tableLoading = false;
-                });
             },
         }
     }
