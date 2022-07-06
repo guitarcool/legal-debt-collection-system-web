@@ -196,35 +196,39 @@
             },
             // 提交上传文件
             submit() {
-                let data;
-                data = {
-                    ...this.form
-                };
-                this.loading = true;
-                if (this.title == "批量案件分发") {
-                    data.caseIds = this.caseIds;
-                    divisionApi.division(data).then(res => {
-                        if (res.code == 200) {
-                            this.loading = false;
-                            this.dialogVisible = false;
-                            this.msgSuccess('操作成功');
-                            this.$emit('refresh');
+                this.$refs["form"].validate((valid) => {
+                    if (valid) {
+                        let data;
+                        data = {
+                            ...this.form
+                        };
+                        this.loading = true;
+                        if (this.title == "批量案件分发") {
+                            data.caseIds = this.caseIds;
+                            divisionApi.division(data).then(res => {
+                                if (res.code == 200) {
+                                    this.loading = false;
+                                    this.dialogVisible = false;
+                                    this.msgSuccess('操作成功');
+                                    this.$emit('refresh');
+                                }
+                            }).catch(() => {
+                                this.loading = false;
+                            });
+                        } else if (this.title == '全选案件分发') {
+                            divisionApi.divisionAll(data).then(res => {
+                                if (res.code == 200) {
+                                    this.loading = false;
+                                    this.dialogVisible = false;
+                                    this.msgSuccess('操作成功');
+                                    this.$emit('refresh');
+                                }
+                            }).catch(() => {
+                                this.loading = false;
+                            });
                         }
-                    }).catch(() => {
-                        this.loading = false;
-                    });
-                } else if (this.title == '全选案件分发') {
-                    divisionApi.divisionAll(data).then(res => {
-                        if (res.code == 200) {
-                            this.loading = false;
-                            this.dialogVisible = false;
-                            this.msgSuccess('操作成功');
-                            this.$emit('refresh');
-                        }
-                    }).catch(() => {
-                        this.loading = false;
-                    });
-                }
+                    }
+                });
             },
             /** 查询部门列表 */
             getDeptList() {
