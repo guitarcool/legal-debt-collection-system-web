@@ -24,13 +24,11 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="变更案件状态" prop="isStatusChange" v-if="form.assignObject == 0">
-                    <div style="display:flex;align-items: center;">
-                        <el-switch v-model="form.isStatusChange" active-color="#13ce66" inactive-color="#ff4949"
-                            :active-value="1" :inactive-value="0">
-                        </el-switch>
-                        <p style="color: #1c84c6">（未分发案件必须开启变更案件状态）</p>
-                    </div>
+                <el-form-item label="待分配案件状态变更：" label-width="160px" prop="status">
+                    <el-radio-group v-model="form.status">
+                        <el-radio label="1">电话调解中</el-radio>
+                        <el-radio label="7">待立案</el-radio>
+                    </el-radio-group>
                 </el-form-item>
                 <el-form-item label="共债分配：" v-if="form.assignObject == 0">
                     <el-radio-group v-model="form.jointDebtAssign">
@@ -70,7 +68,7 @@
                 <el-form-item label="分配结果：">
                     <el-button style="margin-bottom:20px;" size="mini" @click="watchTable"
                         v-hasPermi="['case:assignment:getAssignCaseInfo']" type="danger">预览</el-button>
-                    <el-table :loading="tableLoading" :data="tableData" border v-if="tableShow">
+                    <el-table :loading="tableLoading" max-height="550" :data="tableData" border v-if="tableShow">
                         <el-table-column prop="assignObjectName" label="调解员"></el-table-column>
                         <el-table-column prop="idCardNum" label="身份证量"></el-table-column>
                         <el-table-column prop="caseNum" label="分配案件数"></el-table-column>
@@ -120,7 +118,7 @@
             total: {
                 type: String | Number,
                 default: '--'
-            }
+            },
         },
         data() {
             return {
@@ -151,6 +149,7 @@
                     assignObject: "",
                     assignScale: "",
                     assignType: "",
+                    status: "",
                     caseAssignScales: [],
                     mediateIds: []
                 },
@@ -192,20 +191,19 @@
                 this.form.jointDebtAssign = "0";
                 this.form.assignScale = "0";
                 this.form.assignType = "0";
+                this.form.status = "1";
                 this.tableShow = false;
             },
             // 提交上传文件
             submit() {
-                this.loading = true;
                 let data;
                 data = {
                     ...this.form
                 };
+                this.loading = true;
                 if (this.title == "批量案件分发") {
                     data.caseIds = this.caseIds;
-                }
-                if (this.title == '全选案件分发') {
-                    divisionApi.divisionAll(data).then(res => {
+                    divisionApi.division(data).then(res => {
                         if (res.code == 200) {
                             this.loading = false;
                             this.dialogVisible = false;
@@ -215,8 +213,8 @@
                     }).catch(() => {
                         this.loading = false;
                     });
-                } else {
-                    divisionApi.division(data).then(res => {
+                } else if (this.title == '全选案件分发') {
+                    divisionApi.divisionAll(data).then(res => {
                         if (res.code == 200) {
                             this.loading = false;
                             this.dialogVisible = false;
@@ -281,7 +279,7 @@
                         this.tableData = [];
                         this.tableLoading = false;
                     });
-                } else {
+                } else if (this.title == "全选案件分发") {
                     divisionApi.getAssignCaseInfoAll(data).then(res => {
                         this.tableData = res.data;
                         this.tableLoading = false;
