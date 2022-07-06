@@ -199,6 +199,14 @@ const divisionApi = {
             data
         })
     },
+    //分案筛选-分案预览
+    getAssignCaseInfoAll(data) {
+        return request({
+            url: '/case/assignment/getAssignCaseInfoAll',
+            method: 'post',
+            data
+        })
+    },
 }
 
 // 下载用户导入模版
