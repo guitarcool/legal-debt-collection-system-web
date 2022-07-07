@@ -57,8 +57,10 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item :label="'汇款金额' + (index+1)" :prop="'repayCaseAmounts.' + index + '.repayAmount'"
-                        :rules="[{ required: true, message: '请输入汇款金额', trigger: 'blur'}, { type: 'number', message: '汇款金额必须为大于0的数字'}]">
-                        <el-input style="width:80%" v-model.number="repay.repayAmount"></el-input>
+                        :rules="[{ required: true, message: '请输入汇款金额', trigger: 'blur'}]">
+                        <el-input style="width:80%"
+                            oninput="value=value.replace(/[^0-9.]/g,'').replace(/^\./g, '').replace('.', 'dollar#dollar').replace(/\./g, '').replace('dollar#dollar', '.');"
+                            v-model="repay.repayAmount"></el-input>
                         <el-button v-if="commonCaseNum>1" size="mini" style="margin-left:10px;"
                             icon="el-icon-circle-plus-outline" @click="addRepayCaseAmounts" circle />
                         <el-button v-if="commonCaseNum>1" size="mini" icon="el-icon-remove-outline"
