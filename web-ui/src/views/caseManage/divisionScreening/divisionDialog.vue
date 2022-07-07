@@ -66,8 +66,7 @@
                     </el-table>
                 </el-form-item>
                 <el-form-item label="分配结果：">
-                    <el-button style="margin-bottom:20px;" size="mini" @click="watchTable"
-                        v-hasPermi="['case:assignment:getAssignCaseInfo']" type="danger">预览</el-button>
+                    <el-button style="margin-bottom:20px;" size="mini" @click="watchTable" type="danger">预览</el-button>
                     <el-table :loading="tableLoading" max-height="550" :data="tableData" border v-if="tableShow">
                         <el-table-column prop="assignObjectName" label="调解员"></el-table-column>
                         <el-table-column prop="idCardNum" label="身份证量"></el-table-column>
