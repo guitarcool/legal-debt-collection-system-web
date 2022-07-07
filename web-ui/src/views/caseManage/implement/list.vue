@@ -88,11 +88,11 @@
                         <el-option label="有" value="1"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="民事诉讼批次号：">
+                <el-form-item label="仲裁批次号：">
                     <el-input clearable v-model="queryParams.proBatchNo" placeholder="请输入民事诉讼批次号" size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
-                <el-form-item label="民事立案时间：">
+                <el-form-item label="仲裁立案时间：">
                     <el-date-picker size="small" v-model="frozenDate" type="daterange" range-separator="至"
                         start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" @change="handleFrozenChange"
                         value-format="yyyy-MM-dd">
@@ -163,9 +163,9 @@
                         <div style="padding: 10px 0;font-weight:700">高级查询:</div>
                         <el-form-item label="案件状态：" class="custom-radio">
                             <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
-                                <el-checkbox :label="'7'">待立案</el-checkbox>
-                                <el-checkbox :label="'9'">已判决</el-checkbox>
-                                <el-checkbox :label="'13'">民事结案状态</el-checkbox>
+                                <el-checkbox :label="'7'">待执行立案</el-checkbox>
+                                <el-checkbox :label="'9'">已强制执行</el-checkbox>
+                                <el-checkbox :label="'13'">执行结案状态</el-checkbox>
                             </el-checkbox-group>
                         </el-form-item>
                         <el-form-item label="委案状态：" class="custom-radio">
@@ -198,50 +198,44 @@
                     <div style="font-size:14px;height:28px;line-height:28px;">案件操作：</div>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('8')>-1 == true" type="primary" size="mini"
-                        :disabled="multiple" @click="handleAdd(8)" v-hasPermi="['case:adjudged:batchJudgedCase']">
-                        批量已判决
+                    <el-button v-if="queryParams.caseStatuss.indexOf('11')>-1 == true" type="success" size="mini"
+                        :disabled="multiple" @click="handleAdd(11)" v-hasPermi="['case:adjudged:batchEnforced']">
+                        批量强制执行
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('8')>-1 == true" type="primary" size="mini"
-                        :disabled="multiple" @click="handleAdd(8)" v-hasPermi="['case:adjudged:batchJudgedCase']">
-                        全选已判决
-                    </el-button>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('12')>-1 == true" type="success" size="mini"
-                        :disabled="multiple" @click="handleEnforce(1)" v-hasPermi="['case:adjudged:closed']">批量转民事结案
+                    <el-button v-if="queryParams.caseStatuss.indexOf('11')>-1 == true" type="success" size="mini"
+                        :disabled="multiple" @click="handleAdd(11)" v-hasPermi="['case:adjudged:batchEnforced']">
+                        全选强制执行
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('12')>-1 == true" type="success" size="mini"
-                        @click="handleEnforce(2)" v-hasPermi="['case:adjudged:closedAll']">全选转民事结案
+                        :disabled="multiple" @click="handleEnforce(1)" v-hasPermi="['case:adjudged:closed']">批量转执行结案
+                    </el-button>
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button v-if="queryParams.caseStatuss.indexOf('12')>-1 == true" type="success" size="mini"
+                        @click="handleEnforce(2)" v-hasPermi="['case:adjudged:closedAll']">全选转执行结案
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('9')>-1 == true" type="warning" size="mini"
                         :disabled="multiple" @click="handleprojectEdit(1)"
                         v-hasPermi="['case:adjudged:batchPendingExecute']">
-                        批量执行立案申请
+                        批量强制结案
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('9')>-1 == true" type="warning" size="mini"
                         @click="handleprojectEdit(2)" v-hasPermi="['case:adjudged:pendingExecuteAll']">
-                        全选执行立案申请
+                        全选强制结案
                     </el-button>
                 </el-col>
             </el-row>
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
                     <div style="font-size:14px;height:28px;line-height:28px;">公用操作：</div>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('11')>-1 == true" type="success" size="mini"
-                        :disabled="multiple" @click="handleAdd(11)" v-hasPermi="['case:adjudged:batchEnforced']">
-                        批量强制执行
-                    </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="primary" size="mini" :disabled="multiple" @click="handleAppleEdit(1)"
@@ -282,12 +276,6 @@
             <el-row :gutter="10" class="mb8">
                 <el-col :span="1.5">
                     <div style="font-size:14px;height:28px;line-height:28px;">全选公用操作：</div>
-                </el-col>
-                <el-col :span="1.5">
-                    <el-button v-if="queryParams.caseStatuss.indexOf('11')>-1 == true" type="success" size="mini"
-                        :disabled="multiple" @click="handleAdd(11)" v-hasPermi="['case:adjudged:batchEnforced']">
-                        全选强制执行
-                    </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button type="primary" size="mini" @click="handleAppleEdit(2)"

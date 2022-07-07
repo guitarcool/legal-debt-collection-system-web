@@ -88,11 +88,11 @@
                         <el-option label="有" value="1"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="民事诉讼批次号：">
+                <el-form-item label="仲裁批次号：">
                     <el-input clearable v-model="queryParams.proBatchNo" placeholder="请输入民事诉讼批次号" size="small"
                         style="width: 240px" @keyup.enter.native="handleQuery" />
                 </el-form-item>
-                <el-form-item label="民事立案时间：">
+                <el-form-item label="仲裁立案时间：">
                     <el-date-picker size="small" v-model="frozenDate" type="daterange" range-separator="至"
                         start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" @change="handleFrozenChange"
                         value-format="yyyy-MM-dd">
@@ -163,9 +163,9 @@
                         <div style="padding: 10px 0;font-weight:700">高级查询:</div>
                         <el-form-item label="案件状态：" class="custom-radio">
                             <el-checkbox-group v-model="queryParams.caseStatuss" @change="changeStatus">
-                                <el-checkbox :label="'7'">待立案</el-checkbox>
-                                <el-checkbox :label="'9'">已判决</el-checkbox>
-                                <el-checkbox :label="'13'">民事结案状态</el-checkbox>
+                                <el-checkbox :label="'7'">待仲裁立案</el-checkbox>
+                                <el-checkbox :label="'9'">已裁定</el-checkbox>
+                                <el-checkbox :label="'13'">仲裁结案状态</el-checkbox>
                             </el-checkbox-group>
                         </el-form-item>
                         <el-form-item label="委案状态：" class="custom-radio">
@@ -200,23 +200,23 @@
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('8')>-1 == true" type="primary" size="mini"
                         :disabled="multiple" @click="handleAdd(8)" v-hasPermi="['case:adjudged:batchJudgedCase']">
-                        批量已判决
+                        批量已裁定
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('8')>-1 == true" type="primary" size="mini"
                         :disabled="multiple" @click="handleAdd(8)" v-hasPermi="['case:adjudged:batchJudgedCase']">
-                        全选已判决
+                        全选已裁定
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('12')>-1 == true" type="success" size="mini"
-                        :disabled="multiple" @click="handleEnforce(1)" v-hasPermi="['case:adjudged:closed']">批量转民事结案
+                        :disabled="multiple" @click="handleEnforce(1)" v-hasPermi="['case:adjudged:closed']">批量转仲裁结案
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
                     <el-button v-if="queryParams.caseStatuss.indexOf('12')>-1 == true" type="success" size="mini"
-                        @click="handleEnforce(2)" v-hasPermi="['case:adjudged:closedAll']">全选转民事结案
+                        @click="handleEnforce(2)" v-hasPermi="['case:adjudged:closedAll']">全选转仲裁结案
                     </el-button>
                 </el-col>
                 <el-col :span="1.5">
