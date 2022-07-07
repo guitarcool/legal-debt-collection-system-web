@@ -203,12 +203,6 @@
                 initObj(this.form)
                 this.resetAddForm();
                 this.getLineList();
-                if (this.title == "裁前个人预测试外呼计划") {
-                    this.form.path = 'cutBeforeInfo';
-
-                } else if (this.title == "裁后个人预测试外呼计划") {
-                    this.form.path = 'cutAfterInfo';
-                }
                 this.form = {
                     priority: 'HIGH',
                     is_early: false,
@@ -230,7 +224,7 @@
                         let filterRealtimeStatus = this.form.filterRealtimeStatus.toString();
                         if (this.title == "裁前个人预测试外呼计划") {
                             cuttingBeforeApi.getListByIds(this.ids, this.form.callObject, filterMedLabel,
-                                filterNetworkStatus, filterRealtimeStatus, this.form.path).then(res => {
+                                filterNetworkStatus, filterRealtimeStatus, 'cutBeforeInfo').then(res => {
                                 if (res.code === 200) {
                                     this.form.list = res.data;
                                     let accountId = JSON.parse(sessionStorage.getItem("accountId"));
@@ -248,7 +242,7 @@
                             })
                         } else if (this.title == "裁后个人预测试外呼计划") {
                             cuttingAfterApi.getListByIds(this.ids, this.form.callObject, filterMedLabel,
-                                filterNetworkStatus, filterRealtimeStatus, this.form.path).then(res => {
+                                filterNetworkStatus, filterRealtimeStatus, 'cutAfterInfo').then(res => {
                                 if (res.code === 200) {
                                     this.form.list = res.data;
                                     let accountId = JSON.parse(sessionStorage.getItem("accountId"));
