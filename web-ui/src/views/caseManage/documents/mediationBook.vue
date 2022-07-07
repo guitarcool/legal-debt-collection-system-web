@@ -392,10 +392,17 @@
                     fileReader.onload = function () {
                         try {
                             let jsonData = JSON.parse(this.result); // 说明是普通对象数据，后台转换失败
-                            _self.$message({
-                                message: jsonData.msg,
-                                type: "error",
-                            }); // 弹出的提示信息
+                            if (jsonData.code == 200) {
+                                _self.$message({
+                                    message: jsonData.msg,
+                                    type: "success",
+                                }); // 弹出的提示信息
+                            } else {
+                                _self.$message({
+                                    message: jsonData.msg,
+                                    type: "error",
+                                }); // 弹出的提示信息
+                            }
                             _self.loading = false;
                         } catch (err) { // 解析成对象失败，说明是正常的文件流
                             _self.resolveBlob(res, mimeMap.zip);
