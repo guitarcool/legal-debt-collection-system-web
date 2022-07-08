@@ -2,7 +2,8 @@
     <Dialog :title="title" :height="500" :show.sync="dialogVisible" width="40%" @openDialog="openDialog">
         <template v-slot:default>
             <!-- 分配权限内容 -->
-            <div v-if="title == '全选监督员分发'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
+            <div v-if="title == '全选监督员分发'" style="padding:10px 0;color:red;font-size:16px;line-height:24px">
+                注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
             <div class="division-content">
                 <p>可多选，多选时默认平均分配给所选择人，所有选择人均可监督本批案件信息</p>
                 <el-scrollbar style="height: 350px">
@@ -50,9 +51,9 @@
                 type: String,
                 default: ''
             },
-            total:{
+            total: {
                 type: String | Number,
-                default: '--'           
+                default: '--'
             }
         },
         watch: {
@@ -122,16 +123,12 @@
                     deptIds.push(item.parentId)
                 })
                 let param = {
-                    ids: this.ids, //案件ids，多个用','分隔
+                    ids: [this.ids], //案件ids，多个用','分隔
                     type: 4,
                     sfType: 0,
-                    userIds: userIds.join(','), //userIds,多个用','分隔
-                    deptIds: deptIds.join(','), //deptIds,多个用','分隔
+                    userIds: userIds,
+                    deptIds: deptIds
                 }
-                // if (noData.length > 0) {
-                //   this.msgError('不能跨区分发')
-                //   return
-                // }
                 if (this.title == '全选监督员分发') {
                     this.loading = true;
                     param.ids = [];
