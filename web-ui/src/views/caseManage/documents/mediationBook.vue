@@ -397,46 +397,27 @@
                                     message: jsonData.msg,
                                     type: "success",
                                 }); // 弹出的提示信息
+                                _self.dialogVisible = false;
+                                _self.loading = false;
+                                _self.$emit('refresh')
                             } else {
                                 _self.$message({
                                     message: jsonData.msg,
                                     type: "error",
                                 }); // 弹出的提示信息
+                                _self.loading = false;
                             }
                             _self.loading = false;
                         } catch (err) { // 解析成对象失败，说明是正常的文件流
-                            _self.resolveBlob(res, mimeMap.zip);
                             _self.needSignTemplate = [];
-                            _self.dialogVisible = false;
                             _self.loading = false;
                             _self.$emit('refresh')
                         }
                     };
-                    fileReader.readAsText(data) // 注意别落掉此代码，可以将 Blob 或者 File 对象转根据特殊的编码格式转化为内容(字符串形式)
                 }).catch((error) => {
                     this.needSignTemplate = [];
                     this.loading = false;
                 });
-            },
-            resolveBlob(res, mimeType) {
-                const aLink = document.createElement("a");
-                var blob = new Blob([res.data], {
-                    type: mimeType
-                });
-                // //从response的headers中获取filename, 后端response.setHeader("Content-disposition", "attachment; filename=xxxx.docx") 设置的文件名;
-                var patt = new RegExp("filename=([^;]+\\.[^\\.;]+);*");
-                var contentDisposition = decodeURI(res.headers["content-disposition"]);
-                var result = patt.exec(contentDisposition);
-                var fileName = result[1];
-                fileName = fileName.replace(/\"/g, "");
-                aLink.href = URL.createObjectURL(blob);
-                aLink.setAttribute("download", fileName); // 设置下载文件名称
-                document.body.appendChild(aLink);
-                aLink.click();
-                document.body.appendChild(aLink);
-                this.dialogVisible = false;
-                this.loading = false;
-                this.$emit('refresh')
             },
             //多元调解模版 
             getList() {
