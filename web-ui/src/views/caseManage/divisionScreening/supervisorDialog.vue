@@ -123,15 +123,12 @@
                     deptIds.push(item.parentId)
                 })
                 let param = {
-                    ids: [this.ids], //案件ids，多个用','分隔
-                    type: 4,
-                    sfType: 0,
-                    userIds: userIds,
-                    deptIds: deptIds
+                    caseIds: [this.ids], 
+                    supervisorIds: userIds,
                 }
                 if (this.title == '全选监督员分发') {
                     this.loading = true;
-                    param.ids = [];
+                    param.caseIds = [];
                     divisionApi.supervisorAssignmentAll(param).then(res => {
                         if (res.code == 200) {
                             this.loading = false;
