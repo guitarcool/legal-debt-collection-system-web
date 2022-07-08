@@ -215,6 +215,7 @@
                                 this.loading = false;
                             });
                         } else if (this.title == '全选案件分发') {
+                            data.caseIds = [];
                             divisionApi.divisionAll(data).then(res => {
                                 if (res.code == 200) {
                                     this.loading = false;
@@ -283,6 +284,7 @@
                         this.tableLoading = false;
                     });
                 } else if (this.title == "全选案件分发") {
+                    data.caseIds = [];
                     divisionApi.getAssignCaseInfoAll(data).then(res => {
                         this.tableData = res.data;
                         this.tableLoading = false;
