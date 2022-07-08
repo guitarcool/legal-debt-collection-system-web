@@ -120,7 +120,7 @@
                     return
                 }
                 let param = {};
-                param.ids = this.params;
+                param.ids = [];
                 param.type = this.type;
                 param.templateId = this.templateId
                 param.signatureDate = this.signatureDate

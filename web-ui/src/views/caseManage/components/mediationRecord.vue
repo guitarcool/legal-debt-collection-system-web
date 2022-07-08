@@ -181,7 +181,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids,
+                                        caseIds: [],
                                         exportRange: this.form.exportRange.toString(),
                                         isDesensitization: this.form.isDesensitization,
                                     };
@@ -203,7 +203,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids,
+                                        caseIds: [],
                                         exportRange: this.form.exportRange.toString(),
                                     };
                                     cuttingAfterApi.assignmentNetworkAdjustRecordAll(queryParams).then(res => {
@@ -271,7 +271,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids,
+                                        caseIds: [],
                                         exportRange: this.form.exportRange.toString(),
                                         isDesensitization: this.form.isDesensitization,
                                     };
@@ -293,7 +293,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids,
+                                        caseIds: [],
                                         exportRange: this.form.exportRange.toString(),
                                     };
                                     cuttingAfterApi.batchExportNetworkAdjustRecordAll(queryParams).then(res => {
@@ -361,7 +361,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids,
+                                        caseIds: [],
                                         exportRange: this.form.exportRange.toString(),
                                         isDesensitization: this.form.isDesensitization,
                                     };
@@ -383,7 +383,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids,
+                                        caseIds: [],
                                         exportRange: this.form.exportRange.toString(),
                                     };
                                     withDrawalApi.batchExportNetworkAdjustRecordAll(queryParams).then(res => {
@@ -471,7 +471,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids,
+                                        caseIds: [],
                                         exportRange: this.form.exportRange.toString(),
                                     };
                                     cuttingBeforeApi.batchExportNetworkAdjustRecordAll(queryParams).then(
@@ -493,7 +493,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids,
+                                        caseIds: [],
                                         exportRange: this.form.exportRange.toString(),
                                         isDesensitization: this.form.isDesensitization,
                                     };
@@ -515,7 +515,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids,
+                                        caseIds: [],
                                         content: this.form.content,
                                     };
                                     cuttingBeforeApi.batchMediationFailedAll(queryParams).then(res => {

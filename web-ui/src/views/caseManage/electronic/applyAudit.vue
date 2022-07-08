@@ -146,6 +146,7 @@
                                 };
                             }
                             if (this.title == '全选文书签章审核') {
+                                param.ids = [];
                                 electronicApi.applyCheckAll(param).then((res) => {
                                     if (res.code === 200) {
                                         this.sumbmitLoading = false;
@@ -188,6 +189,7 @@
                                 };
                             }
                             if (this.title == '全选文书签章审核') {
+                                param.ids = [];
                                 electronicApi.applyCheckAll(param).then((res) => {
                                     if (res.code === 200) {
                                         this.sumbmitLoading = false;
