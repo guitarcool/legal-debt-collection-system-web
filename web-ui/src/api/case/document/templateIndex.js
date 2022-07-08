@@ -239,6 +239,23 @@ const templateApi = {
             data
         })
     },
+    //批量生成多人多案文书
+    mumcBatchInstrument(data) {
+        return request({
+            url: '/case/caseInfo/mumc/instrument/batch',
+            method: 'post',
+            data
+        })
+    },
+    //全选生成多人多案文书
+    mumcBatchAllInstrument(data) {
+        return request({
+            url: '/case/caseInfo/mumc/instrument/batchAll',
+            method: 'post',
+            timeout: 600000,
+            data
+        })
+    },
 }
 
 // 下载用户导入模版

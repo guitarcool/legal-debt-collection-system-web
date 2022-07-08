@@ -92,18 +92,10 @@
 
 <script>
     import Dialog from "@/components/Dialog/index";
-    import axios from "axios";
-    import {
-        getToken
-    } from "@/utils/auth";
     import templateApi from "@/api/case/document/templateIndex";
     import divisionApi from "@/api/case/division/index";
     import draggable from 'vuedraggable'
     import Sortable from 'sortablejs'
-    const mimeMap = {
-        xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        zip: "application/zip",
-    };
     export default {
         name: "mediationBook",
         components: {
@@ -121,10 +113,6 @@
                 default: "",
             },
             id: {
-                type: String,
-                default: "",
-            },
-            requestApi: {
                 type: String,
                 default: "",
             },
@@ -251,7 +239,7 @@
                     }
                 })
             },
-            // 提交上传文件
+            // /批量生成调解文书，/全选生成调解文书提交上传文件
             submitTwo() {
                 this.templateIdArr = this.chooseData.map((item) => item.id);
                 this.needSignTemplate = this.chooseData.map((item) => item.switch ? item.switch : false);
@@ -312,56 +300,11 @@
                     });
                 }
             },
-            // 提交上传文件
+            // 多人多案全选，多人多案批量提交上传文件
             submit() {
                 this.templateIdArr = this.chooseData.map((item) => item.id);
                 this.needSignTemplate = this.chooseData.map((item) => item.switch ? item.switch : false);
                 let param = {};
-                //单个生成调解文书
-                // if (this.id) {
-                //     if (this.templateIdArr.length <= 0) {
-                //         this.msgError("请选择模版");
-                //         return;
-                //     }
-                //     param = {
-                //         templateIdArr: this.templateIdArr.join(","),
-                //         needSignTemplate: this.needSignTemplate.join(","),
-                //         id: this.id,
-                //         applyDate: this.applyDate,
-                //         suffix: this.suffix == 1 ?
-                //             ".docx" : this.suffix == 2 ?
-                //             ".pdf" : ".xlsx",
-                //     };
-                //     //批量
-                // } else {
-                if (this.title == '批量生成多人多案文书') {
-                    param.ids = this.ids;
-                    if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
-                        this.msgError('请填写正确的合并数量')
-                        return
-                    }
-                    if (this.templateIdArr.length <= 0) {
-                        this.msgError("请选择模版");
-                        return;
-                    }
-                } else if (this.title == '全选生成多人多案文书') {
-                    param.ids = [];
-                    if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
-                        this.msgError('请填写正确的合并数量')
-                        return
-                    }
-                    if (this.templateIdArr.length <= 0) {
-                        this.msgError("请选择模版");
-                        return;
-                    }
-                } else {
-                    //批量生成调解文书
-                    param.ids = this.params;
-                    if (this.templateIdArr.length <= 0) {
-                        this.msgError("请选择模版");
-                        return;
-                    }
-                }
                 param.caseNumOnePaper = this.caseNumOnePaper;
                 param.templateIdArr = this.templateIdArr.join(",");
                 param.needSignTemplate = this.needSignTemplate.join(","),
@@ -372,52 +315,42 @@
                     this.suffix == 2 ?
                     ".pdf" :
                     ".xlsx";
-                // }
                 this.loading = true;
-                const baseUrl = process.env.VUE_APP_BASE_API;
-                var url = baseUrl + this.requestApi;
-                axios({
-                    method: "post",
-                    url: url,
-                    timeout: 600000,
-                    responseType: "blob",
-                    data: param,
-                    headers: {
-                        Authorization: "Bearer " + getToken()
-                    },
-                }).then((res) => {
-                    let data = res.data
-                    let _self = this
-                    let fileReader = new FileReader();
-                    fileReader.onload = function () {
-                        try {
-                            let jsonData = JSON.parse(this.result); // 说明是普通对象数据，后台转换失败
-                            if (jsonData.code == 200) {
-                                _self.$message({
-                                    message: jsonData.msg,
-                                    type: "success",
-                                }); // 弹出的提示信息
-                                _self.dialogVisible = false;
-                                _self.loading = false;
-                                _self.$emit('refresh')
-                            } else {
-                                _self.$message({
-                                    message: jsonData.msg,
-                                    type: "error",
-                                }); // 弹出的提示信息
-                                _self.loading = false;
-                            }
-                            _self.loading = false;
-                        } catch (err) { // 解析成对象失败，说明是正常的文件流
-                            _self.needSignTemplate = [];
-                            _self.loading = false;
-                            _self.$emit('refresh')
-                        }
-                    };
-                }).catch((error) => {
-                    this.needSignTemplate = [];
-                    this.loading = false;
-                });
+                if (this.title == '批量生成多人多案文书') {
+                    param.ids = this.ids;
+                    if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
+                        this.msgError('请填写正确的合并数量')
+                        return
+                    }
+                    if (this.templateIdArr.length <= 0) {
+                        this.msgError("请选择模版");
+                        return;
+                    }
+                    templateApi.mumcBatchInstrument(param).then((response) => {
+                        this.dialogVisible = false;
+                        this.loading = false;
+                        this.$emit('refresh')
+                    }).catch(() => {
+                        this.loading = false;
+                    })
+                } else if (this.title == '全选生成多人多案文书') {
+                    param.ids = [];
+                    if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
+                        this.msgError('请填写正确的合并数量')
+                        return
+                    }
+                    if (this.templateIdArr.length <= 0) {
+                        this.msgError("请选择模版");
+                        return;
+                    }
+                    templateApi.mumcBatchAllInstrument(param).then((response) => {
+                        this.dialogVisible = false;
+                        this.loading = false;
+                        this.$emit('refresh')
+                    }).catch(() => {
+                        this.loading = false;
+                    })
+                }
             },
             //多元调解模版 
             getList() {
