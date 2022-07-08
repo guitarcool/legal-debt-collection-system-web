@@ -329,8 +329,9 @@
                     templateApi.mumcBatchInstrument(param).then((response) => {
                         this.dialogVisible = false;
                         this.loading = false;
+                        this.msgSuccess(response.msg);
                         this.$emit('refresh')
-                    }).catch(() => {
+                    }).catch((error) => {
                         this.loading = false;
                     })
                 } else if (this.title == '全选生成多人多案文书') {
@@ -346,6 +347,7 @@
                     templateApi.mumcBatchAllInstrument(param).then((response) => {
                         this.dialogVisible = false;
                         this.loading = false;
+                        this.msgSuccess(response.msg);
                         this.$emit('refresh')
                     }).catch(() => {
                         this.loading = false;
