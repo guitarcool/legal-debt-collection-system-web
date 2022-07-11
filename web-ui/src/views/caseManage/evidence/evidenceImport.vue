@@ -6,13 +6,14 @@
                     <el-form-item label="分案名：" prop="divisionName">
                         <el-input v-model="form.divisionName"></el-input>
                     </el-form-item>
-                    <!-- <el-form-item label="案件发布公司：" prop="publishCompany">
+                    <el-form-item label="案件发布公司：" prop="publishCompany">
+                        <!--<el-input v-model="form.publishCompany"></el-input>-->
                         <el-select v-model="form.publishCompany" filterable clearable placeholder="请选择">
                             <el-option v-for="item in companies" :key="item.dictValue" :label="item.dictLabel"
                                 :value="item.dictLabel">
                             </el-option>
                         </el-select>
-                    </el-form-item> -->
+                    </el-form-item>
                     <el-form-item label="案件类型：" prop="caseType">
                         <el-select v-model="form.caseType" filterable placeholder="请选择">
                             <el-option v-for="item in typeOptions" :key="item.dictValue" :label="item.dictLabel"
@@ -79,7 +80,7 @@
                     caseType: '',
                     remark: '',
                     divisionName: '',
-                    // publishCompany: '',
+                    publishCompany: '',
                     remittanceTime: ''
                 },
                 upload_url: process.env.VUE_APP_BASE_API + '/evidence/package/importData', //上传URL
@@ -92,11 +93,11 @@
                         message: '请输入分案名',
                         trigger: 'blur'
                     }],
-                    // publishCompany: [{
-                    //     required: true,
-                    //     message: '请选择案件发布公司',
-                    //     trigger: 'change'
-                    // }],
+                    publishCompany: [{
+                        required: true,
+                        message: '请选择案件发布公司',
+                        trigger: 'change'
+                    }],
                     caseType: [{
                         required: true,
                         message: '请选择消费类型',
@@ -183,7 +184,7 @@
                         let formData = new FormData();
                         formData.append("file", this.files);
                         formData.append("divisionName", this.form.divisionName);
-                        // formData.append("publishCompany", this.form.publishCompany);
+                        formData.append("publishCompany", this.form.publishCompany);
                         formData.append("caseType", this.form.caseType);
                         formData.append("remark", this.form.remark);
                         const instance = axios.create({
