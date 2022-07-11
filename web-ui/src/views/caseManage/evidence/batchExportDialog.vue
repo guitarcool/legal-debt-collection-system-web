@@ -156,8 +156,8 @@
                 default: false,
             },
             params: {
-                type: String,
-                default: ''
+                type: Array,
+                default: []
             },
         },
         watch: {

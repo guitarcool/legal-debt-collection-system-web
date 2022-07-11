@@ -731,7 +731,7 @@
                 exportData: {
                     title: "",
                     dialogVisible: false,
-                    ids: "",
+                    ids: [],
                     requestApi: "",
                     total: "",
                 },
@@ -753,7 +753,7 @@
                 mediationData: {
                     title: "",
                     dialogVisible: false,
-                    ids: "",
+                    ids: [],
                     total: "",
                     type: "",
                 }
@@ -945,7 +945,7 @@
             },
             /** 导出按钮操作 */
             handleExport() {
-                this.exportData.ids = this.ids.toString()
+                this.exportData.ids = this.ids
                 this.exportData.title = "案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.requestApi = "/case/assignment/export";
@@ -1057,7 +1057,7 @@
             },
             //导出调解记录网调记录
             batchExportMediationRecord(title) {
-                this.mediationData.ids = this.ids.join(",");
+                this.mediationData.ids = this.ids;
                 this.mediationData.total = this.total;
                 this.mediationData.type = "1";
                 this.mediationData.title = title;
@@ -1079,7 +1079,7 @@
                 // this.divisionData.total = item.id ? '1' : this.ids.length;
                 // this.divisionData.title = "案件分发";
                 // this.divisionData.dialogVisible = true;
-                // this.divisionData.id = item.id ? item.id : this.ids.join(",");
+                // this.divisionData.id = item.id ? item.id : this.ids;
                 // this.divisionData.orgNo = item.id ?
                 //     item.orgNo :
                 //     this.selection.map((i) => i.orgNo).join(",");
@@ -1101,7 +1101,7 @@
                 this.divisionData.title = "全选案件分发";
                 this.divisionData.total = this.total;
                 this.divisionData.dialogVisible = true;
-                // this.divisionData.id = item.id ? item.id : this.ids.join(",");
+                // this.divisionData.id = item.id ? item.id : this.ids;
                 // this.divisionData.orgNo = item.id ?
                 //     item.orgNo :
                 //     this.selection.map((i) => i.orgNo).join(",");
@@ -1131,7 +1131,7 @@
                 this.numberDialogVisible = true;
             },
             handleSupervisor() {
-                this.supervisorData.ids = this.ids.join(",");
+                this.supervisorData.ids = this.ids;
                 this.supervisorData.title = "监督员分发";
                 this.supervisorData.dialogVisible = true;
             },

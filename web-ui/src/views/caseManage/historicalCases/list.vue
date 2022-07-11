@@ -356,7 +356,7 @@
                     title: "",
                     dialogVisible: false,
                     red: "",
-                    params: "",
+                    params: [],
                 },
                 networkSortresult: [],
                 realtimeSortresult: [],

@@ -164,7 +164,7 @@
                     title: "",
                     dialogVisible: false,
                     red: "",
-                    params: "",
+                    params: [],
                     total: ""
                 },
                 getRowKeys(row) {
@@ -318,7 +318,7 @@
                 }
                 this.batchDialogData.dialogVisible = true;
                 this.batchDialogData.red = false;
-                this.batchDialogData.params = this.ids.join(",");
+                this.batchDialogData.params = this.ids;
             },
             handleMessageAll() {
                 this.batchDialogData.title = "全选文书短信发送";

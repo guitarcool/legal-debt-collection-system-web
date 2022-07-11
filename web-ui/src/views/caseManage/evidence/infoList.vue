@@ -251,7 +251,7 @@
                     title: "",
                     dialogVisible: false,
                     red: "",
-                    params: "",
+                    params: [],
                 },
                 editData: {
                     title: "",
@@ -267,7 +267,7 @@
                 exportData: {
                     title: "",
                     dialogVisible: false,
-                    ids: "",
+                    ids: [],
                     requestApi: "",
                     total: ""
                 },
@@ -382,7 +382,7 @@
             /** 导出按钮操作 */
             handleExport() {
                 const queryParams = {
-                    ids: this.ids.join(',')
+                    ids: this.ids
                 };
                 this.$confirm('是否确认导出所选数据项?', "警告", {
                     confirmButtonText: "确定",
@@ -404,7 +404,7 @@
             },
             handleDownZip() {
                 const h = this.$createElement;
-                let id = this.ids.join(',');
+                let id = this.ids;
                 if (this.ids.length > 200) {
                     this.msgError('勾选的数据量超出系统下载条数200上限，请重新勾选后再进行下载');
                     return;
@@ -489,7 +489,7 @@
                 this.messageData.dialogVisible = true;
                 this.messageData.type = type;
                 this.messageData.requestApi = '/evidence/package/notice/mail'
-                this.messageData.params = this.ids.join(',')
+                this.messageData.params = this.ids
             },
             //全选生成通知邮件
             handleMessageAll(type) {

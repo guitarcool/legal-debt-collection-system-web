@@ -226,7 +226,7 @@
                 exportData: {
                     title: "",
                     dialogVisible: false,
-                    ids: "",
+                    ids: [],
                     requestApi: "",
                     total: ""
                 },
@@ -309,7 +309,7 @@
             },
             /** 导出按钮操作 */
             handleExport() {
-                this.exportData.ids = this.ids.toString()
+                this.exportData.ids = this.ids
                 this.exportData.title = "案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.requestApi = "/report/callRecord/export";
@@ -322,7 +322,7 @@
                 this.exportData.requestApi = "/report/callRecord/exportAll";
             },
             batchDownloadRecording(type) {
-                const queryParams = this.ids.join(',')
+                const queryParams = this.ids
                 this.$confirm("是否确认下载选中的录音文件?", "警告", {
                         confirmButtonText: "确定",
                         cancelButtonText: "取消",

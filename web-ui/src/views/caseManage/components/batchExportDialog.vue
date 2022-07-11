@@ -161,8 +161,8 @@
                 default: false,
             },
             params: {
-                type: String,
-                default: ''
+                type: Array,
+                default: []
             },
             total: {
                 type: String | Number,

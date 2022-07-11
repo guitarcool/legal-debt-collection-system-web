@@ -48,8 +48,8 @@
                 default: ''
             },
             ids: {
-                type: String,
-                default: ''
+                type: Array,
+                default: []
             },
             total: {
                 type: String | Number,
