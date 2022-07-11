@@ -314,13 +314,11 @@
                 }
                 switch (true) {
                     case this.title == "裁前全选短信发送":
-                        param.ids = [];
                         cuttingBeforeApi.downloadSmsTemplate(param).then((response) => {
                             this.download(response.msg);
                         });
                         break;
                     case this.title == "裁后全选短信发送":
-                        param.ids = [];
                         cuttingAfterApi.downloadSmsTemplate(param).then((response) => {
                             this.download(response.msg);
                         });
@@ -378,12 +376,10 @@
                         instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken();
                         switch (true) {
                             case this.title == "裁前全选短信发送":
-                                formData.append("ids", []);
                                 this.upload_url = process.env.VUE_APP_BASE_API +
                                     "/case/postAdjudged/batchSMSFileAll"; //上传URL
                                 break;
                             case this.title == "裁后全选短信发送":
-                                formData.append("ids", []);
                                 this.upload_url = process.env.VUE_APP_BASE_API +
                                     "/shortMsg/pretrialCase/batchSMSFileAll"; //上传URL
                                 break;
@@ -435,7 +431,6 @@
                         }
                         switch (true) {
                             case this.title == '裁后全选短信发送':
-                                param.ids = [];
                                 cuttingAfterApi.sendSmsCollectionAll(param).then((res) => {
                                         if (res.code == 500) {
                                             this.loading = false;
@@ -468,7 +463,6 @@
                                     });
                                 break;
                             case this.title == '裁前全选短信发送':
-                                param.ids = [];
                                 cuttingBeforeApi.sendSmsCollectionAll(param).then((res) => {
                                     if (res.code == 500) {
                                         this.loading = false;

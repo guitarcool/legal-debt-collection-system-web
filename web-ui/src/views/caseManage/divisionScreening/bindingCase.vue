@@ -101,7 +101,6 @@
                     if (valid) {
                         this.loading = true;
                         if (this.title == '全选公众号绑定') {
-                            this.form.caseIds = [];
                             divisionApi.bindWechatAll(this.form).then(res => {
                                 if (res.code === 200) {
                                     this.msgSuccess("绑定成功");

@@ -134,7 +134,6 @@
                 // }
                 if (this.title == '全选监督员分发') {
                     this.loading = true;
-                    param.ids = [];
                     divisionApi.supervisorAssignmentAll(param).then(res => {
                         if (res.code == 200) {
                             this.loading = false;

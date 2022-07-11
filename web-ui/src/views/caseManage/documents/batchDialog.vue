@@ -324,7 +324,6 @@
                     sendTime: this.signatureDate ? this.signatureDate : '',
                 }
                 if (this.title == '全选文书短信发送') {
-                    param.ids = [];
                     importApi.wenShucaseInfoBatchTemplate(param).then((response) => {
                         this.download(response.msg);
                     });
@@ -389,7 +388,6 @@
                         });
                         instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken()
                         if (this.title == '全选文书短信发送') {
-                            formData.append("ids", []);
                             this.upload_url = process.env.VUE_APP_BASE_API +
                                 "/case/clericalRecord/batchClericalSMSAll"; //上传URL
                         } else if (this.title == '批量文书短信发送(旧)') {
@@ -435,7 +433,6 @@
                             sendTime: this.signatureDate ? this.signatureDate : '',
                         }
                         if (this.title == '全选文书短信发送') {
-                            param.ids = [];
                             cuttingAfterApi.batchClericalSMSAll(param).then((res) => {
                                     if (res.code == 500) {
                                         this.loading = false;
