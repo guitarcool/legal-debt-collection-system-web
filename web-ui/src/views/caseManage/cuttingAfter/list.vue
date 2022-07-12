@@ -492,7 +492,7 @@
                 callData: {
                     title: "",
                     dialogVisible: false,
-                    ids: '',
+                    ids: [],
                 },
                 batchexportDialogData: {
                     title: "",
@@ -1038,7 +1038,7 @@
                         .then(() => {
                             if (type == 1) {
                                 let param = {
-                                    ids: that.ids.join(","),
+                                    ids: that.ids,
                                 };
                                 cuttingAfterApi.applyCaseEdit(param).then((res) => {
                                     if (res.code === 200) {
