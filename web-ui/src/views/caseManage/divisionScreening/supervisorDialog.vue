@@ -123,7 +123,7 @@
                     deptIds.push(item.parentId)
                 })
                 let param = {
-                    caseIds: this.ids, 
+                    caseIds: [this.ids], 
                     supervisorIds: userIds,
                 }
                 if (this.title == '全选监督员分发') {

@@ -138,7 +138,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids.join(","),
+                                        caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
                                         isDesensitization: this.form.isDesensitization,
                                     };
@@ -160,7 +160,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids.join(","),
+                                        caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
                                     };
                                     cuttingAfterApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
@@ -228,7 +228,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids.join(","),
+                                        caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
                                         isDesensitization: this.form.isDesensitization,
                                     };
@@ -250,7 +250,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids.join(","),
+                                        caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
                                     };
                                     cuttingAfterApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
@@ -318,7 +318,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids.join(","),
+                                        caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
                                         isDesensitization: this.form.isDesensitization,
                                     };
@@ -340,7 +340,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids.join(","),
+                                        caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
                                     };
                                     withDrawalApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
@@ -408,7 +408,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids.join(","),
+                                        caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
                                         isDesensitization: this.form.isDesensitization,
                                     };
@@ -430,7 +430,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: this.ids.join(","),
+                                        caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
                                     };
                                     cuttingBeforeApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
@@ -451,7 +451,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseId: this.ids.join(","),
+                                        caseId: this.ids,
                                         content: this.form.content,
                                     };
                                     cuttingBeforeApi.batchMediationFailed(queryParams).then(res => {
