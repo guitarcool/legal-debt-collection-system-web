@@ -479,6 +479,7 @@
                         //文件信息
                         if (this.form.templateFileList && this.form.templateFileList.length) {
                             for (var i = 0; i < this.form.templateFileList.length; i++) {
+                                this.form.templateFileList[i].signId = this.form.templateFileList[i].signId?.toString();
                                 this.form.templateFileList[i].label = this.form.templateFileList[i].fileName !=
                                     null ? this.form
                                     .templateFileList[i].fileName : this.form.templateFileList[i].pdfName
