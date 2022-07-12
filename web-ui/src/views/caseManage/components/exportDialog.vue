@@ -86,7 +86,7 @@
             openDialog() {
                 initObj(this.form)
                 this.resetAddForm();
-                this.form.ids = [];
+                this.form.ids = this.ids;
                 this.loading = false;
                 this.form.url = this.requestApi;
                 this.form.desensitization = 1;
@@ -104,7 +104,6 @@
                         this.msgError('筛选出的数据量超出系统导出条数50000上限，请重新筛选后再进行全选导出');
                         return;
                 }
-                this.form.ids = [];
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
                         this.loading = true;

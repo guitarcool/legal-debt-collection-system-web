@@ -123,7 +123,6 @@
                             reason: this.form.reason
                         }
                         if (this.title == '全选审核信修申请') {
-                            param.ids = [];
                             modifyApi.applyModifyAll(param).then(res => {
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
