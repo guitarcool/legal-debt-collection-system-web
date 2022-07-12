@@ -167,8 +167,8 @@
                 default: ''
             },
             ids: {
-                type: Array,
-                default: []
+                type: String,
+                default: ''
             },
         },
         computed: {

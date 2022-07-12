@@ -81,7 +81,7 @@
                 default: "",
             },
             params: {
-                type: Array,
+                type: String | Array,
                 default: [],
             },
             total: {

@@ -268,14 +268,14 @@
                 exportData: {
                     title: "",
                     dialogVisible: false,
-                    ids: [],
+                    ids: "",
                     requestApi: "",
                     total: ""
                 },
                 batchexportData: {
                     title: "",
                     dialogVisible: false,
-                    params: [],
+                    params: "",
                     total: ""
                 },
                 shortmsgProviderType: [],
@@ -378,7 +378,7 @@
                 }
                 this.batchexportData.title = "重新发送短信";
                 this.batchexportData.dialogVisible = true;
-                this.batchexportData.params = this.ids;
+                this.batchexportData.params = this.ids.join(",");
             },
             //打开发送短信的弹窗
             handleMessageAll() {
@@ -402,7 +402,7 @@
             },
             /** 导出按钮操作 */
             handleExport() {
-                this.exportData.ids = this.ids
+                this.exportData.ids = this.ids.toString()
                 this.exportData.title = "案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.requestApi = "/report/shortMsgRecord/export";

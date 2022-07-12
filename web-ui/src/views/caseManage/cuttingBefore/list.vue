@@ -485,7 +485,7 @@
                 mediationData:{
                     title: "",
                     dialogVisible: false,
-                    ids: [],
+                    ids: "",
                     total: "", 
                     type:"",                   
                 },
@@ -499,7 +499,7 @@
                     dialogVisible: false,
                     id: "",
                     requestApi: "",
-                    params: [],
+                    params: "",
                     total: ""
                 },
                 userList: [],
@@ -523,7 +523,7 @@
                     title: "",
                     dialogVisible: false,
                     red: "",
-                    params: [],
+                    params: "",
                     total: ""
                 },
                 dialogVisible: false,
@@ -850,7 +850,7 @@
                     this.msgError("所选数据存在已结案的数据，不能批量拨打");
                     return;
                 }
-                this.callData.ids = this.ids;
+                this.callData.ids = this.ids.join(",");
                 this.callData.title = "裁前个人预测试外呼计划";
                 this.callData.dialogVisible = true;
             },
@@ -1048,7 +1048,7 @@
             },
             //导出调解记录,网调记录,电调记录。
             batchExportMediationRecord(title) {
-                this.mediationData.ids = this.ids;
+                this.mediationData.ids = this.ids.join(",");
                 this.mediationData.total = this.total;
                 this.mediationData.type = "4";
                 this.mediationData.title = title;
@@ -1148,7 +1148,7 @@
                 }
                 this.batchexportData.dialogVisible = true;
                 this.batchexportData.red = false;
-                this.batchexportData.params = this.ids;
+                this.batchexportData.params = this.ids.join(",");
             },
             //打开发送短信的弹窗
             handleMessageAll() {

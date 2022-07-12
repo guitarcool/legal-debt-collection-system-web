@@ -162,7 +162,7 @@
                 exportData: {
                     title: "",
                     dialogVisible: false,
-                    ids: [],
+                    ids: "",
                     requestApi: "",
                 },
                 queryData: {}

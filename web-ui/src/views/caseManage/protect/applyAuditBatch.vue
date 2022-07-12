@@ -53,7 +53,7 @@
                 default: "",
             },
             ids: {
-                type: Array,
+                type: String | Array,
                 default: [],
             },
             cid: {

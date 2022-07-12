@@ -498,7 +498,7 @@
                     title: "",
                     dialogVisible: false,
                     red: "",
-                    params: [],
+                    params: "",
                     total: "",
                 },
                 networkSortresult: [],
@@ -677,7 +677,7 @@
                 mediationData:{
                     title: "",
                     dialogVisible: false,
-                    ids: [],
+                    ids: "",
                     total: "", 
                     type:"",                   
                 }
@@ -860,7 +860,7 @@
                     this.msgError("所选数据存在已结案的数据，不能批量拨打");
                     return;
                 }
-                this.callData.ids = this.ids;
+                this.callData.ids = this.ids.join(",");
                 this.callData.title = "裁后个人预测试外呼计划";
                 this.callData.dialogVisible = true;
             },
@@ -912,7 +912,7 @@
             },
             //导出调解记录网调记录
             batchExportMediationRecord(title) {
-                this.mediationData.ids = this.ids;
+                this.mediationData.ids = this.ids.join(",");
                 this.mediationData.total = this.total;
                 this.mediationData.type = "2";
                 this.mediationData.title = title;
@@ -1081,7 +1081,7 @@
                         message: `订单${a}案件状态不支持强制结案`,
                     });
                 } else {
-                    let ids = this.ids;
+                    let ids = this.ids.join(",");
                     var that = this;
                     this.$confirm(`是否强制结案?`, "提示", {
                             confirmButtonText: "确定",
@@ -1175,7 +1175,7 @@
                 }
                 this.batchexportDialogData.dialogVisible = true;
                 this.batchexportDialogData.red = false;
-                this.batchexportDialogData.params = this.ids;
+                this.batchexportDialogData.params = this.ids.join(",");
             },
             //打开发送短信的弹窗
             handleMessageAll() {

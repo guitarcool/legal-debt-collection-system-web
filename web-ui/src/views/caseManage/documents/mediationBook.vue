@@ -122,7 +122,7 @@
                 default: "",
             },
             params: {
-                type: Array,
+                type: String | Array,
                 default: [],
             },
             selection: {

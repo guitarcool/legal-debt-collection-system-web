@@ -385,7 +385,7 @@
                     dialogVisible: false,
                     id: "",
                     requestApi: "",
-                    params: [],
+                    params: "",
                     selection: [],
                     total: ""
                 },
@@ -397,7 +397,7 @@
                     title: "",
                     dialogVisible: false,
                     red: "",
-                    params: [],
+                    params: "",
                     total: ""
                 },
                 protects: [],
@@ -556,7 +556,7 @@
                 this.mediationBookData.selection = this.selection;
                 this.mediationBookData.dialogVisible = true;
                 this.mediationBookData.requestApi = "/case/caseInfo/mumc/instrument/batch";
-                this.mediationBookData.params = this.ids;
+                this.mediationBookData.params = this.ids.join(",");
                 this.mediationBookData.id = "";
             },
             batchBookTwoAll() {
@@ -565,7 +565,7 @@
                 this.mediationBookData.dialogVisible = true;
                 this.mediationBookData.total = this.total;
                 this.mediationBookData.requestApi = "/case/caseInfo/mumc/instrument/batchAll";
-                this.mediationBookData.params = this.ids;
+                this.mediationBookData.params = this.ids.join(",");
                 this.mediationBookData.id = "";
             },
             changeStatus() {
@@ -584,7 +584,7 @@
                 }
                 this.batchexportDialogData.dialogVisible = true;
                 this.batchexportDialogData.red = false;
-                this.batchexportDialogData.params = this.ids;
+                this.batchexportDialogData.params = this.ids.join(",");
             },
             //打开发送短信的弹窗
             handleCaseStatusMessageAll() {

@@ -159,8 +159,8 @@
                 default: false,
             },
             params: {
-                type: Array,
-                default: []
+                type: String,
+                default: ''
             },
             total: {
                 type: String | Number,
@@ -580,6 +580,9 @@
             border-radius: 10px;
             background-color: red;
         }
+
+        .el-upload__tip {}
+
         .import-div {
             display: flex;
             align-items: center;

@@ -62,8 +62,8 @@
                 default: ''
             },
             params: { //就是选择的ids
-                type: Array,
-                default: []
+                type: String,
+                default: ''
             },
             total: {
                 type: String,

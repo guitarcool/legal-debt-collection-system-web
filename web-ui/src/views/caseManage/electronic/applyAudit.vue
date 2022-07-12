@@ -86,7 +86,9 @@
             },
             ids: {
                 type: Array,
-                default: [],
+                default: () => {
+                    return [];
+                },
             },
             total: {
                 type: String | Number,

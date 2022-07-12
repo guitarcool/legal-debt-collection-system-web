@@ -307,7 +307,7 @@
                 exportData: {
                     title: "",
                     dialogVisible: false,
-                    ids: [],
+                    ids: "",
                     requestApi: "",
                     total: ""
                 },
@@ -428,7 +428,7 @@
             },
             /** 导出按钮操作 */
             handleExport() {
-                this.exportData.ids = this.ids
+                this.exportData.ids = this.ids.toString()
                 this.exportData.title = "案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.requestApi = "/case/financial/export";

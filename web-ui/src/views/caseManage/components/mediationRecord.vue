@@ -86,8 +86,8 @@
                 default: ''
             },
             ids: {
-                type: Array,
-                default: []
+                type: String,
+                default: ''
             },
             type: {
                 type: String,

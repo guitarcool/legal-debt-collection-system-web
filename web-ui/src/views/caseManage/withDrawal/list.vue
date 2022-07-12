@@ -199,7 +199,7 @@
                 exportData: {
                     title: "",
                     dialogVisible: false,
-                    ids: [],
+                    ids: "",
                     requestApi: "",
                     total: ""
                 },
@@ -209,7 +209,7 @@
                 mediationData:{
                     title: "",
                     dialogVisible: false,
-                    ids: [],
+                    ids: "",
                     total: "", 
                     type:"",                   
                 }
@@ -313,7 +313,7 @@
             },
             //导出调解记录网调记录
             batchExportMediationRecord(title) {
-                this.mediationData.ids = this.ids;
+                this.mediationData.ids = this.ids.join(",");
                 this.mediationData.total = this.total;
                 this.mediationData.type = "3";
                 this.mediationData.title = title;
@@ -333,7 +333,7 @@
             },
             /** 导出按钮操作 */
             handleExport() {
-                this.exportData.ids = this.ids
+                this.exportData.ids = this.ids.toString()
                 this.exportData.title = "案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.requestApi = "/case/withdrawal/export";
