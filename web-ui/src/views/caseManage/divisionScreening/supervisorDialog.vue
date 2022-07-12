@@ -48,8 +48,8 @@
                 default: ''
             },
             ids: {
-                type: String,
-                default: ''
+                type: Array,
+                default: []
             },
             total: {
                 type: String | Number,
@@ -123,7 +123,7 @@
                     deptIds.push(item.parentId)
                 })
                 let param = {
-                    caseIds: [this.ids], 
+                    caseIds: this.ids, 
                     supervisorIds: userIds,
                 }
                 if (this.title == '全选监督员分发') {
