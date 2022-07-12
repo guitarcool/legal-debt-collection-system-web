@@ -332,6 +332,7 @@
             },
             /** 导出按钮操作 */
             handleExport() {
+                console.log(this.ids);
                 this.exportData.ids = this.ids;
                 this.exportData.title = "案件导出";
                 this.exportData.dialogVisible = true;
@@ -339,6 +340,7 @@
             },
             /** 全选案件导出按钮操作 */
             handleExportAll(){
+                this.exportData.ids = [];
                 this.exportData.title = "全选案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.total = this.total;

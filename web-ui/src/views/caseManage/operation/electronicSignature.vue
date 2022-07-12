@@ -242,6 +242,7 @@
                 this.exportData.requestApi = "/report/signRecord/export";
             },
             handleExportAll(){
+                this.exportData.ids = [];
                 this.exportData.title = "全选案件导出";
                 this.exportData.dialogVisible = true;
                 this.exportData.total = this.total;

@@ -33,12 +33,12 @@ const importApi = {
         })
     },
     //通用弹窗接口
-    common(query) {
+    common(data) {
         return request({
-            url: `${query.url}`,
-            method: 'get',
+            url: `${data.url}`,
+            method: 'post',
             timeout: 500000,
-            params: query
+            data
         })
     },
     info(id) {
