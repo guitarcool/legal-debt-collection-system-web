@@ -147,9 +147,9 @@
                                                     </el-option>
                                                 </el-select>
                                             </el-form-item>
-                                            <el-form-item style="width:33%" label="签章名称:" prop="signName"
+                                            <el-form-item style="width:33%" label="签章名称:" prop="signId"
                                                 v-if="item.isSign!=0">
-                                                <el-select clearable v-model="item.signName" filterable
+                                                <el-select clearable v-model="item.signId" filterable
                                                     placeholder="请选择">
                                                     <el-option v-for="item in signNameOptions" :key="item.dictValue"
                                                         :label="item.dictLabel" :value="item.dictValue">
@@ -307,7 +307,7 @@
                         message: '请选择管理员',
                         trigger: 'blur'
                     }],
-                    signName: [{
+                    signId: [{
                         required: true,
                         message: '请选择签章名称',
                         trigger: 'blur'
@@ -431,7 +431,7 @@
             },
             isSignchange(item) {
                 if (item.isSign == 0 && item.type == 2) {
-                    item.signName = '';
+                    item.signId = '';
                     item.signSetUp = '';
                     item.pagePlace = '';
                     item.pagePlace = '';
@@ -439,7 +439,7 @@
                     item.pageRange = '';
                     return item
                 } else if (item.isSign == 0 && item.type == 1) {
-                    item.signName = '';
+                    item.signId = '';
                     item.signSetUp = '';
                     item.pagePlace = '';
                     item.placeContent = '';
@@ -582,7 +582,7 @@
                     //电子签章内容
                     formData.append(`list[${i}].isSign`, item.isSign ? item.isSign : '');
                     formData.append(`list[${i}].pagePlace`, item.pagePlace ? item.pagePlace : '');
-                    formData.append(`list[${i}].signName`, item.signName ? item.signName : '');
+                    formData.append(`list[${i}].signId`, item.signId ? item.signId : '');
                     formData.append(`list[${i}].signSetUp`, item.signSetUp ? item.signSetUp : '');
                     if (item.signSetUp == 2 && item.pageIndex == "All") {
                         formData.append(`list[${i}].pageRange`, "All");
