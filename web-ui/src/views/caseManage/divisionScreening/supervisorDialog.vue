@@ -122,11 +122,8 @@
                     deptIds.push(item.parentId)
                 })
                 let param = {
-                    ids: this.ids, //案件ids，多个用','分隔
-                    type: 4,
-                    sfType: 0,
-                    userIds: userIds.join(','), //userIds,多个用','分隔
-                    deptIds: deptIds.join(','), //deptIds,多个用','分隔
+                    caseIds: this.ids, 
+                    supervisorIds: userIds,
                 }
                 // if (noData.length > 0) {
                 //   this.msgError('不能跨区分发')
