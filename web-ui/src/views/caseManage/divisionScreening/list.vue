@@ -699,7 +699,7 @@
                 supervisorData: {
                     title: "",
                     dialogVisible: false,
-                    ids: '',
+                    ids: [],
                     total: ''
                 },
                 recordData: {
@@ -1131,7 +1131,7 @@
                 this.numberDialogVisible = true;
             },
             handleSupervisor() {
-                this.supervisorData.ids = this.ids.join(",");
+                this.supervisorData.ids = this.ids;
                 this.supervisorData.title = "监督员分发";
                 this.supervisorData.dialogVisible = true;
             },
