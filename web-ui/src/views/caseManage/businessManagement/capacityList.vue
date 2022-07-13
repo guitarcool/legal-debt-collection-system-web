@@ -32,7 +32,7 @@
                     </div>
                     <p style="margin-top:20px;">
                         <span style="margin-right:20px;">当月回款总目标： <span
-                                style="color:red">{{queryData.totalAmount||'—'}}万</span></span>
+                                style="color:red">{{queryData.totalAmount||'—'}}元</span></span>
                         <span style="margin-right:20px;">数据截止：<span
                                 style="color:red">{{queryData.date||'—'}}</span></span>
                         <span>本月剩余时间：<span style="color:red">{{queryData.daysRemaining||'—'}}天</span></span>
