@@ -122,9 +122,16 @@
                     deptIds.push(item.parentId)
                 })
                 let param = {
-                    caseIds: this.ids, 
-                    supervisorIds: userIds,
+                    ids: this.ids, //案件ids，多个用','分隔
+                    type: 4,
+                    sfType: 0,
+                    userIds: userIds.join(','), //userIds,多个用','分隔
+                    deptIds: deptIds.join(','), //deptIds,多个用','分隔
                 }
+                // if (noData.length > 0) {
+                //   this.msgError('不能跨区分发')
+                //   return
+                // }
                 if (this.title == '全选监督员分发') {
                     this.loading = true;
                     divisionApi.supervisorAssignmentAll(param).then(res => {
