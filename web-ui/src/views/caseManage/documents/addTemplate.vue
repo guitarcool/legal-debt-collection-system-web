@@ -70,6 +70,12 @@
                                 :active-value="1" :inactive-value="0">
                             </el-switch>
                         </el-form-item>
+                        <el-form-item label="子模版循环：" v-if="form.formatType!=''&&Number(form.formatType)===4">
+                            <el-switch v-model="form.isSubLoop" active-color="#13ce66" inactive-color="#ff4949"
+                                :active-value="1" :inactive-value="0">
+                            </el-switch>
+                            <p style="font-size:12px;">提示：子模版循环开启后本母模版内所有的证据材料将进行循环</p>
+                        </el-form-item>
                     </el-form>
                 </div>
                 <!--上传模版-->
@@ -99,7 +105,8 @@
                                 </el-form-item>
                             </el-form>
                         </el-col>
-                        <el-col :span="12" v-if="form.formatType!=''&&Number(form.formatType)===0">
+                        <el-col :span="12"
+                            v-if="(form.formatType!=''&&Number(form.formatType)===0)||(form.formatType!=''&&Number(form.formatType)==4&&form.isSubLoop == 1)">
                             <!--<p class="book-title">勾选您所需要加入的证据包信息：</p>-->
                             <el-input clearable placeholder="输入关键字进行过滤" v-model="filterText">
                             </el-input>
@@ -147,9 +154,9 @@
                                                     </el-option>
                                                 </el-select>
                                             </el-form-item>
-                                            <el-form-item style="width:33%" label="签章名称:" prop="signName"
+                                            <el-form-item style="width:33%" label="签章名称:" prop="signId"
                                                 v-if="item.isSign!=0">
-                                                <el-select clearable v-model="item.signName" filterable
+                                                <el-select clearable v-model="item.signId" filterable
                                                     placeholder="请选择">
                                                     <el-option v-for="item in signNameOptions" :key="item.dictValue"
                                                         :label="item.dictLabel" :value="item.dictValue">
@@ -189,7 +196,7 @@
                                             <el-form-item style="width:33%" label="指定页面:" prop="pageIndex"
                                                 v-if="item.isSign!=0&&item.signSetUp==2">
                                                 <el-select clearable filterable v-model="item.pageIndex"
-                                                     placeholder="请选择">
+                                                    placeholder="请选择">
                                                     <el-option v-for="item in pageIndexOptions" :key="item.value"
                                                         :label="item.label" :value="item.value">
                                                     </el-option>
@@ -262,7 +269,6 @@
                     deptId: null,
                     templateType: '',
                     formatType: '',
-                    signatureId: '',
                     isPublic: 1,
                     status: 1,
                     content: '',
@@ -307,7 +313,7 @@
                         message: '请选择管理员',
                         trigger: 'blur'
                     }],
-                    signName: [{
+                    signId: [{
                         required: true,
                         message: '请选择签章名称',
                         trigger: 'blur'
@@ -320,32 +326,12 @@
                 },
                 templateTypes: [], //模版类别
                 formatTypes: [], //格式类型
-                signatureList: [], //签章信息
-                types: [{
-                        value: '个人',
-                        label: '个人'
-                    },
-                    {
-                        value: '企业',
-                        label: '企业'
-                    }
-                ],
-                sigForm: {
-                    chooseSignature: []
-                },
                 signatureOptions: [],
-                upload_url: process.env.VUE_APP_BASE_API + '/case/pretrial/repayment', //上传URL
-                files: '',
                 // 是否禁用上传
                 isUploading: false,
                 fileList: [],
                 sinMap: new Map(),
                 userList: [],
-                deptList: [],
-                defaultProps: {
-                    children: "children",
-                    label: "userName",
-                },
                 // 部门树选项
                 deptOptions: undefined,
                 userIds: [],
@@ -389,9 +375,8 @@
             }
         },
         created() {
-            this.getSignature();
+            //新增模版获取管理员
             this.getUsers();
-            //   this.getDeptList();
             //模版类别
             this.getDicts("template_type").then((response) => {
                 this.templateTypes = response.data;
@@ -417,9 +402,6 @@
                 this.signNameOptions = response.data;
             });
         },
-        mounted() {
-
-        },
         watch: {
             filterText(val) {
                 this.$refs.tree.filter(val);
@@ -431,7 +413,7 @@
             },
             isSignchange(item) {
                 if (item.isSign == 0 && item.type == 2) {
-                    item.signName = '';
+                    item.signId = '';
                     item.signSetUp = '';
                     item.pagePlace = '';
                     item.pagePlace = '';
@@ -439,7 +421,7 @@
                     item.pageRange = '';
                     return item
                 } else if (item.isSign == 0 && item.type == 1) {
-                    item.signName = '';
+                    item.signId = '';
                     item.signSetUp = '';
                     item.pagePlace = '';
                     item.placeContent = '';
@@ -450,8 +432,7 @@
             },
             openDialog() {
                 //新增初始化数据
-                this.sigForm.chooseSignature = []
-                //initObj(this.form);
+                // initObj(this.form);
                 this.form = {
                     templateNumber: '',
                     name: '',
@@ -459,7 +440,6 @@
                     manager: '',
                     templateType: '',
                     formatType: '',
-                    signatureId: '',
                     isPublic: 1,
                     status: 1,
                     content: '',
@@ -467,6 +447,7 @@
                     deptId: null,
                     list: [],
                     managerId: null,
+                    isSubLoop: 0
                 }
                 this.filterText = "";
                 this.draggableList = [];
@@ -495,36 +476,16 @@
                         if (this.form.deptId) {
                             this.form.deptId = Number(this.form.deptId)
                         }
-                        //this.userIds = treeGetValue(this.deptOptions, "userId", this.form.manager);
-                        //渲染签章信息
-                        if (this.form.signatureId && this.form.signatureId.length > 0) {
-                            let a = [];
-                            a = this.form.signatureId.split(',')
-                            a.forEach(item => {
-                                //console.log(this.sinMap.get(item))
-                                if (this.sinMap.has(Number(item))) {
-                                    this.sigForm.chooseSignature.push(this.sinMap.get(Number(item)))
-                                    //this.sigForm.chooseSignature[index].pid = this.signatureList[i].id
-                                }
-                            })
-                        };
                         //文件信息
                         if (this.form.templateFileList && this.form.templateFileList.length) {
                             for (var i = 0; i < this.form.templateFileList.length; i++) {
+                                this.form.templateFileList[i].signId = this.form.templateFileList[i].signId?.toString();
                                 this.form.templateFileList[i].label = this.form.templateFileList[i].fileName !=
                                     null ? this.form
                                     .templateFileList[i].fileName : this.form.templateFileList[i].pdfName
                             }
                         }
                         this.draggableList = this.form.templateFileList || []
-                        // if (this.title == '编辑模版' && res.data.fileUrl) {
-                        //   // let filePra = {
-                        //   //     name:res.data.fileName,
-                        //   //     url:res.data.fileUrl
-                        //   // }
-                        //   // this.fileList.push(filePra)
-                        // }
-                        //this.form.file = null;
                         if (this.title == '克隆模版') {
                             this.form.templateNumber = ''
                             this.draggableList = []
@@ -546,15 +507,6 @@
                     return
                 }
                 this.submitLoading = true;
-                // if(!this.form.manager){
-                //     this.msgError('请选择管理员')
-                //     return
-                // }
-                let po = []
-                this.sigForm.chooseSignature.forEach(item => {
-                    po.push(item.pid)
-                })
-                this.form.signatureId = po.join(',')
                 let formData = new FormData();
                 formData.append("templateNumber", this.form.templateNumber);
                 if (this.form.file != null) {
@@ -566,12 +518,11 @@
                 formData.append("manager", this.managerId ? this.managerId : this.form.manager);
                 formData.append("templateType", this.form.templateType);
                 formData.append("formatType", this.form.formatType);
-                formData.append("signatureId", this.form.signatureId);
                 formData.append("isPublic", this.form.isPublic);
                 formData.append("deptId", this.form.deptId ? this.form.deptId : null);
                 formData.append("status", this.form.status);
                 formData.append("content", this.form.content);
-                //formData.append("list", this.draggableList);
+                formData.append("isSubLoop", this.form.isSubLoop);
                 this.draggableList.forEach((item, i) => {
                     formData.append(`list[${i}].type`, item.type);
                     formData.append(`list[${i}].id`, item.id ? item.id : '');
@@ -582,7 +533,7 @@
                     //电子签章内容
                     formData.append(`list[${i}].isSign`, item.isSign ? item.isSign : '');
                     formData.append(`list[${i}].pagePlace`, item.pagePlace ? item.pagePlace : '');
-                    formData.append(`list[${i}].signName`, item.signName ? item.signName : '');
+                    formData.append(`list[${i}].signId`, item.signId ? item.signId : '');
                     formData.append(`list[${i}].signSetUp`, item.signSetUp ? item.signSetUp : '');
                     if (item.signSetUp == 2 && item.pageIndex == "All") {
                         formData.append(`list[${i}].pageRange`, "All");
@@ -630,81 +581,9 @@
             },
             //转变格式类型
             handleChange(value) {
-                //console.log(value)
-                this.sigForm.chooseSignature = []
-                if (value == 0) {
-                    this.sigForm.chooseSignature.push(this.signatureList[0])
-                    this.sigForm.chooseSignature[0].pid = this.signatureList[0].id
+                if (this.title == '新增模版' || this.title == '克隆模版') {
+                    this.draggableList = [];
                 }
-            },
-            //获取签章信息
-            getSignature() {
-                templateApi.signature().then(res => {
-                    //console.log(res);
-                    this.signatureOptions = []
-                    this.signatureList = res.data || []
-                    for (var i = 0; i < this.signatureList.length; i++) {
-                        this.sinMap.set(this.signatureList[i].id, this.signatureList[i])
-                        this.signatureList[i].pid = this.signatureList[i].id
-                    }
-                    // this.signatureList.forEach(item => {
-                    //     this.sinMap.set(item.id,item)
-                    // })
-                    //console.log(this.signatureList)
-                    this.signatureList.forEach(item => {
-                        let param = {
-                            value: item.id,
-                            label: item.name
-                        };
-                        this.signatureOptions.push(param)
-                    })
-                })
-            },
-            //改变签章1,2,3
-            changeSigId(value, index) {
-                //console.log(this.signatureList)
-                //console.log(value,index)
-                //去签章数组找值
-                //let arr = JSON.parse(JSON.stringify(this.signatureList))
-                for (var i = 0; i < this.signatureList.length; i++) {
-                    if (value === this.signatureList[i].id) {
-                        this.$set(this.sigForm.chooseSignature, index, this.signatureList[i]);
-                        this.sigForm.chooseSignature[index].pid = this.signatureList[i].id
-                    }
-                }
-            },
-            //循环遍历map，获得value组成数组
-            getArray(mapp) {
-                this.sigForm.chooseSignature = []
-                for (var [key, value] of mapp) {
-                    this.sigForm.chooseSignature.push(value)
-                }
-                //console.log(1,this.sigForm.chooseSignature)
-            },
-            //新增签章
-            addArr() {
-                let param = {
-                    id: '',
-                    type: '',
-                    entName: '',
-                    corporateName: '',
-                    creditCode: '',
-                    entAddress: '',
-                    contactName: '',
-                    contactPhone: '',
-                    contactIdNumber: '',
-                    pid: '' //区别去id 防止与select中的id冲突，要提交的签名id
-                };
-                this.sigForm.chooseSignature.push(param)
-            },
-            remove(index) {
-                //console.log(index)
-                this.sigForm.chooseSignature.splice(index, 1)
-            },
-            // 文件上传中处理
-            handleFileUploadProgress(event, file, fileList) {
-                //console.log(file)
-                this.isUploading = true;
             },
             fileOnChange(file) {
                 this.isUploading = false;
@@ -717,8 +596,8 @@
                     pageIndex: 'All',
                 };
                 this.draggableList.push(param);
-                //this.uploadSectionFile()
             },
+            //新增模版获取管理员
             getUsers() {
                 let param = {
                     roleKey: 'wenshuguanliyuan'
@@ -730,16 +609,17 @@
             },
             /** 查询部门列表 */
             getDeptList() {
-                /** 查询部门下拉树结构 */
                 treeselect().then((response) => {
                     this.deptOptions = response.data;
                 });
             },
+            //查询证据包信息
             getEvidenceField() {
                 templateApi.getEvidenceField().then((response) => {
                     this.templateData = [response.data];
                 });
             },
+            //切换管理员
             changeUser(value) {
                 this.managerId = null;
                 this.form.deptId = null;
@@ -747,11 +627,8 @@
                 temCenterApi.findByUsername(value).then(response => {
                     this.deptOptions = response.data;
                 })
-                // this.form.manager = value[1]
             },
-            handleUplod() {
-
-            },
+            handleUplod() {},
             filterNode(value, data) {
                 if (!value) return true;
                 return data.label.indexOf(value) !== -1;
@@ -770,7 +647,6 @@
                         pageIndex: 'All',
                     };
                     this.draggableList.push(param);
-                    //this.draggableList = Array.from(new Set(this.draggableList))
                 }
             },
             deleteData(item, index) {
@@ -782,9 +658,7 @@
                         closeOnClickModal: false,
                         type: "warning",
                     }).then(() => {
-                        //console.log(item.id);
                         temCenterApi.deleteFile(item.id).then(res => {
-                            //console.log(res)
                             that.msgSuccess(res.msg);
                             that.openDialog()
                             that.draggableList.splice(index, 1)
@@ -799,7 +673,8 @@
             addFile() {
                 this.editData.title = '新增选择文件';
                 this.editData.dialogVisible = true;
-                if (this.form.formatType == 4) {
+                //type == 1 上传文件，type == 2 证据包， type == 3 自定义type 代表二者都可选。
+                if (this.form.formatType == 4 && this.form.isSubLoop == 0) {
                     this.editData.type = 1;
                 } else {
                     this.editData.type = 3;
@@ -808,7 +683,6 @@
                 this.editData.tid = this.id;
             },
             getVal(value) {
-                //console.log(value.length)
                 this.fontNumber = value.length
             },
             // //切换指定页面
@@ -969,17 +843,6 @@
         }
     }
 
-    /*.file-header{*/
-    /*display: flex;*/
-    /*justify-content: space-between;*/
-    /*>p{*/
-    /*display: flex;*/
-    /*align-items: center;*/
-    /*}*/
-    /*.el-button{*/
-    /*margin-right: 10px;*/
-    /*}*/
-    /*}*/
     .font-number {
         position: absolute;
         bottom: -20px;

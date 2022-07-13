@@ -60,8 +60,8 @@
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
-                                    <el-form-item style="width:33%" label="签章名称:" prop="signName" v-if="item.isSign!=0">
-                                        <el-select clearable v-model="item.signName" filterable placeholder="请选择">
+                                    <el-form-item style="width:33%" label="签章名称:" prop="signId" v-if="item.isSign!=0">
+                                        <el-select clearable v-model="item.signId" filterable placeholder="请选择">
                                             <el-option v-for="item in signNameOptions" :key="item.dictValue"
                                                 :label="item.dictLabel" :value="item.dictValue">
                                             </el-option>
@@ -255,15 +255,16 @@
                 }
             },
             isSignchange(item) {
+                //证据链包 type== 2
                 if (item.isSign == 0 && item.type == 2) {
-                    item.signName = '';
+                    item.signId = '';
                     item.signSetUp = '';
                     item.pagePlace = '';
                     item.pageIndex = 'All';
                     item.pageRange = '';
                     return item
                 } else if (item.isSign == 0 && item.type == 1) {
-                    item.signName = '';
+                    item.signId = '';
                     item.signSetUp = '';
                     item.pagePlace = '';
                     item.placeContent = '';
@@ -292,7 +293,7 @@
                         }
                         formData.append('isSign', item.isSign ? item.isSign : '')
                         formData.append('pagePlace', item.pagePlace ? item.pagePlace : '')
-                        formData.append('signName', item.signName ? item.signName : '')
+                        formData.append('signId', item.signId ? item.signId : '')
                         formData.append('signSetUp', item.signSetUp ? item.signSetUp : '')
                         if (item.signSetUp == 2 && item.pageIndex == "All") {
                             formData.append('pageRange', "All");

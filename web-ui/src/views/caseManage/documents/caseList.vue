@@ -165,7 +165,7 @@
                 <el-table-column label="剩余待还总额" prop="remainingBalance" width="150" sortable="custom"
                     :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="资产最终受让方" prop="assetLastAssignee" width="160" :show-overflow-tooltip="true" />
-                <el-table-column label="调解员" prop="principalName" width="100" />
+                <el-table-column label="调解员" prop="principalName" width="120" />
                 <el-table-column label="案件状态" :formatter="statusFormat" prop="caseStatus" width="120" />
                 <el-table-column label="财保状态" :formatter="getProtects" prop="preStatus" width="120" />
                 <el-table-column label="借款合同" prop="loanContract" width="100">
@@ -293,14 +293,14 @@
                     prop="contractAmount" width="120" />
                 <el-table-column label="剩余期数" prop="remainTerms" width="120" />
                 <el-table-column label="委案状态" :formatter="getEntrustType" prop="entrustStatus"></el-table-column> -->
-                <el-table-column label="操作" width="360" fixed="right" align="center">
+                <el-table-column label="操作" width="160" fixed="right" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" type="primary" v-if="scope.row.entrustStatus != 3"
                             @click="handleUpdate(scope.row)" v-hasPermi="['case:clerical:query']">查看
                         </el-button>
-                        <el-button size="mini" type="warning" @click="handleMediation(scope.row)"
+                        <!-- <el-button size="mini" type="warning" @click="handleMediation(scope.row)"
                             v-hasPermi="['case:clerical:instrument']">生成调解文书
-                        </el-button>
+                        </el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -311,7 +311,7 @@
         <mediationBook @refresh="clearSelection" :params="mediationBookData.params"
             :selection="mediationBookData.selection" :title="mediationBookData.title"
             :show.sync="mediationBookData.dialogVisible" :id="mediationBookData.id"
-            :requestApi="mediationBookData.requestApi" :total="mediationBookData.total"></mediationBook>
+            :total="mediationBookData.total"></mediationBook>
         <batchExportDialog @refresh="clearSelection" :title="batchexportDialogData.title"
             :show.sync="batchexportDialogData.dialogVisible" :red="batchexportDialogData.red"
             :params="batchexportDialogData.params" :total="batchexportDialogData.total"></batchExportDialog>
@@ -384,7 +384,6 @@
                     title: "",
                     dialogVisible: false,
                     id: "",
-                    requestApi: "",
                     params: "",
                     selection: [],
                     total: ""
@@ -530,17 +529,16 @@
                     })
                 }
             },
-            handleMediation(item) {
-                this.mediationBookData.title = "生成调解文书";
-                this.mediationBookData.dialogVisible = true;
-                this.mediationBookData.id = item.id;
-                this.mediationBookData.requestApi = "/case/caseInfo/instrument";
-                this.mediationBookData.params = "";
-            },
+            // handleMediation(item) {
+            //     this.mediationBookData.title = "生成调解文书";
+            //     this.mediationBookData.dialogVisible = true;
+            //     this.mediationBookData.id = item.id;
+            //     this.mediationBookData.requestApi = "/case/caseInfo/instrument";
+            //     this.mediationBookData.params = "";
+            // },
             batchBook() {
                 this.mediationBookData.title = "批量生成调解文书";
                 this.mediationBookData.dialogVisible = true;
-                this.mediationBookData.requestApi = "/case/caseInfo/instrument/batch";
                 this.mediationBookData.params = this.ids;
                 this.mediationBookData.id = "";
             },
@@ -548,14 +546,12 @@
                 this.mediationBookData.title = "全选生成调解文书";
                 this.mediationBookData.dialogVisible = true;
                 this.mediationBookData.total = this.total;
-                this.mediationBookData.requestApi = "/case/caseInfo/instrument/batchAll";
                 this.mediationBookData.id = "";
             },
             batchBookTwo() {
                 this.mediationBookData.title = "批量生成多人多案文书";
                 this.mediationBookData.selection = this.selection;
                 this.mediationBookData.dialogVisible = true;
-                this.mediationBookData.requestApi = "/case/caseInfo/mumc/instrument/batch";
                 this.mediationBookData.params = this.ids.join(",");
                 this.mediationBookData.id = "";
             },
@@ -564,7 +560,6 @@
                 this.mediationBookData.selection = this.selection;
                 this.mediationBookData.dialogVisible = true;
                 this.mediationBookData.total = this.total;
-                this.mediationBookData.requestApi = "/case/caseInfo/mumc/instrument/batchAll";
                 this.mediationBookData.params = this.ids.join(",");
                 this.mediationBookData.id = "";
             },
