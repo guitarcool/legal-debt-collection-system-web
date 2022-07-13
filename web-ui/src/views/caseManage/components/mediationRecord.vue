@@ -515,7 +515,7 @@
                                 if (valid) {
                                     this.loading = true;
                                     let queryParams = {
-                                        caseIds: [],
+                                        caseIds: this.ids,
                                         content: this.form.content,
                                     };
                                     cuttingBeforeApi.batchMediationFailedAll(queryParams).then(res => {

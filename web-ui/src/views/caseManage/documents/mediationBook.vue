@@ -10,15 +10,10 @@
                     <p class="book-title">1、选择文书模版：</p>
                     <el-input clearable placeholder="输入关键字进行过滤" v-model="filterText">
                     </el-input>
-                    <el-scrollbar style="height:250px;" v-if="title =='批量生成多人多案文书'||title == '全选生成多人多案文书'" >
-                        <el-tree :data="caseListTwo" class="border-style" :props="defaultProps" node-key="id"
-                            :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
-                            @node-click="handleNodeClick" default-expand-all />
-                    </el-scrollbar>
-                    <el-scrollbar style="height:250px;" v-else >
-                        <el-tree :data="caseList" class="border-style" :props="defaultProps" node-key="id"
-                            :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree"
-                            @node-click="handleNodeClick" default-expand-all />
+                    <el-scrollbar style="height:250px;">
+                        <el-tree :data="caseList" :props="defaultProps" node-key="id" :expand-on-click-node="true"
+                            :check-strictly="true" ref="tree" @check="handleCheckClick" show-checkbox
+                            default-expand-all />
                     </el-scrollbar>
                 </div>
                 <div class="margin-div">
@@ -30,12 +25,11 @@
                         </p>
                         <draggable v-model="chooseData" v-else>
                             <transition-group>
-                                <li v-for="(item, index) in chooseData" :key="item.id" class="item">
+                                <li v-for="item in chooseData" :key="item.id" class="item">
                                     <p>{{ item.name }}</p>
                                     <div>
-                                        <el-switch v-model="item.switch" active-color="#13ce66" inactive-color="#ff4949"
-                                            style="margin-right: 20px"></el-switch>
-                                        <i class="el-icon-delete" @click="deleteData(index)"></i>
+                                        <el-switch v-model="item.switch" active-color="#13ce66"
+                                            inactive-color="#ff4949"></el-switch>
                                     </div>
                                 </li>
                             </transition-group>
@@ -64,13 +58,26 @@
                 <div class="margin-div" v-show="title =='批量生成多人多案文书'||title == '全选生成多人多案文书'">
                     <p class="book-title">6、自定义案件顺序：</p>
                     <div class="demo">
-                        <el-table :data="selection" border row-key="id" align="left">
+                        <el-table max-height="550" :data="selection" border row-key="id" align="left">
                             <el-table-column ref="tableColumn" v-for="(item, index) in col" :key="`col_${index}`"
                                 :prop="dropCol[index].prop" :label="item.label">
                             </el-table-column>
                         </el-table>
                     </div>
-
+                </div>
+                <div class="margin-div">
+                    <p class="book-title" v-if="title =='批量生成调解文书'||title == '全选生成调解文书'">5、异常值提示：</p>
+                    <p class="book-title" v-else>7、异常值提示：</p>
+                    <el-button type="primary" :loading="tipsLoading" @click="getOutliersTips">异常值查询</el-button>
+                    <div class="demo" style="margin-top:10px">
+                        <el-table max-height="550" :data="tipsList" border align="left">
+                            <el-table-column label="异常值提示" :show-overflow-tooltip="true">
+                                <template slot-scope="scope">
+                                    {{scope.row}}
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </div>
                 </div>
             </div>
         </template>
@@ -85,18 +92,10 @@
 
 <script>
     import Dialog from "@/components/Dialog/index";
-    import axios from "axios";
-    import {
-        getToken
-    } from "@/utils/auth";
     import templateApi from "@/api/case/document/templateIndex";
     import divisionApi from "@/api/case/division/index";
     import draggable from 'vuedraggable'
     import Sortable from 'sortablejs'
-    const mimeMap = {
-        xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        zip: "application/zip",
-    };
     export default {
         name: "mediationBook",
         components: {
@@ -114,10 +113,6 @@
                 default: "",
             },
             id: {
-                type: String,
-                default: "",
-            },
-            requestApi: {
                 type: String,
                 default: "",
             },
@@ -176,7 +171,6 @@
                 ],
                 filterText: "",
                 caseList: [],
-                caseListTwo: [],
                 chooseData: [],
                 selectionData: [],
                 draging: null, //被拖拽的对象
@@ -188,7 +182,9 @@
                 templateIdArr: [],
                 loading: false,
                 needSignTemplate: [],
+                tipsList: [],
                 drawBodyWrapper: '',
+                tipsLoading: false,
             };
         },
         computed: {
@@ -213,19 +209,16 @@
             openDialog() {
                 this.loading = false;
                 this.caseList = [];
-                this.caseListTwo = [];
                 this.chooseData = [];
                 this.needSignTemplate = [];
+                this.tipsList = [];
                 this.caseNumOnePaper = "";
                 this.templateIdArr = [];
                 this.applyDate = "";
                 this.suffix = 1;
+                this.tipsLoading = false;
                 this.filterText = "";
-                if(this.title =='批量生成多人多案文书'||this.title == '全选生成多人多案文书'){
-                    this.getListTwo();
-                }else{
-                    this.getList();
-                }
+                this.getList();
                 this.$nextTick(() => {
                     const drawBodyWrapper = document.querySelector('.el-dialog__body tbody')
                     this.drawBodyWrapper = drawBodyWrapper;
@@ -246,7 +239,7 @@
                     }
                 })
             },
-            // 提交上传文件
+            // /批量生成调解文书，/全选生成调解文书提交上传文件
             submitTwo() {
                 this.templateIdArr = this.chooseData.map((item) => item.id);
                 this.needSignTemplate = this.chooseData.map((item) => item.switch ? item.switch : false);
@@ -307,162 +300,152 @@
                     });
                 }
             },
-            // 提交上传文件
+            // 多人多案全选，多人多案批量提交上传文件
             submit() {
                 this.templateIdArr = this.chooseData.map((item) => item.id);
                 this.needSignTemplate = this.chooseData.map((item) => item.switch ? item.switch : false);
                 let param = {};
-                //单个生成调解文书
-                if (this.id) {
+                param.caseNumOnePaper = this.caseNumOnePaper;
+                param.templateIdArr = this.templateIdArr.join(",");
+                param.needSignTemplate = this.needSignTemplate.join(","),
+                    param.applyDate = this.applyDate;
+                param.suffix =
+                    this.suffix == 1 ?
+                    ".docx" :
+                    this.suffix == 2 ?
+                    ".pdf" :
+                    ".xlsx";
+                this.loading = true;
+                if (this.title == '批量生成多人多案文书') {
+                    param.ids = this.ids;
+                    if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
+                        this.msgError('请填写正确的合并数量')
+                        return
+                    }
                     if (this.templateIdArr.length <= 0) {
                         this.msgError("请选择模版");
                         return;
                     }
-                    param = {
-                        templateIdArr: this.templateIdArr.join(","),
-                        needSignTemplate: this.needSignTemplate.join(","),
-                        id: this.id,
-                        applyDate: this.applyDate,
-                        suffix: this.suffix == 1 ?
-                            ".docx" : this.suffix == 2 ?
-                            ".pdf" : ".xlsx",
-                    };
-                    //批量
-                } else {
-                    if (this.title == '批量生成多人多案文书') {
-                        param.ids = this.ids;
-                        if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
-                            this.msgError('请填写正确的合并数量')
-                            return
-                        }
-                        if (this.templateIdArr.length <= 0) {
-                            this.msgError("请选择模版");
-                            return;
-                        }
-                    } else if (this.title == '全选生成多人多案文书') {
-                        param.ids = [];
-                        if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
-                            this.msgError('请填写正确的合并数量')
-                            return
-                        }
-                        if (this.templateIdArr.length <= 0) {
-                            this.msgError("请选择模版");
-                            return;
-                        }
-                    } else {
-                        //批量生成调解文书
-                        param.ids = this.params;
-                        if (this.templateIdArr.length <= 0) {
-                            this.msgError("请选择模版");
-                            return;
-                        }
+                    templateApi.mumcBatchInstrument(param).then((response) => {
+                        this.dialogVisible = false;
+                        this.loading = false;
+                        this.msgSuccess(response.msg);
+                        this.$emit('refresh')
+                    }).catch((error) => {
+                        this.loading = false;
+                    })
+                } else if (this.title == '全选生成多人多案文书') {
+                    param.ids = [];
+                    if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
+                        this.msgError('请填写正确的合并数量')
+                        return
                     }
-                    param.caseNumOnePaper = this.caseNumOnePaper;
-                    param.templateIdArr = this.templateIdArr.join(",");
-                    param.needSignTemplate = this.needSignTemplate.join(","),
-                    param.applyDate = this.applyDate;
-                    param.suffix =
-                        this.suffix == 1 ?
-                        ".docx" :
-                        this.suffix == 2 ?
-                        ".pdf" :
-                        ".xlsx";
+                    if (this.templateIdArr.length <= 0) {
+                        this.msgError("请选择模版");
+                        return;
+                    }
+                    templateApi.mumcBatchAllInstrument(param).then((response) => {
+                        this.dialogVisible = false;
+                        this.loading = false;
+                        this.msgSuccess(response.msg);
+                        this.$emit('refresh')
+                    }).catch(() => {
+                        this.loading = false;
+                    })
                 }
-                this.loading = true;
-                const baseUrl = process.env.VUE_APP_BASE_API;
-                var url = baseUrl + this.requestApi;
-                axios({
-                    method: "post",
-                    url: url,
-                    timeout: 600000,
-                    responseType: "blob",
-                    data: param,
-                    headers: {
-                        Authorization: "Bearer " + getToken()
-                    },
-                }).then((res) => {
-                    let data = res.data
-                    let _self = this
-                    let fileReader = new FileReader();
-                    fileReader.onload = function () {
-                        try {
-                            let jsonData = JSON.parse(this.result); // 说明是普通对象数据，后台转换失败
-                            _self.$message({
-                                message: jsonData.msg,
-                                type: "error",
-                            }); // 弹出的提示信息
-                            _self.loading = false;
-                        } catch (err) { // 解析成对象失败，说明是正常的文件流
-                            _self.resolveBlob(res, mimeMap.zip);
-                            _self.needSignTemplate = [];
-                            _self.dialogVisible = false;
-                            _self.loading = false;
-                            _self.$emit('refresh')
-                        }
-                    };
-                    fileReader.readAsText(data) // 注意别落掉此代码，可以将 Blob 或者 File 对象转根据特殊的编码格式转化为内容(字符串形式)
-                }).catch((error) => {
-                    this.needSignTemplate = [];
-                    this.loading = false;
-                });
-            },
-            resolveBlob(res, mimeType) {
-                const aLink = document.createElement("a");
-                var blob = new Blob([res.data], {
-                    type: mimeType
-                });
-                // //从response的headers中获取filename, 后端response.setHeader("Content-disposition", "attachment; filename=xxxx.docx") 设置的文件名;
-                var patt = new RegExp("filename=([^;]+\\.[^\\.;]+);*");
-                var contentDisposition = decodeURI(res.headers["content-disposition"]);
-                var result = patt.exec(contentDisposition);
-                var fileName = result[1];
-                fileName = fileName.replace(/\"/g, "");
-                aLink.href = URL.createObjectURL(blob);
-                aLink.setAttribute("download", fileName); // 设置下载文件名称
-                document.body.appendChild(aLink);
-                aLink.click();
-                document.body.appendChild(aLink);
-                this.dialogVisible = false;
-                this.loading = false;
-                this.$emit('refresh')
-            },
-            filterNode(value, data) {
-                if (!value) return true;
-                return data.name.indexOf(value) !== -1;
             },
             //多元调解模版 
             getList() {
-                let data = {
-                    formatType: 0,
-                    templateTypes: [],
-                    status: 1,
-                };
+                let data;
+                if (this.title == '批量生成多人多案文书' || this.title == '全选生成多人多案文书') {
+                    //多人多案模版  4
+                    data = {
+                        formatType: 4,
+                        templateTypes: [],
+                        status: 1,
+                    };
+                } else {
+                    //多元调解模版 
+                    data = {
+                        formatType: 0,
+                        templateTypes: [],
+                        status: 1,
+                    };
+                }
                 templateApi.templateListInfo(data).then((response) => {
                     this.caseList = response.data || [];
                 });
             },
-            //多人多案模版  4
-            getListTwo() {
-                let data = {
-                    formatType: 4,
-                    templateTypes: [],
-                    status: 1,
-                };
-                templateApi.templateListInfo(data).then((response) => {
-                    this.caseListTwo = response.data || [];
-                });
-            },
-            handleNodeClick(data) {
-                //console.log(data)
-                if (!data.id) {
-                    this.$refs.tree.setCurrentKey(null);
+            getOutliersTips() {
+                this.templateIdArr = this.chooseData.map((item) => item.id);
+                this.needSignTemplate = this.chooseData.map((item) => item.switch ? item.switch : false);
+                let param = {};
+                if (this.title == '批量生成多人多案文书') {
+                    param.ids = this.ids;
+                    if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
+                        this.msgError('请填写正确的合并数量')
+                        return
+                    }
+                    if (this.templateIdArr.length <= 0) {
+                        this.msgError("请选择模版");
+                        return;
+                    }
+                } else if (this.title == '全选生成多人多案文书') {
+                    param.ids = [];
+                    if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
+                        this.msgError('请填写正确的合并数量')
+                        return
+                    }
+                    if (this.templateIdArr.length <= 0) {
+                        this.msgError("请选择模版");
+                        return;
+                    }
+                } else if (this.title == '批量生成调解文书') {
+                    //批量生成调解文书
+                    param.ids = this.params;
+                    if (this.templateIdArr.length <= 0) {
+                        this.msgError("请选择模版");
+                        return;
+                    }
+                } else if (this.title == '全选生成调解文书') {
+                    //批量生成调解文书
+                    param.ids = [];
+                    if (this.templateIdArr.length <= 0) {
+                        this.msgError("请选择模版");
+                        return;
+                    }
+                }
+                this.tipsLoading = true;
+                param.caseNumOnePaper = this.caseNumOnePaper;
+                param.templateIdArr = this.templateIdArr.join(",");
+                param.needSignTemplate = this.needSignTemplate.join(","),
+                    param.applyDate = this.applyDate;
+                param.suffix =
+                    this.suffix == 1 ?
+                    ".docx" :
+                    this.suffix == 2 ?
+                    ".pdf" :
+                    ".xlsx";
+                if (this.title == '全选生成多人多案文书' || this.title == '全选生成调解文书') {
+                    templateApi.getOutliersTipsAll(param).then((response) => {
+                        this.tipsLoading = false;
+                        this.tipsList = response.data || [];
+                    }).catch(() => {
+                        this.tipsLoading = false;
+                        this.tipsList = [];
+                    })
                 } else {
-                    this.chooseData.push(data);
-                    this.chooseData = Array.from(new Set(this.chooseData));
+                    templateApi.getOutliersTips(param).then((response) => {
+                        this.tipsLoading = false;
+                        this.tipsList = response.data || [];
+                    }).catch(() => {
+                        this.tipsLoading = false;
+                        this.tipsList = [];
+                    })
                 }
             },
-            deleteData(index) {
-                this.chooseData.splice(index, 1);
+            handleCheckClick() {
+                this.chooseData = this.$refs.tree.getCheckedNodes();
             },
         },
     };
@@ -472,6 +455,22 @@
 <style scoped lang="scss">
     .el-dialog__body {
         height: 20px;
+    }
+
+    // 父级不可选样式
+
+    ::v-deep .el-tree {
+
+        // 不可全选样式
+        .el-tree-node {
+            .is-leaf+.el-checkbox .el-checkbox__inner {
+                display: inline-block;
+            }
+
+            .el-checkbox .el-checkbox__inner {
+                display: none;
+            }
+        }
     }
 
 </style>
@@ -518,35 +517,6 @@
 
         li:last-of-type {
             border-bottom: none;
-        }
-    }
-
-    .border-style {
-        border: 1px solid #e6ebf5;
-        padding: 10px;
-        min-height: 250px;
-        border-top: none;
-        border-radius: 4px;
-
-        .el-tree-node.is-current>.el-tree-node__content {
-            color: #409eff;
-            background-color: transparent;
-            border-radius: 4px;
-        }
-
-        .el-tree-node>.el-tree-node__content:hover {
-            background-color: transparent;
-        }
-
-        .el-tree-node.is-current>.el-tree-node__content:after {
-            content: "\e6da";
-            font-family: element-icons !important;
-            padding-left: 10px;
-            font-weight: bolder;
-        }
-
-        .el-tree-node>.el-tree-node__children {
-            overflow: unset;
         }
     }
 

@@ -2,8 +2,7 @@
     <Dialog :title="title" :height="500" :show.sync="dialogVisible" width="40%" @openDialog="openDialog">
         <template v-slot:default>
             <!-- 分配权限内容 -->
-            <div v-if="title == '全选监督员分发'" style="padding:10px 0;color:red;font-size:16px;line-height:24px">
-                注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
+            <div v-if="title == '全选监督员分发'" style="padding:10px 0;color:red;font-size:16px;line-height:24px" >注意：本次共操作{{total}}条数据，请确认搜索条件无误后操作!</div>
             <div class="division-content">
                 <p>可多选，多选时默认平均分配给所选择人，所有选择人均可监督本批案件信息</p>
                 <el-scrollbar style="height: 350px">
@@ -51,9 +50,9 @@
                 type: Array,
                 default: []
             },
-            total: {
+            total:{
                 type: String | Number,
-                default: '--'
+                default: '--'           
             }
         },
         watch: {
@@ -128,7 +127,6 @@
                 }
                 if (this.title == '全选监督员分发') {
                     this.loading = true;
-                    param.caseIds = [];
                     divisionApi.supervisorAssignmentAll(param).then(res => {
                         if (res.code == 200) {
                             this.loading = false;
