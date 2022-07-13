@@ -12,7 +12,7 @@
                     </el-input>
                     <el-scrollbar style="height:250px;">
                         <el-tree :data="caseList" :props="defaultProps" node-key="id" :expand-on-click-node="true"
-                            :check-strictly="true" ref="tree" @check="handleCheckClick" show-checkbox
+                            :check-strictly="true" :filter-node-method="filterNode" ref="tree" @check="handleCheckClick" show-checkbox
                             default-expand-all />
                     </el-scrollbar>
                 </div>
@@ -224,6 +224,10 @@
                     this.drawBodyWrapper = drawBodyWrapper;
                     this.rowDrop()
                 })
+            },
+            filterNode(value, data) {
+                if (!value) return true;
+                return data.name.indexOf(value) !== -1;
             },
             //行拖拽
             rowDrop() {
