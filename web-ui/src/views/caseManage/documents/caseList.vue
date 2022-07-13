@@ -311,7 +311,7 @@
         <mediationBook @refresh="clearSelection" :params="mediationBookData.params"
             :selection="mediationBookData.selection" :title="mediationBookData.title"
             :show.sync="mediationBookData.dialogVisible" :id="mediationBookData.id"
-            :requestApi="mediationBookData.requestApi" :total="mediationBookData.total"></mediationBook>
+            :total="mediationBookData.total"></mediationBook>
         <batchExportDialog @refresh="clearSelection" :title="batchexportDialogData.title"
             :show.sync="batchexportDialogData.dialogVisible" :red="batchexportDialogData.red"
             :params="batchexportDialogData.params" :total="batchexportDialogData.total"></batchExportDialog>
@@ -384,7 +384,6 @@
                     title: "",
                     dialogVisible: false,
                     id: "",
-                    requestApi: "",
                     params: "",
                     selection: [],
                     total: ""
@@ -540,7 +539,6 @@
             batchBook() {
                 this.mediationBookData.title = "批量生成调解文书";
                 this.mediationBookData.dialogVisible = true;
-                this.mediationBookData.requestApi = "/case/caseInfo/instrument/batch";
                 this.mediationBookData.params = this.ids;
                 this.mediationBookData.id = "";
             },
@@ -548,14 +546,12 @@
                 this.mediationBookData.title = "全选生成调解文书";
                 this.mediationBookData.dialogVisible = true;
                 this.mediationBookData.total = this.total;
-                this.mediationBookData.requestApi = "/case/caseInfo/instrument/batchAll";
                 this.mediationBookData.id = "";
             },
             batchBookTwo() {
                 this.mediationBookData.title = "批量生成多人多案文书";
                 this.mediationBookData.selection = this.selection;
                 this.mediationBookData.dialogVisible = true;
-                this.mediationBookData.requestApi = "/case/caseInfo/mumc/instrument/batch";
                 this.mediationBookData.params = this.ids.join(",");
                 this.mediationBookData.id = "";
             },
@@ -564,7 +560,6 @@
                 this.mediationBookData.selection = this.selection;
                 this.mediationBookData.dialogVisible = true;
                 this.mediationBookData.total = this.total;
-                this.mediationBookData.requestApi = "/case/caseInfo/mumc/instrument/batchAll";
                 this.mediationBookData.params = this.ids.join(",");
                 this.mediationBookData.id = "";
             },
