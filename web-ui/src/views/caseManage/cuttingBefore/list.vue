@@ -405,8 +405,8 @@
                         <el-button size="mini" type="primary" @click="handleUpdate(scope.row)"
                             v-hasPermi="['case:pretrial:query']">查看
                         </el-button>
-                        <el-button size="mini" type="danger" @click="handleExport(scope.row)">律师函
-                        </el-button>
+                        <!-- <el-button size="mini" type="danger" @click="handleExport(scope.row)">律师函
+                        </el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
