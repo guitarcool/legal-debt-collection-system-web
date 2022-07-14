@@ -446,7 +446,7 @@
                                         this.loading = false;
                                     });
                                 break;
-                            case this.title == '裁后批量短信发送':
+                            case this.title == '裁后批量短信发送'||this.title == '裁后批量短信发送(旧)':
                                 cuttingAfterApi.sendSmsCollection(param).then((res) => {
                                         if (res.code == 500) {
                                             this.loading = false;
@@ -478,7 +478,7 @@
                                     this.loading = false;
                                 });
                                 break;
-                            case this.title == '裁前批量短信发送':
+                            case this.title == '裁前批量短信发送'||this.title == '裁前批量短信发送(旧)':
                                 cuttingBeforeApi.sendSmsCollection(param).then((res) => {
                                     if (res.code == 500) {
                                         this.loading = false;

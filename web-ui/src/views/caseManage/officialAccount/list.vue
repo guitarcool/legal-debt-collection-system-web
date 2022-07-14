@@ -216,7 +216,6 @@
                 this.chooseDaterange = []
             },
             handleChange(value) {
-                //console.log(value)
                 if (value == null) {
                     this.queryParams.beginTime = ''
                     this.queryParams.endTime = ''
@@ -250,7 +249,12 @@
                 }, 3000)
             },
             handleUpdate(item) {
-                let idCard = item.idCardNo;
+                let idCard;
+                if (!this.isDesensitization) {
+                    idCard = item.idCardNo;
+                } else {
+                    idCard = item.idCard;
+                }
                 this.dialogVisible = true;
                 officialApi.wechatCaseList(idCard).then((response) => {
                     this.modallist = response.data;

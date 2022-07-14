@@ -12,7 +12,7 @@
                     </el-input>
                     <el-scrollbar style="height:250px;">
                         <el-tree :data="caseList" :props="defaultProps" node-key="id" :expand-on-click-node="true"
-                            :check-strictly="true" ref="tree" @check="handleCheckClick" show-checkbox
+                            :check-strictly="true" :filter-node-method="filterNode" ref="tree" @check="handleCheckClick" show-checkbox
                             default-expand-all />
                     </el-scrollbar>
                 </div>
@@ -225,6 +225,10 @@
                     this.rowDrop()
                 })
             },
+            filterNode(value, data) {
+                if (!value) return true;
+                return data.name.indexOf(value) !== -1;
+            },
             //行拖拽
             rowDrop() {
                 const tbody = this.drawBodyWrapper
@@ -315,7 +319,6 @@
                     this.suffix == 2 ?
                     ".pdf" :
                     ".xlsx";
-                this.loading = true;
                 if (this.title == '批量生成多人多案文书') {
                     param.ids = this.ids;
                     if (this.caseNumOnePaper == '' || this.caseNumOnePaper > 100) {
@@ -326,6 +329,7 @@
                         this.msgError("请选择模版");
                         return;
                     }
+                    this.loading = true;
                     templateApi.mumcBatchInstrument(param).then((response) => {
                         this.dialogVisible = false;
                         this.loading = false;
@@ -344,6 +348,7 @@
                         this.msgError("请选择模版");
                         return;
                     }
+                    this.loading = true;
                     templateApi.mumcBatchAllInstrument(param).then((response) => {
                         this.dialogVisible = false;
                         this.loading = false;
