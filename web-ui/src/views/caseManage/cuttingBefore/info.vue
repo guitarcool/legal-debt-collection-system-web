@@ -533,7 +533,19 @@
                             <p class="small-unit-conent">{{orderInfo.caseId}}</p>
                         </div>
                         <div class="small-three">
-                            <p class="small-unit-header">催收机构：</p>
+                            <p class="small-unit-header">内部订单号：</p>
+                            <p class="small-unit-conent">{{orderInfo.deptName}}</p>
+                        </div>
+                        <div class="small-three">
+                            <p class="small-unit-header">内部客户号：</p>
+                            <p class="small-unit-conent">{{orderInfo.deptName}}</p>
+                        </div>
+                        <div class="small-three">
+                            <p class="small-unit-header">部门：</p>
+                            <p class="small-unit-conent">{{orderInfo.deptName}}</p>
+                        </div>
+                        <div class="small-three">
+                            <p class="small-unit-header">调解员：</p>
                             <p class="small-unit-conent">{{orderInfo.deptName}}</p>
                         </div>
                         <div class="small-three">
@@ -542,8 +554,37 @@
                         </div>
                     </div>
                 </el-tab-pane>
+                <el-tab-pane v-if="firstInfo.commonCaseNum>1" label="还款计划" name="commonCase">
+                    <!--还款计划列表-->
+                    <div class="box" style="margin-bottom:0px">
+                        <el-table ref="Table" border :data="planList" style="width: 100%; margin-top: 20px">
+                            <el-table-column prop="terms" label="当期期数"></el-table-column>
+                            <el-table-column prop="loanDate" label="应还日期"></el-table-column>
+                            <el-table-column prop="loanDate" label="应还本金"></el-table-column>
+                            <el-table-column prop="loanDate" label="应还利息"></el-table-column>
+                            <el-table-column prop="loanDate" label="剩余应还金额"></el-table-column>
+                            <el-table-column prop="loanDate" label="逾期本金"></el-table-column>
+                            <el-table-column prop="loanDate" label="逾期利息"></el-table-column>
+                            <el-table-column prop="loanDate" label="逾期状态"></el-table-column>
+                            <el-table-column prop="loanDate" label="还款状态"></el-table-column>
+                            <el-table-column prop="loanDate" label="逾期天数"></el-table-column>
+                        </el-table>
+                    </div>
+                </el-tab-pane>
+                <el-tab-pane v-if="firstInfo.commonCaseNum>1" label="委案前还款记录" name="commonCase">
+                    <!--委案前还款记录列表-->
+                    <div class="box" style="margin-bottom:0px">
+                        <el-table ref="Table" border :data="commissionList" style="width: 100%; margin-top: 20px">
+                            <el-table-column prop="terms" label="还款唯一标识"></el-table-column>
+                            <el-table-column prop="loanDate" label="还款时间"></el-table-column>
+                            <el-table-column prop="loanDate" label="还款期数"></el-table-column>
+                            <el-table-column prop="loanDate" label="已还本金"></el-table-column>
+                            <el-table-column prop="loanDate" label="已还利息"></el-table-column>
+                        </el-table>
+                    </div>
+                </el-tab-pane>
                 <el-tab-pane v-if="firstInfo.commonCaseNum>1" label="共债案件" name="commonCase">
-                    <!--被申请人联系号码列表-->
+                    <!--共债案件列表-->
                     <div class="box" style="margin-bottom:0px">
                         <el-table ref="Table" :data="commonCaseList" style="width: 100%; margin-top: 20px">
                             <el-table-column label="案件批次号" prop="batchNo">
@@ -1014,6 +1055,8 @@
                 medRecordList: [],
                 contactInfosList: [],
                 commonCaseList: [],
+                commissionList: [],
+                planList: [],
                 relationalContactList: [],
                 netRecordList: [],
                 repRecordList: [],
@@ -1338,6 +1381,8 @@
                 this.medRecordList = [];
                 this.contactInfosList = [];
                 this.commonCaseList = [];
+                this.commissionList = [];
+                this.planList = [];
                 this.relationalContactList = [];
                 this.netRecordList = [];
                 this.repRecordList = [];
@@ -1426,6 +1471,10 @@
                         this.orderInfo = response.data;
                     } else if (infoType == "commonCase") {
                         this.commonCaseList = response.data.caseInfo;
+                    } else if (infoType == "commission") {
+                        this.commissionList = response.data.caseInfo;
+                    } else if (infoType == "plan") {
+                        this.planList = response.data.caseInfo;
                     }
                 });
             },
@@ -1446,6 +1495,10 @@
                 } else if (tab.name == "orderInfo" && Object.keys(this.orderInfo).length == 0) {
                     this.getCaseBaseInfo(tab.name)
                 } else if (tab.name == "commonCase" && this.commonCaseList.length == 0) {
+                    this.getCaseBaseInfo(tab.name)
+                } else if (tab.name == "commission" && this.commissionList.length == 0) {
+                    this.getCaseBaseInfo(tab.name)
+                } else if (tab.name == "plan" && this.planList.length == 0) {
                     this.getCaseBaseInfo(tab.name)
                 }
             },
