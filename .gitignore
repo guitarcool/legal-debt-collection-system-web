@@ -1,3 +1,3 @@
-web-ui/.env.development
+*env
 .DS_Store
-dist/
+.zip
