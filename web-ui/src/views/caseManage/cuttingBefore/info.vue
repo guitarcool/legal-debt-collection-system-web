@@ -554,7 +554,7 @@
                         </div>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane v-if="firstInfo.commonCaseNum>1" label="还款计划" name="commonCase">
+                <el-tab-pane v-if="firstInfo.isShowRepayPlan" label="还款计划" name="commonCase">
                     <!--还款计划列表-->
                     <div class="box" style="margin-bottom:0px">
                         <el-table ref="Table" border :data="repayPlanList" style="width: 100%; margin-top: 20px">
@@ -575,7 +575,7 @@
                         </el-table>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane v-if="firstInfo.commonCaseNum>1" label="委案前还款记录" name="commonCase">
+                <el-tab-pane v-if="firstInfo.isShowRepayRecord" label="委案前还款记录" name="commonCase">
                     <!--委案前还款记录列表-->
                     <div class="box" style="margin-bottom:0px">
                         <el-table ref="Table" border :data="repayRecordList" style="width: 100%; margin-top: 20px">
