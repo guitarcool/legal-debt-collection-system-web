@@ -557,29 +557,33 @@
                 <el-tab-pane v-if="firstInfo.commonCaseNum>1" label="还款计划" name="commonCase">
                     <!--还款计划列表-->
                     <div class="box" style="margin-bottom:0px">
-                        <el-table ref="Table" border :data="planList" style="width: 100%; margin-top: 20px">
-                            <el-table-column prop="terms" label="当期期数"></el-table-column>
-                            <el-table-column prop="loanDate" label="应还日期"></el-table-column>
-                            <el-table-column prop="loanDate" label="应还本金"></el-table-column>
-                            <el-table-column prop="loanDate" label="应还利息"></el-table-column>
-                            <el-table-column prop="loanDate" label="剩余应还金额"></el-table-column>
-                            <el-table-column prop="loanDate" label="逾期本金"></el-table-column>
-                            <el-table-column prop="loanDate" label="逾期利息"></el-table-column>
-                            <el-table-column prop="loanDate" label="逾期状态"></el-table-column>
-                            <el-table-column prop="loanDate" label="还款状态"></el-table-column>
-                            <el-table-column prop="loanDate" label="逾期天数"></el-table-column>
+                        <el-table ref="Table" border :data="repayPlanList" style="width: 100%; margin-top: 20px">
+                            <el-table-column prop="currentTerm" label="当期期数"></el-table-column>
+                            <el-table-column prop="repayableDate" label="应还日期"></el-table-column>
+                            <el-table-column prop="repayableCapital" label="应还本金"></el-table-column>
+                            <el-table-column prop="repayableInterest" label="应还利息"></el-table-column>
+                            <el-table-column prop="remainRepayableAmount" label="剩余应还金额"></el-table-column>
+                            <el-table-column prop="overdueCapital" label="逾期本金"></el-table-column>
+                            <el-table-column prop="overdueInterest" label="逾期利息"></el-table-column>
+                            <el-table-column prop="overdueStatus" label="逾期状态">
+                                <template slot-scope="scope">
+                                    <span>{{scope.row.overdueStatus == 1?"已逾期":scope.row.overdueStatus == 0?"未逾期":""}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="repayStatus" :formatter="repayStatusFormat" label="还款状态"></el-table-column>
+                            <el-table-column prop="overdueDay" label="逾期天数"></el-table-column>
                         </el-table>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane v-if="firstInfo.commonCaseNum>1" label="委案前还款记录" name="commonCase">
                     <!--委案前还款记录列表-->
                     <div class="box" style="margin-bottom:0px">
-                        <el-table ref="Table" border :data="commissionList" style="width: 100%; margin-top: 20px">
-                            <el-table-column prop="terms" label="还款唯一标识"></el-table-column>
-                            <el-table-column prop="loanDate" label="还款时间"></el-table-column>
-                            <el-table-column prop="loanDate" label="还款期数"></el-table-column>
-                            <el-table-column prop="loanDate" label="已还本金"></el-table-column>
-                            <el-table-column prop="loanDate" label="已还利息"></el-table-column>
+                        <el-table ref="Table" border :data="repayRecordList" style="width: 100%; margin-top: 20px">
+                            <el-table-column prop="repayId" label="还款唯一标识"></el-table-column>
+                            <el-table-column prop="repayDate" label="还款日期"></el-table-column>
+                            <el-table-column prop="repayTerm" label="还款期数"></el-table-column>
+                            <el-table-column prop="repaidCapital" label="已还本金"></el-table-column>
+                            <el-table-column prop="repaidInterest" label="已还利息"></el-table-column>
                         </el-table>
                     </div>
                 </el-tab-pane>
@@ -1055,8 +1059,8 @@
                 medRecordList: [],
                 contactInfosList: [],
                 commonCaseList: [],
-                commissionList: [],
-                planList: [],
+                repayRecordList: [],
+                repayPlanList: [],
                 relationalContactList: [],
                 netRecordList: [],
                 repRecordList: [],
@@ -1381,8 +1385,8 @@
                 this.medRecordList = [];
                 this.contactInfosList = [];
                 this.commonCaseList = [];
-                this.commissionList = [];
-                this.planList = [];
+                this.repayRecordList = [];
+                this.repayPlanList = [];
                 this.relationalContactList = [];
                 this.netRecordList = [];
                 this.repRecordList = [];
@@ -1471,10 +1475,10 @@
                         this.orderInfo = response.data;
                     } else if (infoType == "commonCase") {
                         this.commonCaseList = response.data.caseInfo;
-                    } else if (infoType == "commission") {
-                        this.commissionList = response.data.caseInfo;
-                    } else if (infoType == "plan") {
-                        this.planList = response.data.caseInfo;
+                    } else if (infoType == "repayRecord") {
+                        this.repayRecordList = response.data;
+                    } else if (infoType == "repayPlan") {
+                        this.repayPlanList = response.data;
                     }
                 });
             },
@@ -1496,9 +1500,9 @@
                     this.getCaseBaseInfo(tab.name)
                 } else if (tab.name == "commonCase" && this.commonCaseList.length == 0) {
                     this.getCaseBaseInfo(tab.name)
-                } else if (tab.name == "commission" && this.commissionList.length == 0) {
+                } else if (tab.name == "repayRecord" && this.repayRecordList.length == 0) {
                     this.getCaseBaseInfo(tab.name)
-                } else if (tab.name == "plan" && this.planList.length == 0) {
+                } else if (tab.name == "repayPlan" && this.repayPlanList.length == 0) {
                     this.getCaseBaseInfo(tab.name)
                 }
             },
