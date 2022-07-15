@@ -554,7 +554,7 @@
                         </div>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane v-if="firstInfo.showRepayPlan" label="还款计划" name="commonCase">
+                <el-tab-pane v-if="firstInfo.showRepayPlan" label="还款计划" name="repayPlan">
                     <!--还款计划列表-->
                     <div class="box" style="margin-bottom:0px">
                         <el-table ref="Table" border :data="repayPlanList" style="width: 100%; margin-top: 20px">
@@ -570,12 +570,12 @@
                                     <span>{{scope.row.overdueStatus == 1?"已逾期":scope.row.overdueStatus == 0?"未逾期":""}}</span>
                                 </template>
                             </el-table-column>
-                            <el-table-column prop="repayStatus" :formatter="repayStatusFormat" label="还款状态"></el-table-column>
+                            <el-table-column prop="repayStatus" :formatter="planStatusFormat" label="还款状态"></el-table-column>
                             <el-table-column prop="overdueDay" label="逾期天数"></el-table-column>
                         </el-table>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane v-if="firstInfo.showRepayRecord" label="委案前还款记录" name="commonCase">
+                <el-tab-pane v-if="firstInfo.showRepayRecord" label="委案前还款记录" name="repayRecord">
                     <!--委案前还款记录列表-->
                     <div class="box" style="margin-bottom:0px">
                         <el-table ref="Table" border :data="repayRecordList" style="width: 100%; margin-top: 20px">
@@ -1073,7 +1073,8 @@
                 activeNameThree: 'medRecord',
                 remittanceTypes: [], //汇款类型
                 auditStatus: [], //审核状态
-                paymentStatus: [], //还款状态
+                paymentStatus: [], //还款类型
+                planStatus: [], //还款状态
                 componentsName: [], //按钮组件数组，后台直接调用
                 componentsMap: new Map(),
                 relationalContactList: [],
@@ -1286,9 +1287,13 @@
             this.getDicts("audit_status").then((response) => {
                 this.auditStatus = response.data;
             });
-            //还款状态
+            //还款类型
             this.getDicts("repay_status").then((response) => {
                 this.paymentStatus = response.data;
+            });
+            //还款状态
+            this.getDicts("plan_repay_status").then((response) => {
+                this.planStatus = response.data;
             });
             //案件状态
             this.getDicts("case_status").then((response) => {
@@ -1823,11 +1828,15 @@
             reviewStatusFormat(row, column) {
                 return this.selectDictLabel(this.auditStatus, row.reviewStatus);
             },
-            //还款状态
+            //还款类型
             repayStatusFormat(row, column) {
                 return this.selectDictLabel(this.paymentStatus, row.repayStatus);
             },
             //还款状态
+            planStatusFormat(row, column) {
+                return this.selectDictLabel(this.planStatus, row.repayStatus);
+            },
+            //还款类型
             repayFormat(repayStatus) {
                 return this.selectDictLabel(this.paymentStatus, repayStatus);
             },
