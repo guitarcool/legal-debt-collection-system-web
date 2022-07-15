@@ -534,11 +534,11 @@
                         </div>
                         <div class="small-three">
                             <p class="small-unit-header">内部订单号：</p>
-                            <p class="small-unit-conent">{{orderInfo.deptName}}</p>
+                            <p class="small-unit-conent">{{orderInfo.insideOrderNo}}</p>
                         </div>
                         <div class="small-three">
                             <p class="small-unit-header">内部客户号：</p>
-                            <p class="small-unit-conent">{{orderInfo.deptName}}</p>
+                            <p class="small-unit-conent">{{orderInfo.insideCustomerNo}}</p>
                         </div>
                         <div class="small-three">
                             <p class="small-unit-header">部门：</p>
@@ -546,7 +546,7 @@
                         </div>
                         <div class="small-three">
                             <p class="small-unit-header">调解员：</p>
-                            <p class="small-unit-conent">{{orderInfo.deptName}}</p>
+                            <p class="small-unit-conent">{{orderInfo.mediatorName}}</p>
                         </div>
                         <div class="small-three">
                             <p class="small-unit-header"></p>
