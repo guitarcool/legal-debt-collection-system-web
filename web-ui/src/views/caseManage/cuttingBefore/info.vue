@@ -29,7 +29,7 @@
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-                    <el-dropdown slot="append" v-if="firstInfo.caseStatus != 13">
+                    <el-dropdown slot="append" style="margin-right:10px" v-if="firstInfo.caseStatus != 13">
                         <el-button type="primary" size="mini">
                             还款登记<i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
@@ -40,9 +40,21 @@
                                 @click.native="handleReimbursement(1)">结清</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-                    <el-button style="margin-left:10px" type="primary" size="mini"
-                        v-if="firstInfo.preStatus == 0 || firstInfo.preStatus == 4" @click="propertyEdit"
-                        v-hasPermi="['case:pretrial:letterRepair']">申请诉前财保</el-button>
+                    <el-dropdown slot="append" v-if="firstInfo.caseStatus != 13">
+                        <el-button type="primary" size="mini">
+                            法诉申请<i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item v-if="firstInfo.preStatus == 0 || firstInfo.preStatus == 4" @click.native="propertyEdit"
+                                v-hasPermi="['case:pretrial:letterRepair']">申请诉前财保</el-dropdown-item>
+                            <el-dropdown-item v-if="firstInfo.preStatus == 0 || firstInfo.preStatus == 4" @click.native="propertyEdit"
+                                v-hasPermi="['case:pretrial:letterRepair']">申请民事诉讼</el-dropdown-item>
+                            <el-dropdown-item v-if="firstInfo.preStatus == 0 || firstInfo.preStatus == 4" @click.native="propertyEdit"
+                                v-hasPermi="['case:pretrial:letterRepair']">申请仲裁立案</el-dropdown-item>
+                            <el-dropdown-item v-if="firstInfo.preStatus == 0 || firstInfo.preStatus == 4" @click.native="propertyEdit"
+                                v-hasPermi="['case:pretrial:letterRepair']">申请执行立案</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
                 </div>
             </div>
             <div class="box-content">
