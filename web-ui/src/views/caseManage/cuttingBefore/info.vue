@@ -545,8 +545,20 @@
                             <p class="small-unit-conent">{{orderInfo.caseId}}</p>
                         </div>
                         <div class="small-three">
-                            <p class="small-unit-header">催收机构：</p>
+                            <p class="small-unit-header">内部订单号：</p>
+                            <p class="small-unit-conent">{{orderInfo.insideOrderNo}}</p>
+                        </div>
+                        <div class="small-three">
+                            <p class="small-unit-header">内部客户号：</p>
+                            <p class="small-unit-conent">{{orderInfo.insideCustomerNo}}</p>
+                        </div>
+                        <div class="small-three">
+                            <p class="small-unit-header">部门：</p>
                             <p class="small-unit-conent">{{orderInfo.deptName}}</p>
+                        </div>
+                        <div class="small-three">
+                            <p class="small-unit-header">调解员：</p>
+                            <p class="small-unit-conent">{{orderInfo.mediatorName}}</p>
                         </div>
                         <div class="small-three">
                             <p class="small-unit-header"></p>
@@ -554,8 +566,41 @@
                         </div>
                     </div>
                 </el-tab-pane>
+                <el-tab-pane v-if="firstInfo.showRepayPlan" label="还款计划" name="repayPlan">
+                    <!--还款计划列表-->
+                    <div class="box" style="margin-bottom:0px">
+                        <el-table ref="Table" border :data="repayPlanList" style="width: 100%; margin-top: 20px">
+                            <el-table-column prop="currentTerm" label="当期期数"></el-table-column>
+                            <el-table-column prop="repayableDate" label="应还日期"></el-table-column>
+                            <el-table-column prop="repayableCapital" label="应还本金"></el-table-column>
+                            <el-table-column prop="repayableInterest" label="应还利息"></el-table-column>
+                            <el-table-column prop="remainRepayableAmount" label="剩余应还金额"></el-table-column>
+                            <el-table-column prop="overdueCapital" label="逾期本金"></el-table-column>
+                            <el-table-column prop="overdueInterest" label="逾期利息"></el-table-column>
+                            <el-table-column prop="overdueStatus" label="逾期状态">
+                                <template slot-scope="scope">
+                                    <span>{{scope.row.overdueStatus == 1?"已逾期":scope.row.overdueStatus == 0?"未逾期":""}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="repayStatus" :formatter="planStatusFormat" label="还款状态"></el-table-column>
+                            <el-table-column prop="overdueDay" label="逾期天数"></el-table-column>
+                        </el-table>
+                    </div>
+                </el-tab-pane>
+                <el-tab-pane v-if="firstInfo.showRepayRecord" label="委案前还款记录" name="repayRecord">
+                    <!--委案前还款记录列表-->
+                    <div class="box" style="margin-bottom:0px">
+                        <el-table ref="Table" border :data="repayRecordList" style="width: 100%; margin-top: 20px">
+                            <el-table-column prop="repayId" label="还款唯一标识"></el-table-column>
+                            <el-table-column prop="repayDate" label="还款日期"></el-table-column>
+                            <el-table-column prop="repayTerm" label="还款期数"></el-table-column>
+                            <el-table-column prop="repaidCapital" label="已还本金"></el-table-column>
+                            <el-table-column prop="repaidInterest" label="已还利息"></el-table-column>
+                        </el-table>
+                    </div>
+                </el-tab-pane>
                 <el-tab-pane v-if="firstInfo.commonCaseNum>1" label="共债案件" name="commonCase">
-                    <!--被申请人联系号码列表-->
+                    <!--共债案件列表-->
                     <div class="box" style="margin-bottom:0px">
                         <el-table ref="Table" :data="commonCaseList" style="width: 100%; margin-top: 20px">
                             <el-table-column label="案件批次号" prop="batchNo">
@@ -1026,6 +1071,8 @@
                 medRecordList: [],
                 contactInfosList: [],
                 commonCaseList: [],
+                repayRecordList: [],
+                repayPlanList: [],
                 relationalContactList: [],
                 netRecordList: [],
                 repRecordList: [],
@@ -1038,7 +1085,8 @@
                 activeNameThree: 'medRecord',
                 remittanceTypes: [], //汇款类型
                 auditStatus: [], //审核状态
-                paymentStatus: [], //还款状态
+                paymentStatus: [], //还款类型
+                planStatus: [], //还款状态
                 componentsName: [], //按钮组件数组，后台直接调用
                 componentsMap: new Map(),
                 relationalContactList: [],
@@ -1251,9 +1299,13 @@
             this.getDicts("audit_status").then((response) => {
                 this.auditStatus = response.data;
             });
-            //还款状态
+            //还款类型
             this.getDicts("repay_status").then((response) => {
                 this.paymentStatus = response.data;
+            });
+            //还款状态
+            this.getDicts("plan_repay_status").then((response) => {
+                this.planStatus = response.data;
             });
             //案件状态
             this.getDicts("case_status").then((response) => {
@@ -1350,6 +1402,8 @@
                 this.medRecordList = [];
                 this.contactInfosList = [];
                 this.commonCaseList = [];
+                this.repayRecordList = [];
+                this.repayPlanList = [];
                 this.relationalContactList = [];
                 this.netRecordList = [];
                 this.repRecordList = [];
@@ -1438,6 +1492,10 @@
                         this.orderInfo = response.data;
                     } else if (infoType == "commonCase") {
                         this.commonCaseList = response.data.caseInfo;
+                    } else if (infoType == "repayRecord") {
+                        this.repayRecordList = response.data;
+                    } else if (infoType == "repayPlan") {
+                        this.repayPlanList = response.data;
                     }
                 });
             },
@@ -1458,6 +1516,10 @@
                 } else if (tab.name == "orderInfo" && Object.keys(this.orderInfo).length == 0) {
                     this.getCaseBaseInfo(tab.name)
                 } else if (tab.name == "commonCase" && this.commonCaseList.length == 0) {
+                    this.getCaseBaseInfo(tab.name)
+                } else if (tab.name == "repayRecord" && this.repayRecordList.length == 0) {
+                    this.getCaseBaseInfo(tab.name)
+                } else if (tab.name == "repayPlan" && this.repayPlanList.length == 0) {
                     this.getCaseBaseInfo(tab.name)
                 }
             },
@@ -1778,11 +1840,15 @@
             reviewStatusFormat(row, column) {
                 return this.selectDictLabel(this.auditStatus, row.reviewStatus);
             },
-            //还款状态
+            //还款类型
             repayStatusFormat(row, column) {
                 return this.selectDictLabel(this.paymentStatus, row.repayStatus);
             },
             //还款状态
+            planStatusFormat(row, column) {
+                return this.selectDictLabel(this.planStatus, row.repayStatus);
+            },
+            //还款类型
             repayFormat(repayStatus) {
                 return this.selectDictLabel(this.paymentStatus, repayStatus);
             },
