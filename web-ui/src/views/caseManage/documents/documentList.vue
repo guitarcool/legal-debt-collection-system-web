@@ -196,7 +196,7 @@
                     })
                     .then(() => {
                         that.msgSuccess("操作成功");
-                        that.download(file);
+                        that.downloadFile(file,false);
                     })
                     .catch(() => {
                         that.msgInfo("已取消操作");
