@@ -30,7 +30,7 @@
             </template>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="submitForm">确定</el-button>
+                <el-button type="primary" v-debounce="submitForm">确定</el-button>
             </div>
         </Dialog>
     </div>

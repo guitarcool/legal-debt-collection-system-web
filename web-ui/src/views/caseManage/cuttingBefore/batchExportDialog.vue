@@ -45,7 +45,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">关闭</el-button>
-            <el-button type="primary" @click="submitTwo" v-if="title == '批量生成律师函' || title == '全选生成律师函'">确定</el-button>
+            <el-button type="primary" v-debounce="submitTwo" v-if="title == '批量生成律师函' || title == '全选生成律师函'">确定</el-button>
         </div>
     </Dialog>
 </template>

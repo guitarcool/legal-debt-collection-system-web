@@ -17,7 +17,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="submit" :loading="sumbmitLoading">提交</el-button>
+            <el-button type="primary" v-debounce="submit" :loading="sumbmitLoading">提交</el-button>
         </div>
     </Dialog>
 </template>
