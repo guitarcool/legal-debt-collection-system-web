@@ -67,7 +67,7 @@
                 </el-form-item>
                 <el-form-item label="分配结果：">
                     <el-button style="margin-bottom:20px;" size="mini" @click="watchTable" type="danger">预览</el-button>
-                    <el-table :loading="tableLoading" max-height="550" :data="tableData" border v-if="tableShow">
+                    <el-table :buttonLoading="tableLoading" max-height="550" :data="tableData" border v-if="tableShow">
                         <el-table-column prop="assignObjectName" label="调解员"></el-table-column>
                         <el-table-column prop="idCardNum" label="身份证量"></el-table-column>
                         <el-table-column prop="caseNum" label="分配案件数"></el-table-column>
@@ -78,7 +78,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" v-debounce @click="submit" :loading="loading">{{loading?'分发中':'确认分发'}}</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">{{buttonLoading?'分发中':'确认分发'}}</el-button>
         </div>
     </Dialog>
 </template>
@@ -142,7 +142,7 @@
                         trigger: "change"
                     }]
                 },
-                loading: false,
+                buttonLoading: false,
                 form: {
                     jointDebtAssign: "",
                     assignObject: "",
@@ -201,29 +201,29 @@
                         data = {
                             ...this.form
                         };
-                        this.loading = true;
+                        this.buttonLoading = true;
                         if (this.title == "批量案件分发") {
                             data.caseIds = this.caseIds;
                             divisionApi.division(data).then(res => {
                                 if (res.code == 200) {
-                                    this.loading = false;
+                                    this.buttonLoading = false;
                                     this.dialogVisible = false;
                                     this.msgSuccess('操作成功');
                                     this.$emit('refresh');
                                 }
                             }).catch(() => {
-                                this.loading = false;
+                                this.buttonLoading = false;
                             });
                         } else if (this.title == '全选案件分发') {
                             divisionApi.divisionAll(data).then(res => {
                                 if (res.code == 200) {
-                                    this.loading = false;
+                                    this.buttonLoading = false;
                                     this.dialogVisible = false;
                                     this.msgSuccess('操作成功');
                                     this.$emit('refresh');
                                 }
                             }).catch(() => {
-                                this.loading = false;
+                                this.buttonLoading = false;
                             });
                         }
                     }

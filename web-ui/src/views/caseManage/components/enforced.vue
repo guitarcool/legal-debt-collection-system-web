@@ -28,7 +28,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" v-debounce @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -69,7 +69,8 @@
                     account:[
                         { required: true, message: '请输入到账账户', trigger: 'blur' }
                     ]
-                }
+                },
+                buttonLoading:false
             }
         },
         props: {
@@ -115,6 +116,7 @@
                 initObj(this.form)
                 this.resetAddForm();
                 this.form.id = this.id;
+                this.buttonLoading = false;
                 if(this.statusId !=0 && this.statusId ){
                     this.getInfo()
                 }
@@ -139,6 +141,7 @@
             submit () {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
+                        this.buttonLoading = true;
                         if(this.statusId !=0 && this.statusId ){
                             this.form.statusId = this.statusId;
                         }             
@@ -146,9 +149,12 @@
                             if (res.code === 200) {
                                 this.msgSuccess("操作成功");
                                 this.dialogVisible = false;
+                                this.buttonLoading = false;
                                 this.$emit('refresh');
                             }
-                        })
+                        }).catch(() => {
+                            this.buttonLoading = false;
+                        });
                     }
                 });
             }

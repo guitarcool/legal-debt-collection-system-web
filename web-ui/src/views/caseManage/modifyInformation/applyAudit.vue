@@ -16,7 +16,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" v-debounce @click="submit" :loading="loading">{{loading?'审核中':'确定'}}</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">{{buttonLoading?'审核中':'确定'}}</el-button>
 
         </div>
     </Dialog>
@@ -51,7 +51,7 @@
                         trigger: 'change'
                     }],
                 },
-                loading: false
+                buttonLoading: false
             }
         },
         props: {
@@ -99,7 +99,7 @@
                 this.form.type = 1
                 this.resetAddForm();
                 this.form.id = this.id;
-                this.loading = false;
+                this.buttonLoading = false;
             },
             //重置表单清除验证
             resetAddForm() {
@@ -112,7 +112,7 @@
             submit() {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
-                        this.loading = true;
+                        this.buttonLoading = true;
                         if (this.form.type == 0 && this.form.reason == '') {
                             this.msgError("请填写拒绝理由");
                             return
@@ -127,22 +127,22 @@
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
                                     this.$emit('refresh')
-                                    this.loading = false;
+                                    this.buttonLoading = false;
                                     this.dialogVisible = false;
                                 }
                             }).catch(() => {
-                                this.loading = false;
+                                this.buttonLoading = false;
                             });
                         } else {
                             modifyApi.applyModify(param).then(res => {
                                 if (res.code === 200) {
                                     this.msgSuccess("操作成功");
                                     this.$emit('refresh')
-                                    this.loading = false;
+                                    this.buttonLoading = false;
                                     this.dialogVisible = false;
                                 }
                             }).catch(() => {
-                                this.loading = false;
+                                this.buttonLoading = false;
                             });
                         }
                     }

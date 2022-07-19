@@ -32,7 +32,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" v-debounce @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -71,6 +71,7 @@
                     // 上传的地址
                     url: process.env.VUE_APP_BASE_API + "/case/financial/importData",
                 },
+                buttonLoading:false
             }
         },
         computed: {
@@ -87,7 +88,9 @@
 
         },
         methods: {
-            openDialog(){},
+            openDialog(){
+                this.buttonLoading = false;
+            },
             // 提交上传文件
             submit() {
                 this.$refs.upload.submit();
@@ -99,8 +102,8 @@
             },
             // 文件上传成功处理
             handleFileSuccess(response, file, fileList) {
-                console.log(file)
                 this.dialogVisible = false;
+                this.buttonLoading = false;
                 this.upload.isUploading = false;
                 this.$refs.upload.clearFiles();
                 this.$alert(response.msg, "导入结果", { dangerouslyUseHTMLString: true });

@@ -19,7 +19,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" v-debounce @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -112,7 +112,8 @@
                         label: '其它',
                         value: '其它'
                     }
-                ]
+                ],
+                buttonLoading:false
             }
         },
         props: {
@@ -159,29 +160,37 @@
             openDialog() {
                 initObj(this.form)
                 this.resetAddForm();
+                this.buttonLoading = false;
                 this.form.caseId = this.id
             },
             submit() {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
+                        this.buttonLoading = true;
                         switch (true) {
                             case this.title == '裁前新增手机号':
                                 cuttingBeforeApi.addPhone(this.form).then(res => {
                                     if (res.code === 200) {
                                         this.msgSuccess("新增成功");
                                         this.dialogVisible = false;
+                                        this.buttonLoading = false;
                                         this.$emit('refresh');
                                     }
-                                })
+                                }).catch(() => {
+                                    this.buttonLoading = false;
+                                });
                                 break;
                             case this.title == '裁后新增手机号':
                                 cuttingAfterApi.addPhone(this.form).then(res => {
                                     if (res.code === 200) {
                                         this.msgSuccess("新增成功");
                                         this.dialogVisible = false;
+                                        this.buttonLoading = false;
                                         this.$emit('refresh');
                                     }
-                                })
+                                }).catch(() => {
+                                    this.buttonLoading = false;
+                                });
                                 break;
                         }
                     }

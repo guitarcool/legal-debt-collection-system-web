@@ -27,7 +27,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" v-debounce @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -53,8 +53,8 @@
                 // 是否禁用上传
                 isUploading: false,
                 rules: {
-
-                }
+                },
+                buttonLoading:false
             }
         },
         props: {
@@ -98,6 +98,7 @@
                 this.resetAddForm();
                 this.removeFile();
                 this.form.id = this.id;
+                this.buttonLoading = false;
                 this.upload_url = process.env.VUE_APP_BASE_API + this.requestApi
             },
             //重置表单清除验证
@@ -127,6 +128,7 @@
                 });
                 instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken()
                 var that = this
+                that.buttonLoading = true;
                 instance({
                     method: 'post',
                     url: process.env.VUE_APP_BASE_API + that.requestApi,
@@ -142,11 +144,14 @@
                     if (response.data.code == 200) {
                         that.msgSuccess(response.data.msg);
                         that.dialogVisible = false;
+                        that.buttonLoading = false;
                         that.$emit('refresh');
                     }else{
+                        that.buttonLoading = false;
                         that.msgError(response.data.msg);
                     }
                 }).catch(error => {
+                    that.buttonLoading = false;
                     that.msgError(error);
                 })
             },

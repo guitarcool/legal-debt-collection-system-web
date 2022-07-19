@@ -9,7 +9,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" v-debounce @click="submit">确定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确定</el-button>
         </div>
     </Dialog>
 </template>
@@ -40,6 +40,7 @@
                         trigger: "blur"
                     }, ],
                 },
+                buttonLoading:false
             };
         },
         props: {
@@ -80,6 +81,7 @@
                 initObj(this.form);
                 this.resetAddForm();
                 this.form.ids = this.ids;
+                this.buttonLoading = false;
             },
             //重置表单清除验证
             resetAddForm() {
@@ -90,6 +92,7 @@
             submit() {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
+                        this.buttonLoading = true;
                         let data = {
                             options: this.form.options,
                             ids: this.form.ids,
@@ -99,7 +102,10 @@
                                 this.msgSuccess("操作成功");
                                 this.$emit("refresh");
                                 this.dialogVisible = false;
+                                this.buttonLoading = false;
                             }
+                        }).catch((error) => {
+                            this.buttonLoading = false;
                         });
                     }
                 });

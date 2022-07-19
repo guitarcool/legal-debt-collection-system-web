@@ -45,7 +45,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">关闭</el-button>
-            <el-button type="primary" v-debounce @click="submitTwo" v-if="title == '批量生成律师函' || title == '全选生成律师函'">确定</el-button>
+            <el-button type="primary" v-debounce @click="submitTwo" :loading="buttonLoading" v-if="title == '批量生成律师函' || title == '全选生成律师函'">确定</el-button>
         </div>
     </Dialog>
 </template>
@@ -109,6 +109,7 @@
                 num: 0,
                 formlist: [],
                 needSignTemplate: null,
+                buttonLoading:false
             };
         },
         computed: {
@@ -132,6 +133,7 @@
                 this.suffix = 1;
                 this.filterText = "";
                 this.getList();
+                this.buttonLoading = false;
             },
             timekeeping() {
                 this.num = 0;
@@ -200,6 +202,7 @@
                 param.needSignTemplate = this.needSignTemplate;
                 param.applyDate = this.applyDate;
                 param.suffix = this.suffix == 1 ? ".docx" : (this.suffix == 2 ? ".pdf" : ".xlsx");
+                this.buttonLoading = true;
                 if (this.title == '批量生成律师函') {
                     if (param.ids.length > 200) {
                         this.msgError('勾选的数据量超出生成律师函条数200上限，请重新勾选后再进行提交');
@@ -209,12 +212,15 @@
                         if (response.code == 200) {
                             this.dialogVisible = false;
                             this.loading = false;
+                            this.buttonLoading = false;
                             this.msgSuccess('生成律师函任务已提交，请在律师函下载模块中查看律师函生成进度。');
                         } else {
+                            this.buttonLoading = false;
                             this.loading = false;
                             this.msgError(response.msg);
                         }
                     }).catch((error) => {
+                        this.buttonLoading = false;
                         this.loading = false;
                     });
                 } else if (this.title == '全选生成律师函') {
@@ -225,14 +231,17 @@
                     param.ids = [];
                     cuttingBeforeApi.instrumentBatchAll(param).then((response) => {
                         if (response.code == 200) {
+                            this.buttonLoading = false;
                             this.dialogVisible = false;
                             this.loading = false;
                             this.msgSuccess('生成律师函任务已提交，请在律师函下载模块中查看律师函生成进度。');
                         } else {
+                            this.buttonLoading = false;
                             this.loading = false;
                             this.msgError(response.msg);
                         }
                     }).catch((error) => {
+                        this.buttonLoading = false;
                         this.loading = false;
                     });
                 }

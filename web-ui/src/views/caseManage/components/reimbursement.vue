@@ -107,7 +107,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" v-debounce @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -200,7 +200,8 @@
                 remittanceTypes: [],
                 payChannalOptions: [],
                 fileList: [],
-                productList: []
+                productList: [],
+                buttonLoading:false
             };
         },
         props: {
@@ -272,6 +273,7 @@
                 this.form.switch = false;
                 this.removeFile();
                 this.fileList = [];
+                this.buttonLoading = false;
                 if (this.repayList.length > 0 && this.repayList[0].accountNumber) {
                     this.account = true;
                     this.selectaccountNoShou(this.repayList[0].accountNumber);
@@ -315,6 +317,7 @@
                         });
                         instance.defaults.headers.common["Authorization"] =
                             "Bearer " + getToken();
+                        this.buttonLoading = true;
                         var that = this;
                         let url;
                         if (this.title == '裁前部分还款' || '裁前结清') {
@@ -337,12 +340,15 @@
                                 if (response.data.code == 200) {
                                     that.msgSuccess(response.data.msg);
                                     that.dialogVisible = false;
+                                    that.buttonLoading = false;
                                     that.$emit("refresh");
                                 } else if (response.data.code == 500) {
+                                    that.buttonLoading = false;
                                     that.msgError(response.data.msg);
                                 }
                             })
                             .catch((error) => {
+                                that.buttonLoading = false;
                                 that.msgError(error);
                             });
                     }

@@ -83,9 +83,9 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">关闭</el-button>
-            <el-button type="primary" v-debounce @click="submitTwo" v-if="title == '批量生成调解文书' || title == '全选生成调解文书'">确 定
+            <el-button type="primary" v-debounce @click="submitTwo" :loading="buttonLoading" v-if="title == '批量生成调解文书' || title == '全选生成调解文书'">确 定
             </el-button>
-            <el-button type="primary" v-debounce @click="submit" v-else>确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading" v-else>确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -185,6 +185,7 @@
                 tipsList: [],
                 drawBodyWrapper: '',
                 tipsLoading: false,
+                buttonLoading:false
             };
         },
         computed: {
@@ -208,6 +209,7 @@
         methods: {
             openDialog() {
                 this.loading = false;
+                this.buttonLoading = false;
                 this.caseList = [];
                 this.chooseData = [];
                 this.needSignTemplate = [];
@@ -265,6 +267,7 @@
                     ".pdf" :
                     ".xlsx";
                 this.loading = true;
+                this.buttonLoading = true;
                 if (this.title == '批量生成调解文书') {
                     if (param.ids.length > 200) {
                         this.msgError('勾选的数据量超出生成文书条数200上限，请重新勾选后再进行提交');
@@ -274,13 +277,16 @@
                         if (response.code == 200) {
                             this.dialogVisible = false;
                             this.loading = false;
+                            this.buttonLoading = false;
                             this.msgSuccess('文书生成任务已提交，请在文书下载模块中查看文书生成进度。');
                         } else {
+                            this.buttonLoading = false;
                             this.loading = false;
                             this.msgError(response.msg);
                         }
                     }).catch((error) => {
                         this.needSignTemplate = [];
+                        this.buttonLoading = false;
                         this.loading = false;
                     });
                 } else if (this.title == '全选生成调解文书') {
@@ -292,14 +298,17 @@
                     divisionApi.instrumentlistAll(param).then((response) => {
                         if (response.code == 200) {
                             this.dialogVisible = false;
+                            this.buttonLoading = false;
                             this.loading = false;
                             this.msgSuccess('文书生成任务已提交，请在文书下载模块中查看文书生成进度。');
                         } else {
+                            this.buttonLoading = false;
                             this.loading = false;
                             this.msgError(response.msg);
                         }
                     }).catch((error) => {
                         this.needSignTemplate = [];
+                        this.buttonLoading = false;
                         this.loading = false;
                     });
                 }
@@ -330,12 +339,15 @@
                         return;
                     }
                     this.loading = true;
+                    this.buttonLoading = true;
                     templateApi.mumcBatchInstrument(param).then((response) => {
                         this.dialogVisible = false;
                         this.loading = false;
+                        this.buttonLoading = false;
                         this.msgSuccess(response.msg);
                         this.$emit('refresh')
                     }).catch((error) => {
+                        this.buttonLoading = false;
                         this.loading = false;
                     })
                 } else if (this.title == '全选生成多人多案文书') {
@@ -348,13 +360,16 @@
                         this.msgError("请选择模版");
                         return;
                     }
+                    this.buttonLoading = true;
                     this.loading = true;
                     templateApi.mumcBatchAllInstrument(param).then((response) => {
                         this.dialogVisible = false;
                         this.loading = false;
+                        this.buttonLoading = false;
                         this.msgSuccess(response.msg);
                         this.$emit('refresh')
                     }).catch(() => {
+                        this.buttonLoading = false;
                         this.loading = false;
                     })
                 }

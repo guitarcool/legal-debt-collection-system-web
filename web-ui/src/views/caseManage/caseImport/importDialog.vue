@@ -46,7 +46,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" v-debounce @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -98,6 +98,7 @@
                 },
                 loading: false,
                 file: '',
+                buttonLoading:false
             };
         },
         computed: {
@@ -114,6 +115,7 @@
         methods: {
             openDialog() {
                 this.removeFile();
+                this.buttonLoading = false;
                 this.loading = false;
             },
             // // 提交上传文件
@@ -135,6 +137,7 @@
             submit() {
                 if (this.file) {
                     this.loading = true;
+                    this.buttonLoading = true;
                     this.$refs.upload.submit();
                 } else {
                     this.msgError('请确认是否上传了正确的文件在提交！');
@@ -165,6 +168,7 @@
                     dangerouslyUseHTMLString: true
                 });
                 this.loading = false;
+                this.buttonLoading = false;
                 this.$emit("refresh");
             },
             /** 下载模版操作 */

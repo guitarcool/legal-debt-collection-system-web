@@ -84,7 +84,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" v-debounce @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -154,6 +154,7 @@
                         trigger: 'blur'
                     }]
                 },
+                buttonLoading:false
             }
         },
         props: {
@@ -214,10 +215,12 @@
                     callObject: 0,
                 }
                 this.caseId = this.id;
+                this.buttonLoading = false;
             },
             submit() {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
+                        this.buttonLoading = true;
                         //获取数组
                         let filterMedLabel = this.form.filterMedLabel.toString();
                         let filterNetworkStatus = this.form.filterNetworkStatus.toString();
@@ -233,8 +236,10 @@
                                         if (res.code === 200) {
                                             this.msgSuccess("创建计划成功");
                                             this.dialogVisible = false;
+                                            this.buttonLoading = false;
                                             this.$emit('refresh');
                                         } else {
+                                            this.buttonLoading = false;
                                             this.msgError(res.msg);
                                         }
                                     })
@@ -250,9 +255,11 @@
                                     cuttingAfterApi.addduyansoft(this.form).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("创建计划成功");
+                                            this.buttonLoading = false;
                                             this.dialogVisible = false;
                                             this.$emit('refresh');
                                         } else {
+                                            this.buttonLoading = false;
                                             this.msgError(res.msg);
                                         }
                                     })

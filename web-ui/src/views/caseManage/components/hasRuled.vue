@@ -37,7 +37,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" v-debounce @click="submit" >确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -69,7 +69,8 @@
                     trialDate: [
                         { required: true, message: '请填写庭审时间', trigger: 'blur' }
                     ]
-                }
+                },
+                buttonLoading:false
             }
         },
         props: {
@@ -116,6 +117,7 @@
                 this.resetAddForm();
                 this.removeFile();
                 this.form.id = this.id;
+                this.buttonLoading = false;
                 this.upload_url = process.env.VUE_APP_BASE_API + this.requestApi;
                 if(this.statusId !=0 && this.statusId ){
                     this.getInfo()
@@ -140,6 +142,7 @@
             submit () {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
+                        this.buttonLoading = true;
                         let formData = new FormData();
                         formData.append("id", this.id);
                         if(this.files != null ){
@@ -173,11 +176,14 @@
                             if (response.data.code == 200) {
                                 that.msgSuccess(response.data.msg);
                                 that.dialogVisible = false;
+                                that.buttonLoading = false;
                                 that.$emit('refresh');
                             }else{
+                                that.buttonLoading = false;
                                 that.msgError(response.data.msg);
                             }
                         }).catch(error => {
+                            that.buttonLoading = false;
                             that.msgError(error);
                         })
                     }

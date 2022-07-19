@@ -121,7 +121,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" v-debounce @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
             <!-- <el-button v-if="type!=3" type="primary" @click="editSubmit">确 定</el-button> -->
         </div>
     </Dialog>
@@ -239,6 +239,7 @@
                 this.getEvidenceField();
                 this.list = [];
                 this.filterText = "";
+                this.buttonLoading = false;
                 if (this.singleData) {
                     this.original = JSON.parse(this.singleData)
                 }
@@ -274,7 +275,7 @@
                 }
             },
             submit() {
-                let that = this
+                let that = this;
                 this.$confirm(`此操作连接数据库，是否继续?`, "提示", {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
@@ -312,6 +313,7 @@
                     instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken()
                     var url = '/template/info/templateFile/add';
                     var these = that
+                    these.buttonLoading = true;
                     instance({
                         method: 'post',
                         url: process.env.VUE_APP_BASE_API + url,
@@ -323,11 +325,14 @@
                         if (response.data.code == 200) {
                             these.msgSuccess(response.data.msg);
                             these.dialogVisible = false;
+                            these.buttonLoading = false;
                             these.$emit('refresh');
                         } else {
+                            these.buttonLoading = false;
                             these.msgError(response.data.msg);
                         }
                     }).catch(error => {
+                        these.buttonLoading = false;
                         these.msgError(error);
                     })
                 }).catch(() => {

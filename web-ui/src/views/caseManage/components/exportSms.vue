@@ -53,17 +53,17 @@
                 </div>
             </template>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false" v-if="active ==1">取 消</el-button>
-                <el-button type="primary" @click="nextActive" v-if="active ==1">下一步</el-button>
-                <el-button @click="upperActive" v-if="active ==2">上一步</el-button>
-                <el-button type="primary" v-debounce @click="submit" v-if="active ==2">发 送</el-button>
+                <el-button @click="dialogVisible = false" v-show="active ==1">取 消</el-button>
+                <el-button type="primary" @click="nextActive" v-show="active ==1">下一步</el-button>
+                <el-button @click="upperActive" v-show="active ==2">上一步</el-button>
+                <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading" v-show="active ==2">发 送</el-button>
             </div>
         </Dialog>
         <el-dialog title="提示" :visible.sync="visible" width="30%" :before-close="handleClose">
             <span>该号码当前标记为“停机、失联、空号”，是否要继续发送？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="visible = false">取 消</el-button>
-                <el-button type="primary" v-debounce @click="visibleSubmit">确 定</el-button>
+                <el-button type="primary" :loading="buttonLoading" v-debounce @click="visibleSubmit">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -151,6 +151,7 @@
                 loading: false,
                 visible: false,
                 active: 1,
+                buttonLoading:false
             };
         },
         computed: {
@@ -173,6 +174,7 @@
         methods: {
             openDialog() {
                 this.loading = false;
+                this.buttonLoading = false;
                 this.templateId = "";
                 this.applyTime = null;
                 this.filterText = "";
@@ -251,6 +253,7 @@
                 }
                 this.visible = false;
                 this.loading = true;
+                this.buttonLoading = true;
                 // let time = this.timestampToTime();
                 let param = {
                     content: this.textarea,
@@ -266,30 +269,36 @@
                     cuttingBeforeApi.shortMsg(param).then((res) => {
                             if (res.code == 500) {
                                 this.loading = false;
+                                this.buttonLoading = false;
                                 this.msgError(res.msg);
                             } else {
                                 this.dialogVisible = false;
                                 this.loading = false;
+                                this.buttonLoading = false;
                                 this.msgSuccess(res.msg);
                                 this.$emit('refresh');
                             }
                         })
                         .catch((error) => {
+                            this.buttonLoading = false;
                             this.loading = false;
                         });
                 } else if (this.title == "裁后短信发送") {
                     cuttingAfterApi.shortMsg(param).then((res) => {
                             if (res.code == 500) {
+                                this.buttonLoading = false;
                                 this.loading = false;
                                 this.msgError(res.msg);
                             } else {
                                 this.dialogVisible = false;
+                                this.buttonLoading = false;
                                 this.loading = false;
                                 this.msgSuccess(res.msg);
                                 this.$emit('refresh');
                             }
                         })
                         .catch((error) => {
+                            this.buttonLoading = false;
                             this.loading = false;
                         });
                 }
@@ -316,6 +325,7 @@
                     this.visible = true;
                 } else {
                     this.loading = true;
+                    this.buttonLoading = true;
                     // let time = this.timestampToTime();
                     let param = {
                         content: this.textarea,
@@ -331,31 +341,37 @@
                         cuttingBeforeApi.shortMsg(param).then((res) => {
                                 if (res.code == 500) {
                                     this.loading = false;
+                                    this.buttonLoading = false;
                                     this.msgError(res.msg);
                                 } else {
                                     this.dialogVisible = false;
                                     this.loading = false;
+                                    this.buttonLoading = false;
                                     this.msgSuccess(res.msg);
                                     this.$emit('refresh');
                                 }
                             })
                             .catch((error) => {
                                 this.loading = false;
+                                this.buttonLoading = false;
                             });
                     } else if (this.title == "裁后短信发送") {
                         cuttingAfterApi.shortMsg(param).then((res) => {
                                 if (res.code == 500) {
                                     this.loading = false;
+                                    this.buttonLoading = false;
                                     this.msgError(res.msg);
                                 } else {
                                     this.dialogVisible = false;
                                     this.loading = false;
+                                    this.buttonLoading = false;
                                     this.msgSuccess(res.msg);
                                     this.$emit('refresh');
                                 }
                             })
                             .catch((error) => {
                                 this.loading = false;
+                                this.buttonLoading = false;
                             });
                     }
                 }

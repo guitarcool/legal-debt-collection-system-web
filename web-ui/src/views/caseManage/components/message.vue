@@ -26,7 +26,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">关闭</el-button>
-            <el-button type="primary" v-debounce @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -85,7 +85,8 @@
                 caseList: [],
                 signatureDate: '',
                 templateId: '',
-                loading: false
+                loading: false,
+                buttonLoading:false
             }
         },
         computed: {
@@ -106,7 +107,8 @@
         },
         methods: {
             openDialog() {
-                this.loading = false
+                this.loading = false;
+                this.buttonLoading = false;
                 this.filterText = "";
                 this.signatureDate = "";
                 this.templateId = "";
@@ -124,15 +126,18 @@
                 param.type = this.type;
                 param.templateId = this.templateId
                 param.signatureDate = this.signatureDate
-                this.loading = true
+                this.loading = true;
+                this.buttonLoading = true;
                 templateApi.common(this.requestApi, param).then(res => {
                     //console.log(1,res)
                     this.download(res.msg);
-                    this.dialogVisible = false
-                    this.loading = false
+                    this.dialogVisible = false;
+                    this.loading = false;
+                    this.buttonLoading = false;
                     this.$emit('refresh');
                 }).catch(err => {
-                    this.loading = false
+                    this.loading = false;
+                    this.buttonLoading = false;
                 })
             },
             filterNode(value, data) {
