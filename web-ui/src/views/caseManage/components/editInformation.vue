@@ -87,9 +87,9 @@
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
             <el-button v-if="type == 'after'" v-hasPermi="['case:postAdjudged:updateCaseEditData']" type="primary"
-                v-debounce="submit">确 定</el-button>
+                v-debounce @click="submit">确 定</el-button>
             <el-button v-if="type == 'before'" v-hasPermi="['case:pretrial:updateCaseEditData']" type="primary"
-                v-debounce="submit">确 定</el-button>
+                v-debounce @click="submit">确 定</el-button>
         </div>
     </Dialog>
 </template>

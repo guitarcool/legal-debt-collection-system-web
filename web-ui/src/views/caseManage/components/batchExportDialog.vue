@@ -115,17 +115,17 @@
                 </div>
             </template>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false" v-if="active ==1">取 消</el-button>
-                <el-button type="primary" @click="nextActive" v-if="active ==1">下一步</el-button>
-                <el-button @click="upperActive" v-if="active ==2">上一步</el-button>
-                <el-button type="primary" v-debounce="submit" v-if="active ==2">发 送</el-button>
+                <el-button @click="dialogVisible = false" v-show="active ==1">取 消</el-button>
+                <el-button type="primary" @click="nextActive" v-show="active ==1">下一步</el-button>
+                <el-button @click="upperActive" v-show="active ==2">上一步</el-button>
+                <el-button type="primary" v-debounce @click="submit" v-show="active ==2">发 送</el-button>
             </div>
         </Dialog>
         <el-dialog title="提示" :visible.sync="visible" width="30%" :before-close="handleClose">
             <span>该号码当前标记为“停机、失联、空号”，是否要继续发送？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="visible = false">取 消</el-button>
-                <el-button type="primary" v-debounce="visibleSubmit">确 定</el-button>
+                <el-button type="primary" v-debounce @click="visibleSubmit">确 定</el-button>
             </span>
         </el-dialog>
     </div>

@@ -21,7 +21,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" v-debounce="submit" :loading="loading">{{loading?'分发中':'确认分发'}}</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="loading">{{loading?'分发中':'确认分发'}}</el-button>
 
         </div>
     </Dialog>

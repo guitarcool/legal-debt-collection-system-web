@@ -83,9 +83,9 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">关闭</el-button>
-            <el-button type="primary" v-debounce="submitTwo" v-if="title == '批量生成调解文书' || title == '全选生成调解文书'">确 定
+            <el-button type="primary" v-debounce @click="submitTwo" v-if="title == '批量生成调解文书' || title == '全选生成调解文书'">确 定
             </el-button>
-            <el-button type="primary" v-debounce="submit" v-else>确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" v-else>确 定</el-button>
         </div>
     </Dialog>
 </template>

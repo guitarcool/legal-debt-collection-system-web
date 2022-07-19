@@ -26,8 +26,6 @@ import RightToolbar from "@/components/RightToolbar"
 //复制到粘贴板插件
 import VueClipboard from 'vue-clipboard2' //引入插件
 Vue.use(VueClipboard) //安装插件
-import Debounce from './directive/permission/debounce.js' //防抖自定义指令
-Vue.use(Debounce) //使用防抖
 import num from './utils/num'
 
 // 全局方法挂载

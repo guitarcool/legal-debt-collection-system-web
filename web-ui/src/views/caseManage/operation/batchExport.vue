@@ -29,7 +29,7 @@
             </template>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" v-debounce="submit">发 送</el-button>
+                <el-button type="primary" v-debounce @click="submit">发 送</el-button>
             </div>
         </Dialog>
     </div>
