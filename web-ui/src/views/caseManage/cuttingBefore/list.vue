@@ -129,8 +129,8 @@
                 </transition>
             </template>
             <template #filter>
-                <el-form-item label="共债案件仅展示一条：" class="custom-radio">
-                    <el-switch @change="changeStatus" v-model="queryParams.commonFlag" :active-value="1" :inactive-value="-1" active-color="#13ce66" inactive-color="#ff4949">
+                <el-form-item label-width="125px" label="共债仅展示一条：" class="custom-radio">
+                    <el-switch @change="changeStatus" style="margin-top:-18px" v-model="queryParams.commonFlag" :active-value="1" :inactive-value="-1" active-color="#13ce66" inactive-color="#ff4949">
                     </el-switch>
                 </el-form-item>
                 <el-form-item label="联系状态：" class="custom-radio">
