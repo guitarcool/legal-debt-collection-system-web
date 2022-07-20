@@ -443,8 +443,6 @@
                                     });
                                 }
                             });
-<<<<<<< HEAD
-=======
                         } else if (this.title == '批量转电话调解失败') {
                             this.$refs["form"].validate((valid) => {
                                 if (valid) {
@@ -465,7 +463,6 @@
                                     });
                                 }
                             });
->>>>>>> master-bug
                         } else if (this.title == '全选导出网调记录') {
                             this.$refs["form"].validate((valid) => {
                                 if (valid) {
@@ -510,8 +507,6 @@
                                     });
                                 }
                             });
-<<<<<<< HEAD
-=======
                         } else if (this.title == '全选转电话调解失败') {
                             this.$refs["form"].validate((valid) => {
                                 if (valid) {
@@ -532,7 +527,6 @@
                                     });
                                 }
                             });
->>>>>>> master-bug
                         }
                         break;
                 }
