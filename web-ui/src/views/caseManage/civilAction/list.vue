@@ -418,7 +418,7 @@
 
 <script>
     import SearchBar from "@/components/SearchBar/index";
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     import recordDialog from "../components/recordDialog";
     import divisionApi from "@/api/case/division/index";
     import importDialog from "./importDialog";
@@ -784,7 +784,7 @@
                 //查询
                 if (type == 1) {
                     this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
-                    cuttingAfterApi.list(this.searchParams).then((response) => {
+                    civilActionApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
                         this.clearTable();
@@ -803,7 +803,7 @@
                 }
                 //切换页
                 else if (type == 2) {
-                    cuttingAfterApi.list(this.searchParams).then((response) => {
+                    civilActionApi.list(this.searchParams).then((response) => {
                         this.otherParam = response.otherParam;
                         this.caseList = response.rows;
                         response.rows.forEach(element => {
@@ -886,7 +886,7 @@
                             let data = {
                                 caseId: that.ids.join(",")
                             }
-                            cuttingAfterApi.pendingExecute(data).then((res) => {
+                            civilActionApi.pendingExecute(data).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
                                     that.clearSelection();
@@ -894,7 +894,7 @@
                             });
                         } else {
                             let data = {};
-                            cuttingAfterApi.pendingExecuteAll(data).then((res) => {
+                            civilActionApi.pendingExecuteAll(data).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
                                     that.clearSelection();
@@ -950,10 +950,10 @@
             // },
             handleUpdate(item) {
                 this.$router.push({
-                    name: "cutAfterInfo",
+                    name: "civilActionInfo",
                     query: {
-                        afterId: item.id,
-                        afterList: this.idList
+                        civilActionId: item.id,
+                        civilActionList: this.idList
                     }
                 });
             },
@@ -1032,7 +1032,7 @@
                                 let param = {
                                     ids: that.ids.join(","),
                                 };
-                                cuttingAfterApi.applyCaseEdit(param).then((res) => {
+                                civilActionApi.applyCaseEdit(param).then((res) => {
                                     if (res.code === 200) {
                                         that.msgSuccess(res.msg);
                                         that.clearSelection();
@@ -1041,7 +1041,7 @@
                                     }
                                 });
                             } else {
-                                cuttingAfterApi.applyLetterRepairAll().then((res) => {
+                                civilActionApi.applyLetterRepairAll().then((res) => {
                                     if (res.code === 200) {
                                         that.msgSuccess(res.msg);
                                         that.clearSelection();
@@ -1085,7 +1085,7 @@
                                 let param = {
                                     caseId: ids
                                 };
-                                cuttingAfterApi.common(`/case/postAdjudged/closed`, param)
+                                civilActionApi.common(`/case/postAdjudged/closed`, param)
                                     .then((res) => {
                                         if (res.code === 200) {
                                             that.msgSuccess("操作成功");
@@ -1094,7 +1094,7 @@
                                     });
                             } else {
                                 let param = {};
-                                cuttingAfterApi.common(`/case/postAdjudged/closedAll`, param)
+                                civilActionApi.common(`/case/postAdjudged/closedAll`, param)
                                     .then((res) => {
                                         if (res.code === 200) {
                                             that.msgSuccess("操作成功");

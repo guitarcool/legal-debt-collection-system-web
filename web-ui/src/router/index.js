@@ -163,17 +163,17 @@ export const constantRoutes = [{
                 }
             },
             {
-                path: 'cutAfterInfo',
-                component: (resolve) => require(['@/views/caseManage/cuttingAfter/info'], resolve),
-                name: 'cutAfterInfo',
+                path: 'civilActionInfo',
+                component: (resolve) => require(['@/views/caseManage/civilAction/info'], resolve),
+                name: 'civilActionInfo',
                 meta: {
                     title: '裁后详情'
                 }
             },
             {
-                path: 'cutAfterDetails/:afterId(\\d+)',
-                component: (resolve) => require(['@/views/caseManage/cuttingAfter/info'], resolve),
-                name: 'cutAfterDetails',
+                path: 'civilActionDetails/:civilActionId(\\d+)',
+                component: (resolve) => require(['@/views/caseManage/civilAction/info'], resolve),
+                name: 'civilActionDetails',
                 meta: {
                     title: '裁后详情'
                 }

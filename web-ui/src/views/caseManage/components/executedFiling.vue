@@ -51,7 +51,7 @@
     import Dialog from '@/components/Dialog/index'
     import { getToken } from "@/utils/auth";
     import pretrialMediationApi from "@/api/case/pretrialMediation/index";
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     import { initObj } from '@/utils/common'
     export default {
         //已执行立案
@@ -139,7 +139,7 @@
                 }
             },
             getInfo() {
-                cuttingAfterApi.getCaseInfo(this.id).then((response) => {
+                civilActionApi.getCaseInfo(this.id).then((response) => {
                     this.form.court = response.data.enforceCourt;
                     this.form.caseNo = response.data.executeCaseNo;
                     this.form.time = response.data.executeTime;            

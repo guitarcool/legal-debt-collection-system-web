@@ -36,7 +36,7 @@
 <script>
     import Dialog from '@/components/Dialog/index'
     import withDrawalApi from "@/api/case/withDrawal/index";
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     import {
         initObj
@@ -139,7 +139,7 @@
                                         exportRange: this.form.exportRange.toString(),
                                         isDesensitization: this.form.isDesensitization,
                                     };
-                                    cuttingAfterApi.postAdjudgedBatchExport(queryParams).then(res => {
+                                    civilActionApi.postAdjudgedBatchExport(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.buttonLoading = false;
@@ -160,7 +160,7 @@
                                         caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
                                     };
-                                    cuttingAfterApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
+                                    civilActionApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.buttonLoading = false;
@@ -182,7 +182,7 @@
                                         exportRange: this.form.exportRange.toString(),
                                         isDesensitization: this.form.isDesensitization,
                                     };
-                                    cuttingAfterApi.assignmentMediationRecordAll(queryParams).then(res => {
+                                    civilActionApi.assignmentMediationRecordAll(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.buttonLoading = false;
@@ -203,7 +203,7 @@
                                         caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
                                     };
-                                    cuttingAfterApi.assignmentNetworkAdjustRecordAll(queryParams).then(res => {
+                                    civilActionApi.assignmentNetworkAdjustRecordAll(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.buttonLoading = false;
@@ -229,7 +229,7 @@
                                         exportRange: this.form.exportRange.toString(),
                                         isDesensitization: this.form.isDesensitization,
                                     };
-                                    cuttingAfterApi.postAdjudgedBatchExport(queryParams).then(res => {
+                                    civilActionApi.postAdjudgedBatchExport(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.dialogVisible = false;
@@ -250,7 +250,7 @@
                                         caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
                                     };
-                                    cuttingAfterApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
+                                    civilActionApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.dialogVisible = false;
@@ -272,7 +272,7 @@
                                         exportRange: this.form.exportRange.toString(),
                                         isDesensitization: this.form.isDesensitization,
                                     };
-                                    cuttingAfterApi.batchExportMediationRecordAll(queryParams).then(res => {
+                                    civilActionApi.batchExportMediationRecordAll(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.buttonLoading = false;
@@ -293,7 +293,7 @@
                                         caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
                                     };
-                                    cuttingAfterApi.batchExportNetworkAdjustRecordAll(queryParams).then(res => {
+                                    civilActionApi.batchExportNetworkAdjustRecordAll(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.buttonLoading = false;

@@ -121,7 +121,7 @@
     import {
         initObj
     } from "@/utils/common";
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
 
     export default {
         //已判决
@@ -283,7 +283,7 @@
                 this.addOneRepayCaseAmounts();
             },
             getList() {
-                cuttingAfterApi.getJointdebtCaseInfo(this.id).then((response) => {
+                civilActionApi.getJointdebtCaseInfo(this.id).then((response) => {
                     this.productList = response.data;
                 });
             },

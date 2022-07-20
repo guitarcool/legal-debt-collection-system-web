@@ -311,11 +311,11 @@
                             pretrialId: item.caseId
                         }
                     })
-                } else if (item.routerName == 'cUtAfterInfo') {
+                } else if (item.routerName == 'civilActionInfo') {
                     this.$router.push({
-                        name: 'cutAfterInfo',
+                        name: 'civilActionInfo',
                         query: {
-                            afterId: item.caseId
+                            civilActionId: item.caseId
                         }
                     })
                 }

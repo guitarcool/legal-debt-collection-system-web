@@ -138,7 +138,7 @@
     } from "@/utils/auth";
     import axios from "axios";
     import importApi from "@/api/case/import/index";
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     import templateApi from "@/api/case/document/templateIndex";
     export default {
@@ -321,7 +321,7 @@
                         });
                         break;
                     case this.title == "裁后全选短信发送":
-                        cuttingAfterApi.downloadSmsTemplate(param).then((response) => {
+                        civilActionApi.downloadSmsTemplate(param).then((response) => {
                             this.download(response.msg);
                         });
                         break;
@@ -437,7 +437,7 @@
                         }
                         switch (true) {
                             case this.title == '裁后全选短信发送':
-                                cuttingAfterApi.sendSmsCollectionAll(param).then((res) => {
+                                civilActionApi.sendSmsCollectionAll(param).then((res) => {
                                         if (res.code == 500) {
                                             this.loading = false;
                                             this.msgError(res.msg);
@@ -454,7 +454,7 @@
                                     });
                                 break;
                             case this.title == '裁后批量短信发送'||this.title == '裁后批量短信发送(旧)':
-                                cuttingAfterApi.sendSmsCollection(param).then((res) => {
+                                civilActionApi.sendSmsCollection(param).then((res) => {
                                         if (res.code == 500) {
                                             this.loading = false;
                                             this.buttonLoading =false;

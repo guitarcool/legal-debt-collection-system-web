@@ -937,7 +937,7 @@
                             let data = {
                                 caseId: that.ids.join(",")
                             }
-                            cuttingAfterApi.pendingExecute(data).then((res) => {
+                            civilActionApi.pendingExecute(data).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
                                     that.clearSelection();
@@ -945,7 +945,7 @@
                             });
                         } else {
                             let data = {};
-                            cuttingAfterApi.pendingExecuteAll(data).then((res) => {
+                            civilActionApi.pendingExecuteAll(data).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
                                     that.clearSelection();

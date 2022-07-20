@@ -34,7 +34,7 @@
 </template>
 
 <script>
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     import Dialog from '@/components/Dialog/index'
     import { getToken } from "@/utils/auth";
     import pretrialMediationApi from "@/api/case/pretrialMediation/index";
@@ -122,7 +122,7 @@
                 }
             },
             getInfo() {
-                cuttingAfterApi.getCaseInfo(this.id).then((response) => {
+                civilActionApi.getCaseInfo(this.id).then((response) => {
                     this.form.serial = response.data.enforceSerial;
                     this.form.serialNo = response.data.enforceSerialNo;
                     this.form.time = response.data.enforceTime;            

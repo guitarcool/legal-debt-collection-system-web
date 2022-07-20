@@ -355,9 +355,9 @@
                     });
                 } else if (item.caseStatus >= 7) {
                     this.$router.push({
-                        name: "cutAfterInfo",
+                        name: "civilActionInfo",
                         query: {
-                            afterId: item.caseId
+                            civilActionId: item.caseId
                         }
                     });
                 }

@@ -86,7 +86,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button v-if="type == 'after'" v-hasPermi="['case:postAdjudged:updateCaseEditData']" type="primary"
+            <el-button v-if="type == 'civilAction'" v-hasPermi="['case:postAdjudged:updateCaseEditData']" type="primary"
                 v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
             <el-button v-if="type == 'before'" v-hasPermi="['case:pretrial:updateCaseEditData']" type="primary"
                 v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
@@ -96,7 +96,7 @@
 
 <script>
     import Dialog from '@/components/Dialog/index'
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     import {
         initObj
@@ -183,8 +183,8 @@
                 this.resetAddForm();
                 this.form.caseId = this.id;
                 this.buttonLoading = false;
-                if (this.type == 'after') {
-                    cuttingAfterApi.getCaseEditData(this.id).then(res => {
+                if (this.type == 'civilAction') {
+                    civilActionApi.getCaseEditData(this.id).then(res => {
                         if (res.code === 200) {
                             this.form = res.data;
                         }
@@ -201,8 +201,8 @@
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
                         this.buttonLoading = true;
-                        if (this.type == 'after') {
-                            cuttingAfterApi.updateCaseEditData(this.form).then(res => {
+                        if (this.type == 'civilAction') {
+                            civilActionApi.updateCaseEditData(this.form).then(res => {
                                 if (res.code === 200) {
                                     this.msgSuccess("编辑成功");
                                     this.dialogVisible = false;

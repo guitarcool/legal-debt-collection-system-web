@@ -39,7 +39,7 @@
     import {
         getToken
     } from "@/utils/auth";
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     export default {
         name: "importDialog",
         components: {
@@ -141,19 +141,19 @@
             /** 下载模版操作 */
             importTemplate() {
                 if (this.id === 7) {
-                    cuttingAfterApi.importFiledCaseTemplate(this.importData).then((response) => {
+                    civilActionApi.importFiledCaseTemplate(this.importData).then((response) => {
                         this.download(response.msg);
                     });
                 } else if (this.id === 8) {
-                    cuttingAfterApi.importJudgedTemplate(this.importData).then((response) => {
+                    civilActionApi.importJudgedTemplate(this.importData).then((response) => {
                         this.download(response.msg);
                     });
                 } else if (this.id === 10) {
-                    cuttingAfterApi.importExecutedTemplate(this.importData).then((response) => {
+                    civilActionApi.importExecutedTemplate(this.importData).then((response) => {
                         this.download(response.msg);
                     });
                 } else if (this.id === 11) {
-                    cuttingAfterApi.importEnforcedTemplate(this.importData).then((response) => {
+                    civilActionApi.importEnforcedTemplate(this.importData).then((response) => {
                         this.download(response.msg);
                     });
                 }

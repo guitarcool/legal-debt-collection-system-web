@@ -137,7 +137,7 @@
     } from "@/utils/auth";
     import axios from "axios";
     import importApi from "@/api/case/import/index";
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     import templateApi from "@/api/case/document/templateIndex";
     export default {
         name: "exportDialog",
@@ -437,7 +437,7 @@
                             sendTime: this.signatureDate ? this.signatureDate : '',
                         }
                         if (this.title == '全选短信发送') {
-                            cuttingAfterApi.batchSMSAll(param).then((res) => {
+                            civilActionApi.batchSMSAll(param).then((res) => {
                                     if (res.code == 500) {
                                         this.loading = false;
                                         this.buttonLoading = false;
@@ -455,7 +455,7 @@
                                     this.loading = false;
                                 });
                         } else {
-                            cuttingAfterApi.sendSmsbatchSMS(param).then((res) => {
+                            civilActionApi.sendSmsbatchSMS(param).then((res) => {
                                     if (res.code == 500) {
                                         this.buttonLoading = false;
                                         this.loading = false;

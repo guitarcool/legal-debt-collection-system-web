@@ -20,7 +20,7 @@
     } from "@/utils/auth";
     import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     import divisionApi from "@/api/case/division/index";
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     import recordList from './recordList'
     export default {
         name: "recordDialog",
@@ -85,7 +85,7 @@
                         });
                         break;
                     case this.title == "裁后调解记录":
-                        cuttingAfterApi.record(this.id).then(res => {
+                        civilActionApi.record(this.id).then(res => {
                             this.recordList = res.data || []
                         });
                         break;

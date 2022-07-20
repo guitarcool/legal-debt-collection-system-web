@@ -951,7 +951,7 @@
 </template>
 
 <script>
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     import recordList from "../components/recordList";
     import normalDialog from "../components/normalDialog"; //通用弹窗
     import editInformation from "../components/editInformation"; //修改信息弹窗
@@ -1207,9 +1207,9 @@
         },
         created() {
             //案件id
-            this.id = this.$route.query.afterId;
-            if (this.$route.query.afterList && this.$route.query.afterList.length > 0) {
-                this.idList = this.$route.query.afterList;
+            this.id = this.$route.query.civilActionId;
+            if (this.$route.query.civilActionList && this.$route.query.civilActionList.length > 0) {
+                this.idList = this.$route.query.civilActionList;
                 this.buttonChange = true;
             } else {
                 this.idList = [];
@@ -1302,9 +1302,9 @@
         watch: {
             //监控路由参数，实现自己跳自己刷新数据
             $route() {
-                this.id = this.$route.query.afterId;
-                if (this.$route.query.afterList && this.$route.query.afterList.length > 0) {
-                    this.idList = this.$route.query.afterList;
+                this.id = this.$route.query.civilActionId;
+                if (this.$route.query.civilActionList && this.$route.query.civilActionList.length > 0) {
+                    this.idList = this.$route.query.civilActionList;
                     this.buttonChange = true;
                 } else {
                     this.idList = [];
@@ -1363,7 +1363,7 @@
             },
             //第一部分详情
             getAdjudgedInfo(type) {
-                cuttingAfterApi.postAdjudgedInfo(this.id).then((response) => {
+                civilActionApi.postAdjudgedInfo(this.id).then((response) => {
                     this.firstInfo = response.data;
                     this.componentsName = [];
                     componentsArray.componentsName.forEach((item) => {
@@ -1386,7 +1386,7 @@
                     caseId: this.id,
                     type: infoType,
                 }
-                cuttingAfterApi.getCaseBaseInfo(this.baseInfoParams).then((response) => {
+                civilActionApi.getCaseBaseInfo(this.baseInfoParams).then((response) => {
                     if (infoType == "subject") {
                         this.subjectInfo = response.data;
                         if (this.firstInfo.isDesensitization && !this.isDesensitization) {
@@ -1457,7 +1457,7 @@
                 let mediationParams = {
                     caseId: this.id,
                 }
-                cuttingAfterApi.getMediationObject(mediationParams).then((response) => {
+                civilActionApi.getMediationObject(mediationParams).then((response) => {
                     this.medNameOption = response.data;
                 })
             },
@@ -1468,7 +1468,7 @@
                     caseId: this.id,
                     type: caseType,
                 }
-                cuttingAfterApi.getCaseRecordInfo(this.caseInfoParams).then((response) => {
+                civilActionApi.getCaseRecordInfo(this.caseInfoParams).then((response) => {
                     if (caseType == "medRecord") {
                         this.medRecordList = response.data;
                         if (this.firstInfo.isDesensitization && !this.isDesensitization) {
@@ -1526,7 +1526,7 @@
                 this.adjustmentForm.caseId = this.id;
                 this.$refs["adjustmentForm"].validate((valid) => {
                     if (valid) {
-                        cuttingAfterApi.addNetworkAdjustRecord(this.adjustmentForm).then(res => {
+                        civilActionApi.addNetworkAdjustRecord(this.adjustmentForm).then(res => {
                             if (res.code == 200) {
                                 this.msgSuccess("新增成功");
                                 this.getCaseRecordInfo('netRecord');
@@ -1566,7 +1566,7 @@
             },
             editInformation() {
                 this.information.title = '裁后详情案件信息编辑';
-                this.information.type = 'after';
+                this.information.type = 'civilAction';
                 this.information.requestApi = "/case/adjudged/mediationFailed";
                 // 控制弹窗组件显示
                 this.information.dialogVisible = true;
@@ -1591,7 +1591,7 @@
                         let param = {
                             caseId: that.id
                         };
-                        cuttingAfterApi
+                        civilActionApi
                             .common(`/case/postAdjudged/pendingExecute`, param)
                             .then((res) => {
                                 if (res.code == 200) {
@@ -1784,7 +1784,7 @@
                             intention: this.ruleForm.intention,
                         };
                         //console.log(param)
-                        cuttingAfterApi.addRecord(param).then((res) => {
+                        civilActionApi.addRecord(param).then((res) => {
                             this.msgSuccess("操作成功");
                             this.getCaseRecordInfo('medRecord');
                             this.resetForm("ruleForm");
@@ -1878,7 +1878,7 @@
                         let param = {
                             caseId: that.id
                         };
-                        cuttingAfterApi
+                        civilActionApi
                             .common(`/case/adjudged/multipleMediation`, param)
                             .then((res) => {
                                 if (res.code == 200) {
@@ -1903,7 +1903,7 @@
                         let param = {
                             caseId: that.id
                         };
-                        cuttingAfterApi.common(`/case/adjudged/pending`, param).then((res) => {
+                        civilActionApi.common(`/case/adjudged/pending`, param).then((res) => {
                             if (res.code == 200) {
                                 that.msgSuccess("操作成功");
                                 that.getAdjudgedInfo();
@@ -1926,7 +1926,7 @@
                         let param = {
                             caseId: that.id
                         };
-                        cuttingAfterApi
+                        civilActionApi
                             .common(`/case/postAdjudged/closed`, param)
                             .then((res) => {
                                 if (res.code == 200) {
@@ -2005,7 +2005,7 @@
                         let param = {
                             ids: that.id,
                         };
-                        cuttingAfterApi.applyCaseEdit(param).then((res) => {
+                        civilActionApi.applyCaseEdit(param).then((res) => {
                             if (res.code == 200) {
                                 that.msgSuccess(res.msg);
                             } else if (res.code == 500) {
@@ -2081,7 +2081,7 @@
                 //新增或修改单个参数
                 this.$router.replace({
                     query: merge(this.$route.query, {
-                        afterId: this.id
+                        civilActionId: this.id
                     })
                 })
             },
@@ -2096,9 +2096,9 @@
                     });
                 } else if (item.caseStatus >= 7) {
                     this.$router.push({
-                        path: `/division/cutAfterDetails/${item.id}`,
+                        path: `/division/civilActionDetails/${item.id}`,
                         query: {
-                            afterId: item.id
+                            civilActionId: item.id
                         }
                     });
                 }

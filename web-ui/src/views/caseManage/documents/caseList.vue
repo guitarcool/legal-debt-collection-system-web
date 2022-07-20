@@ -522,9 +522,9 @@
                     })
                 } else if (['7', '8', '9', '10', '11', '12'].includes(item.caseStatus)) {
                     this.$router.push({
-                        name: 'cutAfterInfo',
+                        name: 'civilActionInfo',
                         query: {
-                            afterId: item.id
+                            civilActionId: item.id
                         }
                     })
                 }

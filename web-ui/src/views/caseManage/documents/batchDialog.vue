@@ -137,7 +137,7 @@
     } from "@/utils/auth";
     import axios from "axios";
     import importApi from "@/api/case/import/index";
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     import templateApi from "@/api/case/document/templateIndex";
     export default {
         name: "exportDialog",
@@ -439,7 +439,7 @@
                             sendTime: this.signatureDate ? this.signatureDate : '',
                         }
                         if (this.title == '全选文书短信发送') {
-                            cuttingAfterApi.batchClericalSMSAll(param).then((res) => {
+                            civilActionApi.batchClericalSMSAll(param).then((res) => {
                                     if (res.code == 500) {
                                         this.buttonLoading = false;
                                         this.loading = false;
@@ -457,7 +457,7 @@
                                     this.loading = false;
                                 });
                         } else {
-                            cuttingAfterApi.sendSmsWenshu(param).then((res) => {
+                            civilActionApi.sendSmsWenshu(param).then((res) => {
                                     if (res.code == 500) {
                                         this.buttonLoading = false;
                                         this.loading = false;

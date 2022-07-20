@@ -91,7 +91,7 @@
 
 <script>
     import Dialog from '@/components/Dialog/index'
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     import {
         initObj
@@ -188,7 +188,7 @@
         methods: {
             //获取线路
             getLineList() {
-                cuttingAfterApi.getLineList().then(res => {
+                civilActionApi.getLineList().then(res => {
                     this.callphone = res;
                 })
             },
@@ -246,13 +246,13 @@
                                 }
                             })
                         } else if (this.title == "裁后个人预测试外呼计划") {
-                            cuttingAfterApi.getListByIds(this.ids, this.form.callObject, filterMedLabel,
-                                filterNetworkStatus, filterRealtimeStatus, 'cutAfterInfo').then(res => {
+                            civilActionApi.getListByIds(this.ids, this.form.callObject, filterMedLabel,
+                                filterNetworkStatus, filterRealtimeStatus, 'civilActionInfo').then(res => {
                                 if (res.code === 200) {
                                     this.form.list = res.data;
                                     let accountId = JSON.parse(sessionStorage.getItem("accountId"));
                                     this.form.accountId = accountId;
-                                    cuttingAfterApi.addduyansoft(this.form).then(res => {
+                                    civilActionApi.addduyansoft(this.form).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("创建计划成功");
                                             this.buttonLoading = false;

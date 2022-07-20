@@ -72,7 +72,7 @@
 <script>
     import Dialog from "@/components/Dialog/index";
     import templateApi from "@/api/case/document/templateIndex";
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     export default {
         name: "exportDialog",
@@ -204,7 +204,7 @@
                                     this.active = 2;
                                 });
                         } else if (this.title == "裁后短信发送") {
-                            cuttingAfterApi.turnContent(param).then(
+                            civilActionApi.turnContent(param).then(
                                 response => {
                                     this.textarea = response.data;
                                     this.active = 2;
@@ -284,7 +284,7 @@
                             this.loading = false;
                         });
                 } else if (this.title == "裁后短信发送") {
-                    cuttingAfterApi.shortMsg(param).then((res) => {
+                    civilActionApi.shortMsg(param).then((res) => {
                             if (res.code == 500) {
                                 this.buttonLoading = false;
                                 this.loading = false;
@@ -356,7 +356,7 @@
                                 this.buttonLoading = false;
                             });
                     } else if (this.title == "裁后短信发送") {
-                        cuttingAfterApi.shortMsg(param).then((res) => {
+                        civilActionApi.shortMsg(param).then((res) => {
                                 if (res.code == 500) {
                                     this.loading = false;
                                     this.buttonLoading = false;

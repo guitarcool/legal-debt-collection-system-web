@@ -63,7 +63,7 @@
 </template>
 
 <script>
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     import Dialog from '@/components/Dialog/index'
     import { getToken } from "@/utils/auth";
     import { initObj } from '@/utils/common'
@@ -151,7 +151,7 @@
                 }
             },
             getInfo() {
-                cuttingAfterApi.getCaseInfo(this.id).then((response) => {
+                civilActionApi.getCaseInfo(this.id).then((response) => {
                     this.form.caseNo = response.data.caseNo;
                     this.form.court = response.data.court;
                     this.form.judge = response.data.judge;

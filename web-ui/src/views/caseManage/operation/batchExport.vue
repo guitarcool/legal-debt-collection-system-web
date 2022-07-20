@@ -37,7 +37,7 @@
 
 <script>
     import Dialog from "@/components/Dialog/index";
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     export default {
         name: "exportDialog",
         components: {
@@ -148,7 +148,7 @@
                     sendTime: this.signatureDate ? this.signatureDate : '',
                 }
                 if (this.title == '全选重新发送短信') {
-                    cuttingAfterApi.batchResendAll(param).then((res) => {
+                    civilActionApi.batchResendAll(param).then((res) => {
                             if (res.code == 500) {
                                 this.loading = false;
                                 this.buttonLoading = false;
@@ -166,7 +166,7 @@
                             this.loading = false;
                         });
                 } else {
-                    cuttingAfterApi.sendSmsBatchResend(param).then((res) => {
+                    civilActionApi.sendSmsBatchResend(param).then((res) => {
                             if (res.code == 500) {
                                 this.buttonLoading = false;
                                 this.loading = false;

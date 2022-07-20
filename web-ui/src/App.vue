@@ -197,19 +197,19 @@
                                     }
                                 });
 
-                            } else if (name == 'cutAfterInfo') {
-                                // if (this.$route.name == 'cutAfterInfo') {
+                            } else if (name == 'civilActionInfo') {
+                                // if (this.$route.name == 'civilActionInfo') {
                                 //     //新增或修改单个参数
                                 //     this.$router.replace({
                                 //         query: merge(this.$route.query, {
-                                //             afterId: id
+                                //             civilActionId: id
                                 //         })
                                 //     })
                                 // }
                                 this.$router.push({
-                                    path: `/division/cutAfterDetails/${id}`,
+                                    path: `/division/civilActionDetails/${id}`,
                                     query: {
-                                        afterId: id
+                                        civilActionId: id
                                     }
                                 });
                             }

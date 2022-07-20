@@ -279,7 +279,7 @@
 
 <script>
     import SearchBar from "@/components/SearchBar/index";
-    import cuttingAfterApi from "@/api/case/cuttingAfter/index";
+    import civilActionApi from "@/api/case/civilAction/index";
     import divisionApi from "@/api/case/division/index";
     export default {
         name: "list",
@@ -631,7 +631,7 @@
                 //查询
                 if (type == 1) {
                     this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
-                    cuttingAfterApi.historical(this.searchParams).then((response) => {
+                    civilActionApi.historical(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
                         this.clearTable();
@@ -650,7 +650,7 @@
                 }
                 //切换页
                 else if (type == 2) {
-                    cuttingAfterApi.historical(this.searchParams).then((response) => {
+                    civilActionApi.historical(this.searchParams).then((response) => {
                         this.otherParam = response.otherParam;
                         this.caseList = response.rows;
                         response.rows.forEach(element => {
@@ -716,10 +716,10 @@
             },
             handleUpdate(item) {
                 this.$router.push({
-                    name: "cutAfterInfo",
+                    name: "civilActionInfo",
                     query: {
-                        afterId: item.id,
-                        afterList: this.idList
+                        civilActionId: item.id,
+                        civilActionList: this.idList
                     }
                 });
             },
