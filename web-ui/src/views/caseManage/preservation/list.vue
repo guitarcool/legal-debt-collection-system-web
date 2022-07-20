@@ -912,7 +912,7 @@
                     name: "pretrialMediationInfo",
                     query: {
                         pretrialId: item.id,
-                        beforeList: this.idList
+                        pretrialList: this.idList
                     }
                 });
             },

@@ -1279,8 +1279,8 @@
         created() {
             //案件id
             this.id = this.$route.query.pretrialId;
-            if (this.$route.query.beforeList && this.$route.query.beforeList.length > 0) {
-                this.idList = this.$route.query.beforeList;
+            if (this.$route.query.pretrialList && this.$route.query.pretrialList.length > 0) {
+                this.idList = this.$route.query.pretrialList;
                 this.buttonChange = true;
             } else {
                 this.idList = [];
@@ -1377,8 +1377,8 @@
             //监控路由参数，实现自己跳自己刷新数据
             $route() {
                 this.id = this.$route.query.pretrialId;
-                if (this.$route.query.beforeList && this.$route.query.beforeList.length > 0) {
-                    this.idList = this.$route.query.beforeList;
+                if (this.$route.query.pretrialList && this.$route.query.pretrialList.length > 0) {
+                    this.idList = this.$route.query.pretrialList;
                     this.buttonChange = true;
                 } else {
                     this.idList = [];
