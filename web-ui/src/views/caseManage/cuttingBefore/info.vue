@@ -995,6 +995,7 @@
         <editInformation :title="information.title" :id="id" @refresh="getAdjudgedInfo" :type="information.type"
             :show.sync="information.dialogVisible">
         </editInformation>
+        <audioPlay :src="audioData.src" :show.sync="audioData.dialogVisible"></audioPlay>
     </div>
 </template>
 
@@ -1013,6 +1014,7 @@
     import addPhone from "../components/addPhone";
     import reimbursement from "../components/reimbursement";
     import erweima from "../components/erweima";
+    import audioPlay from "../components/audioPlay";
     import {
         initObj
     } from "@/utils/common";
@@ -1033,7 +1035,8 @@
             reimbursement,
             erweima,
             exportSms,
-            editInformation
+            editInformation,
+            audioPlay
         },
         data() {
             return {
@@ -1255,6 +1258,10 @@
                     11: 12,
                     5: 10
                 },
+                audioData: {
+                    dialogVisible: false,
+                    src: "",
+                }
             };
         },
         created() {
@@ -2050,9 +2057,8 @@
                     });
             },
             recordingPlay(val) {
-                let audio = new Audio();
-                audio.src = process.env.VUE_APP_BASE_API + val.path;
-                audio.play();
+                this.audioData.src = process.env.VUE_APP_BASE_API + val.path;
+                this.audioData.dialogVisible = true;
             },
             //一键外呼
             callMe(row) {

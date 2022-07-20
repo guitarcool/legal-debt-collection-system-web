@@ -180,6 +180,7 @@
         </div>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible"
             :ids="exportData.ids" :requestApi="exportData.requestApi" :total="exportData.total"></exportDialog>
+        <audioPlay :src="audioData.src" :show.sync="audioData.dialogVisible"></audioPlay>
     </div>
 </template>
 
@@ -189,12 +190,14 @@
     import {
         downLoadZip
     } from "@/utils/zipdownload";
+    import audioPlay from "../components/audioPlay";
     import exportDialog from "../components/exportDialog";
     export default {
         name: "callLogList",
         components: {
             SearchBar,
-            exportDialog
+            exportDialog,
+            audioPlay
         },
         data() {
             return {
@@ -233,6 +236,10 @@
                 getRowKeys(row) {
                     return row.callRecordId;
                 },
+                audioData: {
+                    dialogVisible: false,
+                    src: "",
+                }
             };
         },
         created() {
@@ -267,8 +274,7 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
-                    }
-                    ).catch(() => {
+                    }).catch(() => {
                         this.caseList = [];
                         this.total = 0;
                         this.loading = false;
@@ -280,8 +286,7 @@
                         this.caseList = response.rows;
                         this.total = response.total;
                         this.loading = false;
-                    }
-                    ).catch(() => {
+                    }).catch(() => {
                         this.caseList = [];
                         this.total = 0;
                         this.loading = false;
@@ -388,9 +393,8 @@
                 }
             },
             recordingPlay(val) {
-                let audio = new Audio();
-                audio.src = process.env.VUE_APP_BASE_API + val.path;
-                audio.play();
+                this.audioData.src = process.env.VUE_APP_BASE_API + val.path;
+                this.audioData.dialogVisible = true;
             },
         },
     };

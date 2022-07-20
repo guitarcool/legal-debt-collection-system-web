@@ -168,19 +168,22 @@
         </div>
         <exportDialog @refresh="clearSelection" :title="exportData.title" :show.sync="exportData.dialogVisible" :ids="exportData.ids"
             :requestApi="exportData.requestApi" :total="exportData.total"></exportDialog>
+        <audioPlay :src="audioData.src" :show.sync="audioData.dialogVisible"></audioPlay>
     </div>
 </template>
 
 <script>
     import operationApi from "@/api/case/operation/index";
     import SearchBar from "@/components/SearchBar/index";
+    import audioPlay from "../components/audioPlay";
     import exportDialog from "../components/exportDialog";
 
     export default {
         name: "callLogList",
         components: {
             SearchBar,
-            exportDialog
+            exportDialog,
+            audioPlay
         },
         data() {
             return {
@@ -223,6 +226,10 @@
                 getRowKeys(row) {
                     return row.callRecordId;
                 },
+                audioData: {
+                    dialogVisible: false,
+                    src: "",
+                }
             };
         },
         created() {
@@ -371,9 +378,8 @@
                 }
             },
             recordingPlay(val) {
-                let audio = new Audio();
-                audio.src = process.env.VUE_APP_BASE_API + val.path;
-                audio.play();
+                this.audioData.src = process.env.VUE_APP_BASE_API + val.path;
+                this.audioData.dialogVisible = true;
             },
         },
     };
