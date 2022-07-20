@@ -954,7 +954,7 @@
 </template>
 
 <script>
-    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
+    import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     import recordList from "../components/recordList";
     import normalDialog from "../components/normalDialog"; //通用弹窗
     import editInformation from "../components/editInformation"; //修改信息弹窗
@@ -1211,7 +1211,7 @@
         },
         created() {
             //案件id
-            this.id = this.$route.query.beforeId;
+            this.id = this.$route.query.pretrialId;
             if (this.$route.query.beforeList && this.$route.query.beforeList.length > 0) {
                 this.idList = this.$route.query.beforeList;
                 this.buttonChange = true;
@@ -1305,7 +1305,7 @@
         watch: {
             //监控路由参数，实现自己跳自己刷新数据
             $route() {
-                this.id = this.$route.query.beforeId;
+                this.id = this.$route.query.pretrialId;
                 if (this.$route.query.beforeList && this.$route.query.beforeList.length > 0) {
                     this.idList = this.$route.query.beforeList;
                     this.buttonChange = true;
@@ -1366,7 +1366,7 @@
             },
             //第一部分详情
             getAdjudgedInfo(type) {
-                cuttingBeforeApi.postAdjudgedInfo(this.id).then((response) => {
+                pretrialMediationApi.postAdjudgedInfo(this.id).then((response) => {
                     this.firstInfo = response.data;
                     this.componentsName = [];
                     componentsArray.componentsName.forEach((item) => {
@@ -1389,7 +1389,7 @@
                     caseId: this.id,
                     type: infoType,
                 }
-                cuttingBeforeApi.getCaseBaseInfo(this.baseInfoParams).then((response) => {
+                pretrialMediationApi.getCaseBaseInfo(this.baseInfoParams).then((response) => {
                     if (infoType == "subject") {
                         this.subjectInfo = response.data;
                         if (this.firstInfo.isDesensitization && !this.isDesensitization) {
@@ -1461,7 +1461,7 @@
                 let mediationParams = {
                     caseId: this.id,
                 }
-                cuttingBeforeApi.getMediationObject(mediationParams).then((response) => {
+                pretrialMediationApi.getMediationObject(mediationParams).then((response) => {
                     this.medNameOption = response.data;
                 })
             },
@@ -1471,7 +1471,7 @@
                     caseId: this.id,
                     type: caseType,
                 }
-                cuttingBeforeApi.getCaseRecordInfo(this.caseInfoParams).then((response) => {
+                pretrialMediationApi.getCaseRecordInfo(this.caseInfoParams).then((response) => {
                     if (caseType == "medRecord") {
                         this.medRecordList = response.data;
                         if (this.firstInfo.isDesensitization && !this.isDesensitization) {
@@ -1529,7 +1529,7 @@
                 this.adjustmentForm.caseId = this.id;
                 this.$refs["adjustmentForm"].validate((valid) => {
                     if (valid) {
-                        cuttingBeforeApi.addNetworkAdjustRecord(this.adjustmentForm).then(res => {
+                        pretrialMediationApi.addNetworkAdjustRecord(this.adjustmentForm).then(res => {
                             if (res.code == 200) {
                                 this.msgSuccess("新增成功");
                                 this.getCaseRecordInfo('netRecord');
@@ -1587,7 +1587,7 @@
                         let param = {
                             caseId: that.id
                         };
-                        cuttingBeforeApi
+                        pretrialMediationApi
                             .common(`/case/pretrial/mediationSuccess`, param)
                             .then((res) => {
                                 if (res.code == 200) {
@@ -1612,7 +1612,7 @@
                         let param = {
                             caseId: that.id
                         };
-                        cuttingBeforeApi
+                        pretrialMediationApi
                             .common(`/case/postAdjudged/pendingExecute`, param)
                             .then((res) => {
                                 if (res.code == 200) {
@@ -1670,7 +1670,7 @@
                         let param = {
                             cid: that.id,
                         };
-                        cuttingBeforeApi.property(param).then((res) => {
+                        pretrialMediationApi.property(param).then((res) => {
                             if (res.code == 200) {
                                 that.msgSuccess("操作成功");
                                 that.getAdjudgedInfo();
@@ -1828,7 +1828,7 @@
                             intention: this.ruleForm.intention,
                         };
                         //console.log(param)
-                        cuttingBeforeApi.addRecord(param).then((res) => {
+                        pretrialMediationApi.addRecord(param).then((res) => {
                             this.msgSuccess("操作成功");
                             this.getCaseRecordInfo('medRecord');
                             this.resetForm("ruleForm");
@@ -1922,7 +1922,7 @@
                         let param = {
                             caseId: that.id
                         };
-                        cuttingBeforeApi
+                        pretrialMediationApi
                             .common(`/case/pretrial/multipleMediation`, param)
                             .then((res) => {
                                 if (res.code == 200) {
@@ -1947,7 +1947,7 @@
                         let param = {
                             caseId: that.id
                         };
-                        cuttingBeforeApi.common(`/case/pretrial/pending`, param).then((res) => {
+                        pretrialMediationApi.common(`/case/pretrial/pending`, param).then((res) => {
                             if (res.code == 200) {
                                 that.msgSuccess("操作成功");
                                 that.getAdjudgedInfo();
@@ -1970,7 +1970,7 @@
                         let param = {
                             caseId: that.id
                         };
-                        cuttingBeforeApi
+                        pretrialMediationApi
                             .common(`/case/postAdjudged/closed`, param)
                             .then((res) => {
                                 if (res.code == 200) {
@@ -2049,7 +2049,7 @@
                         let param = {
                             ids: that.id,
                         };
-                        cuttingBeforeApi.applyCaseEdit(param).then((res) => {
+                        pretrialMediationApi.applyCaseEdit(param).then((res) => {
                             if (res.code == 200) {
                                 that.msgSuccess(res.msg);
                             } else if (res.code == 500) {
@@ -2132,7 +2132,7 @@
                 //新增或修改单个参数
                 this.$router.replace({
                     query: merge(this.$route.query, {
-                        beforeId: this.id
+                        pretrialId: this.id
                     })
                 })
             },
@@ -2140,9 +2140,9 @@
             handleItemUpdate(item) {
                 if (item.caseStatus < 7) {
                     this.$router.push({
-                        path: `/division/cutBeforeDetails/${item.id}`,
+                        path: `/division/pretrialDetails/${item.id}`,
                         query: {
-                            beforeId: item.id
+                            pretrialId: item.id
                         }
                     });
                 } else if (item.caseStatus >= 7) {

@@ -27,7 +27,7 @@
 <script>
     import Dialog from '@/components/Dialog/index'
     import cuttingAfterApi from "@/api/case/cuttingAfter/index";
-    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
+    import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     import {
         initObj
     } from '@/utils/common'
@@ -169,7 +169,7 @@
                         this.buttonLoading = true;
                         switch (true) {
                             case this.title == '裁前新增手机号':
-                                cuttingBeforeApi.addPhone(this.form).then(res => {
+                                pretrialMediationApi.addPhone(this.form).then(res => {
                                     if (res.code === 200) {
                                         this.msgSuccess("新增成功");
                                         this.dialogVisible = false;

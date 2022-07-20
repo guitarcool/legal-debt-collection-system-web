@@ -16,7 +16,7 @@
 
 <script>
     import Dialog from '@/components/Dialog/index'
-    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
+    import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     import { initObj } from '@/utils/common'
     export default {
         name: "normalDialog",
@@ -90,7 +90,7 @@
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
                         this.buttonLoading = true;
-                        cuttingBeforeApi.common(this.requestApi,this.form).then(res => {
+                        pretrialMediationApi.common(this.requestApi,this.form).then(res => {
                             if (res.code === 200) {
                                 this.msgSuccess("操作成功");
                                 this.dialogVisible = false;

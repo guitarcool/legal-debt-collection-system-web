@@ -147,17 +147,17 @@ export const constantRoutes = [{
         component: Layout,
         hidden: true,
         children: [{
-                path: 'cutBeforeDetails/:beforeId(\\d+)',
-                component: (resolve) => require(['@/views/caseManage/cuttingBefore/info'], resolve),
-                name: 'cutBeforeDetails',
+                path: 'pretrialDetails/:pretrialId(\\d+)',
+                component: (resolve) => require(['@/views/caseManage/pretrialMediation/info'], resolve),
+                name: 'pretrialDetails',
                 meta: {
                     title: '裁前详情'
                 }
             },
             {
-                path: 'cutBeforeInfo',
-                component: (resolve) => require(['@/views/caseManage/cuttingBefore/info'], resolve),
-                name: 'cutBeforeInfo',
+                path: 'pretrialMediationInfo',
+                component: (resolve) => require(['@/views/caseManage/pretrialMediation/info'], resolve),
+                name: 'pretrialMediationInfo',
                 meta: {
                     title: '裁前详情'
                 }

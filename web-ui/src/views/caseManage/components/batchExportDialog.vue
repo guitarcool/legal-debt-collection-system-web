@@ -139,7 +139,7 @@
     import axios from "axios";
     import importApi from "@/api/case/import/index";
     import cuttingAfterApi from "@/api/case/cuttingAfter/index";
-    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
+    import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     import templateApi from "@/api/case/document/templateIndex";
     export default {
         name: "exportDialog",
@@ -316,7 +316,7 @@
                 }
                 switch (true) {
                     case this.title == "裁前全选短信发送":
-                        cuttingBeforeApi.downloadSmsTemplate(param).then((response) => {
+                        pretrialMediationApi.downloadSmsTemplate(param).then((response) => {
                             this.download(response.msg);
                         });
                         break;
@@ -473,7 +473,7 @@
                                     });
                                 break;
                             case this.title == '裁前全选短信发送':
-                                cuttingBeforeApi.sendSmsCollectionAll(param).then((res) => {
+                                pretrialMediationApi.sendSmsCollectionAll(param).then((res) => {
                                     if (res.code == 500) {
                                         this.loading = false;
                                         this.buttonLoading =false;
@@ -492,7 +492,7 @@
                                 });
                                 break;
                             case this.title == '裁前批量短信发送'||this.title == '裁前批量短信发送(旧)':
-                                cuttingBeforeApi.sendSmsCollection(param).then((res) => {
+                                pretrialMediationApi.sendSmsCollection(param).then((res) => {
                                     if (res.code == 500) {
                                         this.loading = false;
                                         this.buttonLoading =false;

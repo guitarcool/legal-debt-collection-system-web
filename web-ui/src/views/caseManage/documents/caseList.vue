@@ -515,9 +515,9 @@
             handleUpdate(item) {
                 if (['1', '2', '3', '4', '5', '6'].includes(item.caseStatus)) {
                     this.$router.push({
-                        name: 'cutBeforeInfo',
+                        name: 'pretrialMediationInfo',
                         query: {
-                            beforeId: item.id
+                            pretrialId: item.id
                         }
                     })
                 } else if (['7', '8', '9', '10', '11', '12'].includes(item.caseStatus)) {

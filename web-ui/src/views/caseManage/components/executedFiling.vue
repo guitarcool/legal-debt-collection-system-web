@@ -50,7 +50,7 @@
 <script>
     import Dialog from '@/components/Dialog/index'
     import { getToken } from "@/utils/auth";
-    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
+    import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     import cuttingAfterApi from "@/api/case/cuttingAfter/index";
     import { initObj } from '@/utils/common'
     export default {
@@ -164,7 +164,7 @@
                         if(this.statusId !=0 && this.statusId ){
                             this.form.statusId = this.statusId;
                         }
-                        cuttingBeforeApi.common(this.requestApi,this.form).then(res => {
+                        pretrialMediationApi.common(this.requestApi,this.form).then(res => {
                             if (res.code === 200) {
                                 this.msgSuccess("操作成功");
                                 this.dialogVisible = false;

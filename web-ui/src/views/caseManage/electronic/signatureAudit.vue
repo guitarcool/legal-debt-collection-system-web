@@ -304,11 +304,11 @@
             },
             //案件详情
             goRouter(item) {
-                if (item.routerName == 'cUtBeforeInfo') {
+                if (item.routerName == 'pretrialMediationInfo') {
                     this.$router.push({
-                        name: 'cutBeforeInfo',
+                        name: 'pretrialMediationInfo',
                         query: {
-                            beforeId: item.caseId
+                            pretrialId: item.caseId
                         }
                     })
                 } else if (item.routerName == 'cUtAfterInfo') {

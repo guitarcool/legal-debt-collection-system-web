@@ -56,7 +56,7 @@
     import {
         interval
     } from "@/utils/ruoyi";
-    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
+    import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     export default {
         name: "batchExportDialog",
         components: {
@@ -205,7 +205,7 @@
                         this.msgError('勾选的数据量超出生成律师函条数200上限，请重新勾选后再进行提交');
                         return;
                     }
-                    cuttingBeforeApi.instrumentBatch(param).then((response) => {
+                    pretrialMediationApi.instrumentBatch(param).then((response) => {
                         if (response.code == 200) {
                             this.dialogVisible = false;
                             this.loading = false;
@@ -223,7 +223,7 @@
                         return;
                     }
                     param.ids = [];
-                    cuttingBeforeApi.instrumentBatchAll(param).then((response) => {
+                    pretrialMediationApi.instrumentBatchAll(param).then((response) => {
                         if (response.code == 200) {
                             this.dialogVisible = false;
                             this.loading = false;

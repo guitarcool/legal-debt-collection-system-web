@@ -18,7 +18,7 @@
     import {
         getToken
     } from "@/utils/auth";
-    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
+    import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     import divisionApi from "@/api/case/division/index";
     import cuttingAfterApi from "@/api/case/cuttingAfter/index";
     import recordList from './recordList'
@@ -80,7 +80,7 @@
                         });
                         break;
                     case this.title == "裁前调解记录":
-                        cuttingBeforeApi.record(this.id).then(res => {
+                        pretrialMediationApi.record(this.id).then(res => {
                             this.recordList = res.data || []
                         });
                         break;

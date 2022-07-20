@@ -37,7 +37,7 @@
     import Dialog from '@/components/Dialog/index'
     import withDrawalApi from "@/api/case/withDrawal/index";
     import cuttingAfterApi from "@/api/case/cuttingAfter/index";
-    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
+    import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     import {
         initObj
     } from '@/utils/common'
@@ -409,7 +409,7 @@
                                         exportRange: this.form.exportRange.toString(),
                                         isDesensitization: this.form.isDesensitization,
                                     };
-                                    cuttingBeforeApi.batchExportMediationRecord(queryParams).then(res => {
+                                    pretrialMediationApi.batchExportMediationRecord(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.buttonLoading = false;
@@ -430,7 +430,7 @@
                                         caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
                                     };
-                                    cuttingBeforeApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
+                                    pretrialMediationApi.batchExportNetworkAdjustRecord(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.buttonLoading = false;
@@ -451,7 +451,7 @@
                                         caseId: this.ids,
                                         content: this.form.content,
                                     };
-                                    cuttingBeforeApi.batchMediationFailed(queryParams).then(res => {
+                                    pretrialMediationApi.batchMediationFailed(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.buttonLoading = false;
@@ -471,7 +471,7 @@
                                         caseIds: this.ids,
                                         exportRange: this.form.exportRange.toString(),
                                     };
-                                    cuttingBeforeApi.batchExportNetworkAdjustRecordAll(queryParams).then(
+                                    pretrialMediationApi.batchExportNetworkAdjustRecordAll(queryParams).then(
                                         res => {
                                             if (res.code === 200) {
                                                 this.msgSuccess("操作成功");
@@ -494,7 +494,7 @@
                                         exportRange: this.form.exportRange.toString(),
                                         isDesensitization: this.form.isDesensitization,
                                     };
-                                    cuttingBeforeApi.batchExportMediationRecordAll(queryParams).then(res => {
+                                    pretrialMediationApi.batchExportMediationRecordAll(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.buttonLoading = false;
@@ -515,7 +515,7 @@
                                         caseIds: [],
                                         content: this.form.content,
                                     };
-                                    cuttingBeforeApi.batchMediationFailedAll(queryParams).then(res => {
+                                    pretrialMediationApi.batchMediationFailedAll(queryParams).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("操作成功");
                                             this.buttonLoading = false;

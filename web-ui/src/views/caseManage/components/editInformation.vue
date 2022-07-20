@@ -97,7 +97,7 @@
 <script>
     import Dialog from '@/components/Dialog/index'
     import cuttingAfterApi from "@/api/case/cuttingAfter/index";
-    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
+    import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     import {
         initObj
     } from '@/utils/common'
@@ -190,7 +190,7 @@
                         }
                     })
                 } else if (this.type == 'before') {
-                    cuttingBeforeApi.getCaseEditData(this.id).then(res => {
+                    pretrialMediationApi.getCaseEditData(this.id).then(res => {
                         if (res.code === 200) {
                             this.form = res.data;
                         }
@@ -213,7 +213,7 @@
                                 this.buttonLoading = false;
                             });
                         } else if (this.type == 'before') {
-                            cuttingBeforeApi.updateCaseEditData(this.form).then(res => {
+                            pretrialMediationApi.updateCaseEditData(this.form).then(res => {
                                 if (res.code === 200) {
                                     this.msgSuccess("编辑成功");
                                     this.dialogVisible = false;

@@ -2095,9 +2095,9 @@
             handleItemUpdate(item) {
                 if (item.caseStatus < 7) {
                     this.$router.push({
-                        path: `/division/cutBeforeDetails/${item.id}`,
+                        path: `/division/pretrialDetails/${item.id}`,
                         query: {
-                            beforeId: item.id
+                            pretrialId: item.id
                         }
                     });
                 } else if (item.caseStatus >= 7) {

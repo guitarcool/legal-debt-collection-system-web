@@ -92,7 +92,7 @@
 <script>
     import Dialog from '@/components/Dialog/index'
     import cuttingAfterApi from "@/api/case/cuttingAfter/index";
-    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
+    import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     import {
         initObj
     } from '@/utils/common'
@@ -226,13 +226,13 @@
                         let filterNetworkStatus = this.form.filterNetworkStatus.toString();
                         let filterRealtimeStatus = this.form.filterRealtimeStatus.toString();
                         if (this.title == "裁前个人预测试外呼计划") {
-                            cuttingBeforeApi.getListByIds(this.ids, this.form.callObject, filterMedLabel,
-                                filterNetworkStatus, filterRealtimeStatus, 'cutBeforeInfo').then(res => {
+                            pretrialMediationApi.getListByIds(this.ids, this.form.callObject, filterMedLabel,
+                                filterNetworkStatus, filterRealtimeStatus, 'pretrialMediationInfo').then(res => {
                                 if (res.code === 200) {
                                     this.form.list = res.data;
                                     let accountId = JSON.parse(sessionStorage.getItem("accountId"));
                                     this.form.accountId = accountId;
-                                    cuttingBeforeApi.addduyansoft(this.form).then(res => {
+                                    pretrialMediationApi.addduyansoft(this.form).then(res => {
                                         if (res.code === 200) {
                                             this.msgSuccess("创建计划成功");
                                             this.dialogVisible = false;

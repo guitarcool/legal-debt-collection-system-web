@@ -3,7 +3,7 @@ import {
     praseStrEmpty
 } from "@/utils/ruoyi";
 
-const cuttingBeforeApi = {
+const pretrialMediationApi = {
     //列表
     list(data) {
         return request({
@@ -295,4 +295,4 @@ const cuttingBeforeApi = {
 }
 
 // 下载用户导入模版
-export default cuttingBeforeApi
+export default pretrialMediationApi

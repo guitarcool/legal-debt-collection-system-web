@@ -73,7 +73,7 @@
     import Dialog from "@/components/Dialog/index";
     import templateApi from "@/api/case/document/templateIndex";
     import cuttingAfterApi from "@/api/case/cuttingAfter/index";
-    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
+    import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     export default {
         name: "exportDialog",
         components: {
@@ -198,7 +198,7 @@
                             cid: this.caseId,
                         }
                         if (this.title == "裁前短信发送") {
-                            cuttingBeforeApi.turnContent(param).then(
+                            pretrialMediationApi.turnContent(param).then(
                                 response => {
                                     this.textarea = response.data;
                                     this.active = 2;
@@ -266,7 +266,7 @@
                     sendTime: this.signatureDate ? this.signatureDate : '',
                 }
                 if (this.title == "裁前短信发送") {
-                    cuttingBeforeApi.shortMsg(param).then((res) => {
+                    pretrialMediationApi.shortMsg(param).then((res) => {
                             if (res.code == 500) {
                                 this.loading = false;
                                 this.buttonLoading = false;
@@ -338,7 +338,7 @@
                         sendTime: this.signatureDate ? this.signatureDate : '',
                     }
                     if (this.title == "裁前短信发送") {
-                        cuttingBeforeApi.shortMsg(param).then((res) => {
+                        pretrialMediationApi.shortMsg(param).then((res) => {
                                 if (res.code == 500) {
                                     this.loading = false;
                                     this.buttonLoading = false;

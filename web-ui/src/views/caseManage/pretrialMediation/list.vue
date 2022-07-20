@@ -433,7 +433,7 @@
 
 <script>
     import SearchBar from "@/components/SearchBar/index";
-    import cuttingBeforeApi from "@/api/case/cuttingBefore/index";
+    import pretrialMediationApi from "@/api/case/pretrialMediation/index";
     import exportDialog from "./exportDialog";
     import recordDialog from "../components/recordDialog";
     import batchExportDialog from "./batchExportDialog";
@@ -787,7 +787,7 @@
                 //查询
                 if (type == 1) {
                     this.searchParams = JSON.parse(JSON.stringify(this.queryParams));
-                    cuttingBeforeApi.list(this.searchParams).then((response) => {
+                    pretrialMediationApi.list(this.searchParams).then((response) => {
                         this.queryParams.orderByColumn = "";
                         this.clearSelection();
                         this.clearTable(); //清除排序
@@ -806,7 +806,7 @@
                 }
                 //切换页
                 else if (type == 2) {
-                    cuttingBeforeApi.list(this.searchParams).then((response) => {
+                    pretrialMediationApi.list(this.searchParams).then((response) => {
                         this.otherParam = response.otherParam;
                         this.caseList = response.rows;
                         response.rows.forEach(element => {
@@ -906,9 +906,9 @@
             },
             handleUpdate(item) {
                 this.$router.push({
-                    name: "cutBeforeInfo",
+                    name: "pretrialMediationInfo",
                     query: {
-                        beforeId: item.id,
+                        pretrialId: item.id,
                         beforeList: this.idList
                     }
                 });
@@ -1027,7 +1027,7 @@
                                 let param = {
                                     ids: that.ids.join(","),
                                 };
-                                cuttingBeforeApi.applyCaseEdit(param).then((res) => {
+                                pretrialMediationApi.applyCaseEdit(param).then((res) => {
                                     if (res.code === 200) {
                                         that.msgSuccess(res.msg);
                                         that.clearSelection();
@@ -1036,7 +1036,7 @@
                                     }
                                 });
                             } else if (type == 2) {
-                                cuttingBeforeApi.applyLetterRepairAll().then((res) => {
+                                pretrialMediationApi.applyLetterRepairAll().then((res) => {
                                     if (res.code === 200) {
                                         that.msgSuccess(res.msg);
                                         that.clearSelection();
@@ -1065,7 +1065,7 @@
                             let data = {
                                 caseId: that.ids.join(",")
                             }
-                            cuttingBeforeApi.batchPending(data).then((res) => {
+                            pretrialMediationApi.batchPending(data).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess(res.msg);
                                     that.clearSelection();
@@ -1075,7 +1075,7 @@
                             });
                         } else {
                             let data = {};
-                            cuttingBeforeApi.batchPendingAll(data).then((res) => {
+                            pretrialMediationApi.batchPendingAll(data).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess(res.msg);
                                     that.clearSelection();
@@ -1118,14 +1118,14 @@
                             caseIds: that.ids.join(",") || ''
                         }
                         if (type == 1) {
-                            cuttingBeforeApi.caseProperty(data).then((res) => {
+                            pretrialMediationApi.caseProperty(data).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
                                     that.clearSelection();
                                 }
                             });
                         } else {
-                            cuttingBeforeApi.casePropertyAll(data).then((res) => {
+                            pretrialMediationApi.casePropertyAll(data).then((res) => {
                                 if (res.code === 200) {
                                     that.msgSuccess("操作成功");
                                     that.clearSelection();

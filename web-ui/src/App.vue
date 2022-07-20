@@ -99,9 +99,9 @@
             //     ++id;
             //     console.log(id);
             //     this.$router.push({
-            //         path: `/division/cutBeforeDetails/${id}`,
+            //         path: `/division/pretrialDetails/${id}`,
             //         query: {
-            //             beforeId: id
+            //             pretrialId: id
             //         }
             //     });
             // },
@@ -181,19 +181,19 @@
                             let id = result[0];
                             let name = result[1];
                             console.log(id, name);
-                            if (name == 'cutBeforeInfo') {
-                                // if (this.$route.name == 'cutBeforeInfo') {
+                            if (name == 'pretrialMediationInfo') {
+                                // if (this.$route.name == 'pretrialMediationInfo') {
                                 //     //新增或修改单个参数
                                 //     this.$router.replace({
                                 //         query: merge(this.$route.query, {
-                                //             beforeId: id
+                                //             pretrialId: id
                                 //         })
                                 //     })
                                 // }
                                 this.$router.push({
-                                    path: `/division/cutBeforeDetails/${id}`,
+                                    path: `/division/pretrialDetails/${id}`,
                                     query: {
-                                        beforeId: id
+                                        pretrialId: id
                                     }
                                 });
 

@@ -320,9 +320,9 @@
             handleUpdate(item) {
                 if (item.caseStatus < 7) {
                     this.$router.push({
-                        name: "cutBeforeInfo",
+                        name: "pretrialMediationInfo",
                         query: {
-                            beforeId: item.caseId
+                            pretrialId: item.caseId
                         }
                     });
                 } else if (item.caseStatus >= 7) {
