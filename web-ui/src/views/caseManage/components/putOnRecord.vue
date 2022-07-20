@@ -57,7 +57,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -96,6 +96,7 @@
                     ]
                 },
                 fileList:[],
+                buttonLoading:false
             }
         },
         props: {
@@ -143,6 +144,7 @@
                 this.removeFile();
                 this.fileList = [];
                 this.form.id = this.id;
+                this.buttonLoading = false;
                 this.upload_url = process.env.VUE_APP_BASE_API + this.requestApi;
                 if(this.statusId !=0 && this.statusId ){
                     this.getInfo()
@@ -170,6 +172,7 @@
             submit () {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
+                        this.buttonLoading = true;
                         let formData = new FormData();
                         formData.append("id", this.id);
                         if(this.statusId !=0 && this.statusId ){
@@ -195,11 +198,14 @@
                             if (res.data.code == 200) {
                                 this.msgSuccess(res.data.msg);
                                 this.dialogVisible = false;
+                                this.buttonLoading = false;
                                 this.$emit('refresh');
                             }else{
+                                this.buttonLoading = false;
                                 this.msgError(res.data.msg);
                             }
                         }).catch(error => {
+                            this.buttonLoading = false;
                             this.msgError(error);
                         })
                         // const instance = axios.create({

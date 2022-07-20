@@ -52,7 +52,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -107,7 +107,8 @@
                 typeOptions: [],
                 fileList: [],
                 companies: [],
-                loading: false
+                loading: false,
+                buttonLoading:false
             }
         },
         props: {
@@ -156,7 +157,8 @@
                 this.form.id = this.id
                 this.removeFile()
                 this.fileList = [];
-                this.loading = false
+                this.loading = false;
+                this.buttonLoading = false;
             },
             //重置表单清除验证
             resetAddForm() {
@@ -181,6 +183,7 @@
                 this.$refs["form"].validate((valid) => {
                     if (valid && this.files) {
                         this.loading = true;
+                        this.buttonLoading = true;
                         let formData = new FormData();
                         formData.append("file", this.files);
                         formData.append("divisionName", this.form.divisionName);
@@ -208,9 +211,11 @@
                             });
                             that.dialogVisible = false;
                             that.loading = false;
+                            that.buttonLoading = false;
                             that.$emit('refresh');
                         }).catch(error => {
                             that.msgError(error);
+                            that.buttonLoading = false;
                             that.loading = false;
                         })
                     } else {

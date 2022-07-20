@@ -17,7 +17,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="submit" :loading="sumbmitLoading">提交</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">提交</el-button>
         </div>
     </Dialog>
 </template>
@@ -63,7 +63,7 @@
                         trigger: "blur"
                     }, ],
                 },
-                sumbmitLoading: false,
+                buttonLoading: false,
             };
         },
         props: {
@@ -117,7 +117,7 @@
                 this.resetAddForm();
                 this.form.id = this.id;
                 this.project_operate = 1;
-                this.sumbmitLoading = false;
+                this.buttonLoading = false;
             },
             //重置表单清除验证
             resetAddForm() {
@@ -130,7 +130,7 @@
                 if (this.form.choice == 0) {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
-                            this.sumbmitLoading = true;
+                            this.buttonLoading = true;
                             let param
                             if (this.type == 1) {
                                 param = {
@@ -148,24 +148,24 @@
                             if (this.title == '全选文书签章审核') {
                                 electronicApi.applyCheckAll(param).then((res) => {
                                     if (res.code === 200) {
-                                        this.sumbmitLoading = false;
+                                        this.buttonLoading = false;
                                         this.msgSuccess("操作成功");
                                         this.$emit("refresh");
                                         this.dialogVisible = false;
                                     }
                                 }).catch(error => {
-                                    this.sumbmitLoading = false;
+                                    this.buttonLoading = false;
                                 })
                             } else {
                                 electronicApi.applyCheck(param).then((res) => {
                                     if (res.code === 200) {
-                                        this.sumbmitLoading = false;
+                                        this.buttonLoading = false;
                                         this.msgSuccess("操作成功");
                                         this.$emit("refresh");
                                         this.dialogVisible = false;
                                     }
                                 }).catch(error => {
-                                    this.sumbmitLoading = false;
+                                    this.buttonLoading = false;
                                 })
                             }
                         }
@@ -174,7 +174,7 @@
                 if (this.form.choice == 1) {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
-                            this.sumbmitLoading = true;
+                            this.buttonLoading = true;
                             let param
                             if (this.type == 1) {
                                 param = {
@@ -190,24 +190,24 @@
                             if (this.title == '全选文书签章审核') {
                                 electronicApi.applyCheckAll(param).then((res) => {
                                     if (res.code === 200) {
-                                        this.sumbmitLoading = false;
+                                        this.buttonLoading = false;
                                         this.msgSuccess("操作成功");
                                         this.$emit("refresh");
                                         this.dialogVisible = false;
                                     }
                                 }).catch(error => {
-                                    this.sumbmitLoading = false;
+                                    this.buttonLoading = false;
                                 })
                             } else {
                                 electronicApi.applyCheck(param).then((res) => {
                                     if (res.code === 200) {
-                                        this.sumbmitLoading = false;
+                                        this.buttonLoading = false;
                                         this.msgSuccess("操作成功");
                                         this.$emit("refresh");
                                         this.dialogVisible = false;
                                     }
                                 }).catch(error => {
-                                    this.sumbmitLoading = false;
+                                    this.buttonLoading = false;
                                 })
                             }
                         }

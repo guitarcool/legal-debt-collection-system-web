@@ -51,7 +51,7 @@
     </template>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取消</el-button>
-      <el-button type="primary" @click="submit">确 定</el-button>
+      <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
     </div>
   </Dialog>
 </template>
@@ -102,6 +102,7 @@ export default {
         url: "",
       },
       file:null,
+      buttonLoading:false
     };
   },
   computed: {
@@ -121,6 +122,7 @@ export default {
     },
     // 提交上传文件
     submit() {
+      this.buttonLoading =true;
       this.$refs.upload.submit();
     },
     // 文件上传中处理
@@ -132,6 +134,7 @@ export default {
     handleFileSuccess(response, file, fileList) {
       this.file = file;
       this.dialogVisible = false;
+      this.buttonLoading = false;
       this.upload.isUploading = false;
       this.$refs.upload.clearFiles();
       this.$alert(response.msg, "导入结果", { dangerouslyUseHTMLString: true });

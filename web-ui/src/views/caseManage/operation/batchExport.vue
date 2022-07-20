@@ -29,7 +29,7 @@
             </template>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submit">发 送</el-button>
+                <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">发 送</el-button>
             </div>
         </Dialog>
     </div>
@@ -91,7 +91,8 @@
                 signatureDate: null,
                 loading: false,
                 providerType: "",
-                shortmsgProviderType: []
+                shortmsgProviderType: [],
+                buttonLoading:false
             };
         },
         computed: {
@@ -114,6 +115,7 @@
         methods: {
             openDialog() {
                 this.loading = false;
+                this.buttonLoading = false;
                 this.setvalue = null;
                 this.signatureDate = null;
             },
@@ -139,6 +141,7 @@
                     return;
                 }
                 this.loading = true;
+                this.buttonLoading = true;
                 let param = {
                     ids: this.params,
                     providerType: this.providerType,
@@ -148,30 +151,36 @@
                     cuttingAfterApi.batchResendAll(param).then((res) => {
                             if (res.code == 500) {
                                 this.loading = false;
+                                this.buttonLoading = false;
                                 this.msgError(res.msg);
                             } else {
                                 this.dialogVisible = false;
                                 this.loading = false;
+                                this.buttonLoading = false;
                                 this.msgSuccess(res.msg);
                                 this.$emit('refresh');
                             }
                         })
                         .catch((error) => {
+                            this.buttonLoading = false;
                             this.loading = false;
                         });
                 } else {
                     cuttingAfterApi.sendSmsBatchResend(param).then((res) => {
                             if (res.code == 500) {
+                                this.buttonLoading = false;
                                 this.loading = false;
                                 this.msgError(res.msg);
                             } else {
                                 this.dialogVisible = false;
+                                this.buttonLoading = false;
                                 this.loading = false;
                                 this.msgSuccess(res.msg);
                                 this.$emit('refresh');
                             }
                         })
                         .catch((error) => {
+                            this.buttonLoading = false;
                             this.loading = false;
                         });
                 }

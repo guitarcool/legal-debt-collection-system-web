@@ -114,10 +114,10 @@
                 </div>
             </template>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false" v-if="active ==1">取 消</el-button>
-                <el-button type="primary" @click="nextActive" v-if="active ==1">下一步</el-button>
-                <el-button @click="upperActive" v-if="active ==2">上一步</el-button>
-                <el-button type="primary" @click="submit" v-if="active ==2">发 送</el-button>
+                <el-button @click="dialogVisible = false" v-show="active ==1">取 消</el-button>
+                <el-button type="primary" @click="nextActive" v-show="active ==1">下一步</el-button>
+                <el-button @click="upperActive" v-show="active ==2">上一步</el-button>
+                <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading" v-show="active ==2">发 送</el-button>
             </div>
         </Dialog>
         <el-dialog title="提示" :visible.sync="visible" width="30%" :before-close="handleClose">
@@ -217,7 +217,8 @@
                 filterRealtimeStatus: [],
                 active: 1,
                 providerType: "",
-                shortmsgProviderType: []
+                shortmsgProviderType: [],
+                buttonLoading:false
             };
         },
         computed: {
@@ -240,6 +241,7 @@
         methods: {
             openDialog() {
                 this.loading = false;
+                this.buttonLoading = false;
                 this.templateId = "";
                 this.applyTime = null;
                 this.filterText = "";
@@ -370,6 +372,7 @@
                     this.visible = true;
                 } else {
                     this.loading = true;
+                    this.buttonLoading = true;
                     if (this.files) {
                         let formData = new FormData();
                         formData.append("content", '');
@@ -408,15 +411,18 @@
                         }).then((res) => {
                             if (res.data.code == 500) {
                                 that.loading = false;
+                                that.buttonLoading = false;
                                 that.msgError(res.data.msg);
                             } else {
                                 that.dialogVisible = false;
                                 that.loading = false;
+                                that.buttonLoading = false;
                                 that.msgSuccess(res.data.msg);
                                 that.$emit('refresh');
                             }
                         }).catch(error => {
                             that.loading = false;
+                            that.buttonLoading = false;
                             that.msgError(error);
                         })
                     } else {
@@ -435,31 +441,37 @@
                         if (this.title == '全选文书短信发送') {
                             cuttingAfterApi.batchClericalSMSAll(param).then((res) => {
                                     if (res.code == 500) {
+                                        this.buttonLoading = false;
                                         this.loading = false;
                                         this.msgError(res.msg);
                                     } else {
                                         this.dialogVisible = false;
+                                        this.buttonLoading = false;
                                         this.loading = false;
                                         this.msgSuccess(res.msg);
                                         this.$emit('refresh');
                                     }
                                 })
                                 .catch((error) => {
+                                    this.buttonLoading = false;
                                     this.loading = false;
                                 });
                         } else {
                             cuttingAfterApi.sendSmsWenshu(param).then((res) => {
                                     if (res.code == 500) {
+                                        this.buttonLoading = false;
                                         this.loading = false;
                                         this.msgError(res.msg);
                                     } else {
                                         this.dialogVisible = false;
+                                        this.buttonLoading = false;
                                         this.loading = false;
                                         this.msgSuccess(res.msg);
                                         this.$emit('refresh');
                                     }
                                 })
                                 .catch((error) => {
+                                    this.buttonLoading = false;
                                     this.loading = false;
                                 });
                         }

@@ -63,7 +63,7 @@
 
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -157,7 +157,8 @@
                     title: '',
                     url: ''
                 },
-                payChannalOptions: []
+                payChannalOptions: [],
+                buttonLoading:false
             }
         },
         props: {
@@ -206,6 +207,7 @@
         methods: {
             openDialog() {
                 initObj(this.form);
+                this.buttonLoading = false;
                 this.resetAddForm();
                 this.getRepayDetail();
             },
@@ -232,6 +234,7 @@
             submit() {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
+                        this.buttonLoading = true;
                         let params;
                         if (this.form.audit == 3) {
                             params = {
@@ -248,9 +251,12 @@
                             if (res.code === 200) {
                                 this.msgSuccess("操作成功");
                                 this.$emit('refresh')
-                                this.dialogVisible = false
+                                this.dialogVisible = false;
+                                this.buttonLoading = false;
                             }
-                        })
+                        }).catch(() => {
+                                this.buttonLoading = false;
+                        });
                     }
                 });
             },

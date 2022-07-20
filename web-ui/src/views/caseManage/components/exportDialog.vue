@@ -13,7 +13,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="submit" :loading="loading">{{loading?'下载中':'确定'}}</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确定</el-button>
         </div>
     </Dialog>
 </template>
@@ -43,7 +43,8 @@
                         message: '请选择是否脱敏',
                         trigger: 'change'
                     }]
-                }
+                },
+                buttonLoading:false
             }
         },
         props: {
@@ -88,6 +89,7 @@
                 this.resetAddForm();
                 this.form.ids = this.ids;
                 this.loading = false;
+                this.buttonLoading = false;
                 this.form.url = this.requestApi;
                 this.form.desensitization = 1;
             },
@@ -107,16 +109,19 @@
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
                         this.loading = true;
+                        this.buttonLoading = true;
                         importApi.common(this.form).then(res => {
                             if (res.code === 200) {
                                 this.loading = false;
                                 this.msgSuccess("导出成功");
                                 this.dialogVisible = false;
+                                this.buttonLoading = false;
                                 this.download(res.msg);
                                 this.$emit("refresh");
                             }
                         }).catch(() => {
                             this.loading = false;
+                            this.buttonLoading = false;
                         });
                     }
                 });

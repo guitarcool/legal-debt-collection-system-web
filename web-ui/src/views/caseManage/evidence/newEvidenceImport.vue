@@ -25,7 +25,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -56,7 +56,8 @@
                 // 是否禁用上传
                 isUploading: false,
                 fileList: [],
-                loading: false
+                loading: false,
+                buttonLoading:false
             }
         },
         props: {
@@ -96,7 +97,8 @@
                 this.form.id = this.id
                 this.removeFile()
                 this.fileList = [];
-                this.loading = false
+                this.loading = false;
+                this.buttonLoading = false;
             },
             //重置表单清除验证
             resetAddForm() {
@@ -109,6 +111,7 @@
             submit() {
                 if (this.files) {
                     this.loading = true;
+                    this.buttonLoading = true;
                     let formData = new FormData();
                     formData.append("file", this.files);
                     formData.append("id", this.id);
@@ -126,14 +129,15 @@
                             processData: false, // 告诉axios不要去处理发送的数据(重要参数)
                             contentType: false, // 告诉axios不要去设置Content-Type请求头
                         }).then(function (response) {
-                            console.log(response)
                             that.$alert(response.data.msg, "导入结果", {
                                 dangerouslyUseHTMLString: true
                             });
                             that.dialogVisible = false;
+                            that.buttonLoading = false;
                             that.loading = false;
                             that.$emit('refresh');
                         }).catch(error => {
+                            that.buttonLoading = false;
                             that.msgError(error);
                             that.loading = false;
                         })
@@ -151,11 +155,13 @@
                             that.$alert(response.data.msg, "导入结果", {
                                 dangerouslyUseHTMLString: true
                             });
+                            that.buttonLoading = false;
                             that.dialogVisible = false;
                             that.loading = false;
                             that.$emit('refresh');
                         }).catch(error => {
                             that.msgError(error);
+                            that.buttonLoading = false;
                             that.loading = false;
                         })
                     }

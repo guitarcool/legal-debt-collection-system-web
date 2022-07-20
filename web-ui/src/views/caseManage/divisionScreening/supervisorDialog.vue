@@ -21,7 +21,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="submit" :loading="loading">{{loading?'分发中':'确认分发'}}</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">{{buttonLoading?'分发中':'确认分发'}}</el-button>
 
         </div>
     </Dialog>
@@ -73,7 +73,7 @@
                 userList: [],
                 realcheckNodes: [],
                 deptList: [],
-                loading: false
+                buttonLoading: false
             }
         },
         computed: {
@@ -130,28 +130,28 @@
                 //   return
                 // }
                 if (this.title == '全选监督员分发') {
-                    this.loading = true;
+                    this.buttonLoading = true;
                     divisionApi.supervisorAssignmentAll(param).then(res => {
                         if (res.code == 200) {
-                            this.loading = false;
+                            this.buttonLoading = false;
                             this.dialogVisible = false;
                             this.msgSuccess('操作成功')
                             this.$emit('refresh')
                         }
                     }).catch(error => {
-                        this.loading = false;
+                        this.buttonLoading = false;
                     })
                 } else {
-                    this.loading = true;
+                    this.buttonLoading = true;
                     divisionApi.supervisorAssignment(param).then(res => {
                         if (res.code == 200) {
-                            this.loading = false;
+                            this.buttonLoading = false;
                             this.dialogVisible = false;
                             this.msgSuccess('操作成功')
                             this.$emit('refresh')
                         }
                     }).catch(error => {
-                        this.loading = false;
+                        this.buttonLoading = false;
                     })
                 }
             },

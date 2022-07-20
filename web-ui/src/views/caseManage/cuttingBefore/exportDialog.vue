@@ -46,7 +46,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">关闭</el-button>
-            <el-button type="primary" @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -109,6 +109,7 @@
                 loading: false,
                 formlist: [],
                 needSignTemplate: null,
+                buttonLoading:false
             };
         },
         computed: {
@@ -126,6 +127,7 @@
         methods: {
             openDialog() {
                 this.loading = false;
+                this.buttonLoading = false;
                 this.templateId = "";
                 this.applyDate = "";
                 this.filterText = "";
@@ -152,6 +154,7 @@
         }`;
                 }
                 const baseUrl = process.env.VUE_APP_BASE_API;
+                this.buttonLoading = true;
                 axios({
                     method: "get",
                     url: baseUrl + url,
@@ -175,6 +178,7 @@
                         } catch (err) { // 解析成对象失败，说明是正常的文件流
                             _self.resolveBlob(res, mimeMap.zip);
                             _self.dialogVisible = false;
+                            _self.buttonLoading = false;
                             _self.loading = false;
                             _self.$emit('refresh');
                         }
@@ -182,6 +186,7 @@
                     fileReader.readAsText(data) // 注意别落掉此代码，可以将 Blob 或者 File 对象转根据特殊的编码格式转化为内容(字符串形式)
                 }).catch((error) => {
                     // console.log(error)
+                    this.buttonLoading = false;
                     this.loading = false;
                 });
             },
@@ -203,6 +208,7 @@
                 document.body.appendChild(aLink);
                 this.dialogVisible = false;
                 this.loading = false;
+                this.buttonLoading = false;
                 this.$emit('refresh');
             },
             filterNode(value, data) {

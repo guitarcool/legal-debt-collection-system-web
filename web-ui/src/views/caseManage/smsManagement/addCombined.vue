@@ -18,7 +18,7 @@
             </template>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="submitForm">确定</el-button>
+                <el-button type="primary" v-debounce @click="submitForm" :loading="buttonLoading">确定</el-button>
             </div>
         </Dialog>
     </div>
@@ -58,6 +58,7 @@
                 sigForm: {
                     chooseSignature: [],
                 },
+                buttonLoading:false
             };
         },
         props: {
@@ -102,6 +103,7 @@
                 initObj(this.form)
                 this.resetAddForm();
                 this.getUsers();
+                this.buttonLoading = false;
                 //编辑查详情
                 if (this.id) {
                     this.form = {
@@ -119,17 +121,24 @@
             submitForm() {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
+                        this.buttonLoading = true;
                         if (this.id) {
                             shortLinkApi.combinateEdit(this.form).then((response) => {
                                 this.msgSuccess("修改成功");
                                 this.dialogVisible = false;
+                                this.buttonLoading = false;
                                 this.getList();
+                            }).catch((error) => {
+                                this.buttonLoading = false;
                             });
                         } else {
                             shortLinkApi.combinateAdd(this.form).then((response) => {
                                 this.msgSuccess("新增成功");
                                 this.dialogVisible = false;
+                                this.buttonLoading = false;
                                 this.getList();
+                            }).catch((error) => {
+                                this.buttonLoading = false;
                             });
                         }
                     }

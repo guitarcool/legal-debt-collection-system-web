@@ -34,7 +34,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -64,7 +64,8 @@
                     reason: [
                         { required: true, message: '请填写调解未履行原因', trigger: 'blur' }
                     ]
-                }
+                },
+                buttonLoading:false
             }
         },
         props: {
@@ -110,7 +111,8 @@
                 initObj(this.form)
                 this.resetAddForm();
                 this.removeFile();
-                this.form.id = this.id
+                this.form.id = this.id;
+                this.buttonLoading = false;
                 this.upload_url = process.env.VUE_APP_BASE_API + this.requestApi;
                 if(this.statusId !=0 && this.statusId ){
                     this.getInfo()
@@ -150,6 +152,7 @@
                             withCredentials: true
                         });
                         instance.defaults.headers.common['Authorization'] = 'Bearer ' + getToken()
+                        this.buttonLoading = true;
                         var that = this
                         instance({
                             method: 'post',
@@ -166,9 +169,11 @@
                             if (response.data.code == 200) {
                                 that.msgSuccess(response.data.msg);
                                 that.dialogVisible = false;
+                                that.buttonLoading = false;
                                 that.$emit('refresh');
                             }
                         }).catch(error => {
+                            that.buttonLoading = false;
                             that.msgError(error);
                         })
                     }

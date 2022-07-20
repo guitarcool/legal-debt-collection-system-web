@@ -63,7 +63,7 @@
 
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -124,6 +124,7 @@
                     title: '',
                     url: ''
                 },
+                buttonLoading:false
             }
         },
         props: {
@@ -178,6 +179,7 @@
                 this.submitForm.id = this.id;
                 this.form.repayType = this.form.repayType.toString();
                 this.submitForm.operate = 1;
+                this.buttonLoading = false;
                 if (this.jointdebtId) {
                     this.getList();
                 }
@@ -209,6 +211,7 @@
                 }
                 this.$refs["submitForm"].validate((valid) => {
                     if (valid) {
+                        this.buttonLoading = true;
                         let param = {
                             caseId: this.form.caseId,
                             respondentName: this.form.respondentName,
@@ -222,8 +225,11 @@
                             if (res.code === 200) {
                                 this.msgSuccess("操作成功");
                                 this.$emit('refresh')
-                                this.dialogVisible = false
+                                this.dialogVisible = false;
+                                this.buttonLoading = false;
                             }
+                        }).catch(error => {
+                            this.buttonLoading = false;
                         })
                     }
                 });

@@ -63,7 +63,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="submit">确定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确定</el-button>
         </div>
     </Dialog>
 </template>
@@ -132,6 +132,7 @@
                         trigger: "blur"
                     }, ],
                 },
+                buttonLoading:false
             };
         },
         props: {
@@ -178,6 +179,7 @@
                 initObj(this.form);
                 this.resetAddForm();
                 this.getInfo();
+                this.buttonLoading = false;
                 this.form.id = this.id;
                 this.form.house = "0";
                 this.form.choice = "1";
@@ -203,6 +205,7 @@
                     if (this.form.choice == 0) {
                         this.$refs["form"].validate((valid) => {
                             if (valid) {
+                                this.buttonLoading = true;
                                 let param = {
                                     options: this.form.options,
                                     choice: this.form.choice,
@@ -214,7 +217,10 @@
                                         this.msgSuccess("操作成功");
                                         this.$emit("refresh");
                                         this.dialogVisible = false;
+                                        this.buttonLoading = false;
                                     }
+                                }).catch((error) => {
+                                    this.buttonLoading = false;
                                 });
                             }
                         });
@@ -222,6 +228,7 @@
                     if (this.form.choice == 1) {
                         this.$refs["form"].validate((valid) => {
                             if (valid) {
+                                this.buttonLoading = true;
                                 let param = {
                                     cid: this.cid,
                                     id: this.id,
@@ -243,7 +250,10 @@
                                         this.msgSuccess("操作成功");
                                         this.$emit("refresh");
                                         this.dialogVisible = false;
+                                        this.buttonLoading = false;
                                     }
+                                }).catch((error) => {
+                                    this.buttonLoading = false;
                                 });
                             }
                         });
@@ -251,6 +261,7 @@
                 } else {
                     this.$refs["form"].validate((valid) => {
                         if (valid) {
+                            this.buttonLoading = true;
                             let param = {
                                 cid: this.cid,
                                 id: this.id,
@@ -271,7 +282,10 @@
                                     this.msgSuccess("修改成功");
                                     this.$emit("refresh");
                                     this.dialogVisible = false;
+                                    this.buttonLoading = false;
                                 }
+                            }).catch((error) => {
+                                this.buttonLoading = false;
                             });
                         }
                     });

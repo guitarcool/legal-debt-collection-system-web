@@ -9,7 +9,7 @@
         </template>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="submit">确 定</el-button>
+            <el-button type="primary" v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
 </template>
@@ -31,7 +31,8 @@
                     content: [
                         { required: true, message: '请输入原因', trigger: 'blur' }
                     ],
-                }
+                },
+                buttonLoading:false
             }
         },
         props: {
@@ -74,7 +75,8 @@
             openDialog(){
                 initObj(this.form)
                 this.resetAddForm();
-                this.form.caseId = this.id
+                this.form.caseId = this.id;
+                this.buttonLoading = false;
             },
             //重置表单清除验证
             resetAddForm(){
@@ -87,13 +89,17 @@
             submit () {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
+                        this.buttonLoading = true;
                         cuttingBeforeApi.common(this.requestApi,this.form).then(res => {
                             if (res.code === 200) {
                                 this.msgSuccess("操作成功");
                                 this.dialogVisible = false;
+                                this.buttonLoading = false;
                                 this.$emit('refresh');
                             }
-                        })
+                        }).catch(() => {
+                            this.buttonLoading =false;
+                        });
                     }
                 });
             }
