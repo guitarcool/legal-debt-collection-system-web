@@ -2154,7 +2154,7 @@
             },
             editInformation() {
                 this.information.title = '裁前详情案件信息编辑';
-                this.information.type = 'before';
+                this.information.type = 'pretrialMediation';
                 this.information.requestApi = "/case/adjudged/mediationFailed";
                 // 控制弹窗组件显示
                 this.information.dialogVisible = true;

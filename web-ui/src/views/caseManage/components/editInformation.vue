@@ -88,7 +88,7 @@
             <el-button @click="dialogVisible = false">取消</el-button>
             <el-button v-if="type == 'civilAction'" v-hasPermi="['case:postAdjudged:updateCaseEditData']" type="primary"
                 v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
-            <el-button v-if="type == 'before'" v-hasPermi="['case:pretrial:updateCaseEditData']" type="primary"
+            <el-button v-if="type == 'pretrialMediation'" v-hasPermi="['case:pretrial:updateCaseEditData']" type="primary"
                 v-debounce @click="submit" :loading="buttonLoading">确 定</el-button>
         </div>
     </Dialog>
@@ -189,7 +189,7 @@
                             this.form = res.data;
                         }
                     })
-                } else if (this.type == 'before') {
+                } else if (this.type == 'pretrialMediation') {
                     pretrialMediationApi.getCaseEditData(this.id).then(res => {
                         if (res.code === 200) {
                             this.form = res.data;
@@ -212,7 +212,7 @@
                             }).catch(() => {
                                 this.buttonLoading = false;
                             });
-                        } else if (this.type == 'before') {
+                        } else if (this.type == 'pretrialMediation') {
                             pretrialMediationApi.updateCaseEditData(this.form).then(res => {
                                 if (res.code === 200) {
                                     this.msgSuccess("编辑成功");
