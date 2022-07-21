@@ -10,7 +10,7 @@
                 </el-form-item>
                 <!-- 有账户 -->
                 <div v-if="account">
-                    <el-form-item label="收款账户：" prop="accountNoShou">
+                    <el-form-item label="收款人账号：" prop="accountNoShou">
                         <el-select v-model="form.accountNoShou" filterable placeholder="请选择" style="width: 210px"
                             @change="selectaccountNoShou">
                             <el-option v-for="item in repayList" :key="item.accountNumber" :label="item.accountNumber"
@@ -18,26 +18,29 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="收款账户名：" prop="accountName">
+                    <el-form-item label="收款人名称：" prop="accountName">
                         <el-input v-model="form.accountName" disabled></el-input>
                     </el-form-item>
-                    <el-form-item label="开户行名称：" prop="openbankName">
+                    <el-form-item label="收款人开户行：" prop="openbankName">
                         <el-input v-model="form.openbankName" disabled></el-input>
                     </el-form-item>
                 </div>
                 <!-- 无账户自定义 -->
                 <div v-else>
-                    <el-form-item label="收款账户：" prop="accountNoShou">
+                    <el-form-item label="收款人账号：" prop="accountNoShou">
                         <el-input v-model="form.accountNoShou"></el-input>
                     </el-form-item>
-                    <el-form-item label="收款账户名：" prop="accountName">
+                    <el-form-item label="收款人名称：" prop="accountName">
                         <el-input v-model="form.accountName"></el-input>
                     </el-form-item>
-                    <el-form-item label="开户行名称：" prop="openbankName">
+                    <el-form-item label="收款人开户行：" prop="openbankName">
                         <el-input v-model="form.openbankName"></el-input>
                     </el-form-item>
                 </div>
-                <el-form-item label="汇款账户：" prop="accountNo">
+                <el-form-item label="付款人账号：" prop="accountNo">
+                    <el-input v-model="form.accountNo"></el-input>
+                </el-form-item>
+                <el-form-item label="付款人名称：">
                     <el-input v-model="form.accountNo"></el-input>
                 </el-form-item>
                 <el-form-item label="共债还款：" prop="accountNo" v-if="commonCaseNum>1">
@@ -46,7 +49,7 @@
                     </el-switch>
                 </el-form-item>
                 <div v-for="(repay, index) in form.repayCaseAmounts" :key="repay.key">
-                    <el-form-item :label="'还款案件' + (index+1)" :prop="'repayCaseAmounts.' + index + '.caseId'"
+                    <el-form-item :label="'还款案件' + (index+1) + '：'" :prop="'repayCaseAmounts.' + index + '.caseId'"
                         :rules="{ required: true, message: '请选择还款案件', trigger: 'change'}">
                         <el-select :disabled="index == 0" style="width:100%" v-model="repay.caseId" placeholder="请选择"
                             filterable>
@@ -56,7 +59,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item :label="'汇款金额' + (index+1)" :prop="'repayCaseAmounts.' + index + '.repayAmount'"
+                    <el-form-item :label="'汇款金额' + (index+1) + '：'" :prop="'repayCaseAmounts.' + index + '.repayAmount'"
                         :rules="[{ required: true, message: '请输入汇款金额', trigger: 'blur'}]">
                         <el-input style="width:80%"
                             oninput="value=value.replace(/[^0-9.]/g,'').replace(/^\./g, '').replace('.', 'dollar#dollar').replace(/\./g, '').replace('dollar#dollar', '.');"
@@ -201,7 +204,7 @@
                 payChannalOptions: [],
                 fileList: [],
                 productList: [],
-                buttonLoading:false
+                buttonLoading: false
             };
         },
         props: {

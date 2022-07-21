@@ -32,14 +32,14 @@
             <el-form ref="submitForm" :model="submitForm" :rules="rules" label-width="110px">
                 <div v-if="jointdebtId">
                     <div v-for="(domain, index) in submitForm.domains" :key="domain.key">
-                        <el-form-item :label="'还款案件' + (index+1)">
+                        <el-form-item :label="'还款案件' + (index+1) + '：'">
                             <el-select style="width:50%" disabled v-model="domain.caseId" placeholder="请选择" filterable>
                                 <el-option :label="domain.caseId +'-'+ domain.productName +'-'+ domain.subjectAmount"
                                     :value="domain.caseId">
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item :label="'汇款金额' + (index+1)">
+                        <el-form-item :label="'汇款金额' + (index+1) + '：'">
                             <el-input style="width:50%" disabled v-model.number="domain.repayAmount"></el-input>
                         </el-form-item>
                     </div>
