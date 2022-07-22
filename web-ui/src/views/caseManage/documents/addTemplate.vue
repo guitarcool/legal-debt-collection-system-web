@@ -105,7 +105,6 @@
                                     Number(form.formatType) === 1 ||
                                         Number(form.formatType) === 2
                                 "
-                                @input="getVal"
                                 v-model="form.content"
                                 :rows="8"
                                 type="textarea"
@@ -113,7 +112,6 @@
                             ></el-input>
                             <el-input
                                 v-if="Number(form.formatType) === 3"
-                                @input="getVal"
                                 v-model="form.content"
                                 :rows="8"
                                 type="textarea"
@@ -121,7 +119,7 @@
                             >
                             </el-input>
                         </el-form-item>
-                        <p class="font-number">{{ fontNumber }}字</p>
+                        <!-- <p class="font-number">{{ fontNumber }}字</p> -->
                     </el-form>
                 </div>
                 <!--状态设置-->
@@ -689,7 +687,7 @@ export default {
                 tid: "",
                 singleData: ""
             },
-            fontNumber: 0,
+            // fontNumber: 0,
             buttonLoading: false
         };
     },
@@ -1082,9 +1080,9 @@ export default {
             this.editData.id = "";
             this.editData.tid = this.id;
         },
-        getVal(value) {
-            this.fontNumber = value.length;
-        }
+        // getVal(value) {
+        //     this.fontNumber = value.length;
+        // }
         // //切换指定页面
         // changePageIndex(item) {
         //     if (item.pageIndex == 'All') {
@@ -1241,10 +1239,10 @@ export default {
     }
 }
 
-.font-number {
-    position: absolute;
-    bottom: -20px;
-    right: 2px;
-    color: #999999;
-}
+// .font-number {
+//     position: absolute;
+//     bottom: -20px;
+//     right: 2px;
+//     color: #999999;
+// }
 </style>
