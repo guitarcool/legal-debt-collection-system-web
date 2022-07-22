@@ -889,12 +889,14 @@ export default {
                 "deptId",
                 this.form.deptId ? this.form.deptId : null
             );
-            formData.append(
-                "status",
-                ["1", "2", "3"].includes(this.form.formatType) == true
-                    ? "0"
-                    : "1"
-            );
+            if(this.title == "新增模版"){
+                formData.append(
+                    "status",
+                    ["1", "2", "3"].includes(this.form.formatType) == true
+                        ? "0"
+                        : "1"
+                );
+            }
             formData.append("content", this.form.content);
             if (this.form.formatType == 4) {
                 formData.append("isSubLoop", this.form.isSubLoop);
