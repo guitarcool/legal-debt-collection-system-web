@@ -311,6 +311,7 @@
                         formData.append("accountNo", this.form.accountNo);
                         formData.append("repayType", this.form.repayType);
                         formData.append("openbankName", this.form.openbankName);
+                        formData.append("remitAccountName", this.form.remitAccountName);
                         formData.append("accountName", this.form.accountName);
                         formData.append("accountNoShou", this.form.accountNoShou);
                         formData.append("remittanceTime", this.form.remittanceTime);
