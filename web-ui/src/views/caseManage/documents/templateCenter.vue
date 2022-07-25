@@ -88,23 +88,18 @@
                 </el-table-column>
                 <el-table-column label="操作" width="300" fixed="right" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" v-if="[0, 4].includes(scope.row.formatType)" type="primary"
-                            @click="seeWord(scope.row)" v-hasPermi="['template:info:query']">下载
-                        </el-button>
-                        <el-button size="mini" type="warning" @click="edit(scope.row.id)"
-                            v-hasPermi="['template:info:edit']">编辑
-                        </el-button>
-                        <el-button size="mini" type="danger" @click="toggle(scope.row.id)" v-if="scope.row.status == 0"
+                        <el-button size="mini" type="success" @click="toggle(scope.row.id)" v-if="scope.row.status == 0"
                             v-hasPermi="['template:info:switch']">启用
                         </el-button>
                         <el-button size="mini" type="danger" v-if="scope.row.status == 1" @click="toggle(scope.row.id)"
                             v-hasPermi="['template:info:switch']">停用
                         </el-button>
-                        <!--<el-button-->
-                        <!--size="mini"-->
-                        <!--type="success"-->
-                        <!--v-hasPermi="['case:caseinfo:query']">更换模版-->
-                        <!--</el-button>-->
+                        <el-button size="mini" type="warning" @click="edit(scope.row.id)"
+                            v-hasPermi="['template:info:edit']">编辑
+                        </el-button>
+                        <el-button size="mini" v-if="[0, 4].includes(scope.row.formatType)" type="primary"
+                            @click="seeWord(scope.row)" v-hasPermi="['template:info:query']">下载
+                        </el-button>
                         <el-button size="mini" type="success" @click="cloning(scope.row.id)"
                             v-hasPermi="['template:info:clone']">克隆
                         </el-button>
@@ -334,6 +329,7 @@
                     .then(() => {
                         templateApi.toggleStatus(id).then((res) => {
                             that.msgSuccess("操作成功");
+                            that.getList(2);
                             that.clearSelection();
                         });
                     })
