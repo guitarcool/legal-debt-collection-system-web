@@ -41,7 +41,7 @@
                     <el-input v-model="form.accountNo"></el-input>
                 </el-form-item>
                 <el-form-item label="付款人名称：">
-                    <el-input v-model="form.accountNo"></el-input>
+                    <el-input v-model="form.remitAccountName"></el-input>
                 </el-form-item>
                 <el-form-item label="共债还款：" prop="accountNo" v-if="commonCaseNum>1">
                     <el-switch v-model="form.switch" @change="switchChange" active-color="#13ce66"
@@ -149,6 +149,7 @@
                     accountName: "",
                     accountNoShou: "",
                     payChannal: "",
+                    remitAccountName: "",
                     repayCaseAmounts: [{
                         repayAmount: '',
                         caseId: ''
