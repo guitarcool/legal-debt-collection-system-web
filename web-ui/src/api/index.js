@@ -38,14 +38,6 @@ const importApi = {
             method: 'post'
         })
     },
-    //电话日志
-    breatheLog(data) {
-        return request({
-            url: '/breathe/log',
-            method: 'post',
-            data
-        })
-    },
 }
 
 // 下载用户导入模版

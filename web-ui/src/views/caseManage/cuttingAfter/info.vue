@@ -1955,7 +1955,8 @@
 </template>
 
 <script>
-import indexApi from "@/api/index";
+import axios from "axios";
+import { getToken } from "@/utils/auth";
 import cuttingAfterApi from "@/api/case/cuttingAfter/index";
 import recordList from "../components/recordList";
 import normalDialog from "../components/normalDialog"; //通用弹窗
@@ -3070,6 +3071,12 @@ export default {
                 return;
             }
             var logData = {};
+            var url = process.env.VUE_APP_BASE_API + "/breathe/log/one"; //电话日志
+            const instance = axios.create({
+                withCredentials: true
+            });
+            instance.defaults.headers.common["Authorization"] =
+                "Bearer " + getToken();
             var that = this;
             this.$confirm(`是否要拨打电话?`, "提示", {
                 confirmButtonText: "确定",
@@ -3095,11 +3102,22 @@ export default {
                                     that.getCaseRecordInfo("callRecord");
                                     //电话日志
                                     if (data) {
-                                        logData = data;
+                                        logData = {
+                                            ...data,
+                                            operation: "拨打成功"
+                                        };
                                     }
-                                    indexApi
-                                        .breatheLog(logData)
-                                        .then(res => {});
+                                    instance({
+                                        method: "post",
+                                        url: url,
+                                        data: logData,
+                                        timeout: 600000,
+                                        processData: false, // 告诉axios不要去处理发送的数据(重要参数)
+                                        contentType: false // 告诉axios不要去设置Content-Type请求头
+                                        // config: {
+                                        //     headers: {'Content-Type': 'multipart/form-data'}
+                                        // }
+                                    }).then(res => {});
                                 });
                                 //失败触发
                                 DYSDK.callFail(data => {
@@ -3108,11 +3126,22 @@ export default {
                                     that.getCaseRecordInfo("callRecord");
                                     //电话日志
                                     if (data) {
-                                        logData = data;
+                                        logData = {
+                                            ...data,
+                                            operation: "拨打失败"
+                                        };
                                     }
-                                    indexApi
-                                        .breatheLog(logData)
-                                        .then(res => {});
+                                    instance({
+                                        method: "post",
+                                        url: url,
+                                        data: logData,
+                                        timeout: 600000,
+                                        processData: false, // 告诉axios不要去处理发送的数据(重要参数)
+                                        contentType: false // 告诉axios不要去设置Content-Type请求头
+                                        // config: {
+                                        //     headers: {'Content-Type': 'multipart/form-data'}
+                                        // }
+                                    }).then(res => {});
                                 });
                                 //电话挂断状态
                                 DYSDK.callEnd(data => {
@@ -3121,11 +3150,22 @@ export default {
                                     that.getCaseRecordInfo("callRecord");
                                     //电话日志
                                     if (data) {
-                                        logData = data;
+                                        logData = {
+                                            ...data,
+                                            operation: "电话挂断"
+                                        };
                                     }
-                                    indexApi
-                                        .breatheLog(logData)
-                                        .then(res => {});
+                                    instance({
+                                        method: "post",
+                                        url: url,
+                                        data: logData,
+                                        timeout: 600000,
+                                        processData: false, // 告诉axios不要去处理发送的数据(重要参数)
+                                        contentType: false // 告诉axios不要去设置Content-Type请求头
+                                        // config: {
+                                        //     headers: {'Content-Type': 'multipart/form-data'}
+                                        // }
+                                    }).then(res => {});
                                 });
                             },
                             tag

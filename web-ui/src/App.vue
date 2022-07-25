@@ -34,7 +34,8 @@
 </template>
 
 <script>
-import indexApi from "@/api/index";
+import axios from "axios";
+import { getToken } from "@/utils/auth";
 import merge from "webpack-merge";
 export default {
     name: "App",
@@ -151,6 +152,12 @@ export default {
         // },
         getIframe() {
             var logData = {};
+            var url = process.env.VUE_APP_BASE_API + "/breathe/log"; //预测试外呼电话日志
+            const instance = axios.create({
+                withCredentials: true
+            });
+            instance.defaults.headers.common["Authorization"] =
+                "Bearer " + getToken();
             var se = document.createElement("script");
             se.id = "dySdkScript";
             se.setAttribute(
@@ -164,13 +171,9 @@ export default {
             // js 加载后执行
             se.onload = () => {
                 //初始化完毕
-                DYSDK.ready(() => {
-                    // console.log(111)
-                });
+                DYSDK.ready(() => {});
 
-                DYSDK.callReady(() => {
-                    // console.log(222)
-                });
+                DYSDK.callReady(() => {});
                 //电话连接中状态
                 DYSDK.callConnecting(data => {});
                 //电话成功状态
@@ -179,35 +182,78 @@ export default {
                         this.$Message.error("不存在uuid");
                         return;
                     }
-                    //电话成功日志
+                    //电话日志
                     if (data) {
-                        logData = data;
+                        logData = { ...data, operation: "拨打成功" };
                     }
-                    indexApi.breatheLog(logData).then(res => {});
+                    instance({
+                        method: "post",
+                        url: url,
+                        data: logData,
+                        timeout: 600000,
+                        processData: false, // 告诉axios不要去处理发送的数据(重要参数)
+                        contentType: false // 告诉axios不要去设置Content-Type请求头
+                        // config: {
+                        //     headers: {'Content-Type': 'multipart/form-data'}
+                        // }
+                    }).then(res => {});
                 });
                 //电话失败
                 DYSDK.callFail(data => {
-                    //电话失败日志
+                    //电话日志
                     if (data) {
-                        logData = data;
+                        logData = { ...data, operation: "拨打失败" };
                     }
-                    indexApi.breatheLog(logData).then(res => {});
+                    instance({
+                        method: "post",
+                        url: url,
+                        data: logData,
+                        timeout: 600000,
+                        processData: false, // 告诉axios不要去处理发送的数据(重要参数)
+                        contentType: false // 告诉axios不要去设置Content-Type请求头
+                        // config: {
+                        //     headers: {'Content-Type': 'multipart/form-data'}
+                        // }
+                    }).then(res => {});
                 });
                 //电话挂断
                 DYSDK.callEnd(data => {
-                    //电话挂断日志
+                    //电话日志
                     if (data) {
-                        logData = data;
+                        logData = { ...data, operation: "电话挂断" };
                     }
-                    indexApi.breatheLog(logData).then(res => {});
+                    instance({
+                        method: "post",
+                        url: url,
+                        data: logData,
+                        timeout: 600000,
+                        processData: false, // 告诉axios不要去处理发送的数据(重要参数)
+                        contentType: false // 告诉axios不要去设置Content-Type请求头
+                        // config: {
+                        //     headers: {'Content-Type': 'multipart/form-data'}
+                        // }
+                    }).then(res => {});
                 });
                 //处于预测式智能外呼状态
                 DYSDK.callBridge(data => {
-                    //电话预测式智能外呼日志
+                    //电话日志
                     if (data) {
-                        logData = data;
+                        logData = {
+                            ...data,
+                            operation: "处于预测式智能外呼状态"
+                        };
                     }
-                    indexApi.breatheLog(logData).then(res => {});
+                    instance({
+                        method: "post",
+                        url: url,
+                        data: logData,
+                        timeout: 600000,
+                        processData: false, // 告诉axios不要去处理发送的数据(重要参数)
+                        contentType: false // 告诉axios不要去设置Content-Type请求头
+                        // config: {
+                        //     headers: {'Content-Type': 'multipart/form-data'}
+                        // }
+                    }).then(res => {});
                     console.log(data, "打印结果");
                     if (data.bridgeType == "start") {
                         let result = data.userTag.split("+");
@@ -247,7 +293,6 @@ export default {
                         }
                     }
                 });
-
                 DYSDK.getPhonelines(data => {
                     if (data) {
                         this.isCallReady = true;
