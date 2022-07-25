@@ -97,6 +97,7 @@
                     pageSize: 50,
                     orderByColumn: "",
                     isAsc: "",
+                    queryType: [1,3,4], //调解文书，多人多案文书，批量文书
                 },
                 selection: [],
                 userList: [],
