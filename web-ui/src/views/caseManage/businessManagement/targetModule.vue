@@ -62,7 +62,7 @@
                         </div>
                     </el-tab-pane>
                     <el-tab-pane label="产品回款目标" name="second">
-                        <!--收款账户-->
+                        <!--收款人账号-->
                         <div class="box" style="margin-bottom:0px">
                             <el-button size="mini" type="primary" v-hasPermi="['count:product:target:addOrUpdate']"
                                 @click="addSecondTarget">新增目标</el-button>

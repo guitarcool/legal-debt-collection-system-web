@@ -162,12 +162,12 @@
                 rules: {
                     accountNo: [{
                         required: true,
-                        message: "请输入汇款账户",
+                        message: "请输入付款人账号",
                         trigger: "blur"
                     }, ],
                     accountName: [{
                         required: true,
-                        message: "请输入收款账户名",
+                        message: "请输入收款人名称",
                         trigger: "blur"
                     }, ],
                     openbankName: [{
@@ -177,12 +177,12 @@
                     }, ],
                     repayType: [{
                         required: true,
-                        message: "请选择汇款账户",
+                        message: "请选择汇款类型",
                         trigger: "change"
                     }, ],
                     accountNoShou: [{
                         required: true,
-                        message: "请选择收款账户",
+                        message: "请选择收款人账号",
                         trigger: "change"
                     }, ],
                     payChannal: [{
