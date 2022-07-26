@@ -42,13 +42,13 @@
                         ></el-input>
                     </el-form-item>
                     <el-form-item label="收款人账号：" prop="accountNoShou">
-                        <el-input v-model="form.accountNoShou"></el-input>
+                        <el-input v-model="form.accountNoShou" placeholder="请输入收款人账号"></el-input>
                     </el-form-item>
                     <el-form-item label="收款人名称：" prop="accountName">
-                        <el-input v-model="form.accountName"></el-input>
+                        <el-input v-model="form.accountName" placeholder="请输入收款人名称"></el-input>
                     </el-form-item>
                     <el-form-item label="开户行名称：" prop="openbankName">
-                        <el-input v-model="form.openbankName"></el-input>
+                        <el-input v-model="form.openbankName" placeholder="请输入开户行名称"></el-input>
                     </el-form-item>
                     <el-form-item label="付款人账号：" prop="accountNo">
                         <el-input
@@ -57,7 +57,7 @@
                         ></el-input>
                     </el-form-item>
                     <el-form-item label="付款人名称：">
-                        <el-input v-model="form.remitAccountName"></el-input>
+                        <el-input v-model="form.remitAccountName" placeholder="请输入付款人名称"></el-input>
                     </el-form-item>
                     <el-form-item label="汇款金额：" prop="repayAmount">
                         <el-input

@@ -35,6 +35,7 @@
 
 <script>
 import axios from "axios";
+import indexApi from "@/api/index";
 import { getToken } from "@/utils/auth";
 import merge from "webpack-merge";
 export default {

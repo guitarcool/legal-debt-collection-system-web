@@ -26,7 +26,7 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="付款人名称：">
-                    <el-input v-model="form.remitAccountName"></el-input>
+                    <el-input disabled v-model="form.remitAccountName"></el-input>
                 </el-form-item>
                 <el-form-item label="汇款金额：">
                     <el-input
