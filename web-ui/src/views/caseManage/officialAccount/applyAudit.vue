@@ -47,8 +47,8 @@
                     <el-form-item label="收款人名称：" prop="accountName">
                         <el-input v-model="form.accountName" placeholder="请输入收款人名称"></el-input>
                     </el-form-item>
-                    <el-form-item label="开户行名称：" prop="openbankName">
-                        <el-input v-model="form.openbankName" placeholder="请输入开户行名称"></el-input>
+                    <el-form-item label="收款人开户行：" prop="openbankName">
+                        <el-input v-model="form.openbankName" placeholder="请输入收款人开户行"></el-input>
                     </el-form-item>
                     <el-form-item label="付款人账号：" prop="accountNo">
                         <el-input
@@ -175,7 +175,7 @@ export default {
                 openbankName: [
                     {
                         required: true,
-                        message: "请输入开户行名称",
+                        message: "请输入收款人开户行",
                         trigger: "blur"
                     }
                 ],

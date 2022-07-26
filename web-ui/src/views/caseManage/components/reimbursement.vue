@@ -172,7 +172,7 @@
                     }, ],
                     openbankName: [{
                         required: true,
-                        message: "请输入开户行名称",
+                        message: "请输入收款人开户行",
                         trigger: "blur"
                     }, ],
                     repayType: [{
