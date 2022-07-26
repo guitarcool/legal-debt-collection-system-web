@@ -782,12 +782,24 @@
                                 :show-overflow-tooltip="true"
                             >
                             </el-table-column>
-                            <el-table-column prop="accountNumber" label="收款人账号" width="200"
-                                :show-overflow-tooltip="true">
+                            <el-table-column
+                                prop="accountNumber"
+                                label="收款人账号"
+                                width="200"
+                                :show-overflow-tooltip="true"
+                            >
                             </el-table-column>
-                            <el-table-column prop="accountName" label="收款人名称" :show-overflow-tooltip="true">
+                            <el-table-column
+                                prop="accountName"
+                                label="收款人名称"
+                                :show-overflow-tooltip="true"
+                            >
                             </el-table-column>
-                            <el-table-column prop="openbankName" label="收款人开户行" :show-overflow-tooltip="true">
+                            <el-table-column
+                                prop="openbankName"
+                                label="收款人开户行"
+                                :show-overflow-tooltip="true"
+                            >
                             </el-table-column>
                             <!--<el-table-column label="操作" width="160" fixed="right" align="center">-->
                             <!--<template slot-scope="scope">-->
@@ -1315,13 +1327,36 @@
                 <el-tab-pane label="还款记录列表" name="repRecord">
                     <!--还款记录列表-->
                     <div class="box" style="margin-bottom:0px;padding-top:0px">
-                        <el-table ref="table" :data="repRecordList" style="width: 100%; margin-top: 20px">
-                            <el-table-column prop="accountNo" label="付款人账号" width="200">
+                        <el-table
+                            ref="table"
+                            :data="repRecordList"
+                            style="width: 100%; margin-top: 20px"
+                        >
+                            <el-table-column
+                                prop="accountNo"
+                                label="付款人账号"
+                                width="200"
+                            >
+                            </el-table-column>
+                            <el-table-column
+                                label="汇款类型"
+                                :show-overflow-tooltip="true"
+                                :formatter="repayTypeFormat"
+                                prop="repayType"
+                            >
                             </el-table-column>
                             <el-table-column prop="amount" label="汇款金额">
                             </el-table-column>
-                            <el-table-column prop="accountNoShou" label="收款人账号" width="200"></el-table-column>
-                            <el-table-column label="汇款时间" width="150" prop="remittanceTime">
+                            <el-table-column
+                                prop="accountNoShou"
+                                label="收款人账号"
+                                width="200"
+                            ></el-table-column>
+                            <el-table-column
+                                label="汇款时间"
+                                width="150"
+                                prop="remittanceTime"
+                            >
                                 <template slot-scope="scope">
                                     <span>{{
                                         parseTime(
