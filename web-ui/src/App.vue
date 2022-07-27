@@ -111,9 +111,15 @@ export default {
         //     ++id;
         //     console.log(id);
         //     this.$router.push({
+<<<<<<< HEAD
         //         path: `/division/pretrialDetails/${id}`,
         //         query: {
         //             pretrialId: id
+=======
+        //         path: `/division/cutBeforeDetails/${id}`,
+        //         query: {
+        //             beforeId: id
+>>>>>>> master
         //         }
         //     });
         // },
@@ -261,16 +267,26 @@ export default {
                         let id = result[0];
                         let name = result[1];
                         console.log(id, name);
+<<<<<<< HEAD
                         if (name == "pretrialMediationInfo") {
                             // if (this.$route.name == 'pretrialMediationInfo') {
                             //     //新增或修改单个参数
                             //     this.$router.replace({
                             //         query: merge(this.$route.query, {
                             //             pretrialId: id
+=======
+                        if (name == "cutBeforeInfo") {
+                            // if (this.$route.name == 'cutBeforeInfo') {
+                            //     //新增或修改单个参数
+                            //     this.$router.replace({
+                            //         query: merge(this.$route.query, {
+                            //             beforeId: id
+>>>>>>> master
                             //         })
                             //     })
                             // }
                             this.$router.push({
+<<<<<<< HEAD
                                 path: `/division/pretrialDetails/${id}`,
                                 query: {
                                     pretrialId: id
@@ -282,13 +298,32 @@ export default {
                             //     this.$router.replace({
                             //         query: merge(this.$route.query, {
                             //             civilActionId: id
+=======
+                                path: `/division/cutBeforeDetails/${id}`,
+                                query: {
+                                    beforeId: id
+                                }
+                            });
+                        } else if (name == "cutAfterInfo") {
+                            // if (this.$route.name == 'cutAfterInfo') {
+                            //     //新增或修改单个参数
+                            //     this.$router.replace({
+                            //         query: merge(this.$route.query, {
+                            //             afterId: id
+>>>>>>> master
                             //         })
                             //     })
                             // }
                             this.$router.push({
+<<<<<<< HEAD
                                 path: `/division/civilActionDetails/${id}`,
                                 query: {
                                     civilActionId: id
+=======
+                                path: `/division/cutAfterDetails/${id}`,
+                                query: {
+                                    afterId: id
+>>>>>>> master
                                 }
                             });
                         }

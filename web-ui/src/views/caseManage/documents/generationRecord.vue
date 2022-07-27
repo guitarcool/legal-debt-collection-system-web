@@ -295,10 +295,13 @@
                         }
                         templateApi.batchDownloadClerical(data).then((res) => {
                             if (res.code === 200) {
-                                that.msgSuccess("操作成功");
+                                // that.msgSuccess("操作成功");
                                 that.clearSelection();
-                                that.download(res.msg);
-                            }
+                                that.msgSuccess('生成文书任务已提交，请在文书下载模块中查看文书生成进度。');
+                                // that.download(res.msg);
+                            } else {
+                                that.msgError(res.msg);
+                        }
                         });
                     })
                     .catch(() => {

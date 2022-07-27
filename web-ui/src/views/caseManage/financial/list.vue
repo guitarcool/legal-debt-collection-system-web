@@ -157,10 +157,11 @@
                 <el-table-column label="汇款金额" width="150" prop="amount" />
                 <el-table-column label="汇款类型" width="150" :show-overflow-tooltip="true" :formatter="repayTypeFormat"
                     prop="repayType" />
-                <el-table-column label="汇款账户" width="180" prop="accountNo" />
-                <el-table-column label="收款账户" width="180" :show-overflow-tooltip="true" prop="accountNoShou" />
-                <el-table-column label="收款账户名" width="150" :show-overflow-tooltip="true" prop="accountName" />
-                <el-table-column label="开户行名称" width="150" :show-overflow-tooltip="true" prop="openbankName"
+                <el-table-column label="付款人账号" width="180" prop="accountNo" />
+                <el-table-column label="付款人名称" width="180" prop="remitAccountName" />
+                <el-table-column label="收款人账号" width="180" :show-overflow-tooltip="true" prop="accountNoShou" />
+                <el-table-column label="收款人名称" width="150" :show-overflow-tooltip="true" prop="accountName" />
+                <el-table-column label="收款人开户行" width="150" :show-overflow-tooltip="true" prop="openbankName"
                     sortable="custom" :sort-orders="['descending', 'ascending']" />
                 <el-table-column label="汇款时间" width="150" sortable="custom" :sort-orders="['descending', 'ascending']"
                     prop="remittanceTime">
