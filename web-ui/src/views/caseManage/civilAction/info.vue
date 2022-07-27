@@ -2680,7 +2680,7 @@ export default {
         },
         editInformation() {
             this.information.title = "裁后详情案件信息编辑";
-            this.information.type = "after";
+            this.information.type = 'civilAction';
             this.information.requestApi = "/case/adjudged/mediationFailed";
             // 控制弹窗组件显示
             this.information.dialogVisible = true;
