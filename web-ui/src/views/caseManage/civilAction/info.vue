@@ -762,8 +762,8 @@
                         </div>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="收款账户" name="repayAccount">
-                    <!--收款账户-->
+                <el-tab-pane label="收款人账号" name="repayAccount">
+                    <!--收款人账号-->
                     <div class="box" style="margin-bottom:0px">
                         <el-button
                             type="primary"
@@ -784,7 +784,7 @@
                             </el-table-column>
                             <el-table-column
                                 prop="accountNumber"
-                                label="收款账户"
+                                label="收款人账号"
                                 width="200"
                                 :show-overflow-tooltip="true"
                             >
@@ -797,7 +797,7 @@
                             </el-table-column>
                             <el-table-column
                                 prop="openbankName"
-                                label="开户行名称"
+                                label="收款人开户行"
                                 :show-overflow-tooltip="true"
                             >
                             </el-table-column>
@@ -1349,7 +1349,7 @@
                             </el-table-column>
                             <el-table-column
                                 prop="accountNoShou"
-                                label="收款账户"
+                                label="收款人账号"
                                 width="200"
                             ></el-table-column>
                             <el-table-column
