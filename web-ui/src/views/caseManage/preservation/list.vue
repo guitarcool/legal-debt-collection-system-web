@@ -341,14 +341,8 @@
             </template>
             <template #filter>
                 <el-form-item label="共债案件仅展示一条：" class="custom-radio">
-                    <el-switch
-                        @change="changeStatus"
-                        v-model="queryParams.commonFlag"
-                        :active-value="1"
-                        :inactive-value="-1"
-                        active-color="#13ce66"
-                        inactive-color="#ff4949"
-                    >
+                    <el-switch @change="changeStatus" v-model="queryParams.commonFlag" :active-value="1"
+                        :inactive-value="-1" active-color="#13ce66" inactive-color="#ff4949">
                     </el-switch>
                 </el-form-item>
                 <el-form-item label="联系状态：" class="custom-radio">
@@ -1814,22 +1808,16 @@ export default {
     }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .custom-radio {
     padding-top: 10px;
     display: flex !important;
-
-    .el-form-item__label {
-        width: 100px;
-        text-align: left;
-        line-height: 20px;
-        align-items: flex-start;
-    }
+    align-content: center;
 
     .el-radio {
         /*width: 20%;*/
         margin-right: 10px;
-        margin-bottom: 20px;
+        // margin-bottom: 20px;
     }
 }
 

@@ -137,8 +137,8 @@
                 </transition>
             </template>
             <template #filter>
-                <el-form-item label-width="125px" label="共债仅展示一条：" class="custom-radio">
-                    <el-switch @change="changeStatus" style="margin-top:-18px" v-model="queryParams.commonFlag" :active-value="1"
+                <el-form-item label="共债案件仅展示一条：" class="custom-radio">
+                    <el-switch @change="changeStatus" v-model="queryParams.commonFlag" :active-value="1"
                         :inactive-value="-1" active-color="#13ce66" inactive-color="#ff4949">
                     </el-switch>
                 </el-form-item>
@@ -1289,24 +1289,18 @@
     };
 
 </script>
-<style lang="scss">
-    .custom-radio {
-        padding-top: 10px;
-        display: flex !important;
+<style lang="scss" scoped>
+.custom-radio {
+    padding-top: 10px;
+    display: flex !important;
+    align-content: center;
 
-        .el-form-item__label {
-            width: 100px;
-            text-align: left;
-            line-height: 20px;
-            align-items: flex-start;
-        }
-
-        .el-radio {
-            /*width: 20%;*/
-            margin-right: 10px;
-            margin-bottom: 20px;
-        }
+    .el-radio {
+        /*width: 20%;*/
+        margin-right: 10px;
+        // margin-bottom: 20px;
     }
+}
 
     .queryDiv {
         height: 30px;

@@ -385,22 +385,17 @@
     };
 
 </script>
-<style lang="scss">
-    .custom-radio {
-        padding-top: 10px;
-        display: flex !important;
+<style lang="scss" scoped>
+.custom-radio {
+    padding-top: 10px;
+    display: flex !important;
+    align-content: center;
 
-        .el-form-item__label {
-            width: 100px;
-            text-align: left;
-            line-height: 20px;
-            align-items: flex-start;
-        }
-
-        .el-radio {
-            margin-right: 10px;
-            margin-bottom: 20px;
-        }
+    .el-radio {
+        /*width: 20%;*/
+        margin-right: 10px;
+        // margin-bottom: 20px;
     }
+}
 
 </style>
