@@ -1,5 +1,5 @@
 <template>
-  <Dialog :title="title" :height="600" :show.sync="dialogVisible" width="80%">
+  <Dialog :title="title" :height="600" :show.sync="dialogVisible" width="80%" @openDialog="openDialog">
     <template v-slot:default>
       <div class="box-contnet-wrap">
         <el-row :gutter="10" class="mb8" style="display: flex;align-items: center;">
@@ -164,7 +164,6 @@ export default {
     },
   },
   created() {
-    this.getList();
     //格式类型
     this.getDicts("combination_type").then((response) => {
       this.combinationType = response.data;
@@ -172,6 +171,9 @@ export default {
   },
   mounted() {},
   methods: {
+    openDialog(){
+      this.getList();
+    },
     /** 查询角色列表 */
     getList() {
       this.loading = true;

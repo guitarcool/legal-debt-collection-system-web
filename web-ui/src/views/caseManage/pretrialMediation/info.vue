@@ -902,12 +902,6 @@
                 <el-tab-pane label="诉前财保" name="preProperty">
                     <div class="box-content" v-if="prePropertyInfo">
                         <div class="small-three">
-                            <p class="small-unit-header">财保申请状态：</p>
-                            <p class="small-unit-conent">
-                                {{ preStatusFormat(prePropertyInfo.status) }}
-                            </p>
-                        </div>
-                        <div class="small-three">
                             <p class="small-unit-header">财保批次号：</p>
                             <p class="small-unit-conent">
                                 {{ prePropertyInfo.proBatchNo }}
@@ -954,6 +948,10 @@
                             <p class="small-unit-conent">
                                 {{ prePropertyInfo.options }}
                             </p>
+                        </div>
+                        <div class="small-three">
+                            <p class="small-unit-header"></p>
+                            <p class="small-unit-conent"></p>
                         </div>
                     </div>
                 </el-tab-pane>
