@@ -238,6 +238,8 @@
             },
             treeChangeSelect(id) {
                 if (id) {
+                    this.form.mediateIds = [];
+                    this.form.caseAssignScales = [];
                     this.disabled = false;
                     divisionApi.getMediatorList(id).then(response => {
                         this.userList = response.data;
