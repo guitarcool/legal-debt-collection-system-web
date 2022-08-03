@@ -852,10 +852,10 @@ export default {
             this.loading = true;
             //查询
             if (type == 1) {
-                if (this.extensive == 1&&this.queryParams.sortExtColumn == "") {
-                    this.msgError("排序依据未选择，不能进行扩选查询！");
-                    return;
-                }
+                // if (this.extensive == 1&&this.queryParams.sortExtColumn == "") {
+                //     this.msgError("排序依据未选择，不能进行扩选查询！");
+                //     return;
+                // }
                 //姓名排序
                 if (
                     this.queryParams.sortExtColumn == "respondentName" &&
@@ -1049,6 +1049,7 @@ export default {
             });
         },
         resetAll() {
+            this.extensive = -1;
             this.queryParams.commonFlag = -1;
             this.queryParams.exist = 1;
             this.queryParams.caseStatuss = [
