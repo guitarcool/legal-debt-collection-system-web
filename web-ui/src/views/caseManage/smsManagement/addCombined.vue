@@ -80,7 +80,7 @@
             },
             editList: {
                 type: Object,
-                default: {},
+                default: ()=>{},
             },
         },
         computed: {

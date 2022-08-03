@@ -187,7 +187,7 @@ export default {
     },
     menus: {
       type: Array,
-      default: []
+      default: ()=>[],
     },
   },
   data() {
