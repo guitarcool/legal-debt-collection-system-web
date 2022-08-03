@@ -849,7 +849,6 @@ export default {
             this.queryParams.commonFlag = this.queryParams.commonFlag
                 ? this.queryParams.commonFlag
                 : -1;
-            this.loading = true;
             //查询
             if (type == 1) {
                 // if (this.extensive == 1&&this.queryParams.sortExtColumn == "") {
@@ -878,6 +877,7 @@ export default {
                     this.msgError("合同号内容未填写，不能进行扩选查询！");
                     return;
                 }
+                this.loading = true;
                 this.searchParams = JSON.parse(
                     JSON.stringify(this.queryParams)
                 );
@@ -899,6 +899,7 @@ export default {
             }
             //切换页
             else if (type == 2) {
+                this.loading = true;
                 templateApi
                     .caseList(this.searchParams)
                     .then(response => {
