@@ -169,10 +169,8 @@
             }
         },
         created() {
-            this.getDeptList();
         },
         mounted() {
-
         },
         methods: {
             //重置表单清除验证
@@ -184,6 +182,7 @@
                 }
             },
             openDialog() {
+                this.getDeptList();
                 initObj(this.form);
                 this.resetAddForm();
                 this.form.assignObject = "0";

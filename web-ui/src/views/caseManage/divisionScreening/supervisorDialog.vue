@@ -88,18 +88,13 @@
         },
         created() {
             //   this.getList();
-            this.getDeptList();
         },
         mounted() {
 
         },
         methods: {
             openDialog() {
-                //数据初始化，首次进入
-                this.filterText = "";
-                //整合部门数据和用户数据成一棵树
-                let arr = this.deptList.concat(this.userList)
-                this.deptOptions = this.handleTree(arr, "deptId", 'parentId', 'children', this.rootId);
+                this.getDeptList();
             },
             // 提交上传文件
             submit() {
@@ -179,6 +174,11 @@
                         this.userList[i].parentId = this.userList[i].deptId
                         delete this.userList[i].deptId
                     }
+                    //数据初始化，首次进入
+                    this.filterText = "";
+                    //整合部门数据和用户数据成一棵树
+                    let arr = this.deptList.concat(this.userList)
+                    this.deptOptions = this.handleTree(arr, "deptId", 'parentId', 'children', this.rootId); 
                 });
             },
         }
