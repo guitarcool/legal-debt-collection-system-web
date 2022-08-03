@@ -158,38 +158,42 @@
                 </el-form-item>
             </template>
             <template #filter>
-                <el-form-item
-                    label-width="125px"
-                    label="共债仅展示一条："
-                    class="custom-radio"
-                >
-                    <el-switch
-                        @change="changeStatus"
-                        style="margin-top:-15px"
-                        v-model="queryParams.commonFlag"
-                        :active-value="1"
-                        :inactive-value="-1"
-                        active-color="#13ce66"
-                        inactive-color="#ff4949"
+                <div style="display:flex">
+                    <el-form-item
+                        label-width="215px"
+                        label="共债仅展示一条："
+                        class="custom-radio"
                     >
-                    </el-switch>
-                </el-form-item>
-                <el-form-item
-                    label-width="125px"
-                    label="扩选排序功能："
-                    class="custom-radio"
-                >
-                    <el-switch
-                        @change="changeExtensive"
-                        style="margin-top:-15px"
-                        v-model="extensive"
-                        :active-value="1"
-                        :inactive-value="-1"
-                        active-color="#13ce66"
-                        inactive-color="#ff4949"
+                        <el-switch
+                            @change="changeStatus"
+                            style="margin-top:-18px;"
+                            v-model="queryParams.commonFlag"
+                            :active-value="1"
+                            :inactive-value="-1"
+                            active-color="#13ce66"
+                            inactive-color="#ff4949"
+                        >
+                        </el-switch>
+                    </el-form-item>
+                    <el-form-item
+                        style="margin-left:-60px"
+                        label-width="190px"
+                        label="扩选排序功能："
+                        class="custom-radio"
                     >
-                    </el-switch>
-                </el-form-item>
+                        <el-switch
+                            @change="changeExtensive"
+                            style="margin-top:-18px;"
+                            v-model="extensive"
+                            :active-value="1"
+                            :inactive-value="-1"
+                            active-color="#13ce66"
+                            inactive-color="#ff4949"
+                        >
+                        </el-switch>
+                    </el-form-item>
+                </div>
+
                 <el-form-item
                     label="排序依据："
                     v-if="extensive == 1"
